@@ -1,0 +1,69 @@
+{
+  "name": "my-base-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.9.3",
+    "axios": "^1.3.4",
+    "moment": "^2.29.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.10.0",
+    "react-scripts": "^5.0.1",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.4.2",
+    "sass": "^1.60.0",
+    "sass-loader": "^13.2.2"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test --verbose",
+    "eject": "react-scripts eject",
+    "lint": "eslint --cache .",
+    "format": "prettier --check ."
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11"
+  ],
+  "devDependencies": {
+    "@craco/craco": "^7.1.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/jest": "^29.5.0",
+    "@types/lodash": "^4.14.192",
+    "@types/node": "^18.15.11",
+    "@types/react": "^18.0.31",
+    "@types/react-dom": "^18.0.11",
+    "@types/react-redux": "^7.1.25",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-lodash": "^7.4.0",
+    "eslint-plugin-no-relative-import-paths": "^1.5.2",
+    "typescript": "^4.9.5"
+  },
+  "homepage": ".",
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^@modules(.*)$": "<rootDir>/src/modules$1",
+      "^@common(.*)$": "<rootDir>/src/modules/common$1",
+      "^@redux(.*)$": "<rootDir>/src/modules/redux$1"
+    }
+  }
+}
