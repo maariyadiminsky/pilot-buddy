@@ -74,6 +74,7 @@ module.exports = {
     'react/prefer-stateless-function': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/no-array-index-key': 'off',
+    'react/jsx-no-useless-fragment': 'off',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'import/extensions': 'off',
     'import/newline-after-import': 'warn',
