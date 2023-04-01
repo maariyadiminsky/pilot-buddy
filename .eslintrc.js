@@ -76,16 +76,16 @@ module.exports = {
     'react/no-array-index-key': 'off',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'import/extensions': 'off',
-    'import/newline-after-import': 'error',
+    'import/newline-after-import': 'warn',
     'import/no-unresolved': 'off',
     'react/function-component-definition': 'off',
     'import/prefer-default-export': 'off',
     'no-param-reassign': ['error', { props: false }],
     'implicit-arrow-linebreak': 'off',
-    'operator-linebreak': ['error', 'after'],
+    'operator-linebreak': 'off',
     'object-curly-newline': 'off',
     'import/order': [
-      'error',
+      'warn',
       {
         alphabetize: { order: 'asc' },
         groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
@@ -101,9 +101,17 @@ module.exports = {
       },
     ],
     'import/prefer-default-export': 'off',
+    'jsx-a11y/anchor-is-valid': [
+      'warn',
+      {
+        components: ['Link'],
+        specialLink: ['hrefLeft', 'hrefRight'],
+        aspects: ['noHref', 'invalidHref', 'preferButton'],
+      },
+    ],
     'jsx-a11y/label-has-for': 'off',
     'jsx-a11y/label-has-associated-control': [
-      'error',
+      'warn',
       {
         labelComponents: [],
         labelAttributes: [],
@@ -111,7 +119,7 @@ module.exports = {
       },
     ],
     'jsx-a11y/control-has-associated-label': [
-      'error',
+      'warn',
       {
         controlComponents: ['Button', 'SubmitButton'],
       },
@@ -123,7 +131,7 @@ module.exports = {
     'lodash/matches-shorthand': ['error', 'never'],
     '@typescript-eslint/camelcase': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-member-accessibility': ['error', { accessibility: 'no-public' }],
+    '@typescript-eslint/explicit-member-accessibility': ['warn', { accessibility: 'no-public' }],
     '@typescript-eslint/indent': 'off',
     '@typescript-eslint/member-delimiter-style': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
