@@ -1,21 +1,16 @@
 import DateDisplay from '@common/date/DateDisplay';
 import React from 'react';
-import styles from './home.module.scss';
-
+// style={{
+//   position: 'relative',
+//   width: '100%',
+//   display: 'flex',
+//   justifyContent: 'center',
+//   alignItems: 'center',
+//   flexDirection: 'column',
+// }}
 const HomePage: React.FC = () => (
-  <div
-    style={{
-      position: 'relative',
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      flexDirection: 'column',
-    }}
-  >
-    <h1 style={{ fontSize: '4em' }} className={styles['home-title']}>
-      Welcome!
-    </h1>
+  <div>
+    <h1 className="text-xl text-red-200 font-bold underline">Welcome!</h1>
     This CRA Custom Template setup includes:
     <ul>
       <i>

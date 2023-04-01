@@ -3,7 +3,6 @@ import HomePage from '@modules/home/HomePage';
 import NotFoundPage from '@modules/page-status/NotFoundPage';
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import '@styles/main.sass';
 
 const Root: React.FC = () => (
   <Router>
