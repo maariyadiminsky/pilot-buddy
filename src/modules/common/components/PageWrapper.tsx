@@ -4,7 +4,7 @@ import {
   ShieldCheckIcon,
   Bars4Icon,
   ClockIcon,
-  HomeIcon,
+  BookOpenIcon,
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
@@ -15,7 +15,7 @@ import HeaderWithActions from '@common/components/header/HeaderWithActions';
 import { type ChildrenType } from '@common/types';
 
 const navigation = [
-  { name: 'Home', href: '#', icon: HomeIcon, current: true },
+  { name: 'Study Room', href: '#', icon: BookOpenIcon, current: true },
   { name: 'My tasks', href: '#', icon: Bars4Icon, current: false },
   { name: 'Recent', href: '#', icon: ClockIcon, current: false },
 ];
@@ -27,10 +27,11 @@ const secondaryNavigation = [
 ];
 
 interface PageWrapperProps {
+  title?: string;
   children: ChildrenType;
 }
 
-const PageWrapper = ({ children }: PageWrapperProps) => {
+const PageWrapper = ({ title, children }: PageWrapperProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div className="min-h-full">
@@ -39,7 +40,7 @@ const PageWrapper = ({ children }: PageWrapperProps) => {
         <SearchHeader {...{ setSidebarOpen }} shouldShowSearch={false} />
         <main className="flex-1">
           <>
-            <HeaderWithActions title="home" />
+            <HeaderWithActions title={title} />
             {children}
           </>
         </main>

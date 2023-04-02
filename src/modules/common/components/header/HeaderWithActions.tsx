@@ -20,7 +20,7 @@ interface ActionItem {
 }
 
 interface HeaderWithActionsProps {
-  title: string;
+  title?: string;
   actions?: ActionItem[];
 }
 
