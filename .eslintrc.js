@@ -85,6 +85,7 @@ module.exports = {
     'implicit-arrow-linebreak': 'off',
     'operator-linebreak': 'off',
     'object-curly-newline': 'off',
+    'import/no-extraneous-dependencies': 'off',
     'import/order': [
       'warn',
       {

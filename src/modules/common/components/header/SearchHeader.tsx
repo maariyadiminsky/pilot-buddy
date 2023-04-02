@@ -7,7 +7,7 @@ import { Bars3CenterLeftIcon } from '@heroicons/react/24/outline';
 import ProfileDropdown from '@common/components/profile/ProfileDropdown';
 import ProfilePicture from '@common/components/profile/ProfilePicture';
 
-const SearchHeader = ({ setSidebarOpen, shouldShowSearch = false }) => (
+const SearchHeader = ({ setSidebarOpen, shouldShowSearch = true }) => (
   <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 border-b border-gray-200 bg-white lg:hidden">
     <button
       type="button"
