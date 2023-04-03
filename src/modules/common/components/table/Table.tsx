@@ -1,4 +1,5 @@
 import { truthyString } from '@common/utils';
+import { PlayCircleIcon, PencilIcon } from '@heroicons/react/20/solid';
 
 const sessions = [
   {
@@ -88,14 +89,28 @@ const Table = () => (
               <td
                 className={truthyString(
                   planIdx === 0 ? '' : 'border-t border-transparent',
-                  'relative py-3.5 pl-3 pr-4 text-right text-sm font-medium sm:pr-6'
+                  'relative py-3.5 pl-3 pr-4 text-center text-sm font-medium sm:pr-6'
                 )}
               >
                 <button
                   type="button"
-                  className="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
+                  className="inline-flex items-center rounded-md bg-white mx-0.5 px-4 xl:px-8 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
                 >
-                  Select<span className="sr-only">, {name}</span>
+                  <PlayCircleIcon
+                    className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                    aria-hidden="true"
+                  />
+                  <span className="sr-only">Start test</span>
+                </button>
+                <button
+                  type="button"
+                  className="inline-flex items-center rounded-md bg-white mx-0.5 px-4 xl:px-8 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
+                >
+                  <PencilIcon
+                    className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                    aria-hidden="true"
+                  />
+                  <span className="sr-only">Edit test</span>
                 </button>
                 {planIdx !== 0 ? (
                   <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" />
