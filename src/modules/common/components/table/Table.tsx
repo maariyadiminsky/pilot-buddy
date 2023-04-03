@@ -7,12 +7,14 @@ const sessions = [
     name: 'Hobby Pilot Exam sdfdsf fdsdfsd fsdsdfsd dasdsafasafasfasfasfasd dadasdasdasdsad',
     topic: 'Private Pilot Exam sdfdsf fdsdfsd fsdsdfsd dasdsafasafasfasfasfasd dadasdasdasdsad ',
     questions: 12,
+    color: 'pink',
   },
   {
     id: 2,
     name: 'Startup',
     topic: 'Commercial Test dass',
     questions: 1,
+    color: 'purple',
   },
   // More plans...
 ];
@@ -47,7 +49,7 @@ const Table = () => (
           </tr>
         </thead>
         <tbody>
-          {sessions.map(({ id, name, topic, questions }, planIdx) => (
+          {sessions.map(({ id, name, topic, questions, color }, planIdx) => (
             <tr key={id}>
               <td
                 className={truthyString(
@@ -55,13 +57,22 @@ const Table = () => (
                   'relative py-4 pl-4 pr-3 text-sm sm:pl-6'
                 )}
               >
-                <div className="font-medium text-gray-900 w-36 md:w-60 xl:w-72 truncate">
-                  {name}
+                <div className="group flex items-center rounded-md px-3 py-2 text-sm font-medium text-gray-700">
+                  <span
+                    className={truthyString(
+                      'invisible sm:visible sm:mr-4 sm:h-2.5 sm:w-2.5 sm:rounded-full',
+                      `bg-${color}-600`
+                    )}
+                    aria-hidden="true"
+                  />
+                  <div className="font-medium text-gray-900 w-36 md:w-60 xl:w-72 truncate">
+                    {name}
+                  </div>
                 </div>
                 {/* mobile */}
                 <div className="mt-1 flex flex-col text-gray-500 xs:block sm:hidden">
                   <span className="xs:block sm:hidden">
-                    <span className="sm:hidden xs:inline">·</span> {questions} Question
+                    <span className="sm:hidden xs:inline pl-2">·</span> {questions} Question
                     {questions > 1 ? 's' : ''}
                   </span>
                 </div>
