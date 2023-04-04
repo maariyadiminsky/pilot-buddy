@@ -41,6 +41,11 @@ const pinnedItems = [
 
 const StudyRoom = () => {
   // eslint-disable-next-line
+  const handleAddSession = () => {
+    // handle add session
+  };
+
+  // eslint-disable-next-line
   const handleStartSession = (id: number) => {
     // handle start session
   };
@@ -67,7 +72,13 @@ const StudyRoom = () => {
         {...{ handleStartSession, handleEditSession }}
       />
       <SessionsTable
-        {...{ handleStartSession, handleEditSession, handleRemoveSession, handleRemoveAllSessions }}
+        {...{
+          handleAddSession,
+          handleStartSession,
+          handleEditSession,
+          handleRemoveSession,
+          handleRemoveAllSessions,
+        }}
       />
     </PageWrapper>
   );

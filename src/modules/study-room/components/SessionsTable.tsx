@@ -1,6 +1,11 @@
 import { truthyString, getUniqId } from '@common/utils';
 import DropdownMenu from '@common/components/DropdownMenu';
-import { PlayCircleIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
+import {
+  PlayCircleIcon,
+  PencilSquareIcon,
+  PlusCircleIcon,
+  TrashIcon,
+} from '@heroicons/react/20/solid';
 import { useCallback } from 'react';
 
 const sessions = [
@@ -64,6 +69,7 @@ const sessions = [
 ];
 
 interface SessionsTableProps {
+  handleAddSession: () => void;
   handleStartSession: (id: number) => void;
   handleEditSession: (id: number) => void;
   handleRemoveSession: (id: number) => void;
@@ -71,6 +77,7 @@ interface SessionsTableProps {
 }
 
 const SessionsTable = ({
+  handleAddSession,
   handleStartSession,
   handleEditSession,
   handleRemoveSession,
@@ -79,8 +86,15 @@ const SessionsTable = ({
   const getDropdownActions = useCallback(
     () => [
       {
-        text: 'Delete all sessions',
-        srText: 'Remove all sessions from table',
+        text: 'New',
+        srText: 'Create new session',
+        icon: PlusCircleIcon,
+        handleOnClick: () => handleAddSession(),
+      },
+      {
+        text: 'Delete all',
+        srText: 'Remove all sessions',
+        // icon: TrashIcon,
         handleOnClick: () => handleRemoveAllSessions(),
       },
     ],
