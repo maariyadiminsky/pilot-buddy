@@ -1,7 +1,7 @@
 // todo add typescript
 // @ts-nocheck
 import PageWrapper from '@common/components/PageWrapper';
-import PinnedItems from '@common/components/pinned-item/PinnedItems';
+import PinnedItems from '@modules/study-room/components/pinned-item/PinnedItems';
 import Table from '@modules/study-room/components/SessionsTable';
 
 const pinnedItems = [

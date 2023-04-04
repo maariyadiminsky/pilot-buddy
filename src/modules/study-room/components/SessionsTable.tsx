@@ -1,8 +1,8 @@
 // todo add typescript
 // @ts-nocheck
-import { useState, useRef, useLayoutEffect } from 'react';
 import { truthyString, getUniqId } from '@common/utils';
-import { PlayCircleIcon, PencilIcon } from '@heroicons/react/20/solid';
+import { PlayCircleIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
+import { useState, useRef, useLayoutEffect } from 'react';
 
 const sessions = [
   {
@@ -109,7 +109,7 @@ const SessionsTable = () => {
                     <div className="left-14 top-0 flex h-4 items-center space-x-2 bg-white sm:left-12">
                       <button
                         type="button"
-                        className="inline-flex items-center rounded bg-white px-4 py-1 text-sm font-semibold text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
+                        className="inline-flex items-center rounded bg-white px-4 py-1 text-sm font-semibold text-sky-700 shadow-sm ring-1 ring-inset ring-sky-700 hover:text-white hover:bg-sky-700 hover:ring-sky-700 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
                       >
                         Delete all sessions
                       </button>
@@ -158,7 +158,7 @@ const SessionsTable = () => {
                     </div>
                   </div>
                   {/* mobile */}
-                  <div className="mt-1 flex flex-col text-gray-500 xs:block sm:hidden">
+                  <div className="mt-1 flex flex-col text-gray-700 xs:block sm:hidden">
                     <span className="xs:block sm:hidden">
                       <span className="sm:hidden xs:inline pl-2">·</span> {questions} Question
                       {questions > 1 ? 's' : ''}
@@ -172,15 +172,15 @@ const SessionsTable = () => {
                 <td
                   className={truthyString(
                     planIdx === 0 ? '' : 'border-t border-gray-200',
-                    'px-3 py-3.5 text-sm text-gray-500 sm:table-cell'
+                    'px-3 py-3.5 text-sm text-gray-700 sm:table-cell'
                   )}
                 >
-                  <div className="w-36 lg:w-60 xl:w-72 truncate">{topic}</div>
+                  <div className="w-36 lg:w-52 xl:w-72 truncate">{topic}</div>
                 </td>
                 <td
                   className={truthyString(
                     planIdx === 0 ? '' : 'border-t border-gray-200',
-                    'hidden px-3 py-3.5 text-sm text-gray-500 sm:table-cell'
+                    'hidden px-3 py-3.5 text-sm text-gray-700 sm:table-cell'
                   )}
                 >
                   {questions}
@@ -191,26 +191,27 @@ const SessionsTable = () => {
                     'relative py-3.5 pl-3 pr-4 text-center text-sm font-medium sm:pr-6'
                   )}
                 >
-                  <button
-                    type="button"
-                    className="inline-flex items-center rounded-md bg-white mx-0.5 px-4 xl:px-8 py-1 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-                  >
+                  <div className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white">
                     <PlayCircleIcon
-                      className="h-6 w-6 flex-shrink-0 text-red-600 group-hover:text-red-700"
+                      className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-red-600 hover:text-sky-700"
                       aria-hidden="true"
                     />
                     <span className="sr-only">Start test</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="inline-flex items-center rounded-md bg-white mx-0.5 px-4 xl:px-8 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-                  >
-                    <PencilIcon
-                      className="h-6 w-6 flex-shrink-0 text-sky-700 group-hover:text-sky-700"
+                  </div>
+                  <div className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white">
+                    <PencilSquareIcon
+                      className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-700"
                       aria-hidden="true"
                     />
                     <span className="sr-only">Edit test</span>
-                  </button>
+                  </div>
+                  <div className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white">
+                    <TrashIcon
+                      className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-700"
+                      aria-hidden="true"
+                    />
+                    <span className="sr-only">Delete test</span>
+                  </div>
                   {planIdx !== 0 ? (
                     <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" />
                   ) : null}

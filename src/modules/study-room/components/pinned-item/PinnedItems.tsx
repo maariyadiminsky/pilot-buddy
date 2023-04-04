@@ -1,9 +1,9 @@
 import { Menu, Transition } from '@headlessui/react';
-import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
+import { EllipsisVerticalIcon, BookmarkSlashIcon } from '@heroicons/react/20/solid';
 import { Fragment } from 'react';
 
 import { truthyString, getUniqId } from '@common/utils';
-import { getInitials, getTypeAmount } from '@common/components/pinned-item/utils';
+import { getInitials, getTypeAmount } from '@modules/study-room/components/pinned-item/utils';
 
 interface Item {
   id: number; // todo change to unique uuid
@@ -35,13 +35,13 @@ const PinnedItem = ({ title, items }: PinnedItemProps) => (
           </div>
           <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-b border-r border-t border-gray-200 bg-white">
             <div className="flex-1 truncate px-4 py-2 text-sm">
-              <a href="#" className="font-medium text-gray-900 hover:text-gray-600">
+              <a href="#" className="font-medium text-gray-900 hover:text-sky-700">
                 {text}
               </a>
               <p className="text-gray-500">{getTypeAmount(type, total)}</p>
             </div>
             <Menu as="div" className="flex-shrink-0 pr-2">
-              <Menu.Button className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+              <Menu.Button className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-700 focus:ring-offset-2">
                 <span className="sr-only">Open options</span>
                 <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
               </Menu.Button>
@@ -61,42 +61,35 @@ const PinnedItem = ({ title, items }: PinnedItemProps) => (
                         <a
                           href="#"
                           className={truthyString(
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                            active ? ' text-sky-700' : 'text-gray-700',
                             'block px-4 py-2 text-sm'
                           )}
                         >
-                          Unpin
+                          <span className="inline-flex justify-center">
+                            <span className="sr-only">Open options</span>
+                            <BookmarkSlashIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+                            Unpin
+                          </span>
                         </a>
                       )}
                     </Menu.Item>
                   </div>
                   <div className="py-1">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          className={truthyString(
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                            'block px-4 py-2 text-sm'
-                          )}
-                        >
-                          Start
-                        </a>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          className={truthyString(
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                            'block px-4 py-2 text-sm'
-                          )}
-                        >
-                          Edit
-                        </a>
-                      )}
-                    </Menu.Item>
+                    {['Start', 'Edit'].map((action) => (
+                      <Menu.Item key={getUniqId(action)}>
+                        {({ active }) => (
+                          <a
+                            href="#"
+                            className={truthyString(
+                              active ? 'bg-sky-700 text-white' : 'text-gray-700',
+                              'block px-4 py-2 text-sm'
+                            )}
+                          >
+                            {action}
+                          </a>
+                        )}
+                      </Menu.Item>
+                    ))}
                   </div>
                 </Menu.Items>
               </Transition>
