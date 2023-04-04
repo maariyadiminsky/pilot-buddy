@@ -1,7 +1,7 @@
 // todo add typescript
 // @ts-nocheck
 import { useState, useRef, useLayoutEffect } from 'react';
-import { truthyString } from '@common/utils';
+import { truthyString, getUniqId } from '@common/utils';
 import { PlayCircleIcon, PencilIcon } from '@heroicons/react/20/solid';
 
 const sessions = [
@@ -20,42 +20,42 @@ const sessions = [
     color: 'bg-yellow-600',
   },
   {
-    id: 1,
+    id: 3,
     name: 'Instruments Test #1',
     topic: 'Instruments ',
     questions: 24,
     color: 'bg-purple-700',
   },
   {
-    id: 2,
+    id: 4,
     name: 'Instruments Test #2',
     topic: 'Instruments',
     questions: 9,
     color: 'bg-yellow-600',
   },
   {
-    id: 1,
+    id: 5,
     name: 'Practice',
     topic: 'Commercial',
     questions: 6,
     color: 'bg-sky-700',
   },
   {
-    id: 2,
+    id: 6,
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-pink-700',
   },
   {
-    id: 1,
+    id: 7,
     name: 'Pilot Exam Test #2',
     topic: 'Private Pilot',
     questions: 17,
     color: 'bg-sky-700',
   },
   {
-    id: 2,
+    id: 8,
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
@@ -111,7 +111,7 @@ const SessionsTable = () => {
                         type="button"
                         className="inline-flex items-center rounded bg-white px-4 py-1 text-sm font-semibold text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
                       >
-                        Delete all
+                        Delete all sessions
                       </button>
                     </div>
                   ) : (
@@ -137,8 +137,8 @@ const SessionsTable = () => {
             </tr>
           </thead>
           <tbody>
-            {sessions.map(({ id, name, topic, questions, color }, planIdx) => (
-              <tr key={id}>
+            {sessions.map(({ name, topic, questions, color }, planIdx) => (
+              <tr key={getUniqId()}>
                 <td
                   className={truthyString(
                     planIdx === 0 ? '' : 'border-t border-transparent',
