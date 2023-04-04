@@ -10,7 +10,7 @@ const Breadcrumbs = () => (
     <ol className="mx-left flex w-full max-w-screen-xl space-x-4 px-4 sm:px-6 lg:px-8">
       <li className="flex">
         <div className="flex items-center">
-          <a href="#" className="text-white hover:text-sky-700">
+          <a href="#" className="text-white hover:text-sky-100">
             <HomeIcon className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
             <span className="sr-only">Home</span>
           </a>
@@ -30,7 +30,7 @@ const Breadcrumbs = () => (
             </svg>
             <a
               href={page.href}
-              className="ml-4 text-sm font-n subpixel-antialiased lg:text-xs text-white hover:text-sky-700"
+              className="ml-4 text-sm subpixel-antialiased lg:text-xs text-white hover:text-sky-100"
               aria-current={page.current ? 'page' : undefined}
             >
               {page.name}
