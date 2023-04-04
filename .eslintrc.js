@@ -51,6 +51,7 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+    'no-confusing-arrow': 'off',
     'no-relative-import-paths/no-relative-import-paths': [
       'warn',
       { allowSameFolder: true, rootDir: 'src', prefix: '' },

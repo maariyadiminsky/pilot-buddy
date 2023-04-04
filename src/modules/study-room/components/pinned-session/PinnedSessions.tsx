@@ -18,22 +18,19 @@ interface Item {
 interface PinnedSessionProps {
   title: string;
   items: Item[];
+  handleStartSession: (id: number) => void;
+  handleEditSession: (id: number) => void;
 }
 
-const PinnedSession = ({ title, items }: PinnedSessionProps) => {
+const PinnedSession = ({
+  title,
+  items,
+  handleStartSession,
+  handleEditSession,
+}: PinnedSessionProps) => {
   // eslint-disable-next-line
   const handleUnpinSession = (id: number) => {
     // handle unpin here
-  };
-
-  // eslint-disable-next-line
-  const handleStartSession = (id: number) => {
-    // handle start session
-  };
-
-  // eslint-disable-next-line
-  const handleEditSession = (id: number) => {
-    // handle edit session
   };
 
   const getDropdownActions = useCallback(
@@ -63,7 +60,7 @@ const PinnedSession = ({ title, items }: PinnedSessionProps) => {
       <h2 className="text-sm font-medium text-gray-900">{title}</h2>
       <ul className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-4">
         {items.map(({ id, text, type, total, className }) => (
-          <li key={getUniqId(text)} className="relative col-span-1 flex rounded-md shadow-sm">
+          <li key={getUniqId(text)} className="col-span-1 flex rounded-md shadow-sm">
             <div
               className={truthyString(
                 'flex w-16 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white',
@@ -83,7 +80,12 @@ const PinnedSession = ({ title, items }: PinnedSessionProps) => {
                 </button>
                 <p className="text-gray-500">{getTypeAmount(type, total)}</p>
               </div>
-              <DropdownMenu name="pinned-items" actions={getDropdownActions(id)} wrapperId={id} />
+              <DropdownMenu
+                name="pinned-items"
+                actions={getDropdownActions(id)}
+                wrapperId={id}
+                // className="right-10 top-3"
+              />
             </div>
           </li>
         ))}

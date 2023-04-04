@@ -1,13 +1,7 @@
-// todo add typescript
-// @ts-nocheck
 import { truthyString, getUniqId } from '@common/utils';
-import {
-  // EllipsisVerticalIcon,
-  PlayCircleIcon,
-  PencilSquareIcon,
-  TrashIcon,
-} from '@heroicons/react/20/solid';
-import { useState, useRef, useLayoutEffect } from 'react';
+import DropdownMenu from '@common/components/DropdownMenu';
+import { PlayCircleIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
+import { useCallback } from 'react';
 
 const sessions = [
   {
@@ -69,59 +63,39 @@ const sessions = [
   // More plans...
 ];
 
-const SessionsTable = () => {
-  const checkbox = useRef();
-  const [checked, setChecked] = useState(false);
-  const [indeterminate, setIndeterminate] = useState(false);
-  const [selectedSessions, setSelectedSessions] = useState([]);
+interface SessionsTableProps {
+  handleStartSession: (id: number) => void;
+  handleEditSession: (id: number) => void;
+  handleRemoveSession: (id: number) => void;
+  handleRemoveAllSessions: () => void;
+}
 
-  useLayoutEffect(() => {
-    const isIndeterminate =
-      selectedSessions.length > 0 && selectedSessions.length < sessions.length;
-    setChecked(selectedSessions.length === sessions.length);
-    setIndeterminate(isIndeterminate);
-
-    if (checkbox?.current) {
-      checkbox.current.indeterminate = isIndeterminate;
-    }
-  }, [selectedSessions]);
-
-  const toggleAll = () => {
-    setSelectedSessions(checked || indeterminate ? [] : sessions);
-    setChecked(!checked && !indeterminate);
-    setIndeterminate(false);
-  };
-
+const SessionsTable = ({
+  handleStartSession,
+  handleEditSession,
+  handleRemoveSession,
+  handleRemoveAllSessions,
+}: SessionsTableProps) => {
+  const getDropdownActions = useCallback(
+    () => [
+      {
+        text: 'Delete all sessions',
+        srText: 'Remove all sessions from table',
+        handleOnClick: () => handleRemoveAllSessions(),
+      },
+    ],
+    []
+  );
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0">
         <table className="min-w-full divide-y divide-gray-300">
           <thead>
             <tr>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                <div className="flex flex-row items-center">
-                  <input
-                    type="checkbox"
-                    className="-mt-0.5 ml-2 mr-4 h-4 w-4 rounded border-gray-300 text-sky-700 focus:ring-sky-700"
-                    ref={checkbox}
-                    checked={checked}
-                    onChange={toggleAll}
-                  />
-                  {selectedSessions.length > 0 ? (
-                    <div className="left-14 top-0 flex h-4 items-center space-x-2 bg-white sm:left-12">
-                      <button
-                        type="button"
-                        className="inline-flex items-center rounded bg-white px-4 py-1 text-sm font-semibold text-sky-700 shadow-sm ring-1 ring-inset ring-sky-700 hover:text-white hover:bg-sky-700 hover:ring-sky-700 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-                      >
-                        Delete all sessions
-                      </button>
-                    </div>
-                  ) : (
-                    'Name'
-                  )}
+              <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 sm:pl-6">
+                <div className="flex flex-row relative items-center">
+                  <DropdownMenu name="pinned-items" actions={getDropdownActions()} />
+                  Name
                 </div>
               </th>
               <th
@@ -136,13 +110,10 @@ const SessionsTable = () => {
               >
                 Questions
               </th>
-              <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                <span className="sr-only">Select</span>
-              </th>
             </tr>
           </thead>
           <tbody>
-            {sessions.map(({ name, topic, questions, color }, planIdx) => (
+            {sessions.map(({ id, name, topic, questions, color }, planIdx) => (
               <tr key={getUniqId()}>
                 <td
                   className={truthyString(
@@ -196,27 +167,39 @@ const SessionsTable = () => {
                     'relative py-3.5 pl-3 pr-4 text-center text-sm font-medium sm:pr-6'
                   )}
                 >
-                  <div className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white">
+                  <button
+                    type="button"
+                    onClick={() => handleStartSession(id)}
+                    className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
+                  >
                     <PlayCircleIcon
                       className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-red-600 hover:text-sky-700"
                       aria-hidden="true"
                     />
                     <span className="sr-only">Start test</span>
-                  </div>
-                  <div className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white">
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleEditSession(id)}
+                    className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
+                  >
                     <PencilSquareIcon
                       className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-700"
                       aria-hidden="true"
                     />
                     <span className="sr-only">Edit test</span>
-                  </div>
-                  <div className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white">
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveSession(id)}
+                    className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
+                  >
                     <TrashIcon
                       className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-700"
                       aria-hidden="true"
                     />
                     <span className="sr-only">Delete test</span>
-                  </div>
+                  </button>
                   {planIdx !== 0 ? (
                     <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" />
                   ) : null}
@@ -229,5 +212,4 @@ const SessionsTable = () => {
     </div>
   );
 };
-
 export default SessionsTable;

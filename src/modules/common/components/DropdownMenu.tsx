@@ -15,9 +15,10 @@ interface DropdownMenuProps {
   name: string;
   actions: MenuOption[];
   wrapperId?: number;
+  className?: string;
 }
 
-const DropdownMenu = ({ name, actions, wrapperId }: DropdownMenuProps) => (
+const DropdownMenu = ({ name, actions, wrapperId, className }: DropdownMenuProps) => (
   <Menu as="div" className="flex-shrink-0 pr-2">
     <Menu.Button className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-700 focus:ring-offset-2">
       <span className="sr-only">Open {name} options</span>
@@ -32,35 +33,44 @@ const DropdownMenu = ({ name, actions, wrapperId }: DropdownMenuProps) => (
       leaveFrom="transform opacity-100 scale-100"
       leaveTo="transform opacity-0 scale-95"
     >
-      <Menu.Items className="absolute right-10 top-3 z-10 mx-3 mt-1 w-48 origin-top-right divide-y divide-gray-200 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-        <div className="py-1">
-          {actions.map(({ text, srText, icon, handleOnClick }) => {
-            // note: fixes Typescript error:
-            // Property 'icon' does not exist on type 'JSX.IntrinsicElements'.
-            const Icon = icon;
+      <Menu.Items
+        className={truthyString(
+          'absolute z-10 mx-3 mt-1 w-40 origin-top-right divide-y divide-gray-200 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
+          className
+        )}
+      >
+        {actions.map(({ text, srText, icon, handleOnClick }, index) => {
+          // note: fixes Typescript error:
+          // Property 'icon' does not exist on type 'JSX.IntrinsicElements'.
+          const Icon = icon;
 
-            return (
-              <Menu.Item key={getUniqId(text)}>
-                {({ active }) => (
-                  <button
-                    type="button"
-                    onClick={() => wrapperId && handleOnClick?.(wrapperId)}
-                    className={truthyString(
-                      active ? ' text-sky-700' : 'text-gray-700',
-                      'block px-4 py-2 text-sm'
-                    )}
-                  >
-                    <span className="inline-flex justify-center">
-                      <span className="sr-only">{srText}</span>
-                      {Icon && <Icon className="h-5 w-5 mr-1" aria-hidden="true" />}
-                      {text}
-                    </span>
-                  </button>
-                )}
-              </Menu.Item>
-            );
-          })}
-        </div>
+          const hasIconClass = (active: boolean) => (active ? 'text-sky-700' : 'text-gray-700');
+          const noIconClass = (active: boolean) =>
+            active ? 'bg-sky-700 text-white' : 'text-gray-700';
+
+          return (
+            <Menu.Item key={getUniqId(text)}>
+              {({ active }) => (
+                <button
+                  type="button"
+                  onClick={() => wrapperId && handleOnClick?.(wrapperId)}
+                  className={truthyString(
+                    icon ? hasIconClass(active) : noIconClass(active),
+                    'block px-4 py-2 text-sm w-full h-full text-left',
+                    index === 0 && 'rounded-t-md',
+                    index === actions.length - 1 && 'rounded-b-md'
+                  )}
+                >
+                  <span className="inline-flex justify-center font-normal">
+                    <span className="sr-only">{srText}</span>
+                    {Icon && <Icon className="h-5 w-5 mr-1" aria-hidden="true" />}
+                    {text}
+                  </span>
+                </button>
+              )}
+            </Menu.Item>
+          );
+        })}
       </Menu.Items>
     </Transition>
   </Menu>

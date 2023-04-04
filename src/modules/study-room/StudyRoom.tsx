@@ -2,7 +2,7 @@
 // @ts-nocheck
 import PageWrapper from '@common/components/PageWrapper';
 import PinnedItems from '@modules/study-room/components/pinned-session/PinnedSessions';
-import Table from '@modules/study-room/components/SessionsTable';
+import SessionsTable from '@modules/study-room/components/SessionsTable';
 
 const pinnedItems = [
   {
@@ -39,11 +39,38 @@ const pinnedItems = [
   },
 ];
 
-const HomePage = () => (
-  <PageWrapper title="Study Room">
-    <PinnedItems title="Pinned Sessions" items={pinnedItems} />
-    <Table />
-  </PageWrapper>
-);
+const StudyRoom = () => {
+  // eslint-disable-next-line
+  const handleStartSession = (id: number) => {
+    // handle start session
+  };
 
-export default HomePage;
+  // eslint-disable-next-line
+  const handleEditSession = (id: number) => {
+    // handle edit session
+  };
+
+  // eslint-disable-next-line
+  const handleRemoveSession = (id: number) => {
+    // handle remove session
+  };
+
+  const handleRemoveAllSessions = () => {
+    // remove all sessions
+  };
+
+  return (
+    <PageWrapper title="Study Room">
+      <PinnedItems
+        title="Pinned Sessions"
+        items={pinnedItems}
+        {...{ handleStartSession, handleEditSession }}
+      />
+      <SessionsTable
+        {...{ handleStartSession, handleEditSession, handleRemoveSession, handleRemoveAllSessions }}
+      />
+    </PageWrapper>
+  );
+};
+
+export default StudyRoom;
