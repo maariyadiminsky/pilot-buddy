@@ -13,7 +13,7 @@ import SearchHeader from '@common/components/header/SearchHeader';
 import HeaderWithActions, {
   type HeaderActionItemType,
 } from '@common/components/header/HeaderWithActions';
-import Breadcrumbs from '@common/components/Breadcrumbs';
+import Breadcrumbs from '@modules/common/components/page/components/Breadcrumbs';
 
 import { type ChildrenType } from '@common/types';
 
@@ -35,6 +35,7 @@ interface PageWrapperProps {
   children: ChildrenType;
 }
 
+// todo: need to pass page data to breadcrumbs here.
 const PageWrapper = ({ title, headerActions, children }: PageWrapperProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

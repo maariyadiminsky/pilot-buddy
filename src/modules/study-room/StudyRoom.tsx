@@ -1,7 +1,7 @@
 // todo add typescript
 // @ts-nocheck
 import { PlusCircleIcon } from '@heroicons/react/20/solid';
-import PageWrapper from '@common/components/PageWrapper';
+import PageWrapper from '@modules/common/components/page/PageWrapper';
 import PinnedItems from '@modules/study-room/components/pinned-session/PinnedSessions';
 import SessionsTable from '@modules/study-room/components/SessionsTable';
 import { useCallback, useMemo } from 'react';

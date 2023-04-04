@@ -76,6 +76,7 @@ interface SessionsTableProps {
   handleRemoveAllSessions: () => void;
 }
 
+// todo: add sorting
 const SessionsTable = ({
   handleCreateSession,
   handleStartSession,

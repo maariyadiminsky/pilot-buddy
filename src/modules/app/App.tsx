@@ -1,5 +1,6 @@
 import { ROUTES } from '@modules/common/api/constants';
 import NotFoundPage from '@modules/page-status/NotFoundPage';
+import StudySession from '@modules/study-room/StudySession';
 import StudyRoom from '@modules/study-room/StudyRoom';
 import { persistor, store } from '@redux/store/reducers/store';
 import React from 'react';
@@ -13,7 +14,8 @@ const App: React.FC = () => (
       <Router>
         <Routes>
           <Route path="*" element={<NotFoundPage />} />
-          <Route path={ROUTES.HOMEPAGE_ROUTE} element={<StudyRoom />} />
+          <Route path={ROUTES.STUDY_ROOM_ROUTE} element={<StudyRoom />} />
+          <Route path={ROUTES.HOMEPAGE_ROUTE} element={<StudySession />} />
         </Routes>
       </Router>
     </PersistGate>
