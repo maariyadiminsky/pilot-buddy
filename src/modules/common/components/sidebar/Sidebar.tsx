@@ -7,6 +7,8 @@ import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { truthyString } from '@common/utils';
 import ProfileCard from '@modules/common/components/profile/ProfileCard';
 
+import Logo from '@common/components/sidebar/images/airplane.png';
+
 const Sidebar = ({
   navigation,
   secondaryNavigation,
@@ -62,11 +64,7 @@ const Sidebar = ({
                 </div>
               </Transition.Child>
               <div className="flex flex-shrink-0 items-center px-4">
-                <img
-                  className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=purple&shade=500"
-                  alt="Your Company"
-                />
+                <img className="h-8 w-auto text-sky-700" src={Logo} alt="Pilot Buddy" />
               </div>
               <div className="mt-5 h-0 flex-1 overflow-y-auto">
                 <nav className="divide-y divide-gray-200">
@@ -137,11 +135,7 @@ const Sidebar = ({
     {/* desktop static sidebar */}
     <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col lg:border-r lg:border-gray-200 lg:bg-gray-100 lg:pb-4 lg:pt-5">
       <div className="flex flex-shrink-0 items-center px-6">
-        <img
-          className="h-8 w-auto"
-          src="https://tailwindui.com/img/logos/mark.svg?color=purple&shade=500"
-          alt="Your Company"
-        />
+        <img className="h-8 w-auto text-sky-700" src={Logo} alt="Pilot Buddy" />
       </div>
       <div className="mt-5 flex h-0 flex-1 flex-col overflow-y-auto pt-1">
         {/* User account dropdown */}

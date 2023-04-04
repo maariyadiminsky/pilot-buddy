@@ -8,7 +8,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
-import Sidebar from '@common/components/Sidebar';
+import Sidebar from '@modules/common/components/sidebar/Sidebar';
 import SearchHeader from '@common/components/header/SearchHeader';
 import HeaderWithActions from '@common/components/header/HeaderWithActions';
 
