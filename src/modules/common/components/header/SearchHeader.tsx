@@ -1,13 +1,16 @@
-// todo add typescript
-// @ts-nocheck
 import { Menu } from '@headlessui/react';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { Bars3CenterLeftIcon } from '@heroicons/react/24/outline';
-
 import ProfileDropdown from '@common/components/profile/ProfileDropdown';
 import ProfilePicture from '@common/components/profile/ProfilePicture';
+import { Dispatch, SetStateAction } from 'react';
 
-const SearchHeader = ({ setSidebarOpen, shouldShowSearch = true }) => (
+interface SearchHeaderProps {
+  setSidebarOpen: Dispatch<SetStateAction<boolean>>;
+  shouldShowSearch?: boolean;
+}
+
+const SearchHeader = ({ setSidebarOpen, shouldShowSearch = true }: SearchHeaderProps) => (
   <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 border-b border-gray-200 bg-white lg:hidden">
     <button
       type="button"

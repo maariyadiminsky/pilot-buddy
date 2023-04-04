@@ -10,7 +10,9 @@ import { useState } from 'react';
 
 import Sidebar from '@modules/common/components/sidebar/Sidebar';
 import SearchHeader from '@common/components/header/SearchHeader';
-import HeaderWithActions from '@common/components/header/HeaderWithActions';
+import HeaderWithActions, {
+  type HeaderActionItemType,
+} from '@common/components/header/HeaderWithActions';
 
 import { type ChildrenType } from '@common/types';
 
@@ -28,11 +30,13 @@ const secondaryNavigation = [
 
 interface PageWrapperProps {
   title?: string;
+  headerActions?: HeaderActionItemType;
   children: ChildrenType;
 }
 
-const PageWrapper = ({ title, children }: PageWrapperProps) => {
+const PageWrapper = ({ title, headerActions, children }: PageWrapperProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="min-h-full">
       <Sidebar {...{ navigation, secondaryNavigation, sidebarOpen, setSidebarOpen }} />
@@ -40,7 +44,12 @@ const PageWrapper = ({ title, children }: PageWrapperProps) => {
         <SearchHeader {...{ setSidebarOpen }} shouldShowSearch={false} />
         <main className="flex-1">
           <>
-            <HeaderWithActions title={title} />
+            <HeaderWithActions
+              title={title}
+              // todo fix typescript enum issue
+              /* @ts-ignore */
+              actions={headerActions}
+            />
             {children}
           </>
         </main>

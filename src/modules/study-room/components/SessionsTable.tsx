@@ -69,7 +69,7 @@ const sessions = [
 ];
 
 interface SessionsTableProps {
-  handleAddSession: () => void;
+  handleCreateSession: () => void;
   handleStartSession: (id: number) => void;
   handleEditSession: (id: number) => void;
   handleRemoveSession: (id: number) => void;
@@ -77,7 +77,7 @@ interface SessionsTableProps {
 }
 
 const SessionsTable = ({
-  handleAddSession,
+  handleCreateSession,
   handleStartSession,
   handleEditSession,
   handleRemoveSession,
@@ -86,10 +86,10 @@ const SessionsTable = ({
   const getDropdownActions = useCallback(
     () => [
       {
-        text: 'New',
+        text: 'Create',
         srText: 'Create new session',
         icon: PlusCircleIcon,
-        handleOnClick: () => handleAddSession(),
+        handleOnClick: () => handleCreateSession(),
       },
       {
         text: 'Delete all',

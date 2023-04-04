@@ -1,8 +1,10 @@
 // todo add typescript
 // @ts-nocheck
+import { PlusCircleIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@common/components/PageWrapper';
 import PinnedItems from '@modules/study-room/components/pinned-session/PinnedSessions';
 import SessionsTable from '@modules/study-room/components/SessionsTable';
+import { useCallback, useMemo } from 'react';
 
 const pinnedItems = [
   {
@@ -41,8 +43,14 @@ const pinnedItems = [
 
 const StudyRoom = () => {
   // eslint-disable-next-line
-  const handleAddSession = () => {
+  const routeToAddSessionScreen = () => {
+    // go to add session component and route
+  };
+
+  // eslint-disable-next-line
+  const handleCreateSession = () => {
     // handle add session
+    // pass data here eventually
   };
 
   // eslint-disable-next-line
@@ -64,8 +72,23 @@ const StudyRoom = () => {
     // remove all sessions
   };
 
+  const getHeaderActions = useCallback(
+    () => [
+      {
+        text: 'Create',
+        srText: 'Create new session',
+        icon: PlusCircleIcon,
+        buttonType: 'solid',
+        handleOnClick: () => routeToAddSessionScreen(),
+      },
+    ],
+    []
+  );
+
+  const headerActions = useMemo(() => getHeaderActions(), []);
+
   return (
-    <PageWrapper title="Study Room">
+    <PageWrapper title="Study Room" headerActions={headerActions}>
       <PinnedItems
         title="Pinned Sessions"
         items={pinnedItems}
@@ -73,7 +96,7 @@ const StudyRoom = () => {
       />
       <SessionsTable
         {...{
-          handleAddSession,
+          handleCreateSession,
           handleStartSession,
           handleEditSession,
           handleRemoveSession,

@@ -1,11 +1,11 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 
+import { WrapperTypeEnum } from '@common/types';
 import { truthyString } from '@common/utils';
-import { type WrapperType } from '@common/types';
 
 interface ProfileDropdownProps {
-  wrapperType: WrapperType;
+  wrapperType: keyof typeof WrapperTypeEnum;
 }
 
 const styles = {

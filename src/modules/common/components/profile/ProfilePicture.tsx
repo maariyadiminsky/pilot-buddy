@@ -1,8 +1,8 @@
-import { type WrapperType } from '@common/types';
+import { WrapperTypeEnum } from '@common/types';
 
 interface ProfilePictureProps {
-  wrapperType: WrapperType;
-  isMobile?: false;
+  wrapperType: keyof typeof WrapperTypeEnum;
+  isMobile?: boolean;
 }
 
 const styles = {

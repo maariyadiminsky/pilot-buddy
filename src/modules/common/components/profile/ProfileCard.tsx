@@ -3,11 +3,10 @@ import { ChevronUpDownIcon } from '@heroicons/react/24/outline';
 
 import ProfileDropdown from '@modules/common/components/profile/ProfileDropdown';
 import ProfilePicture from '@common/components/profile/ProfilePicture';
-
-import { type WrapperType } from '@common/types';
+import { WrapperTypeEnum } from '@common/types';
 
 interface ProfileCardProps {
-  wrapperType: WrapperType;
+  wrapperType: keyof typeof WrapperTypeEnum;
   isMobile: false;
 }
 

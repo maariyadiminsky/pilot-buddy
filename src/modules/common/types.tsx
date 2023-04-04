@@ -6,9 +6,9 @@ import {
   RefAttributes,
 } from 'react';
 
-export enum WrapperType {
-  Header = 'header',
-  Sidebar = 'sidebar',
+export enum WrapperTypeEnum {
+  header = 'header',
+  sidebar = 'sidebar',
 }
 
 export type ChildrenType = PropsWithChildren;
@@ -19,3 +19,10 @@ export type HeroIconType = ForwardRefExoticComponent<
     titleId?: string;
   } & RefAttributes<SVGSVGElement>
 >;
+
+// typescript utils
+
+type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
+  {
+    [K in Keys]-?: Required<Pick<T, K>> & Partial<Record<Exclude<Keys, K>, undefined>>;
+  }[Keys];
