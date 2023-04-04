@@ -1,7 +1,12 @@
 // todo add typescript
 // @ts-nocheck
 import { truthyString, getUniqId } from '@common/utils';
-import { PlayCircleIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
+import {
+  // EllipsisVerticalIcon,
+  PlayCircleIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from '@heroicons/react/20/solid';
 import { useState, useRef, useLayoutEffect } from 'react';
 
 const sessions = [
