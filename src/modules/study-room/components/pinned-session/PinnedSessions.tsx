@@ -63,7 +63,7 @@ const PinnedSession = ({
           <li key={getUniqId(text)} className="col-span-1 flex rounded-md shadow-sm">
             <div
               className={truthyString(
-                'flex w-16 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white',
+                'flex w-16 antialiased first-letter:flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white',
                 className
               )}
             >
@@ -74,7 +74,7 @@ const PinnedSession = ({
                 <button
                   type="button"
                   onClick={() => handleStartSession(id)}
-                  className="font-medium text-gray-900 hover:text-sky-700"
+                  className="font-medium text-gray-900 hover:text-sky-700 antialiased"
                 >
                   {text}
                 </button>

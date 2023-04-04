@@ -102,8 +102,8 @@ const SessionsTable = ({
   );
   return (
     <div className="px-4 sm:px-6 lg:px-8">
-      <div className="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0">
-        <table className="min-w-full divide-y divide-gray-300">
+      <div className="-mx-4 mt-10 sm:mx-0 rounded-t-md">
+        <table className="min-w-full divide-y-2 divide-sky-700">
           <thead>
             <tr>
               <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 sm:pl-6">
@@ -131,7 +131,7 @@ const SessionsTable = ({
               <tr key={getUniqId()}>
                 <td
                   className={truthyString(
-                    planIdx === 0 ? '' : 'border-t border-transparent',
+                    planIdx === 0 ? '' : 'border-t border-gray-300',
                     'relative py-4 pl-4 pr-3 text-sm sm:pl-6'
                   )}
                 >
@@ -143,7 +143,7 @@ const SessionsTable = ({
                       )}
                       aria-hidden="true"
                     />
-                    <div className="font-medium text-gray-900 w-36 md:w-60 xl:w-72 truncate">
+                    <div className="font-medium antialiased text-gray-900 w-36 md:w-60 xl:w-72 truncate">
                       {name}
                     </div>
                   </div>
@@ -155,13 +155,13 @@ const SessionsTable = ({
                     </span>
                   </div>
                   {planIdx !== 0 ? (
-                    <div className="absolute -top-px left-6 right-0 h-px bg-gray-200" />
+                    <div className="absolute -top-px left-6 right-0 h-px bg-gray-300" />
                   ) : null}
                 </td>
                 {/* desktop */}
                 <td
                   className={truthyString(
-                    planIdx === 0 ? '' : 'border-t border-gray-200',
+                    planIdx === 0 ? '' : 'border-t border-gray-300',
                     'px-3 py-3.5 text-sm text-gray-700 sm:table-cell'
                   )}
                 >
@@ -169,7 +169,7 @@ const SessionsTable = ({
                 </td>
                 <td
                   className={truthyString(
-                    planIdx === 0 ? '' : 'border-t border-gray-200',
+                    planIdx === 0 ? '' : 'border-t border-gray-300',
                     'hidden px-3 py-3.5 text-sm text-gray-700 sm:table-cell'
                   )}
                 >
@@ -177,7 +177,7 @@ const SessionsTable = ({
                 </td>
                 <td
                   className={truthyString(
-                    planIdx === 0 ? '' : 'border-t border-transparent',
+                    planIdx === 0 ? '' : 'border-t border-gray-300',
                     'relative py-3.5 pl-3 pr-4 text-center text-sm font-medium sm:pr-6'
                   )}
                 >
@@ -215,7 +215,7 @@ const SessionsTable = ({
                     <span className="sr-only">Delete test</span>
                   </button>
                   {planIdx !== 0 ? (
-                    <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" />
+                    <div className="absolute -top-px left-0 right-6 h-px bg-gray-300" />
                   ) : null}
                 </td>
               </tr>

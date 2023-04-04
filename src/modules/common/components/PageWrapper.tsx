@@ -13,6 +13,7 @@ import SearchHeader from '@common/components/header/SearchHeader';
 import HeaderWithActions, {
   type HeaderActionItemType,
 } from '@common/components/header/HeaderWithActions';
+import Breadcrumbs from '@common/components/Breadcrumbs';
 
 import { type ChildrenType } from '@common/types';
 
@@ -50,6 +51,7 @@ const PageWrapper = ({ title, headerActions, children }: PageWrapperProps) => {
               /* @ts-ignore */
               actions={headerActions}
             />
+            <Breadcrumbs />
             {children}
           </>
         </main>
