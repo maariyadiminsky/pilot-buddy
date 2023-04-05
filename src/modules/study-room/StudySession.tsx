@@ -52,7 +52,7 @@ const StudySession = () => {
           {/* Navbar */}
 
           {/* 3 column wrapper */}
-          <div className="w-full flex-grow lg:flex px-8">
+          <div className="w-full flex-grow xl:flex px-8">
             {/* Left sidebar & main wrapper */}
             <div className="min-w-0 flex-1 bg-inherit xl:flex">
               {/* Account profile */}
