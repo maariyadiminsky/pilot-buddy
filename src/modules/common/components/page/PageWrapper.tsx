@@ -38,7 +38,7 @@ const PageWrapper = ({ title, headerActions, children }: PageWrapperProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-full bg-zinc-50">
+    <div className="min-h-full bg-white">
       <Sidebar {...{ navigation, secondaryNavigation, sidebarOpen, setSidebarOpen }} />
       <div className="flex flex-col lg:pl-64">
         <SearchHeader {...{ setSidebarOpen }} shouldShowSearch={false} />

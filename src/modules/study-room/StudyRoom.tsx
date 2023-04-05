@@ -91,7 +91,7 @@ const StudyRoom = () => {
 
   return (
     <PageWrapper title="Study Room" headerActions={headerActions}>
-      <>
+      <div className="h-screen">
         <PinnedItems
           title="Pinned Sessions"
           items={pinnedItems}
@@ -106,7 +106,7 @@ const StudyRoom = () => {
             handleRemoveAllSessions,
           }}
         />
-      </>
+      </div>
     </PageWrapper>
   );
 };

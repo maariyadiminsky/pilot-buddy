@@ -4,8 +4,8 @@ const activityItems = [
 ];
 
 const SessionGoals = () => (
-  <div className="bg-gray-50 pr-4 sm:pr-6 lg:flex-shrink-0 lg:border-l lg:border-gray-200 lg:pr-8 xl:pr-0">
-    <div className="pl-6 lg:w-80">
+  <div className="bg-zinc-50 lg:flex-shrink-0 lg:border-l lg:border-gray-200 flex px-8 xl:w-96">
+    <div className="lg:w-80">
       <div className="pb-2 pt-6">
         <h2 className="text-sm font-semibold">Activity</h2>
       </div>

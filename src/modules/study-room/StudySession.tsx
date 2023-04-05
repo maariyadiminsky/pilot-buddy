@@ -46,8 +46,8 @@ const StudySession = () => {
   return (
     <PageWrapper title="Session Room" headerActions={headerActions}>
       <>
-        <div className="relative flex min-h-full min-w-full flex-col bg-inherit">
-          <div className="w-full flex-grow xl:flex px-8">
+        <div className="relative flex h-screen min-w-full flex-col bg-inherit">
+          <div className="w-full flex-grow xl:flex">
             <div className="min-w-0 flex-1 bg-inherit xl:flex">
               <SessionStatsAndActions />
               <SessionQuestionsList />
