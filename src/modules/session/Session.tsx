@@ -2,14 +2,14 @@
 // @ts-nocheck
 import { PlayCircleIcon, PencilSquareIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@modules/common/components/page/PageWrapper';
-import SessionStatsAndActions from '@modules/study-room/components/SessionStatsAndActions';
-import SessionQuestionsList from '@modules/study-room/components/SessionQuestionsList';
-import SessionGoals from '@modules/study-room/components/SessionGoals';
+import SessionNotes from '@modules/session/components/SessionNotes';
+import SessionQuestionsList from '@modules/session/components/SessionQuestionsList';
+import SessionGoals from '@modules/session/components/SessionGoals';
 
 import { useCallback, useMemo } from 'react';
 
 // todo: get session name and add to PageWrapper title
-const StudySession = () => {
+const Session = () => {
   // eslint-disable-next-line
   const handleStartSession = (id: number) => {
     // handle start session
@@ -49,7 +49,7 @@ const StudySession = () => {
         <div className="relative flex h-screen min-w-full flex-col bg-inherit">
           <div className="w-full flex-grow xl:flex">
             <div className="min-w-0 flex-1 bg-inherit xl:flex">
-              <SessionStatsAndActions />
+              <SessionNotes />
               <SessionQuestionsList />
             </div>
             <SessionGoals />
@@ -60,4 +60,4 @@ const StudySession = () => {
   );
 };
 
-export default StudySession;
+export default Session;

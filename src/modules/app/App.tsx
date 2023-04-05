@@ -1,6 +1,6 @@
 import { ROUTES } from '@modules/common/api/constants';
 import NotFoundPage from '@modules/page-status/NotFoundPage';
-import StudySession from '@modules/study-room/StudySession';
+import StudySession from '@modules/session/Session';
 import StudyRoom from '@modules/study-room/StudyRoom';
 import { persistor, store } from '@redux/store/reducers/store';
 import React from 'react';
