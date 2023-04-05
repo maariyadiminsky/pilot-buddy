@@ -1,10 +1,11 @@
 // todo add typescript
 // @ts-nocheck
-import { PlusCircleIcon } from '@heroicons/react/20/solid';
+import { PlusIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@modules/common/components/page/PageWrapper';
 import PinnedItems from '@modules/study-room/components/pinned-session/PinnedSessions';
 import SessionsTable from '@modules/study-room/components/SessionsTable';
 import { useCallback, useMemo } from 'react';
+import { type BrandButtonType } from '@common/components/button/BrandButton';
 
 const pinnedItems = [
   {
@@ -73,15 +74,16 @@ const StudyRoom = () => {
   };
 
   const getHeaderActions = useCallback(
-    () => [
-      {
-        text: 'Create',
-        srText: 'Create new session',
-        icon: PlusCircleIcon,
-        buttonType: 'solid',
-        handleOnClick: () => routeToAddSessionScreen(),
-      },
-    ],
+    () =>
+      [
+        {
+          text: 'Create',
+          srText: 'Create new session',
+          icon: PlusIcon,
+          buttonType: 'solid',
+          handleOnClick: () => routeToAddSessionScreen(),
+        },
+      ] as BrandButtonType[],
     []
   );
 
@@ -89,20 +91,22 @@ const StudyRoom = () => {
 
   return (
     <PageWrapper title="Study Room" headerActions={headerActions}>
-      <PinnedItems
-        title="Pinned Sessions"
-        items={pinnedItems}
-        {...{ handleStartSession, handleEditSession }}
-      />
-      <SessionsTable
-        {...{
-          handleCreateSession,
-          handleStartSession,
-          handleEditSession,
-          handleRemoveSession,
-          handleRemoveAllSessions,
-        }}
-      />
+      <>
+        <PinnedItems
+          title="Pinned Sessions"
+          items={pinnedItems}
+          {...{ handleStartSession, handleEditSession }}
+        />
+        <SessionsTable
+          {...{
+            handleCreateSession,
+            handleStartSession,
+            handleEditSession,
+            handleRemoveSession,
+            handleRemoveAllSessions,
+          }}
+        />
+      </>
     </PageWrapper>
   );
 };

@@ -1,31 +1,9 @@
-import { type HeroIconType } from '@common/types';
-import { truthyString, getUniqId } from '@common/utils';
-
-enum ButtonTypeEnum {
-  clear = 'clear',
-  solid = 'solid',
-}
-
-type ButtonType = keyof typeof ButtonTypeEnum;
-
-const styles = {
-  clear:
-    'sm:order-0 order-1 ml-3 inline-flex items-center rounded-md bg-gray-100 text-gray-900 px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-0',
-  solid:
-    'sm:order-1 order-0 inline-flex items-center rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800 sm:ml-3',
-};
-
-export interface HeaderActionItemType {
-  text: string;
-  srText: string;
-  buttonType: ButtonType;
-  icon?: HeroIconType;
-  handleOnClick?: () => void;
-}
+import BrandButton, { type BrandButtonType } from '@common/components/button/BrandButton';
+import { getUniqId } from '@common/utils';
 
 interface HeaderWithActionsProps {
   title?: string;
-  actions?: HeaderActionItemType[];
+  actions?: BrandButtonType[];
 }
 
 const HeaderWithActions = ({ title, actions }: HeaderWithActionsProps) => (
@@ -35,31 +13,10 @@ const HeaderWithActions = ({ title, actions }: HeaderWithActionsProps) => (
         {title}
       </h1>
     </div>
-    <div className="mt-4 flex sm:ml-4 sm:mt-0">
-      {actions?.map(({ text, srText, buttonType, icon, handleOnClick }) => {
-        const Icon = icon;
-
-        return (
-          <button
-            key={getUniqId(text)}
-            type="button"
-            className={truthyString('inline-flex justify-center font-light', styles[buttonType])}
-            onClick={() => handleOnClick?.()}
-          >
-            <span className="sr-only">{srText}</span>
-            {Icon && (
-              <Icon
-                className={truthyString(
-                  buttonType === 'clear' ? 'text-gray-500' : 'text-white',
-                  'font-light h-5 w-5 mr-1'
-                )}
-                aria-hidden="true"
-              />
-            )}
-            {text}
-          </button>
-        );
-      })}
+    <div className="mt-4 flex sm:ml-4 sm:mt-0 space-x-3">
+      {actions?.map((action) => (
+        <BrandButton key={getUniqId()} {...{ ...action }} />
+      ))}
     </div>
   </div>
 );

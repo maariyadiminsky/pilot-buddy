@@ -10,11 +10,9 @@ import { useState } from 'react';
 
 import Sidebar from '@modules/common/components/sidebar/Sidebar';
 import SearchHeader from '@common/components/header/SearchHeader';
-import HeaderWithActions, {
-  type HeaderActionItemType,
-} from '@common/components/header/HeaderWithActions';
+import HeaderWithActions from '@common/components/header/HeaderWithActions';
 import Breadcrumbs from '@modules/common/components/page/components/Breadcrumbs';
-
+import { type BrandButtonType } from '@common/components/button/BrandButton';
 import { type ChildrenType } from '@common/types';
 
 const navigation = [
@@ -31,7 +29,7 @@ const secondaryNavigation = [
 
 interface PageWrapperProps {
   title?: string;
-  headerActions?: HeaderActionItemType;
+  headerActions?: BrandButtonType[];
   children: ChildrenType;
 }
 
@@ -46,12 +44,7 @@ const PageWrapper = ({ title, headerActions, children }: PageWrapperProps) => {
         <SearchHeader {...{ setSidebarOpen }} shouldShowSearch={false} />
         <main className="flex-1">
           <>
-            <HeaderWithActions
-              title={title}
-              // todo fix typescript enum issue
-              /* @ts-ignore */
-              actions={headerActions}
-            />
+            <HeaderWithActions title={title} actions={headerActions} />
             <Breadcrumbs />
             {children}
           </>
