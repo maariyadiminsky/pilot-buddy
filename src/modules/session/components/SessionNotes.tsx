@@ -13,7 +13,7 @@ const SessionNotes = () => {
       <div className="py-6 px-4">
         <div className="items-center justify-between">
           <div className="flex-1 space-y-8">
-            <div className="xl:mt-3 space-y-8 sm:flex sm:items-center sm:justify-between sm:space-y-0 xl:block xl:space-y-8">
+            <div className="xl:mt-3 space-y-8 sm:space-y-0 xl:block xl:space-y-8">
               <NoteAction handleSubmit={handleSubmit} />
               <Notes notes={notes} />
             </div>

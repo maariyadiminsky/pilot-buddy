@@ -9,7 +9,7 @@ interface NotesProps {
 const Notes = ({ notes }: NotesProps) => {
   console.log('notes:', notes);
   return (
-    <ul className=" overflow-auto max-h-screen overscroll-contain scroll-smooth">
+    <ul className="divide-y divide-solid max-h-screen overflow-y-auto smooth-scroll overscroll-contain relative">
       {notes.map(({ id, text, icon }) => {
         const isLink = icon.value === 'link';
         const textToRender = isLink ? includeProtocolAndHostWithinLink(text) : text;
@@ -20,7 +20,6 @@ const Notes = ({ notes }: NotesProps) => {
               <NoteIcon {...icon} />
             </div>
             <div className="ml-2 w-full">
-              {/* <p className="text-sm font-medium text-gray-900">{person.name}</p> */}
               <p
                 className={
                   isLink ? 'text-sm text-blue-600 hover:text-blue-600' : 'text-sm text-gray-500'
