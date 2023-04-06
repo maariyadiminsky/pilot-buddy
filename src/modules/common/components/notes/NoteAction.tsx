@@ -28,21 +28,28 @@ interface NoteActionProps {
   handleSubmit: (data: NoteDataType) => void;
 }
 
+const DEFAULT_NOTE_ICON = NOTE_TYPES[3];
+
 const NoteAction = ({ formData, handleSubmit }: NoteActionProps) => {
   const [text, setText] = useState(formData?.text || '');
-  const [selectedIcon, setSelectedIcon] = useState(formData?.icon || NOTE_TYPES[3]);
+  const [selectedIcon, setSelectedIcon] = useState(formData?.icon || DEFAULT_NOTE_ICON);
 
   const charLimit = getCharLeft(text);
 
   const handleFormSubmit = (event: SyntheticEvent<Element>) => {
     event.preventDefault();
 
-    return handleSubmit({
+    console.log('in handleFormSubmit');
+
+    handleSubmit({
       ...(formData || {}),
       id: formData?.id || getUniqId(),
       icon: selectedIcon,
       text,
     });
+
+    setText('');
+    setSelectedIcon(DEFAULT_NOTE_ICON);
   };
 
   return (
