@@ -1,79 +1,55 @@
-import { Fragment, useState } from 'react';
-import {
-  FaceFrownIcon,
-  FaceSmileIcon,
-  FireIcon,
-  HandThumbUpIcon,
-  HeartIcon,
-  XMarkIcon,
-  PlusCircleIcon,
-} from '@heroicons/react/20/solid';
+import { SyntheticEvent, Fragment, useState } from 'react';
+import { EllipsisVerticalIcon, PlusCircleIcon } from '@heroicons/react/20/solid';
 import { Listbox, Transition } from '@headlessui/react';
-import { truthyString } from '@common/utils';
-
-const moods = [
-  {
-    name: 'Excited',
-    value: 'excited',
-    icon: FireIcon,
-    iconColor: 'text-white',
-    bgColor: 'bg-red-500',
-  },
-  {
-    name: 'Loved',
-    value: 'loved',
-    icon: HeartIcon,
-    iconColor: 'text-white',
-    bgColor: 'bg-pink-400',
-  },
-  {
-    name: 'Happy',
-    value: 'happy',
-    icon: FaceSmileIcon,
-    iconColor: 'text-white',
-    bgColor: 'bg-green-400',
-  },
-  {
-    name: 'Sad',
-    value: 'sad',
-    icon: FaceFrownIcon,
-    iconColor: 'text-white',
-    bgColor: 'bg-yellow-400',
-  },
-  {
-    name: 'Thumbsy',
-    value: 'thumbsy',
-    icon: HandThumbUpIcon,
-    iconColor: 'text-white',
-    bgColor: 'bg-blue-500',
-  },
-  {
-    name: 'I feel nothing',
-    value: null,
-    icon: XMarkIcon,
-    iconColor: 'text-gray-400',
-    bgColor: 'bg-transparent',
-  },
-];
+import { truthyString, getUniqId } from '@common/utils';
+import { HeroIconType } from '@common/types';
+import { NOTE_TYPES } from '@common/components/notes/constants';
+import NoteIcon from '@common/components/notes/components/NoteIcon';
 
 const CHAR_LIMIT = 100;
 const getCharLeft = (text: string) => CHAR_LIMIT - text.length;
 
-interface NoteProps {
-  existingText?: string;
+interface NoteIconType {
+  name: string;
+  value: string | null;
+  icon: HeroIconType;
+  iconColor: string;
+  bgColor: string;
 }
 
-const Note = ({ existingText = '' }: NoteProps) => {
-  const [text, setText] = useState(existingText);
-  const [selectedIcon, setSelectedIcon] = useState(moods[5]);
+export interface NoteDataType {
+  id?: string;
+  text: string;
+  icon: NoteIconType;
+}
+
+interface NoteActionProps {
+  formData?: NoteDataType;
+  handleSubmit: (data: NoteDataType) => void;
+}
+
+const NoteAction = ({ formData, handleSubmit }: NoteActionProps) => {
+  const [text, setText] = useState(formData?.text || '');
+  const [selectedIcon, setSelectedIcon] = useState(formData?.icon || NOTE_TYPES[3]);
 
   const charLimit = getCharLeft(text);
+
+  const handleFormSubmit = (event: SyntheticEvent<Element>) => {
+    event.preventDefault();
+
+    return handleSubmit({
+      ...(formData || {}),
+      id: formData?.id || getUniqId(),
+      icon: selectedIcon,
+      text,
+    });
+  };
 
   return (
     <div className="flex items-start space-x-4">
       <div className="min-w-0 flex-1">
-        <form action="#" className="relative">
-          <div className="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-sky-700">
+        <form onSubmit={handleFormSubmit} className="relative">
+          <div className="overflow-hidden w-full rounded-lg shadow-sm ring-1 ring-inset bg-white ring-gray-300 focus-within:ring-2 focus-within:ring-sky-700">
             <label htmlFor="note" className="sr-only">
               Add a note here
             </label>
@@ -81,7 +57,8 @@ const Note = ({ existingText = '' }: NoteProps) => {
               rows={3}
               name="note"
               id="note"
-              className="block w-full resize-none border-0 bg-transparent text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:py-1.5 sm:text-sm sm:leading-6"
+              aria-label="note"
+              className="block whitespace-pre-wrap w-full resize-none border-0 bg-transparent text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:py-1.5 sm:text-sm sm:leading-6"
               placeholder="Add a note here..."
               maxLength={100}
               value={text}
@@ -97,39 +74,26 @@ const Note = ({ existingText = '' }: NoteProps) => {
             </div>
           </div>
 
-          <div className="absolute inset-x-0 bottom-0 flex justify-between py-2 pl-3 pr-2">
+          <div className="absolute inset-x-0 bottom-0 flex justify-between py-2 pl-3.5 pr-2">
             <div className="flex items-center space-x-5">
               <div className="flex items-center">
                 <Listbox value={selectedIcon} onChange={setSelectedIcon}>
                   {({ open }) => (
                     <>
-                      <Listbox.Label className="sr-only"> Your mood </Listbox.Label>
+                      <Listbox.Label className="sr-only"> Note type </Listbox.Label>
                       <div className="relative">
                         <Listbox.Button className="relative -m-2.5 flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500">
                           <span className="flex items-center justify-center">
                             {selectedIcon.value === null ? (
                               <span>
-                                <FaceSmileIcon
+                                <EllipsisVerticalIcon
                                   className="h-5 w-5 flex-shrink-0"
                                   aria-hidden="true"
                                 />
-                                <span className="sr-only"> Add your mood </span>
+                                <span className="sr-only"> Add node type </span>
                               </span>
                             ) : (
-                              <span>
-                                <span
-                                  className={truthyString(
-                                    selectedIcon.bgColor,
-                                    'flex h-8 w-8 items-center justify-center rounded-full'
-                                  )}
-                                >
-                                  <selectedIcon.icon
-                                    className="h-5 w-5 flex-shrink-0 text-white"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                                <span className="sr-only">{selectedIcon.name}</span>
-                              </span>
+                              <NoteIcon {...selectedIcon} />
                             )}
                           </span>
                         </Listbox.Button>
@@ -142,35 +106,19 @@ const Note = ({ existingText = '' }: NoteProps) => {
                           leaveTo="opacity-0"
                         >
                           <Listbox.Options className="absolute z-10 -ml-6 mt-1 w-60 rounded-lg bg-white py-3 text-base shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:ml-auto sm:w-64 sm:text-sm">
-                            {moods.map((mood) => (
+                            {NOTE_TYPES.map((type) => (
                               <Listbox.Option
-                                key={mood.value}
+                                key={type.value}
                                 className={({ active }) =>
                                   truthyString(
                                     active ? 'bg-gray-100' : 'bg-white',
                                     'relative cursor-default select-none px-3 py-2'
                                   )
                                 }
-                                value={mood}
+                                value={type}
                               >
                                 <div className="flex items-center">
-                                  <div
-                                    className={truthyString(
-                                      mood.bgColor,
-                                      'flex h-8 w-8 items-center justify-center rounded-full'
-                                    )}
-                                  >
-                                    <mood.icon
-                                      className={truthyString(
-                                        mood.iconColor,
-                                        'h-5 w-5 flex-shrink-0'
-                                      )}
-                                      aria-hidden="true"
-                                    />
-                                  </div>
-                                  <span className="ml-3 block truncate font-medium">
-                                    {mood.name}
-                                  </span>
+                                  <NoteIcon {...type} shouldIncludeName />
                                 </div>
                               </Listbox.Option>
                             ))}
@@ -201,4 +149,4 @@ const Note = ({ existingText = '' }: NoteProps) => {
   );
 };
 
-export default Note;
+export default NoteAction;
