@@ -25,8 +25,6 @@ const NoteAction = ({ formData, handleSubmit }: NoteActionProps) => {
   const handleFormSubmit = (event: SyntheticEvent<Element>) => {
     event.preventDefault();
 
-    console.log('in handleFormSubmit');
-
     handleSubmit({
       ...(formData || {}),
       id: formData?.id || getUniqId(),

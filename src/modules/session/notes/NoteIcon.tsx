@@ -21,7 +21,7 @@ const NoteIcon = ({
   const Icon = icon;
 
   return (
-    <>
+    <div>
       <span
         className={truthyString(
           bgColor,
@@ -35,7 +35,7 @@ const NoteIcon = ({
         <span className="ml-3 block truncate font-medium text-gray-900 text-sm">{name}</span>
       )}
       <span className="sr-only">{name}</span>
-    </>
+    </div>
   );
 };
 
