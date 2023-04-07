@@ -1,5 +1,5 @@
 import { SyntheticEvent, Fragment, useState, useEffect } from 'react';
-import { EllipsisVerticalIcon, PlusCircleIcon } from '@heroicons/react/20/solid';
+import { PlusCircleIcon, EyeSlashIcon } from '@heroicons/react/20/solid';
 import { Listbox, Transition } from '@headlessui/react';
 import { truthyString, getUniqId } from '@common/utils';
 import { NOTE_TYPES } from '@modules/session/notes/constants';
@@ -12,11 +12,13 @@ const getCharLeft = (text: string) => CHAR_LIMIT - text.length;
 interface NoteActionProps {
   currentNote?: NoteDataType;
   handleSubmit: (data: NoteDataType) => void;
+  shouldHide: boolean;
+  setShouldHide: (value: boolean) => void;
 }
 
 const DEFAULT_NOTE_ICON = NOTE_TYPES[3];
 
-const NoteAction = ({ currentNote, handleSubmit }: NoteActionProps) => {
+const NoteAction = ({ currentNote, handleSubmit, shouldHide, setShouldHide }: NoteActionProps) => {
   const [text, setText] = useState(currentNote?.text || '');
   const [selectedIcon, setSelectedIcon] = useState(currentNote?.icon || DEFAULT_NOTE_ICON);
 
@@ -42,6 +44,8 @@ const NoteAction = ({ currentNote, handleSubmit }: NoteActionProps) => {
     setText('');
     setSelectedIcon(DEFAULT_NOTE_ICON);
   };
+
+  if (shouldHide) return null;
 
   return (
     <div className="flex items-start space-x-4 px-4">
@@ -78,23 +82,23 @@ const NoteAction = ({ currentNote, handleSubmit }: NoteActionProps) => {
                 <Listbox value={selectedIcon} onChange={setSelectedIcon}>
                   {({ open }) => (
                     <>
-                      <Listbox.Label className="sr-only"> Note type </Listbox.Label>
                       <div className="relative">
-                        <Listbox.Button className="relative -m-2.5 flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500">
-                          <span className="flex items-center justify-center">
-                            {selectedIcon.value === null ? (
-                              <span>
-                                <EllipsisVerticalIcon
-                                  className="h-5 w-5 flex-shrink-0"
-                                  aria-hidden="true"
-                                />
-                                <span className="sr-only"> Add node type </span>
-                              </span>
-                            ) : (
-                              <NoteIcon {...selectedIcon} />
-                            )}
-                          </span>
-                        </Listbox.Button>
+                        <div className="flex flex-row flex-start space-x-4">
+                          <Listbox.Button className="relative -m-2.5 flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500">
+                            <NoteIcon {...selectedIcon} />
+                            <Listbox.Label className="sr-only"> Note type </Listbox.Label>
+                          </Listbox.Button>
+                          <button
+                            type="button"
+                            className="flex items-center justify-center"
+                            onClick={() => setShouldHide(true)}
+                          >
+                            <EyeSlashIcon
+                              className="w-6 h-6 flex-shrink-0 text-gray-300 hover:text-sky-700"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </div>
 
                         <Transition
                           show={open}
