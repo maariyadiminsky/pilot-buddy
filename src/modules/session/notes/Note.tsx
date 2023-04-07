@@ -22,7 +22,7 @@ export interface NoteDataType {
 
 interface NoteDataProps extends NoteDataType {
   handleRemoveNote: (id: string) => void;
-  handleEditNote: (id: string, shouldSave?: boolean) => void;
+  handleEditNote: (id: string) => void;
 }
 
 const Note = ({ id, text, icon, handleRemoveNote, handleEditNote }: NoteDataProps) => {

@@ -3,7 +3,7 @@ import { getUniqId } from '@common/utils';
 
 interface NotesProps {
   notes: NoteDataType[];
-  handleRemoveNote: (id: string, shouldSave?: boolean) => void;
+  handleRemoveNote: (id: string) => void;
   handleEditNote: (id: string) => void;
 }
 

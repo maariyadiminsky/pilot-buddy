@@ -1,5 +1,5 @@
 import { SyntheticEvent, Fragment, useState, useEffect } from 'react';
-import { PlusCircleIcon, EyeSlashIcon } from '@heroicons/react/20/solid';
+import { PlusCircleIcon, EyeIcon } from '@heroicons/react/20/solid';
 import { Listbox, Transition } from '@headlessui/react';
 import { truthyString, getUniqId } from '@common/utils';
 import { NOTE_TYPES } from '@modules/session/notes/constants';
@@ -13,12 +13,12 @@ interface NoteActionProps {
   currentNote?: NoteDataType;
   handleSubmit: (data: NoteDataType) => void;
   shouldHide: boolean;
-  setShouldHide: (value: boolean) => void;
+  handleHideNote: (value: boolean) => void;
 }
 
 const DEFAULT_NOTE_ICON = NOTE_TYPES[3];
 
-const NoteAction = ({ currentNote, handleSubmit, shouldHide, setShouldHide }: NoteActionProps) => {
+const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: NoteActionProps) => {
   const [text, setText] = useState(currentNote?.text || '');
   const [selectedIcon, setSelectedIcon] = useState(currentNote?.icon || DEFAULT_NOTE_ICON);
 
@@ -29,7 +29,7 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, setShouldHide }: No
       setText(currentNote.text);
       setSelectedIcon(currentNote.icon);
     }
-  }, [currentNote?.id]);
+  }, [currentNote]);
 
   const handleFormSubmit = (event: SyntheticEvent<Element>) => {
     event.preventDefault();
@@ -91,9 +91,9 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, setShouldHide }: No
                           <button
                             type="button"
                             className="flex items-center justify-center"
-                            onClick={() => setShouldHide(true)}
+                            onClick={() => handleHideNote(true)}
                           >
-                            <EyeSlashIcon
+                            <EyeIcon
                               className="w-6 h-6 flex-shrink-0 text-gray-300 hover:text-sky-700"
                               aria-hidden="true"
                             />
