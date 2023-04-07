@@ -13,6 +13,7 @@ export const removeObjectFromArray = (
 ) => {
   const isArrayItemsAnObject = typeof array[0] === 'object';
 
+  // ignore arrays as values as this is a shallow removal
   if ((!keyToCheck && isArrayItemsAnObject) || Array.isArray(array[0])) return array;
 
   const indexOfItemToRemove = array.findIndex(

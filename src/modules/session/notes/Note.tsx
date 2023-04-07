@@ -44,7 +44,7 @@ const Note = ({ id, text, icon, handleRemoveNote }: NoteDataProps) => {
       <button
         type="button"
         onClick={() => handleRemoveNote(id)}
-        className="hidden font-medium opacity-100 duration-300 absolute inset-x-0 bottom-0 top-0 group-hover:block group-hover:cursor-pointer text-center bg-gray-100 text-gray-700"
+        className="hidden font-medium opacity-100 duration-300 absolute inset-x-0 bottom-0 top-0 group-hover:block group-hover:cursor-pointer text-center bg-sky-700 text-white"
       >
         <div className="ml-4 flex flex-row justify-start items-center">
           <XMarkIcon className="h-5 w-5 opacity-75 flex-shrink-0" aria-hidden="true" />
