@@ -11,7 +11,7 @@ import { useState } from 'react';
 import Sidebar from '@modules/common/components/sidebar/Sidebar';
 import SearchHeader from '@common/components/header/SearchHeader';
 import HeaderWithActions from '@common/components/header/HeaderWithActions';
-import Breadcrumbs from '@modules/common/components/page/components/Breadcrumbs';
+import Breadcrumbs from '@modules/common/components/page/Breadcrumbs';
 import { type BrandButtonType } from '@common/components/button/BrandButton';
 import { type ChildrenType } from '@common/types';
 

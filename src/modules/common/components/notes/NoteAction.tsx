@@ -2,26 +2,12 @@ import { SyntheticEvent, Fragment, useState } from 'react';
 import { EllipsisVerticalIcon, PlusCircleIcon } from '@heroicons/react/20/solid';
 import { Listbox, Transition } from '@headlessui/react';
 import { truthyString, getUniqId } from '@common/utils';
-import { HeroIconType } from '@common/types';
 import { NOTE_TYPES } from '@common/components/notes/constants';
-import NoteIcon from '@common/components/notes/components/NoteIcon';
+import NoteIcon from '@modules/common/components/notes/NoteIcon';
+import { type NoteDataType } from '@common/components/notes/Note';
 
 const CHAR_LIMIT = 100;
 const getCharLeft = (text: string) => CHAR_LIMIT - text.length;
-
-interface NoteIconType {
-  name: string;
-  value: string | null;
-  icon: HeroIconType;
-  iconColor: string;
-  bgColor: string;
-}
-
-export interface NoteDataType {
-  id?: string;
-  text: string;
-  icon: NoteIconType;
-}
 
 interface NoteActionProps {
   formData?: NoteDataType;
@@ -53,7 +39,7 @@ const NoteAction = ({ formData, handleSubmit }: NoteActionProps) => {
   };
 
   return (
-    <div className="flex items-start space-x-4">
+    <div className="flex items-start space-x-4 px-4">
       <div className="min-w-0 flex-1">
         <form onSubmit={handleFormSubmit} className="relative">
           <div className="overflow-hidden w-full rounded-lg shadow-sm ring-1 ring-inset bg-white ring-gray-300 focus-within:ring-2 focus-within:ring-sky-700">
