@@ -1,8 +1,11 @@
 import NoteIcon from '@modules/session/notes/NoteIcon';
 import { type HeroIconType } from '@common/types';
-import { removeLineBreaksFromText, includeProtocolAndHostWithinLink } from '@common/utils';
-import { XMarkIcon } from '@heroicons/react/20/solid';
-
+import {
+  truthyString,
+  removeLineBreaksFromText,
+  includeProtocolAndHostWithinLink,
+} from '@common/utils';
+import { XMarkIcon, PencilIcon } from '@heroicons/react/20/solid';
 interface NoteIconType {
   name: string;
   value: string | null;
@@ -12,25 +15,55 @@ interface NoteIconType {
 }
 
 export interface NoteDataType {
-  id?: string;
+  id: string;
   text: string;
   icon: NoteIconType;
 }
 
 interface NoteDataProps extends NoteDataType {
-  handleRemoveNote: (id?: string) => void;
+  handleRemoveNote: (id: string) => void;
+  handleEditNote: (id: string, shouldSave?: boolean) => void;
 }
 
-const Note = ({ id, text, icon, handleRemoveNote }: NoteDataProps) => {
+const Note = ({ id, text, icon, handleRemoveNote, handleEditNote }: NoteDataProps) => {
   const isLink = icon.value === 'link';
   const textToRender = isLink ? includeProtocolAndHostWithinLink(text) : text;
 
   return (
-    <li key={id} className="relative group flex flex-row justify-between py-4">
-      <div className="ml-4 flex flex-row space-x-3">
-        <NoteIcon {...icon} />
+    <li key={id} className="relative justify-between py-4">
+      <div className="px-4 flex flex-col space-y-1 w-full xl:w-72">
+        <div className="flex flex-row justify-between space-x-2">
+          <NoteIcon {...icon} />
+          <div className="flex flex-row flex-end justify-between">
+            <button
+              type="button"
+              onClick={() => handleEditNote(id)}
+              className="flex justify-center items-center group pr-1"
+            >
+              <PencilIcon
+                className="h-6 w-6 xl:w-4 xl:h-4 opacity-75 flex-shrink-0 text-gray-700 group-hover:text-sky-700"
+                aria-hidden="true"
+              />
+              <span className="sr-only">Edit note</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleRemoveNote(id)}
+              className="flex justify-center items-center group"
+            >
+              <XMarkIcon
+                className="h-8 w-8 xl:w-5 xl:h-5 opacity-75 flex-shrink-0 text-gray-700 group-hover:text-sky-700"
+                aria-hidden="true"
+              />
+              <span className="sr-only">Remove note</span>
+            </button>
+          </div>
+        </div>
         <div
-          className={isLink ? 'text-sm text-blue-600 hover:text-blue-600' : 'text-sm text-gray-500'}
+          className={truthyString(
+            isLink ? 'text-sm text-blue-600 hover:text-blue-600' : 'text-sm text-gray-500',
+            'break-words w-60'
+          )}
         >
           {isLink ? (
             <a href={textToRender} target="_blank" rel="noreferrer">
@@ -41,16 +74,6 @@ const Note = ({ id, text, icon, handleRemoveNote }: NoteDataProps) => {
           )}
         </div>
       </div>
-      <button
-        type="button"
-        onClick={() => handleRemoveNote(id)}
-        className="hidden font-medium opacity-100 duration-300 absolute inset-x-0 bottom-0 top-0 group-hover:block group-hover:cursor-pointer text-center bg-sky-700 text-white"
-      >
-        <div className="ml-4 flex flex-row justify-start items-center">
-          <XMarkIcon className="h-5 w-5 opacity-75 flex-shrink-0" aria-hidden="true" />
-          <span className="ml-4 text-sm">Remove</span>
-        </div>
-      </button>
     </li>
   );
 };

@@ -21,15 +21,18 @@ const NoteIcon = ({
   const Icon = icon;
 
   return (
-    <div>
+    <div className="flex flex-row justify-center items-center">
       <span
         className={truthyString(
           bgColor,
-          'flex h-6 w-6 items-center justify-center rounded-full',
+          'flex h-7 w-7 xl:h-6 xl:w-6 items-center justify-center rounded-full',
           className
         )}
       >
-        <Icon className={truthyString(iconColor, 'h-4 w-4 flex-shrink-0')} aria-hidden="true" />
+        <Icon
+          className={truthyString(iconColor, 'w-5 h-5 xl:h-4 xl:w-4 flex-shrink-0')}
+          aria-hidden="true"
+        />
       </span>
       {shouldIncludeName && (
         <span className="ml-3 block truncate font-medium text-gray-900 text-sm">{name}</span>

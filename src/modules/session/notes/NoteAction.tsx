@@ -1,4 +1,4 @@
-import { SyntheticEvent, Fragment, useState } from 'react';
+import { SyntheticEvent, Fragment, useState, useEffect } from 'react';
 import { EllipsisVerticalIcon, PlusCircleIcon } from '@heroicons/react/20/solid';
 import { Listbox, Transition } from '@headlessui/react';
 import { truthyString, getUniqId } from '@common/utils';
@@ -10,24 +10,31 @@ const CHAR_LIMIT = 100;
 const getCharLeft = (text: string) => CHAR_LIMIT - text.length;
 
 interface NoteActionProps {
-  formData?: NoteDataType;
+  currentNote?: NoteDataType;
   handleSubmit: (data: NoteDataType) => void;
 }
 
 const DEFAULT_NOTE_ICON = NOTE_TYPES[3];
 
-const NoteAction = ({ formData, handleSubmit }: NoteActionProps) => {
-  const [text, setText] = useState(formData?.text || '');
-  const [selectedIcon, setSelectedIcon] = useState(formData?.icon || DEFAULT_NOTE_ICON);
+const NoteAction = ({ currentNote, handleSubmit }: NoteActionProps) => {
+  const [text, setText] = useState(currentNote?.text || '');
+  const [selectedIcon, setSelectedIcon] = useState(currentNote?.icon || DEFAULT_NOTE_ICON);
 
   const charLimit = getCharLeft(text);
+
+  useEffect(() => {
+    if (currentNote) {
+      setText(currentNote.text);
+      setSelectedIcon(currentNote.icon);
+    }
+  }, [currentNote?.id]);
 
   const handleFormSubmit = (event: SyntheticEvent<Element>) => {
     event.preventDefault();
 
     handleSubmit({
-      ...(formData || {}),
-      id: formData?.id || getUniqId(),
+      ...(currentNote || {}),
+      id: currentNote?.id || getUniqId(),
       icon: selectedIcon,
       text,
     });
