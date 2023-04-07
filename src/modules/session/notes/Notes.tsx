@@ -1,4 +1,4 @@
-import Note, { type NoteDataType } from '@common/components/notes/Note';
+import Note, { type NoteDataType } from '@modules/session/notes/Note';
 import { getUniqId } from '@common/utils';
 
 interface NotesProps {

@@ -2,9 +2,9 @@ import { SyntheticEvent, Fragment, useState } from 'react';
 import { EllipsisVerticalIcon, PlusCircleIcon } from '@heroicons/react/20/solid';
 import { Listbox, Transition } from '@headlessui/react';
 import { truthyString, getUniqId } from '@common/utils';
-import { NOTE_TYPES } from '@common/components/notes/constants';
-import NoteIcon from '@modules/common/components/notes/NoteIcon';
-import { type NoteDataType } from '@common/components/notes/Note';
+import { NOTE_TYPES } from '@modules/session/notes/constants';
+import NoteIcon from '@modules/session/notes/NoteIcon';
+import { type NoteDataType } from '@modules/session/notes/Note';
 
 const CHAR_LIMIT = 100;
 const getCharLeft = (text: string) => CHAR_LIMIT - text.length;

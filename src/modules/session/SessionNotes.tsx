@@ -1,15 +1,16 @@
 import { useState } from 'react';
 
-import Notes from '@common/components/notes/Notes';
-import NoteAction from '@common/components/notes/NoteAction';
-import { type NoteDataType } from '@common/components/notes/Note';
+import Notes from '@modules/session/notes/Notes';
+import NoteAction from '@modules/session/notes/NoteAction';
+import { type NoteDataType } from '@modules/session/notes/Note';
+import { removeObjectFromArray } from '@common/utils';
 
 const SessionNotes = () => {
   const [notes, setNotes] = useState<NoteDataType[]>([]);
 
   const handleSubmit = (data: NoteDataType) => setNotes([...notes, { ...data }]);
 
-  const handleRemoveNote = (id?: string) => id && notes.filter((note) => note.id !== id);
+  const handleRemoveNote = (id?: string) => id && setNotes(removeObjectFromArray(notes, id, 'id'));
 
   return (
     <div className="bg-zinc-50 xl:w-72 xl:flex-shrink-0 xl:border-r xl:border-gray-200">

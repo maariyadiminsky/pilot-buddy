@@ -2,9 +2,9 @@
 // @ts-nocheck
 import { PlayCircleIcon, PencilSquareIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@modules/common/components/page/PageWrapper';
-import SessionNotes from '@modules/session/components/SessionNotes';
-import SessionQuestionsList from '@modules/session/components/SessionQuestionsList';
-import SessionGoals from '@modules/session/components/SessionGoals';
+import SessionNotes from '@modules/session/SessionNotes';
+import SessionQuestionsList from '@modules/session/SessionQuestionsList';
+import SessionGoals from '@modules/session/SessionGoals';
 
 import { useCallback, useMemo } from 'react';
 

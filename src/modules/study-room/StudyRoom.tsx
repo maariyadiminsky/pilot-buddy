@@ -2,8 +2,8 @@
 // @ts-nocheck
 import { PlusIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@modules/common/components/page/PageWrapper';
-import PinnedItems from '@modules/study-room/components/pinned-session/PinnedSessions';
-import SessionsTable from '@modules/study-room/components/SessionsTable';
+import PinnedItems from '@modules/study-room/pinned-session/PinnedSessions';
+import SessionsTable from '@modules/study-room/SessionsTable';
 import { useCallback, useMemo } from 'react';
 import { type BrandButtonType } from '@common/components/button/BrandButton';
 
