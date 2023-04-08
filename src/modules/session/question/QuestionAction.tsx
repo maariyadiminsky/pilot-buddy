@@ -20,7 +20,7 @@ const QuestionAction = ({ setShouldShowQuestionAction }: QuestionActionProps) =>
     <div className="flex flex-col mb-6">
       <label
         htmlFor="question"
-        className="justify-start items-start block text-sm font-medium leading-6 text-pink-600"
+        className="justify-start items-start block text-sm font-semibold leading-6 text-pink-600"
       >
         Question
       </label>
@@ -42,7 +42,7 @@ const QuestionAction = ({ setShouldShowQuestionAction }: QuestionActionProps) =>
     </div>
     <div className="flex flex-col mt-2">
       <div className="flex justify-between">
-        <label htmlFor="answer" className="block text-sm font-medium leading-6 text-sky-700">
+        <label htmlFor="answer" className="block text-sm font-semibold leading-6 text-sky-700">
           Answer (Optional)
         </label>
       </div>

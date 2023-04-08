@@ -17,7 +17,7 @@ const SessionQuestion = ({ question, answer }: SessionQuestionProps) => (
           <div className="w-8">
             <QuestionMarkCircleIcon className="text-pink-600 h-6 w-6" aria-hidden="true" />
           </div>
-          <div className="w-96 text-base font-medium text-pink-600">
+          <div className="w-96 text-sm font-medium text-pink-600">
             <span className="font-semibold">Q:</span> {question}
             <span className="sr-only">{question}</span>
           </div>
