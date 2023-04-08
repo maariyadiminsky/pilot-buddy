@@ -27,7 +27,7 @@ const projects = [
 const SessionQuestionsList = () => (
   <div className="bg-white lg:min-w-0 lg:flex-1">
     <div className="border-b border-t border-gray-200 pb-4 pl-4 pr-6 pt-4 sm:pl-6 lg:pl-8 xl:border-t-0 xl:pl-6 xl:pt-6">
-      <div className="flex items-center">
+      <div className="flex items-center justify-between">
         <h1 className="flex-1 text-lg font-medium">Projects</h1>
         <Menu as="div" className="relative">
           <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">

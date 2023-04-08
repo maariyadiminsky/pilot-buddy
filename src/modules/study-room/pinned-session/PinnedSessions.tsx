@@ -80,7 +80,7 @@ const PinnedSession = ({
                 </button>
                 <p className="text-gray-500">{getTypeAmount(type, total)}</p>
               </div>
-              <DropdownMenu name="pinned-items" actions={getDropdownActions(id)} wrapperId={id} />
+              <DropdownMenu name="pinned-items" actions={getDropdownActions(id)} />
             </div>
           </li>
         ))}

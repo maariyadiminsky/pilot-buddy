@@ -8,17 +8,16 @@ interface MenuOption {
   text: string;
   srText: string;
   icon?: HeroIconType;
-  handleOnClick?: (id: number) => void;
+  handleOnClick?: () => void;
 }
 
 interface DropdownMenuProps {
   name: string;
   actions: MenuOption[];
-  wrapperId?: number;
   className?: string;
 }
 
-const DropdownMenu = ({ name, actions, wrapperId, className }: DropdownMenuProps) => {
+const DropdownMenu = ({ name, actions, className }: DropdownMenuProps) => {
   const menuRef = useRef<HTMLElement | null>(null);
   const [menuAdjustment, setMenuAdjustment] = useState('');
 
@@ -70,7 +69,7 @@ const DropdownMenu = ({ name, actions, wrapperId, className }: DropdownMenuProps
                 {({ active }) => (
                   <button
                     type="button"
-                    onClick={() => wrapperId && handleOnClick?.(wrapperId)}
+                    onClick={() => handleOnClick?.()}
                     className={truthyString(
                       icon ? hasIconClass(active) : noIconClass(active),
                       'block px-4 py-2 text-sm w-full h-full text-left',
