@@ -11,7 +11,7 @@ const getCharLeft = (text: string) => CHAR_LIMIT - text.length;
 
 interface NoteActionProps {
   currentNote?: NoteDataType;
-  handleSubmit: (data: NoteDataType) => void;
+  handleSubmit: (value: NoteDataType) => void;
   shouldHide: boolean;
   handleHideNote: (value: boolean) => void;
 }
@@ -32,6 +32,11 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
     }
   }, [currentNote]);
 
+  const handleSetText = (newText: string) => {
+    setShouldShowEmptyTextWarning(false);
+    setText(newText);
+  };
+
   const handleFormSubmit = (event: SyntheticEvent<Element>) => {
     event.preventDefault();
 
@@ -49,11 +54,6 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
 
     setText('');
     setSelectedIcon(DEFAULT_NOTE_ICON);
-  };
-
-  const handleSetText = (newText: string) => {
-    setShouldShowEmptyTextWarning(false);
-    setText(newText);
   };
 
   if (shouldHide) return null;

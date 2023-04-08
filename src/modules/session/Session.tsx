@@ -6,7 +6,7 @@ import SessionNotes from '@modules/session/SessionNotes';
 import SessionQuestionsList from '@modules/session/SessionQuestionsList';
 import SessionGoals from '@modules/session/SessionGoals';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 
 // todo: get session name and add to PageWrapper title
 const Session = () => {
@@ -17,7 +17,7 @@ const Session = () => {
     // handle start session
   };
 
-  const getHeaderActions = useCallback(
+  const headerActions = useMemo(
     () =>
       [
         {
@@ -32,13 +32,12 @@ const Session = () => {
           srText: 'Add question to session',
           icon: PencilSquareIcon,
           buttonClassType: 'clear',
+          disabled: shouldShowQuestionAction,
           handleOnClick: () => setShouldShowQuestionAction(true),
         },
       ] as BrandButtonType[],
-    []
+    [shouldShowQuestionAction]
   );
-
-  const headerActions = useMemo(() => getHeaderActions(), []);
 
   return (
     <PageWrapper title="Session Room" headerActions={headerActions}>

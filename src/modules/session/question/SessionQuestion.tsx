@@ -1,16 +1,18 @@
-import { getUniqId } from '@common/utils';
 import { ChevronRightIcon, StarIcon, QuestionMarkCircleIcon } from '@heroicons/react/20/solid';
 
-interface SessionQuestionProps {
+interface SessionQuestionBaseType {
+  id: string;
   question: string;
   answer?: string | null;
 }
+interface SessionQuestionProps extends SessionQuestionBaseType {
+  handleEditQuestion: (id: string) => void;
+}
 
-const SessionQuestion = ({ question, answer }: SessionQuestionProps) => (
-  <li
-    key={getUniqId()}
-    className="relative py-5 pl-4 pr-6 hover:bg-gray-50 sm:py-6 sm:pl-6 lg:pl-8 xl:pl-6"
-  >
+export type SessionQuestionType = SessionQuestionBaseType;
+
+const SessionQuestion = ({ id, question, answer, handleEditQuestion }: SessionQuestionProps) => (
+  <li className="relative py-5 pl-4 pr-6 hover:bg-gray-50 sm:py-6 sm:pl-6 lg:pl-8 xl:pl-6">
     <div className="flex items-center justify-between space-x-4">
       <div className="min-w-0 space-y-3">
         <div className="flex justify-start items-start space-x-1">
@@ -48,7 +50,11 @@ const SessionQuestion = ({ question, answer }: SessionQuestionProps) => (
 
       <div className="hidden flex-shrink-0 flex-col items-end space-y-3 md:flex">
         <p className="flex items-center space-x-4">
-          <button type="button" className="flex justify-center items-center group pr-1">
+          <button
+            type="button"
+            onClick={() => handleEditQuestion(id)}
+            className="flex justify-center items-center group pr-1"
+          >
             <ChevronRightIcon
               className="h-7 w-7 opacity-75 flex-shrink-0 text-gray-700 group-hover:text-sky-700"
               aria-hidden="true"

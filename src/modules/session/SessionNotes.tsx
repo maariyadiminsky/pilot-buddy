@@ -14,7 +14,7 @@ const SessionNotes = () => {
   const handleAddNote = (note?: NoteDataType) => note && setNotes([...notes, { ...note }]);
 
   // add to notes for ui, currentNote is undefined to clear if hiding, and save
-  const handleSubmit = (note: NoteDataType) => {
+  const handleSubmitNote = (note: NoteDataType) => {
     handleAddNote(note);
     setCurrentNote(undefined);
 
@@ -63,7 +63,7 @@ const SessionNotes = () => {
                 </div>
               ) : (
                 <NoteAction
-                  handleSubmit={handleSubmit}
+                  handleSubmit={handleSubmitNote}
                   currentNote={currentNote}
                   shouldHide={shouldHideNoteAction}
                   handleHideNote={handleHideNoteAction}
