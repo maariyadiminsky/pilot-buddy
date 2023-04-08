@@ -80,7 +80,7 @@ const StudyRoom = () => {
           text: 'Create',
           srText: 'Create new session',
           icon: PlusIcon,
-          buttonType: 'solid',
+          buttonClassType: 'solid',
           handleOnClick: () => routeToAddSessionScreen(),
         },
       ] as BrandButtonType[],

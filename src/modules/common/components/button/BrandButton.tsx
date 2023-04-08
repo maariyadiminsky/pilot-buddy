@@ -1,15 +1,22 @@
 import { type HeroIconType } from '@common/types';
 import { truthyString } from '@common/utils';
 
-enum ButtonTypeEnum {
+enum ButtonClassTypeEnum {
   clear = 'clear',
   solid = 'solid',
+  solidPink = 'solidPink',
+}
+
+enum ButtonType {
+  button = 'button',
+  submit = 'submit',
 }
 
 interface BrandButtonProps {
   text: string;
   srText: string;
-  buttonType: keyof typeof ButtonTypeEnum;
+  buttonType?: keyof typeof ButtonType;
+  buttonClassType: keyof typeof ButtonClassTypeEnum;
   icon?: HeroIconType;
   handleOnClick?: () => void;
 }
@@ -25,15 +32,23 @@ const styles = {
     'text-white bg-pink-700 hover:bg-sky-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800 sm:ml-3',
 };
 
-const BrandButton = ({ text, srText, buttonType, icon, handleOnClick }: BrandButtonProps) => {
+const BrandButton = ({
+  text,
+  srText,
+  buttonType,
+  buttonClassType,
+  icon,
+  handleOnClick,
+}: BrandButtonProps) => {
   const Icon = icon;
 
   return (
     <button
-      type="button"
+      /* eslint-disable react/button-has-type */
+      type={buttonType ?? 'button'}
       className={truthyString(
         'group subpixel-antialiased inline-flex justify-center items-center rounded-md w-44 h-9 text-sm shadow-sm',
-        styles[buttonType]
+        styles[buttonClassType]
       )}
       onClick={() => handleOnClick?.()}
     >
@@ -41,7 +56,7 @@ const BrandButton = ({ text, srText, buttonType, icon, handleOnClick }: BrandBut
       {Icon && (
         <Icon
           className={truthyString(
-            buttonType === 'clear' ? 'text-gray-900 group-hover:text-white' : 'text-white',
+            buttonClassType === 'clear' ? 'text-gray-900 group-hover:text-white' : 'text-white',
             'font-light h-5 w-5 mr-1'
           )}
           aria-hidden="true"

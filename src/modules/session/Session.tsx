@@ -6,18 +6,15 @@ import SessionNotes from '@modules/session/SessionNotes';
 import SessionQuestionsList from '@modules/session/SessionQuestionsList';
 import SessionGoals from '@modules/session/SessionGoals';
 
-import { useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 
 // todo: get session name and add to PageWrapper title
 const Session = () => {
+  const [shouldShowQuestionAction, setShouldShowQuestionAction] = useState(false);
+
   // eslint-disable-next-line
   const handleStartSession = (id: number) => {
     // handle start session
-  };
-
-  // eslint-disable-next-line
-  const handleAddQuestion = (id: number) => {
-    // handle add question, open modal
   };
 
   const getHeaderActions = useCallback(
@@ -27,15 +24,15 @@ const Session = () => {
           text: 'Start Session',
           srText: 'Start session',
           icon: PlayCircleIcon,
-          buttonType: 'solidPink',
+          buttonClassType: 'solidPink',
           handleOnClick: (id: number) => handleStartSession(id),
         },
         {
           text: 'Add Question',
           srText: 'Add question to session',
           icon: PencilSquareIcon,
-          buttonType: 'clear',
-          handleOnClick: (id: number) => handleAddQuestion(id),
+          buttonClassType: 'clear',
+          handleOnClick: () => setShouldShowQuestionAction(true),
         },
       ] as BrandButtonType[],
     []
@@ -50,7 +47,10 @@ const Session = () => {
           <div className="w-full flex-grow xl:flex">
             <div className="min-w-0 flex-1 bg-inherit xl:flex">
               <SessionNotes />
-              <SessionQuestionsList />
+              <SessionQuestionsList
+                shouldShowQuestionAction={shouldShowQuestionAction}
+                setShouldShowQuestionAction={setShouldShowQuestionAction}
+              />
             </div>
             <SessionGoals />
           </div>

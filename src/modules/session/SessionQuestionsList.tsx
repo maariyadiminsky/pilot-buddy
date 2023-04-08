@@ -1,5 +1,6 @@
 import DropdownMenu from '@modules/common/components/dropdown/DropdownMenu';
 import SessionQuestion from '@modules/session/question/SessionQuestion';
+import QuestionAction from '@modules/session/question/QuestionAction';
 import { getUniqId } from '@common/utils';
 
 const questionData = [
@@ -44,11 +45,25 @@ const getDropdownActions = () => [
   },
 ];
 
-const SessionQuestionsList = () => (
-  <div className="bg-white lg:min-w-0 lg:flex-1">
-    <div className="border-b border-t border-gray-200 pb-4 pl-4 pr-6 pt-4 sm:pl-6 lg:pl-8 xl:border-t-0 xl:pl-6 xl:pt-6">
-      <div className="flex items-center justify-end">
-        <DropdownMenu name="pinned-items" actions={getDropdownActions()} type="sort" />
+interface SessionQuestionsListProps {
+  shouldShowQuestionAction: boolean;
+  setShouldShowQuestionAction: (value: boolean) => void;
+}
+
+const SessionQuestionsList = ({
+  shouldShowQuestionAction,
+  setShouldShowQuestionAction,
+}: SessionQuestionsListProps) => (
+  <div className="bg-white lg:min-w-0 lg:flex-1 flex flex-col">
+    <div className="border-b border-t border-gray-200 xl:border-t-0">
+      <div className="flex flex-col justify-end py-4">
+        {shouldShowQuestionAction ? (
+          <QuestionAction setShouldShowQuestionAction={setShouldShowQuestionAction} />
+        ) : (
+          <div className="flex justify-end items-center pr-4">
+            <DropdownMenu name="pinned-items" actions={getDropdownActions()} type="sort" />
+          </div>
+        )}
       </div>
     </div>
     <ul className="divide-y divide-gray-200 border-b border-gray-200">
