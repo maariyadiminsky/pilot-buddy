@@ -6,12 +6,10 @@ enum ButtonTypeEnum {
   solid = 'solid',
 }
 
-type ButtonType = keyof typeof ButtonTypeEnum;
-
 interface BrandButtonProps {
   text: string;
   srText: string;
-  buttonType: ButtonType;
+  buttonType: keyof typeof ButtonTypeEnum;
   icon?: HeroIconType;
   handleOnClick?: () => void;
 }

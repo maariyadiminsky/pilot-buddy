@@ -1,8 +1,12 @@
 import { type HeroIconType } from '@common/types';
 import { truthyString, getUniqId } from '@common/utils';
 import { Menu, Transition } from '@headlessui/react';
-import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
+import { EllipsisVerticalIcon, BarsArrowUpIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Fragment, useRef, useState } from 'react';
+
+export enum DropdownTypeEnum {
+  sort = 'sort',
+}
 
 interface MenuOption {
   text: string;
@@ -15,9 +19,11 @@ interface DropdownMenuProps {
   name: string;
   actions: MenuOption[];
   className?: string;
+  useCustomPosition?: boolean;
+  type?: keyof typeof DropdownTypeEnum;
 }
 
-const DropdownMenu = ({ name, actions, className }: DropdownMenuProps) => {
+const DropdownMenu = ({ name, actions, className, type, useCustomPosition }: DropdownMenuProps) => {
   const menuRef = useRef<HTMLElement | null>(null);
   const [menuAdjustment, setMenuAdjustment] = useState('');
 
@@ -30,29 +36,58 @@ const DropdownMenu = ({ name, actions, className }: DropdownMenuProps) => {
     setMenuAdjustment(x > window.outerWidth - 200 ? 'right-0' : '');
   };
 
-  return (
-    <Menu as="div" className="flex-shrink-0 pr-2" ref={menuRef}>
+  const renderButton = () => {
+    let buttonContent = null;
+    const buttonClassNameCommon = 'inline-flex bg-white';
+    let buttonClassName = '';
+
+    switch (type) {
+      case DropdownTypeEnum.sort:
+        buttonContent = (
+          <>
+            <BarsArrowUpIcon className="-ml-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+            Sort
+            <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+          </>
+        );
+        buttonClassName =
+          'w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50';
+        break;
+      default:
+        buttonContent = <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />;
+        buttonClassName =
+          'h-8 w-8 items-center justify-center rounded-full text-gray-900 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-700 focus:ring-offset-2';
+    }
+
+    return (
       <Menu.Button
         onClick={() => shouldAdjustMenuRelativeToWindow()}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-700 focus:ring-offset-2"
+        className={`${buttonClassNameCommon} ${buttonClassName}`}
       >
         <span className="sr-only">Open {name} options</span>
-        <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
+        {buttonContent}
       </Menu.Button>
+    );
+  };
+
+  return (
+    <Menu as="div" className={truthyString(!useCustomPosition && 'relative')} ref={menuRef}>
+      {renderButton()}
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"
         enterFrom="transform opacity-0 scale-95"
         enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
+        leave="transition ease-in duration-100"
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items
           className={truthyString(
-            'absolute z-10 mx-3 mt-1 w-40 origin-top-right divide-y divide-gray-200 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
+            'absolute z-10 mt-1 w-40 origin-top-right divide-y divide-gray-200 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
             className,
-            menuAdjustment
+            menuAdjustment,
+            !useCustomPosition && 'right-0'
           )}
         >
           {actions.map(({ text, srText, icon, handleOnClick }, index) => {

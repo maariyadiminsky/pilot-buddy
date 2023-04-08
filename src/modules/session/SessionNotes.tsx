@@ -44,7 +44,7 @@ const SessionNotes = () => {
 
   return (
     <div className="bg-zinc-50 xl:w-72 xl:flex-shrink-0 xl:border-r xl:border-gray-200">
-      <div className="pt-3">
+      <div className="py-4">
         <div className="items-center justify-between">
           <div className="flex-1 space-y-8">
             <div className="flex flex-col mt-3 space-y-0 xl:block">

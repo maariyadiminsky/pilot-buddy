@@ -1,4 +1,4 @@
-import DropdownMenu from '@common/components/DropdownMenu';
+import DropdownMenu from '@modules/common/components/dropdown/DropdownMenu';
 
 import { truthyString, getUniqId } from '@common/utils';
 import { getInitials, getTypeAmount } from '@modules/study-room/pinned-session/utils';
@@ -69,18 +69,22 @@ const PinnedSession = ({
             >
               {getInitials(text)}
             </div>
-            <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-b border-r border-t border-gray-200 bg-white">
-              <div className="flex-1 truncate px-4 py-2 text-sm">
+            <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-b border-r border-t border-gray-200 bg-white pr-1">
+              <div className="flex-1 items-center justify-between truncate px-4 py-2 text-sm">
                 <button
                   type="button"
                   onClick={() => handleStartSession(id)}
                   className="font-medium text-gray-900 hover:text-sky-700 antialiased"
                 >
-                  {text}
+                  {text} dasdddsfsdfsdfsdfsdfsdfds
                 </button>
                 <p className="text-gray-500">{getTypeAmount(type, total)}</p>
               </div>
-              <DropdownMenu name="pinned-items" actions={getDropdownActions(id)} />
+              <DropdownMenu
+                name="pinned-items"
+                actions={getDropdownActions(id)}
+                useCustomPosition
+              />
             </div>
           </li>
         ))}
