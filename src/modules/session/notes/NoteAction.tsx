@@ -21,6 +21,7 @@ const DEFAULT_NOTE_ICON = NOTE_TYPES[3];
 const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: NoteActionProps) => {
   const [text, setText] = useState(currentNote?.text || '');
   const [selectedIcon, setSelectedIcon] = useState(currentNote?.icon || DEFAULT_NOTE_ICON);
+  const [shouldShowEmptyTextWarning, setShouldShowEmptyTextWarning] = useState(false);
 
   const charLimit = getCharLeft(text);
 
@@ -34,6 +35,11 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
   const handleFormSubmit = (event: SyntheticEvent<Element>) => {
     event.preventDefault();
 
+    if (!text) {
+      setShouldShowEmptyTextWarning(true);
+      return;
+    }
+
     handleSubmit({
       ...(currentNote || {}),
       id: currentNote?.id || getUniqId(),
@@ -43,6 +49,11 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
 
     setText('');
     setSelectedIcon(DEFAULT_NOTE_ICON);
+  };
+
+  const handleSetText = (newText: string) => {
+    setShouldShowEmptyTextWarning(false);
+    setText(newText);
   };
 
   if (shouldHide) return null;
@@ -64,7 +75,7 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
               placeholder="Add a note here..."
               maxLength={100}
               value={text}
-              onChange={(event) => setText(event.target.value)}
+              onChange={(event) => handleSetText(event.target.value)}
             />
 
             {/* Spacer element to match the height of the toolbar */}
@@ -146,6 +157,11 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
             </div>
           </div>
         </form>
+        {shouldShowEmptyTextWarning && (
+          <div className="flex items-center justify-start text-sm text-rose-500 py-2">
+            Note cannot be empty.
+          </div>
+        )}
       </div>
     </div>
   );
