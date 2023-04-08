@@ -3,7 +3,7 @@ import { ChevronRightIcon, StarIcon, QuestionMarkCircleIcon } from '@heroicons/r
 
 interface SessionQuestionProps {
   question: string;
-  answer: string;
+  answer?: string | null;
 }
 
 const SessionQuestion = ({ question, answer }: SessionQuestionProps) => (
@@ -22,23 +22,25 @@ const SessionQuestion = ({ question, answer }: SessionQuestionProps) => (
             <span className="sr-only">{question}</span>
           </div>
         </div>
-        <div className="flex justify-start items-start space-x-1">
-          <div className="w-8">
-            <span
-              className="bg-sky-100 h-6 w-6 flex items-center justify-center rounded-full"
-              aria-hidden="true"
-            >
-              <StarIcon
-                className="h-4 w-4 text-sky-700 flex items-center justify-center"
+        {answer && (
+          <div className="flex justify-start items-start space-x-1">
+            <div className="w-8">
+              <span
+                className="bg-sky-100 h-6 w-6 flex items-center justify-center rounded-full"
                 aria-hidden="true"
-              />
-            </span>
+              >
+                <StarIcon
+                  className="h-4 w-4 text-sky-700 flex items-center justify-center"
+                  aria-hidden="true"
+                />
+              </span>
+            </div>
+            <div className="w-96 text-sm font-small italic text-sky-700">
+              <span className="font-semibold text-base not-italic">A:</span> {answer}
+              <span className="sr-only">{answer}</span>
+            </div>
           </div>
-          <div className="w-96 text-sm font-small italic text-sky-700">
-            <span className="font-semibold text-base not-italic">A:</span> {answer}
-            <span className="sr-only">{answer}</span>
-          </div>
-        </div>
+        )}
       </div>
       <div className="md:hidden">
         <ChevronRightIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />

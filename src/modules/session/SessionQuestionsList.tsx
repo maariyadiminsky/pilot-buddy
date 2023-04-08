@@ -24,6 +24,11 @@ const questionData = [
     question: 'eeeeesfdsf 765bgfdfdgfd',
     answer: 'sdfdsffdssd',
   },
+  {
+    id: '4',
+    question: 'eeeeesfdsf 765bgfdfdgfd',
+    answer: null,
+  },
 ];
 
 const getDropdownActions = () => [
