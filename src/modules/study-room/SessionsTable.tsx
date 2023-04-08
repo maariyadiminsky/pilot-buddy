@@ -187,7 +187,7 @@ const SessionsTable = ({
                     className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
                   >
                     <PlayCircleIcon
-                      className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-red-600 hover:text-sky-700"
+                      className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-pink-700 hover:text-sky-700"
                       aria-hidden="true"
                     />
                     <span className="sr-only">Start test</span>

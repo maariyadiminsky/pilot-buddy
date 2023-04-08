@@ -27,7 +27,7 @@ const Session = () => {
           text: 'Start Session',
           srText: 'Start session',
           icon: PlayCircleIcon,
-          buttonType: 'solidRed',
+          buttonType: 'solidPink',
           handleOnClick: (id: number) => handleStartSession(id),
         },
         {

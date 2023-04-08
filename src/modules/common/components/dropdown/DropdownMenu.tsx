@@ -38,7 +38,7 @@ const DropdownMenu = ({ name, actions, className, type, useCustomPosition }: Dro
 
   const renderButton = () => {
     let buttonContent = null;
-    const buttonClassNameCommon = 'inline-flex bg-white';
+    const buttonClassNameCommon = 'inline-flex';
     let buttonClassName = '';
 
     switch (type) {
@@ -54,7 +54,9 @@ const DropdownMenu = ({ name, actions, className, type, useCustomPosition }: Dro
           'w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50';
         break;
       default:
-        buttonContent = <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />;
+        buttonContent = (
+          <EllipsisVerticalIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+        );
         buttonClassName =
           'h-8 w-8 items-center justify-center rounded-full text-gray-900 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-700 focus:ring-offset-2';
     }
