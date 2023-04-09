@@ -1,8 +1,15 @@
 import BrandButton from '@common/components/button/BrandButton';
-import { MicrophoneIcon, PencilSquareIcon, XMarkIcon } from '@heroicons/react/20/solid';
-import { type SessionQuestionType } from '@modules/session/question/SessionQuestion';
 import { getUniqId } from '@common/utils';
+import { PencilSquareIcon, XMarkIcon } from '@heroicons/react/20/solid';
+import { type SessionQuestionType } from '@modules/session/question/SessionQuestion';
+import Dictaphone from '@modules/speech-recognition/Dictaphone';
 import { SyntheticEvent, useState, useEffect } from 'react';
+import { useSpeechRecognition } from 'react-speech-recognition';
+
+export enum MicrophoneEnumType {
+  question = 'question',
+  answer = 'answer',
+}
 
 interface QuestionActionProps {
   currentQuestion?: SessionQuestionType;
@@ -18,13 +25,34 @@ const QuestionAction = ({
   const [question, setQuestion] = useState(currentQuestion?.question || '');
   const [answer, setAnswer] = useState<string | null | undefined>(currentQuestion?.answer || '');
   const [shouldShowEmptyQuestionWarning, setShouldShowEmptyQuestionWarning] = useState(false);
+  const [currentMicrophoneOn, setCurrentMicrophoneOn] = useState<
+    keyof typeof MicrophoneEnumType | null
+  >(null);
 
+  const { transcript } = useSpeechRecognition();
+
+  // when user edits a question
   useEffect(() => {
     if (currentQuestion) {
       setQuestion(currentQuestion.question);
       setAnswer(currentQuestion?.answer);
     }
   }, [currentQuestion]);
+
+  // when user uses voice to text append to any existing text
+  useEffect(() => {
+    const isQuestionMicrophoneOn = currentMicrophoneOn === 'question';
+    const preText = isQuestionMicrophoneOn ? question : answer;
+    const newText = `${preText}${preText ? ' ' : ''}${transcript}`;
+
+    if (isQuestionMicrophoneOn) {
+      setQuestion(newText);
+    } else {
+      setAnswer(newText);
+    }
+
+    setCurrentMicrophoneOn(null);
+  }, [transcript]);
 
   const handleSetQuestion = (newText: string) => {
     setShouldShowEmptyQuestionWarning(false);
@@ -85,9 +113,13 @@ const QuestionAction = ({
             onChange={(event) => handleSetQuestion(event.target.value)}
           />
           <div className="absolute inset-y-0 right-0 flex items-center pr-3 group">
-            <MicrophoneIcon
-              className="h-5 w-5 text-gray-400 group-hover:text-sky-700 group-hover:cursor-pointer"
-              aria-hidden="true"
+            <Dictaphone
+              isListening={currentMicrophoneOn === 'question'}
+              isDisabled={currentMicrophoneOn === 'answer'}
+              callbackOnClick={() =>
+                !currentMicrophoneOn &&
+                setCurrentMicrophoneOn(currentMicrophoneOn === 'question' ? null : 'question')
+              }
             />
           </div>
         </div>
@@ -114,9 +146,14 @@ const QuestionAction = ({
             onChange={(event) => setAnswer(event.target.value)}
           />
           <div className="absolute inset-y-0 right-0 flex items-center pr-3 group">
-            <MicrophoneIcon
-              className="h-5 w-5 text-gray-400 group-hover:text-sky-700 group-hover:cursor-pointer"
-              aria-hidden="true"
+            <Dictaphone
+              isListening={currentMicrophoneOn === 'answer'}
+              isDisabled={currentMicrophoneOn === 'question'}
+              callbackOnClick={() =>
+                setCurrentMicrophoneOn(
+                  !currentMicrophoneOn && currentMicrophoneOn === 'answer' ? null : 'answer'
+                )
+              }
             />
           </div>
         </div>
