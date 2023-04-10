@@ -27,8 +27,14 @@ const QuestionAction = ({
   const [isQuestionMicrophoneOn, setIsQuestionMicrophoneOn] = useState(false);
   const [isAnswerMicrophoneOn, setIsAnswerMicrophoneOn] = useState(false);
 
-  const { SpeechRecognition, isMicrophoneAvailable, transcript, modalData, clearModalData } =
-    useInitializeSpeechToText();
+  const {
+    SpeechRecognition,
+    isMicrophoneAvailable,
+    transcript,
+    modalData,
+    setModalError,
+    clearModalData,
+  } = useInitializeSpeechToText();
 
   // when user edits a question
   useEffect(() => {
@@ -117,6 +123,7 @@ const QuestionAction = ({
                 isDisabled={Boolean(isAnswerMicrophoneOn)}
                 isMicrophoneAvailable={isMicrophoneAvailable}
                 setIsOn={(value) => handleSetIsOn(setIsQuestionMicrophoneOn, value)}
+                setModalError={setModalError}
                 setModalOpen={modalRef.current?.setModalOpen}
               />
             </div>
@@ -150,6 +157,7 @@ const QuestionAction = ({
                 isDisabled={Boolean(isQuestionMicrophoneOn)}
                 isMicrophoneAvailable={isMicrophoneAvailable}
                 setIsOn={(value) => handleSetIsOn(setIsAnswerMicrophoneOn, value)}
+                setModalError={setModalError}
                 setModalOpen={modalRef.current?.setModalOpen}
               />
             </div>

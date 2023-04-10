@@ -1,6 +1,7 @@
 import { truthyString } from '@common/utils';
 import { MicrophoneIcon } from '@heroicons/react/20/solid';
 import { useEffect } from 'react';
+import { DictaphoneModalErrorType } from '@modules/speech-recognition/hooks/useInitializeSpeechToText';
 
 interface SpeechRecognitionStartListeningProps {
   continuous?: boolean;
@@ -18,6 +19,7 @@ interface DictaphoneProps {
   isDisabled: boolean;
   isMicrophoneAvailable: boolean;
   setIsOn: (value: boolean) => void;
+  setModalError: (errorType: DictaphoneModalErrorType) => void;
   setModalOpen?: (value: boolean) => void;
 }
 
@@ -27,13 +29,33 @@ const Dictaphone = ({
   isDisabled,
   isMicrophoneAvailable,
   setIsOn,
+  setModalError,
   setModalOpen,
 }: DictaphoneProps) => {
   const { startListening, stopListening } = SpeechRecognition;
 
+  const handleError = (error: Error) => {
+    if (error?.message.includes('Permission denied')) {
+      setModalError(DictaphoneModalErrorType.permission);
+    } else {
+      setModalError(DictaphoneModalErrorType.default);
+    }
+
+    setModalOpen?.(true);
+  };
+
   const stopListeningToAudio = async () => {
-    await stopListening();
-    setIsOn(false);
+    let hasError = null;
+    try {
+      await stopListening();
+    } catch (error) {
+      hasError = error;
+    } finally {
+      if (hasError instanceof Error) {
+        handleError(hasError);
+      }
+      setIsOn(false);
+    }
   };
 
   const startListeningToAudio = async () => {
@@ -44,8 +66,18 @@ const Dictaphone = ({
       return;
     }
 
-    await startListening({ continuous: false });
-    setIsOn(true);
+    let hasError = null;
+    try {
+      await startListening({ continuous: false });
+    } catch (error) {
+      hasError = error;
+    } finally {
+      if (hasError instanceof Error) {
+        handleError(hasError);
+      } else {
+        setIsOn(true);
+      }
+    }
   };
 
   useEffect(() => {
