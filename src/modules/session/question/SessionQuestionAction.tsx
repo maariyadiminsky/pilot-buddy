@@ -2,14 +2,14 @@ import BrandButton from '@common/components/button/BrandButton';
 import { getUniqId } from '@common/utils';
 import { PencilSquareIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import { type SessionQuestionType } from '@modules/session/question/SessionQuestion';
-import Dictaphone from '@modules/speech-recognition/Dictaphone';
-import { SyntheticEvent, useState, useEffect } from 'react';
+import Dictaphone, { type DictaphoneRefType } from '@modules/speech-recognition/Dictaphone';
+import { SyntheticEvent, useState, useEffect, useRef } from 'react';
 import { useSpeechRecognition } from 'react-speech-recognition';
 
-export enum MicrophoneEnumType {
-  question = 'question',
-  answer = 'answer',
-}
+// export enum MicrophoneEnumType {
+//   question = 'question',
+//   answer = 'answer',
+// }
 
 interface QuestionActionProps {
   currentQuestion?: SessionQuestionType;
@@ -25,11 +25,15 @@ const QuestionAction = ({
   const [question, setQuestion] = useState(currentQuestion?.question || '');
   const [answer, setAnswer] = useState<string | null | undefined>(currentQuestion?.answer || '');
   const [shouldShowEmptyQuestionWarning, setShouldShowEmptyQuestionWarning] = useState(false);
-  const [currentMicrophoneOn, setCurrentMicrophoneOn] = useState<
-    keyof typeof MicrophoneEnumType | null
-  >(null);
+
+  const questionMicrophoneRef = useRef<DictaphoneRefType>(null);
+  const answerMicrophoneRef = useRef<DictaphoneRefType>(null);
+  // const [currentMicrophoneOn, setCurrentMicrophoneOn] = useState<
+  //   keyof typeof MicrophoneEnumType | null
+  // >(null);
 
   const { transcript } = useSpeechRecognition();
+  console.log('ignore:', transcript);
 
   // when user edits a question
   useEffect(() => {
@@ -40,19 +44,19 @@ const QuestionAction = ({
   }, [currentQuestion]);
 
   // when user uses voice to text append to any existing text
-  useEffect(() => {
-    const isQuestionMicrophoneOn = currentMicrophoneOn === 'question';
-    const preText = isQuestionMicrophoneOn ? question : answer;
-    const newText = `${preText}${preText ? ' ' : ''}${transcript}`;
+  // useEffect(() => {
+  //   const isQuestionMicrophoneOn = currentMicrophoneOn === 'question';
+  //   const preText = isQuestionMicrophoneOn ? question : answer;
+  //   const newText = `${preText}${preText ? ' ' : ''}${transcript}`;
 
-    if (isQuestionMicrophoneOn) {
-      setQuestion(newText);
-    } else {
-      setAnswer(newText);
-    }
+  //   if (isQuestionMicrophoneOn) {
+  //     setQuestion(newText);
+  //   } else {
+  //     setAnswer(newText);
+  //   }
 
-    setCurrentMicrophoneOn(null);
-  }, [transcript]);
+  //   setCurrentMicrophoneOn(null);
+  // }, [transcript]);
 
   const handleSetQuestion = (newText: string) => {
     setShouldShowEmptyQuestionWarning(false);
@@ -113,14 +117,7 @@ const QuestionAction = ({
             onChange={(event) => handleSetQuestion(event.target.value)}
           />
           <div className="absolute inset-y-0 right-0 flex items-center pr-3 group">
-            <Dictaphone
-              isListening={currentMicrophoneOn === 'question'}
-              isDisabled={currentMicrophoneOn === 'answer'}
-              callbackOnClick={() =>
-                !currentMicrophoneOn &&
-                setCurrentMicrophoneOn(currentMicrophoneOn === 'question' ? null : 'question')
-              }
-            />
+            <Dictaphone ref={questionMicrophoneRef} isDisabled={false} />
           </div>
         </div>
         {shouldShowEmptyQuestionWarning && (
@@ -146,15 +143,7 @@ const QuestionAction = ({
             onChange={(event) => setAnswer(event.target.value)}
           />
           <div className="absolute inset-y-0 right-0 flex items-center pr-3 group">
-            <Dictaphone
-              isListening={currentMicrophoneOn === 'answer'}
-              isDisabled={currentMicrophoneOn === 'question'}
-              callbackOnClick={() =>
-                setCurrentMicrophoneOn(
-                  !currentMicrophoneOn && currentMicrophoneOn === 'answer' ? null : 'answer'
-                )
-              }
-            />
+            <Dictaphone ref={answerMicrophoneRef} isDisabled={false} />
           </div>
         </div>
         <div className="flex justify-end items-end pt-4">

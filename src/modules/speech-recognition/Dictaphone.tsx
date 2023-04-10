@@ -1,15 +1,20 @@
 import { MicrophoneIcon } from '@heroicons/react/20/solid';
 import { createSpeechlySpeechRecognition } from '@speechly/speech-recognition-polyfill';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-import { useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, forwardRef, useImperativeHandle, Ref } from 'react';
 
 interface DictaphoneProps {
-  isListening: boolean;
   isDisabled: boolean;
-  callbackOnClick?: () => void;
 }
 
-const Dictaphone = ({ isListening, isDisabled, callbackOnClick }: DictaphoneProps) => {
+export interface DictaphoneRefType {
+  isOn: boolean;
+  setIsOn: (value: boolean) => void;
+}
+
+const Dictaphone = ({ isDisabled }: DictaphoneProps, ref: Ref<DictaphoneRefType>) => {
+  const [isOn, setIsOn] = useState(false);
+
   const hasInitialized = useMemo(() => {
     const appId = process.env.REACT_APP_SPEECHLY_APP_ID;
 
@@ -25,16 +30,34 @@ const Dictaphone = ({ isListening, isDisabled, callbackOnClick }: DictaphoneProp
 
   const { startListening, stopListening } = SpeechRecognition;
 
+  useImperativeHandle(ref, () => ({ isOn, setIsOn }));
+
+  const stopListeningToAudio = async () => {
+    setIsOn(false);
+
+    await stopListening();
+  };
+
+  const startListeningToAudio = async () => {
+    setIsOn(true);
+
+    await startListening({ continuous: false, interimResults: true });
+  };
+
   useEffect(() => {
     if (!hasInitialized) return undefined;
 
-    // fail safe to turn off mic in case user forgets too.
-    const timer = setTimeout(() => listening && stopListening(), 5000);
+    // fail safe to turn off mic in case user forgets.
+    const timer = setTimeout(() => {
+      if (listening) {
+        stopListeningToAudio();
+      }
+    }, 5000);
+
+    console.log('listening:', listening, 'transcript:', transcript);
 
     return () => clearTimeout(timer);
   }, [listening]);
-
-  console.log('listening?:', listening, transcript);
 
   if (!hasInitialized) return null;
 
@@ -47,26 +70,20 @@ const Dictaphone = ({ isListening, isDisabled, callbackOnClick }: DictaphoneProp
     return <div>no available</div>;
   }
 
-  const startListeningToUser = () => {
-    callbackOnClick?.();
-    startListening();
-  };
-
   return (
     <button
       type="button"
       className="group"
       disabled={isDisabled}
-      onMouseDown={() => startListeningToUser()}
-      onMouseUp={stopListening}
+      onClick={() => (isOn ? stopListeningToAudio() : startListeningToAudio())}
     >
       <MicrophoneIcon
         className={`h-5 w-5 ${
-          !isDisabled && isListening && listening ? 'text-sky-700' : 'text-gray-400'
+          isOn ? 'text-sky-700' : 'text-gray-400'
         } enabled:group-hover:text-sky-700 enabled:group-hover:cursor-pointer`}
         aria-hidden="true"
       />
     </button>
   );
 };
-export default Dictaphone;
+export default forwardRef(Dictaphone);
