@@ -1,46 +1,55 @@
 import { truthyString } from '@common/utils';
 import { MicrophoneIcon } from '@heroicons/react/20/solid';
-import { createSpeechlySpeechRecognition } from '@speechly/speech-recognition-polyfill';
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-import { useMemo, useEffect } from 'react';
+import { useEffect } from 'react';
 
-interface DictaphoneProps {
-  isOn: boolean;
-  setIsOn: (value: boolean) => void;
-  isDisabled: boolean;
+interface SpeechRecognitionStartListeningProps {
+  continuous?: boolean;
+  interimResults?: boolean;
+  lang?: string;
+}
+interface SpeechRecognitionType {
+  startListening: (props: SpeechRecognitionStartListeningProps) => Promise<void>;
+  stopListening: () => Promise<void>;
 }
 
-const Dictaphone = ({ isOn, setIsOn, isDisabled }: DictaphoneProps) => {
-  const hasInitialized = useMemo(() => {
-    const appId = process.env.REACT_APP_SPEECHLY_APP_ID;
+interface DictaphoneProps {
+  SpeechRecognition: SpeechRecognitionType;
+  isOn: boolean;
+  isDisabled: boolean;
+  isMicrophoneAvailable: boolean;
+  setIsOn: (value: boolean) => void;
+  setModalOpen?: (value: boolean) => void;
+}
 
-    if (!appId) return false;
-
-    SpeechRecognition.applyPolyfill(createSpeechlySpeechRecognition(appId));
-
-    return true;
-  }, []);
-
-  const { isMicrophoneAvailable, browserSupportsSpeechRecognition } = useSpeechRecognition();
-
+const Dictaphone = ({
+  SpeechRecognition,
+  isOn,
+  isDisabled,
+  isMicrophoneAvailable,
+  setIsOn,
+  setModalOpen,
+}: DictaphoneProps) => {
   const { startListening, stopListening } = SpeechRecognition;
 
   const stopListeningToAudio = async () => {
     await stopListening();
-
     setIsOn(false);
   };
 
   const startListeningToAudio = async () => {
     if (isDisabled) return;
 
-    setIsOn(true);
+    if (!isMicrophoneAvailable) {
+      setModalOpen?.(true);
+      return;
+    }
 
     await startListening({ continuous: false });
+    setIsOn(true);
   };
 
   useEffect(() => {
-    if (!hasInitialized) return undefined;
+    if (isDisabled || !isMicrophoneAvailable) return undefined;
 
     // fail safe to turn off mic in case user forgets.
     const timer = setTimeout(() => {
@@ -50,34 +59,25 @@ const Dictaphone = ({ isOn, setIsOn, isDisabled }: DictaphoneProps) => {
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [isOn]);
+  }, [isOn, isDisabled, isMicrophoneAvailable]);
 
-  if (!hasInitialized) return null;
-
-  if (!browserSupportsSpeechRecognition) {
-    return <span>Browser doesn&apos;t support speech recognition.</span>;
-  }
-
-  if (!isMicrophoneAvailable) {
-    return <div>no available</div>;
-  }
-
-  console.log('isOn:', isOn);
   return (
-    <button
-      type="button"
-      className="group"
-      disabled={isDisabled}
-      onClick={() => (isOn ? stopListeningToAudio() : startListeningToAudio())}
-    >
-      <MicrophoneIcon
-        className={truthyString(
-          'h-5 w-5 enabled:group-hover:text-sky-700 enabled:group-hover:cursor-pointer',
-          isOn ? 'text-sky-700' : 'text-gray-400'
-        )}
-        aria-hidden="true"
-      />
-    </button>
+    <>
+      <button
+        type="button"
+        className="group"
+        disabled={isDisabled}
+        onClick={() => (isOn ? stopListeningToAudio() : startListeningToAudio())}
+      >
+        <MicrophoneIcon
+          className={truthyString(
+            'h-5 w-5 enabled:group-hover:text-sky-700 enabled:group-hover:cursor-pointer',
+            isOn ? 'text-sky-700' : 'text-gray-400'
+          )}
+          aria-hidden="true"
+        />
+      </button>
+    </>
   );
 };
 export default Dictaphone;
