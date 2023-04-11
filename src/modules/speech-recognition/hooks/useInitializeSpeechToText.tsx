@@ -62,7 +62,7 @@ export const useInitializeSpeechToText = () => {
       let hasError = null;
 
       try {
-        if (!appId) throw new Error('Speechly API ID issue.');
+        if (!appId) throw new Error('Speechly APP ID - possibly nonexistent or incorrect.');
 
         if (!browserSupportsSpeechRecognition) {
           setModalError(DictaphoneModalErrorType.browser);
