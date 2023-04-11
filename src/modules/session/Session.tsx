@@ -1,6 +1,6 @@
 // todo add typescript
 // @ts-nocheck
-import { PlayCircleIcon, PencilSquareIcon } from '@heroicons/react/20/solid';
+import { PlayCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@modules/common/components/page/PageWrapper';
 import SessionNotes from '@modules/session/SessionNotes';
 import SessionQuestionsList from '@modules/session/SessionQuestionsList';
@@ -30,7 +30,7 @@ const Session = () => {
         {
           text: 'Add Question',
           srText: 'Add question to session',
-          icon: PencilSquareIcon,
+          icon: PlusIcon,
           buttonClassType: 'clear',
           disabled: shouldShowQuestionAction,
           handleOnClick: () => setShouldShowQuestionAction(true),

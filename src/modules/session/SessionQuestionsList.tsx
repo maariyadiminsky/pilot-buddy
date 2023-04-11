@@ -7,6 +7,35 @@ import SessionQuestion, {
 import QuestionAction from '@modules/session/question/SessionQuestionAction';
 import { useState } from 'react';
 
+const questionData = [
+  {
+    id: '0',
+    question: 'dsfdsfdsf df sdfsdsd sdfsdfsdfssd  fdsfsd ',
+    answer: 'dsfdsfsd',
+  },
+  {
+    id: '1',
+    question: '342342jkh4h54k5khjdsjklclksdf',
+    answer:
+      'gfdhgdhgfhfghfgfgfghfghfg fghfgh fghfgklhfglhjgf lgfhj fglkjh lgkfj hlkjgf jfg hjgdlfk hjdglfh jdfj kd jsf klgslkj sjk djklsjkl fsdljk sjkd klsd sljkd  jkds fjklgsd',
+  },
+  {
+    id: '2',
+    question: 'sfddsfdsfsdfsdfds sdfsdfsdfsdfds sd fsdfsdfs',
+    answer: '4534tfdggdf ',
+  },
+  {
+    id: '3',
+    question: 'eeeeesfdsf 765bgfdfdgfd',
+    answer: 'sdfdsffdssd',
+  },
+  {
+    id: '4',
+    question: 'sfsd',
+    answer: null,
+  },
+];
+
 const getDropdownActions = () => [
   {
     text: 'Create',
@@ -29,7 +58,7 @@ const SessionQuestionsList = ({
   shouldShowQuestionAction,
   setShouldShowQuestionAction,
 }: SessionQuestionsListProps) => {
-  const [questions, setQuestions] = useState<SessionQuestionType[]>([]);
+  const [questions, setQuestions] = useState<SessionQuestionType[]>(questionData);
   const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>();
 
   const handleSubmitQuestion = (question: SessionQuestionType) => {
@@ -52,6 +81,7 @@ const SessionQuestionsList = ({
     setShouldShowQuestionAction(true);
   };
 
+  // when user opens to edit or create and clicks cancel button
   const handleCancelAction = () => {
     if (currentQuestion) {
       setQuestions([...questions, { ...currentQuestion }]);
@@ -82,6 +112,7 @@ const SessionQuestionsList = ({
           <SessionQuestion
             key={getUniqId()}
             {...question}
+            handleRemoveQuestion={handleRemoveQuestion}
             handleEditQuestion={handleEditQuestion}
           />
         ))}
