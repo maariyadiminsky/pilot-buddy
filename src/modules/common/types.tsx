@@ -11,7 +11,7 @@ export enum WrapperTypeEnum {
   sidebar = 'sidebar',
 }
 
-export type ChildrenType = PropsWithChildren;
+export type ChildrenArrayType = PropsWithChildren;
 
 export type HeroIconType = ForwardRefExoticComponent<
   PropsWithoutRef<SVGProps<SVGSVGElement>> & {

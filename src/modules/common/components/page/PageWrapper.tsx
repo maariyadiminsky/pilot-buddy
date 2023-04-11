@@ -13,7 +13,7 @@ import SearchHeader from '@common/components/header/SearchHeader';
 import HeaderWithActions from '@common/components/header/HeaderWithActions';
 import Breadcrumbs from '@modules/common/components/page/Breadcrumbs';
 import { type BrandButtonType } from '@common/components/button/BrandButton';
-import { type ChildrenType } from '@common/types';
+import { type ChildrenArrayType } from '@common/types';
 
 const navigation = [
   { name: 'Study Room', href: '#', icon: BookOpenIcon, current: true },
@@ -30,7 +30,7 @@ const secondaryNavigation = [
 interface PageWrapperProps {
   title?: string;
   headerActions?: BrandButtonType[];
-  children: ChildrenType;
+  children: ChildrenArrayType;
 }
 
 // todo: need to pass page data to breadcrumbs here.
