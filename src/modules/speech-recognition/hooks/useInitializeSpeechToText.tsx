@@ -35,8 +35,7 @@ export const useInitializeSpeechToText = () => {
           title: 'Browser Issue',
           children: (
             <div className="flex justify-center items-center">
-              Regrettably, your browser lacks speech recognition support. Please upgrade to the
-              newest version of Chrome.
+              Browser lacks speech recognition; upgrade to latest Chrome version.
             </div>
           ),
           confirmChildren: 'Ok',
