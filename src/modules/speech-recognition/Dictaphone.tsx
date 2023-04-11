@@ -83,7 +83,7 @@ const Dictaphone = ({
   useEffect(() => {
     if (isDisabled || !isMicrophoneAvailable) return undefined;
 
-    // fail safe to turn off mic in case user forgets.
+    // Turn off mic if user forgets or background noise persists.
     const timer = setTimeout(() => {
       if (isOn) {
         stopListeningToAudio();
