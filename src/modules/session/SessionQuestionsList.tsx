@@ -68,13 +68,11 @@ const SessionQuestionsList = ({
       if (shouldShowQuestionAction) return null;
 
       return (
-        <div className="flex justify-center items-center mt-12">
-          <EmptyDataAction
-            title="Add your first question"
-            description="Kick off your study session by adding some questions!"
-            handleOnClick={() => setShouldShowQuestionAction(true)}
-          />
-        </div>
+        <EmptyDataAction
+          title="Add your first question"
+          description="Kick off your study session by adding some questions!"
+          handleOnClick={() => setShouldShowQuestionAction(true)}
+        />
       );
     }
 

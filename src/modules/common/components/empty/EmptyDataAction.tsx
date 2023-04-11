@@ -8,7 +8,7 @@ interface EmptyDataActionsProps {
 }
 
 const EmptyDataAction = ({ title, description, handleOnClick }: EmptyDataActionsProps) => (
-  <div className="text-center">
+  <div className="flex flex-col justify-center items-center text-center mt-12">
     <svg
       fill="none"
       viewBox="0 0 24 24"
