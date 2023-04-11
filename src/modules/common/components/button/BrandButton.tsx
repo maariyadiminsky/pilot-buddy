@@ -19,18 +19,18 @@ interface BrandButtonProps {
   disabled?: boolean;
   buttonType?: keyof typeof ButtonType;
   icon?: HeroIconType;
-  handleOnClick?: () => void;
+  handleOnClick?: (value?: any) => void;
 }
 
 export type BrandButtonType = BrandButtonProps;
 
 const styles = {
   clear:
-    'bg-gray-100 text-gray-900 ring-1 ring-inset ring-gray-300 enabled:hover:bg-sky-700 disabled:text-gray-400 disabled:bg-gray-100 enabled:hover:text-white sm:ml-0',
+    'bg-gray-100 text-gray-900 ring-1 ring-inset ring-gray-300 enabled:hover:bg-sky-700 disabled:text-gray-400 disabled:bg-gray-100 enabled:hover:text-white',
   solid:
-    'enabled:text-white enabled:bg-sky-700 enabled:hover:bg-sky-600 disabled:text-gray-40 disabled:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800 sm:ml-3',
+    'enabled:text-white enabled:bg-sky-700 enabled:hover:bg-sky-600 disabled:text-gray-40 disabled:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800',
   solidPink:
-    'enabled:text-white enabled:bg-pink-700 enabled:hover:bg-sky-700 disabled:text-gray-40 disabled:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800 sm:ml-3',
+    'enabled:text-white enabled:bg-pink-700 enabled:hover:bg-sky-700 disabled:text-gray-40 disabled:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800',
 };
 
 const BrandButton = ({

@@ -1,39 +1,11 @@
-import DropdownMenu from '@modules/common/components/dropdown/DropdownMenu';
+import { getUniqId, removeObjectFromArray } from '@common/utils';
+import DropdownMenu from '@common/components/dropdown/DropdownMenu';
+import EmptyDataAction from '@common/components/empty/EmptyDataAction';
 import SessionQuestion, {
   type SessionQuestionType,
 } from '@modules/session/question/SessionQuestion';
 import QuestionAction from '@modules/session/question/SessionQuestionAction';
-import { getUniqId, removeObjectFromArray } from '@common/utils';
 import { useState } from 'react';
-
-const questionData = [
-  {
-    id: '0',
-    question: 'dsfdsfdsf df sdfsdsd sdfsdfsdfssd  fdsfsd ',
-    answer: 'dsfdsfsd',
-  },
-  {
-    id: '1',
-    question: '342342jkh4h54k5khjdsjklclksdf',
-    answer:
-      'gfdhgdhgfhfghfgfgfghfghfg fghfgh fghfgklhfglhjgf lgfhj fglkjh lgkfj hlkjgf jfg hjgdlfk hjdglfh jdfj kd jsf klgslkj sjk djklsjkl fsdljk sjkd klsd sljkd  jkds fjklgsd',
-  },
-  {
-    id: '2',
-    question: 'sfddsfdsfsdfsdfds sdfsdfsdfsdfds sd fsdfsdfs',
-    answer: '4534tfdggdf ',
-  },
-  {
-    id: '3',
-    question: 'eeeeesfdsf 765bgfdfdgfd',
-    answer: 'sdfdsffdssd',
-  },
-  {
-    id: '4',
-    question: 'sfsd',
-    answer: null,
-  },
-];
 
 const getDropdownActions = () => [
   {
@@ -57,7 +29,7 @@ const SessionQuestionsList = ({
   shouldShowQuestionAction,
   setShouldShowQuestionAction,
 }: SessionQuestionsListProps) => {
-  const [questions, setQuestions] = useState<SessionQuestionType[]>(questionData);
+  const [questions, setQuestions] = useState<SessionQuestionType[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>();
 
   const handleSubmitQuestion = (question: SessionQuestionType) => {
@@ -89,24 +61,25 @@ const SessionQuestionsList = ({
     setShouldShowQuestionAction(false);
   };
 
-  return (
-    <div className="bg-white lg:min-w-0 lg:flex-1 flex flex-col">
-      <div className="border-b border-t border-gray-200 xl:border-t-0">
-        <div className="flex flex-col justify-end py-4">
-          {shouldShowQuestionAction ? (
-            <QuestionAction
-              currentQuestion={currentQuestion}
-              handleSubmit={handleSubmitQuestion}
-              handleCancelAction={handleCancelAction}
-            />
-          ) : (
-            <div className="flex justify-end items-center pr-4">
-              <DropdownMenu name="pinned-items" actions={getDropdownActions()} type="sort" />
-            </div>
-          )}
+  const renderQuestionsOrEmptyAction = () => {
+    if (!questions?.length) {
+      // if user is creating a new question there is
+      // no need to show the empty data action component
+      if (shouldShowQuestionAction) return null;
+
+      return (
+        <div className="flex justify-center items-center mt-12">
+          <EmptyDataAction
+            title="Add your first question"
+            description="Kick off your study session by adding some questions!"
+            handleOnClick={() => setShouldShowQuestionAction(true)}
+          />
         </div>
-      </div>
-      <ul className="divide-y divide-gray-200 border-b border-gray-200">
+      );
+    }
+
+    return (
+      <ul className="divide-y divide-gray-200 border-b border-gray-200 border-t">
         {questions.map((question) => (
           <SessionQuestion
             key={getUniqId()}
@@ -115,6 +88,25 @@ const SessionQuestionsList = ({
           />
         ))}
       </ul>
+    );
+  };
+
+  return (
+    <div className="bg-white lg:min-w-0 lg:flex-1 flex flex-col">
+      <div className="flex flex-col justify-end py-4">
+        {shouldShowQuestionAction ? (
+          <QuestionAction
+            currentQuestion={currentQuestion}
+            handleSubmit={handleSubmitQuestion}
+            handleCancelAction={handleCancelAction}
+          />
+        ) : (
+          <div className="flex justify-end items-center pr-4">
+            <DropdownMenu name="pinned-items" actions={getDropdownActions()} type="sort" />
+          </div>
+        )}
+      </div>
+      {renderQuestionsOrEmptyAction()}
     </div>
   );
 };
