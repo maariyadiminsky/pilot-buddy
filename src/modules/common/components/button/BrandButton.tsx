@@ -59,7 +59,7 @@ const BrandButton = ({
       {Icon && (
         <Icon
           className={truthyString(
-            buttonClassType === 'clear' ? ' group-hover:text-white' : 'text-white',
+            buttonClassType === 'clear' ? 'enabled:group-hover:text-white' : 'enabled:text-white',
             'font-light h-5 w-5 mr-1',
             disabled ? ' group-hover:text-gray-400' : ''
           )}
