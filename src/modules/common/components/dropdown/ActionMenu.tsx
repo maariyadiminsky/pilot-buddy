@@ -15,7 +15,7 @@ interface MenuOption {
   handleOnClick?: () => void;
 }
 
-interface DropdownMenuProps {
+interface ActionMenuProps {
   name: string;
   actions: MenuOption[];
   className?: string;
@@ -23,7 +23,7 @@ interface DropdownMenuProps {
   type?: keyof typeof DropdownTypeEnum;
 }
 
-const DropdownMenu = ({ name, actions, className, type, useCustomPosition }: DropdownMenuProps) => {
+const ActionMenu = ({ name, actions, className, type, useCustomPosition }: ActionMenuProps) => {
   const menuRef = useRef<HTMLElement | null>(null);
   const [menuAdjustment, setMenuAdjustment] = useState('');
 
@@ -129,4 +129,4 @@ const DropdownMenu = ({ name, actions, className, type, useCustomPosition }: Dro
     </Menu>
   );
 };
-export default DropdownMenu;
+export default ActionMenu;

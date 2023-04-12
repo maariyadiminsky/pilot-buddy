@@ -6,18 +6,25 @@ import Dictaphone from '@modules/speech-recognition/Dictaphone';
 import { SyntheticEvent, useState, useRef, useEffect } from 'react';
 import Modal, { type ModalRef } from '@common/components/modal/Modal';
 import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks/useInitializeSpeechToText';
+import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
+import TimeSelectMenu from '../settings/TimeSelectMenu';
+import { TIME_OPTIONS } from '../constants';
 
-interface QuestionActionProps {
+interface SessionQuestionActionProps {
+  isTimed: boolean;
+  settingsTime: SelectMenuItemType;
   currentQuestion?: SessionQuestionType;
   handleSubmit: (value: SessionQuestionType) => void;
   handleCancelAction: () => void;
 }
 
-const QuestionAction = ({
+const SessionQuestionAction = ({
+  isTimed,
+  settingsTime,
   handleSubmit,
   handleCancelAction,
   currentQuestion,
-}: QuestionActionProps) => {
+}: SessionQuestionActionProps) => {
   const modalRef = useRef<ModalRef>(null);
 
   const [question, setQuestion] = useState(currentQuestion?.question || '');
@@ -26,6 +33,11 @@ const QuestionAction = ({
 
   const [isQuestionMicrophoneOn, setIsQuestionMicrophoneOn] = useState(false);
   const [isAnswerMicrophoneOn, setIsAnswerMicrophoneOn] = useState(false);
+
+  // time selected in edit panel
+  // only visible if Timed toggle is selecte in Settings
+  // Override initial settings
+  const [time, setTime] = useState<SelectMenuItemType>(settingsTime || TIME_OPTIONS[0]);
 
   const {
     SpeechRecognition,
@@ -75,6 +87,7 @@ const QuestionAction = ({
       id: currentQuestion?.id || getUniqId(),
       question,
       answer,
+      time: isTimed ? time || settingsTime : undefined,
     });
 
     setQuestion('');
@@ -92,12 +105,15 @@ const QuestionAction = ({
             />
             {currentQuestion ? 'Edit' : 'Add a'} Question
           </h2>
-          <button type="button" onClick={() => handleCancelAction()}>
-            <XMarkIcon
-              className="h-6 w-6 flex-shrink-0 text-gray-700 hover:text-sky-700 hover:cursor-pointer"
-              aria-hidden="true"
-            />
-          </button>
+          <div className="flex flex-row justify-end items-center space-x-3">
+            <TimeSelectMenu time={time} setTime={setTime} />
+            <button type="button" onClick={() => handleCancelAction()}>
+              <XMarkIcon
+                className="h-6 w-6 -mt-1 flex-shrink-0 text-gray-700 hover:text-sky-700 hover:cursor-pointer"
+                aria-hidden="true"
+              />
+            </button>
+          </div>
         </div>
         <div className="flex flex-col mb-6">
           <label
@@ -177,4 +193,4 @@ const QuestionAction = ({
   );
 };
 
-export default QuestionAction;
+export default SessionQuestionAction;

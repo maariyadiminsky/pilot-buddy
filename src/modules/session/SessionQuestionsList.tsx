@@ -1,11 +1,12 @@
 import { removeObjectFromArray } from '@common/utils';
-import DropdownMenu from '@common/components/dropdown/DropdownMenu';
+import ActionMenu from '@common/components/dropdown/ActionMenu';
 import EmptyDataAction from '@common/components/empty/EmptyDataAction';
 import SessionQuestion, {
   type SessionQuestionType,
 } from '@modules/session/question/SessionQuestion';
 import QuestionAction from '@modules/session/question/SessionQuestionAction';
 import { useState } from 'react';
+import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
 
 const questionData = [
   {
@@ -50,11 +51,15 @@ const getDropdownActions = () => [
 ];
 
 interface SessionQuestionsListProps {
+  isTimed: boolean;
+  settingsTime: SelectMenuItemType;
   shouldShowQuestionAction: boolean;
   setShouldShowQuestionAction: (value: boolean) => void;
 }
 
 const SessionQuestionsList = ({
+  isTimed,
+  settingsTime,
   shouldShowQuestionAction,
   setShouldShowQuestionAction,
 }: SessionQuestionsListProps) => {
@@ -123,14 +128,21 @@ const SessionQuestionsList = ({
 
     return (
       <ul className="divide-y divide-gray-200 border-b border-gray-200 border-t">
-        {questions.map((question) => (
-          <SessionQuestion
-            key={question.id}
-            {...question}
-            handleRemoveQuestion={handleRemoveQuestion}
-            handleEditQuestion={handleEditQuestion}
-          />
-        ))}
+        {questions.map((question) => {
+          const questionWithTime = {
+            ...question,
+            time: question.time || settingsTime,
+          };
+          return (
+            <SessionQuestion
+              key={question.id}
+              {...questionWithTime}
+              isTimed={isTimed}
+              handleRemoveQuestion={handleRemoveQuestion}
+              handleEditQuestion={handleEditQuestion}
+            />
+          );
+        })}
       </ul>
     );
   };
@@ -140,13 +152,15 @@ const SessionQuestionsList = ({
       <div className="flex flex-col justify-start py-4">
         {shouldShowQuestionAction ? (
           <QuestionAction
+            isTimed={isTimed}
+            settingsTime={settingsTime}
             currentQuestion={currentQuestion}
             handleSubmit={handleSubmitQuestion}
             handleCancelAction={handleCancelAction}
           />
         ) : (
           <div className="flex justify-end items-center pr-4">
-            <DropdownMenu name="pinned-items" actions={getDropdownActions()} type="sort" />
+            <ActionMenu name="pinned-items" actions={getDropdownActions()} type="sort" />
           </div>
         )}
       </div>

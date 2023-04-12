@@ -56,7 +56,7 @@ const SessionNotes = () => {
   };
 
   return (
-    <div className="bg-zinc-50 xl:w-72 min-h-screen xl:flex-shrink-0 xl:border-r xl:border-gray-200">
+    <div className="bg-zinc-50 xl:w-72 xl:flex-shrink-0 xl:border-r xl:border-gray-200">
       <div className="py-4">
         <div className="items-center justify-between">
           <div className="flex-1 space-y-8">

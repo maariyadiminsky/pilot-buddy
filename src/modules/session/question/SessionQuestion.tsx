@@ -3,16 +3,20 @@ import {
   TrashIcon,
   StarIcon,
   QuestionMarkCircleIcon,
+  ClockIcon,
 } from '@heroicons/react/20/solid';
+import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
 
 interface SessionQuestionBaseType {
   id: string;
   question: string;
   answer?: string | null;
+  time?: SelectMenuItemType;
 }
 
 export type SessionQuestionType = SessionQuestionBaseType;
 interface SessionQuestionProps extends SessionQuestionBaseType {
+  isTimed: boolean;
   handleEditQuestion: (id: string) => void;
   handleRemoveQuestion: (id: string, customQuestions?: SessionQuestionType[]) => void;
 }
@@ -21,11 +25,13 @@ const SessionQuestion = ({
   id,
   question,
   answer,
+  time,
+  isTimed,
   handleEditQuestion,
   handleRemoveQuestion,
 }: SessionQuestionProps) => (
   <li className="relative py-5 hover:bg-gray-50 px-10">
-    <div className="flex items-center justify-between space-x-4">
+    <div className="flex items-start justify-between space-x-4">
       <div className="min-w-0 space-y-3">
         <div className="flex justify-start items-start space-x-1">
           <div className="w-8">
@@ -57,29 +63,42 @@ const SessionQuestion = ({
         )}
       </div>
 
-      <div className="flex-shrink-0 flex-row items-end md:flex">
-        <button
-          type="button"
-          onClick={() => handleEditQuestion(id)}
-          className="inline-flex items-center bg-white mx-0 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-        >
-          <PencilSquareIcon
-            className="h-7 w-7 flex-shrink-0 text-gray-600 hover:text-sky-700"
-            aria-hidden="true"
-          />
-          <span className="sr-only">Edit question</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => handleRemoveQuestion(id)}
-          className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-        >
-          <TrashIcon
-            className="h-7 w-7 flex-shrink-0 text-gray-600 hover:text-sky-700"
-            aria-hidden="true"
-          />
-          <span className="sr-only">Delete question</span>
-        </button>
+      <div className="flex flex-col justify-start items-end space-y-2">
+        <div className="flex-shrink-0 flex-row justify-end items-end md:flex">
+          <button
+            type="button"
+            onClick={() => handleEditQuestion(id)}
+            className="inline-flex items-center bg-white mx-0 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
+          >
+            <PencilSquareIcon
+              className="h-7 w-7 flex-shrink-0 text-gray-600 hover:text-sky-700"
+              aria-hidden="true"
+            />
+            <span className="sr-only">Edit question</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleRemoveQuestion(id)}
+            className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
+          >
+            <TrashIcon
+              className="h-7 w-7 flex-shrink-0 text-gray-600 hover:text-sky-700"
+              aria-hidden="true"
+            />
+            <span className="sr-only">Delete question</span>
+          </button>
+        </div>
+        {isTimed && time && (
+          <div className="flex flex-row justify-end space-x-0.5">
+            <ClockIcon
+              className="h-3 w-3 mt-0.5 flex-shrink-0 font-medium text-sky-700"
+              aria-hidden="true"
+            />
+            <div className="flex justify-end text-sky-700 text-xs font-medium pr-2">
+              {time.name}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   </li>

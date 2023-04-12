@@ -1,5 +1,5 @@
 import { truthyString } from '@common/utils';
-import DropdownMenu from '@modules/common/components/dropdown/DropdownMenu';
+import ActionMenu from '@modules/common/components/dropdown/ActionMenu';
 import { PlayCircleIcon, PlusIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
 
 import { useCallback } from 'react';
@@ -104,7 +104,7 @@ const SessionsTable = ({
             <tr>
               <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 sm:pl-6">
                 <div className="flex flex-row items-center">
-                  <DropdownMenu
+                  <ActionMenu
                     name="pinned-items"
                     actions={getDropdownActions()}
                     useCustomPosition

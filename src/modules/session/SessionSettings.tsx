@@ -1,11 +1,13 @@
 import SettingToggle, { type SettingToggleType } from '@modules/session/settings/SettingToggle';
+import { ReactNode } from 'react';
 
 interface SessionSettingProps {
   settings: SettingToggleType[];
+  children?: ReactNode;
 }
 
-const SessionSettings = ({ settings }: SessionSettingProps) => (
-  <div className="bg-zinc-50 lg:flex-shrink-0 lg:border-l lg:border-gray-200 flex px-8 xl:w-96">
+const SessionSettings = ({ settings, children }: SessionSettingProps) => (
+  <div className="bg-zinc-50 lg:flex-shrink-0 lg:border-l lg:border-gray-200 flex xl:w-96 px-8 min-h-full w-full">
     <div className="lg:w-80">
       <div className="pt-8">
         <h2 className="text-sm font-semibold">Settings</h2>
@@ -15,6 +17,7 @@ const SessionSettings = ({ settings }: SessionSettingProps) => (
           <SettingToggle key={index} {...setting} />
         ))}
       </ul>
+      {children}
     </div>
   </div>
 );

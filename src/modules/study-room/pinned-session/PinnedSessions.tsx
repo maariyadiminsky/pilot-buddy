@@ -1,4 +1,4 @@
-import DropdownMenu from '@modules/common/components/dropdown/DropdownMenu';
+import ActionMenu from '@common/components/dropdown/ActionMenu';
 
 import { truthyString } from '@common/utils';
 import { getInitials, getTypeAmount } from '@modules/study-room/pinned-session/utils';
@@ -80,11 +80,7 @@ const PinnedSession = ({
                 </button>
                 <p className="text-gray-500">{getTypeAmount(type, total)}</p>
               </div>
-              <DropdownMenu
-                name="pinned-items"
-                actions={getDropdownActions(id)}
-                useCustomPosition
-              />
+              <ActionMenu name="pinned-items" actions={getDropdownActions(id)} useCustomPosition />
             </div>
           </li>
         ))}
