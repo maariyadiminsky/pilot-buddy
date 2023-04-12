@@ -90,7 +90,7 @@ const QuestionAction = ({
               className="h-6 w-6 xl:h-5 xl:h5 flex-shrink-0 text-gray-700 hover:text-sky-700"
               aria-hidden="true"
             />
-            Add Question
+            {currentQuestion ? 'Edit' : 'Add a'} Question
           </h2>
           <button type="button" onClick={() => handleCancelAction()}>
             <XMarkIcon

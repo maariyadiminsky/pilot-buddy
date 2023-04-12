@@ -53,7 +53,7 @@ const Session = () => {
         },
         {
           title: 'Timed',
-          description: 'Every question is timed and automatically transitions to the next.',
+          description: 'Each question is timed and automatically transitions to the next.',
           getter: isTimed,
           setter: setIsTimed,
         },
