@@ -1,4 +1,4 @@
-import { getUniqId, removeObjectFromArray } from '@common/utils';
+import { removeObjectFromArray } from '@common/utils';
 import DropdownMenu from '@common/components/dropdown/DropdownMenu';
 import EmptyDataAction from '@common/components/empty/EmptyDataAction';
 import SessionQuestion, {
@@ -125,7 +125,7 @@ const SessionQuestionsList = ({
       <ul className="divide-y divide-gray-200 border-b border-gray-200 border-t">
         {questions.map((question) => (
           <SessionQuestion
-            key={getUniqId()}
+            key={question.id}
             {...question}
             handleRemoveQuestion={handleRemoveQuestion}
             handleEditQuestion={handleEditQuestion}
@@ -137,7 +137,7 @@ const SessionQuestionsList = ({
 
   return (
     <div className="bg-white lg:min-w-0 lg:flex-1 flex flex-col">
-      <div className="flex flex-col justify-end py-4">
+      <div className="flex flex-col justify-start py-4">
         {shouldShowQuestionAction ? (
           <QuestionAction
             currentQuestion={currentQuestion}

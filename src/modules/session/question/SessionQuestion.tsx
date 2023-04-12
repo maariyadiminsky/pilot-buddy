@@ -24,7 +24,7 @@ const SessionQuestion = ({
   handleEditQuestion,
   handleRemoveQuestion,
 }: SessionQuestionProps) => (
-  <li className="relative py-5 pl-4 pr-6 hover:bg-gray-50 sm:py-6 sm:pl-6 lg:pl-8 xl:pl-6">
+  <li className="relative py-5 hover:bg-gray-50 px-10">
     <div className="flex items-center justify-between space-x-4">
       <div className="min-w-0 space-y-3">
         <div className="flex justify-start items-start space-x-1">
@@ -61,10 +61,10 @@ const SessionQuestion = ({
         <button
           type="button"
           onClick={() => handleEditQuestion(id)}
-          className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
+          className="inline-flex items-center bg-white mx-0 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
         >
           <PencilSquareIcon
-            className="h-6 w-6 flex-shrink-0 text-gray-600 hover:text-sky-700"
+            className="h-7 w-7 flex-shrink-0 text-gray-600 hover:text-sky-700"
             aria-hidden="true"
           />
           <span className="sr-only">Edit question</span>
@@ -75,7 +75,7 @@ const SessionQuestion = ({
           className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
         >
           <TrashIcon
-            className="h-6 w-6 flex-shrink-0 text-gray-600 hover:text-sky-700"
+            className="h-7 w-7 flex-shrink-0 text-gray-600 hover:text-sky-700"
             aria-hidden="true"
           />
           <span className="sr-only">Delete question</span>

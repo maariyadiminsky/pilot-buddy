@@ -1,6 +1,6 @@
 import DropdownMenu from '@modules/common/components/dropdown/DropdownMenu';
 
-import { truthyString, getUniqId } from '@common/utils';
+import { truthyString } from '@common/utils';
 import { getInitials, getTypeAmount } from '@modules/study-room/pinned-session/utils';
 import { useCallback } from 'react';
 
@@ -60,7 +60,7 @@ const PinnedSession = ({
       <h2 className="text-sm font-medium text-gray-900">{title}</h2>
       <ul className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-4">
         {items.map(({ id, text, type, total, className }) => (
-          <li key={getUniqId(text)} className="col-span-1 flex rounded-md shadow-sm">
+          <li key={id} className="col-span-1 flex rounded-md shadow-sm">
             <div
               className={truthyString(
                 'flex w-16 antialiased first-letter:flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white',

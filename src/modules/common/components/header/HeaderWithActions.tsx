@@ -1,5 +1,4 @@
 import BrandButton, { type BrandButtonType } from '@common/components/button/BrandButton';
-import { getUniqId } from '@common/utils';
 
 interface HeaderWithActionsProps {
   title?: string;
@@ -14,8 +13,8 @@ const HeaderWithActions = ({ title, actions }: HeaderWithActionsProps) => (
       </h1>
     </div>
     <div className="mt-4 flex sm:ml-4 sm:mt-0 space-x-3">
-      {actions?.map((action) => (
-        <BrandButton key={getUniqId()} {...{ ...action }} />
+      {actions?.map((action, index) => (
+        <BrandButton key={index} {...{ ...action }} />
       ))}
     </div>
   </div>

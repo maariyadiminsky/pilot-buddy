@@ -1,5 +1,5 @@
 import { type HeroIconType } from '@common/types';
-import { truthyString, getUniqId } from '@common/utils';
+import { truthyString } from '@common/utils';
 import { Menu, Transition } from '@headlessui/react';
 import { EllipsisVerticalIcon, BarsArrowUpIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Fragment, useRef, useState } from 'react';
@@ -102,7 +102,7 @@ const DropdownMenu = ({ name, actions, className, type, useCustomPosition }: Dro
               active ? 'bg-sky-700 text-white' : 'text-gray-700';
 
             return (
-              <Menu.Item key={getUniqId(text)}>
+              <Menu.Item key={index}>
                 {({ active }) => (
                   <button
                     type="button"

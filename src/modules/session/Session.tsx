@@ -4,13 +4,16 @@ import { PlayCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@modules/common/components/page/PageWrapper';
 import SessionNotes from '@modules/session/SessionNotes';
 import SessionQuestionsList from '@modules/session/SessionQuestionsList';
-import SessionGoals from '@modules/session/SessionGoals';
+import SessionSettings from '@modules/session/SessionSettings';
+import { type SettingToggleType } from '@modules/session/settings/SettingToggle';
 
 import { useState, useMemo } from 'react';
 
 // todo: get session name and add to PageWrapper title
 const Session = () => {
   const [shouldShowQuestionAction, setShouldShowQuestionAction] = useState(false);
+  const [shouldReadOutLoud, setShouldReadOutLoud] = useState(false);
+  const [isTimed, setIsTimed] = useState(false);
 
   // eslint-disable-next-line
   const handleStartSession = (id: number) => {
@@ -39,6 +42,25 @@ const Session = () => {
     [shouldShowQuestionAction]
   );
 
+  const settings = useMemo(
+    () =>
+      [
+        {
+          title: 'Text-to-Speech',
+          description: 'During the session, your questions will be read aloud for you',
+          getter: shouldReadOutLoud,
+          setter: setShouldReadOutLoud,
+        },
+        {
+          title: 'Timed',
+          description: 'Every question is timed and automatically transitions to the next',
+          getter: isTimed,
+          setter: setIsTimed,
+        },
+      ] as SettingToggleType,
+    [shouldReadOutLoud, isTimed]
+  );
+
   return (
     <PageWrapper title="Session Room" headerActions={headerActions}>
       <>
@@ -51,7 +73,7 @@ const Session = () => {
                 setShouldShowQuestionAction={setShouldShowQuestionAction}
               />
             </div>
-            <SessionGoals />
+            <SessionSettings settings={settings} />
           </div>
         </div>
       </>

@@ -1,4 +1,4 @@
-import { truthyString, getUniqId } from '@common/utils';
+import { truthyString } from '@common/utils';
 import DropdownMenu from '@modules/common/components/dropdown/DropdownMenu';
 import { PlayCircleIcon, PlusIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
 
@@ -128,7 +128,7 @@ const SessionsTable = ({
           </thead>
           <tbody>
             {sessions.map(({ id, name, topic, questions, color }, planIdx) => (
-              <tr key={getUniqId()}>
+              <tr key={id}>
                 <td
                   className={truthyString(
                     planIdx === 0 ? '' : 'border-t border-gray-300',
