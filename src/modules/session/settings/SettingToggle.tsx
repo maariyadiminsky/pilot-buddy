@@ -12,7 +12,7 @@ export type SettingToggleType = SettingToggleProps;
 
 const SettingToggle = ({ title, description, getter, setter }: SettingToggleProps) => (
   <Switch.Group as="div" className="flex items-center justify-between">
-    <span className="flex flex-grow flex-col py-3">
+    <span className="flex flex-grow flex-col space-y-3 my-6">
       <Switch
         checked={getter}
         onChange={setter}

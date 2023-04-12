@@ -47,13 +47,13 @@ const Session = () => {
       [
         {
           title: 'Text-to-Speech',
-          description: 'During the session, your questions will be read aloud for you',
+          description: 'During the session, your questions will be read aloud for you.',
           getter: shouldReadOutLoud,
           setter: setShouldReadOutLoud,
         },
         {
           title: 'Timed',
-          description: 'Every question is timed and automatically transitions to the next',
+          description: 'Every question is timed and automatically transitions to the next.',
           getter: isTimed,
           setter: setIsTimed,
         },
