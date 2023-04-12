@@ -61,30 +61,45 @@ const SessionQuestionsList = ({
   const [questions, setQuestions] = useState<SessionQuestionType[]>(questionData);
   const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>();
 
+  const handleAddQuestion = (question: SessionQuestionType) => {
+    const questionsWithNewQuestion = [...questions, { ...question }];
+    setQuestions(questionsWithNewQuestion);
+    return questionsWithNewQuestion;
+  };
+
   const handleSubmitQuestion = (question: SessionQuestionType) => {
-    setQuestions([...questions, { ...question }]);
+    handleAddQuestion(question);
     setCurrentQuestion(undefined);
     setShouldShowQuestionAction(false);
 
     // handle saving question here
   };
 
-  const handleRemoveQuestion = (id: string) => {
-    setQuestions(removeObjectFromArray(questions, id, 'id'));
+  const handleRemoveQuestion = (id: string, customQuestions?: SessionQuestionType[]) => {
+    setQuestions(removeObjectFromArray(customQuestions || questions, id, 'id'));
 
     // save to local or hidden folder in google drive
   };
 
   const handleEditQuestion = (id: string) => {
+    // in the case they were editing before and just hit edit again
+    // add back the last item user was editing.
+    // This also acts as a cancel of the last edit.
+    if (currentQuestion) {
+      const currentQuestions = handleAddQuestion(currentQuestion);
+      handleRemoveQuestion(id, currentQuestions);
+    } else {
+      handleRemoveQuestion(id);
+    }
+
     setCurrentQuestion(questions.find((question) => question.id === id));
-    handleRemoveQuestion(id);
     setShouldShowQuestionAction(true);
   };
 
   // when user opens to edit or create and clicks cancel button
   const handleCancelAction = () => {
     if (currentQuestion) {
-      setQuestions([...questions, { ...currentQuestion }]);
+      handleAddQuestion(currentQuestion);
       setCurrentQuestion(undefined);
     }
 

@@ -10,12 +10,12 @@ interface SessionQuestionBaseType {
   question: string;
   answer?: string | null;
 }
-interface SessionQuestionProps extends SessionQuestionBaseType {
-  handleEditQuestion: (id: string) => void;
-  handleRemoveQuestion: (id: string) => void;
-}
 
 export type SessionQuestionType = SessionQuestionBaseType;
+interface SessionQuestionProps extends SessionQuestionBaseType {
+  handleEditQuestion: (id: string) => void;
+  handleRemoveQuestion: (id: string, customQuestions?: SessionQuestionType[]) => void;
+}
 
 const SessionQuestion = ({
   id,

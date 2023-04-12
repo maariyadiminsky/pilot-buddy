@@ -11,7 +11,11 @@ const SessionNotes = () => {
   const [currentNote, setCurrentNote] = useState<NoteDataType>();
   const [shouldHideNoteAction, setShouldHideNoteAction] = useState(false);
 
-  const handleAddNote = (note?: NoteDataType) => note && setNotes([...notes, { ...note }]);
+  const handleAddNote = (note: NoteDataType) => {
+    const notesWithNewNote = [...notes, { ...note }];
+    setNotes(notesWithNewNote);
+    return notesWithNewNote;
+  };
 
   // add to notes for ui, currentNote is undefined to clear if hiding, and save
   const handleSubmitNote = (note: NoteDataType) => {
@@ -21,15 +25,24 @@ const SessionNotes = () => {
     // handle saving note here
   };
 
-  const handleRemoveNote = (id: string) => {
-    setNotes(removeObjectFromArray(notes, id, 'id'));
+  const handleRemoveNote = (id: string, customNotes?: NoteDataType[]) => {
+    setNotes(removeObjectFromArray(customNotes || notes, id, 'id'));
 
     // save to local or hidden folder in google drive
   };
 
   const handleEditNote = (id: string) => {
+    // in the case they were editing before and just hit edit again
+    // add back the last item user was editing.
+    // This also acts as a cancel of the last edit.
+    if (currentNote) {
+      const currentNotes = handleAddNote(currentNote);
+      handleRemoveNote(id, currentNotes);
+    } else {
+      handleRemoveNote(id);
+    }
+
     setCurrentNote(notes.find((note) => note.id === id));
-    handleRemoveNote(id);
   };
 
   // hide note action
