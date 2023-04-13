@@ -44,11 +44,6 @@ const pinnedItems = [
 
 const StudyRoom = () => {
   // eslint-disable-next-line
-  const routeToAddSessionScreen = () => {
-    // go to add session component and route
-  };
-
-  // eslint-disable-next-line
   const handleCreateSession = () => {
     // handle add session
     // pass data here eventually
@@ -69,10 +64,6 @@ const StudyRoom = () => {
     // handle remove session
   };
 
-  const handleRemoveAllSessions = () => {
-    // remove all sessions
-  };
-
   const getHeaderActions = useCallback(
     () =>
       [
@@ -81,7 +72,7 @@ const StudyRoom = () => {
           srText: 'Create new session',
           icon: PlusIcon,
           buttonClassType: 'solid',
-          handleOnClick: () => routeToAddSessionScreen(),
+          handleOnClick: () => handleCreateSession(),
         },
       ] as BrandButtonType[],
     []
