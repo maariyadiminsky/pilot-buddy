@@ -1,4 +1,4 @@
-import { SessionTimeEnum } from './types';
+import { SessionTimeEnum, SessionOrderEnum } from './types';
 import {
   ExclamationTriangleIcon,
   InformationCircleIcon,
@@ -13,6 +13,19 @@ export const TIME_OPTIONS = [
   { id: 1, name: SessionTimeEnum['10 Seconds'] },
   { id: 2, name: SessionTimeEnum['15 Seconds'] },
   { id: 3, name: SessionTimeEnum['20 Seconds'] },
+];
+
+export const ORDER_OPTIONS = [
+  {
+    id: 0,
+    name: SessionOrderEnum.Sort,
+    description: 'Questions will appear just as they are currently sorted now.',
+  },
+  {
+    id: 1,
+    name: SessionOrderEnum.Random,
+    description: 'Questions will be displayed in random order.',
+  },
 ];
 
 export const NOTE_TYPES = [

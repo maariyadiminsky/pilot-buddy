@@ -7,6 +7,7 @@ import { Fragment } from 'react';
 export interface SelectMenuItemType {
   id: number;
   name: string;
+  description?: string;
 }
 
 interface SelectMenuProps {
@@ -44,7 +45,7 @@ const SelectMenu = ({ title, icon, options, currentlySelected, handleSelect }: S
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                 {options.map((option) => (
                   <Listbox.Option
                     key={option.id}
@@ -58,25 +59,36 @@ const SelectMenu = ({ title, icon, options, currentlySelected, handleSelect }: S
                   >
                     {({ selected, active }) => (
                       <>
-                        <span
-                          className={truthyString(
-                            selected ? 'font-semibold' : 'font-normal',
-                            'block truncate'
-                          )}
-                        >
-                          {option.name}
-                        </span>
-
-                        {selected ? (
+                        <div className="flex items-start justify-start">
+                          {selected ? (
+                            <span
+                              className={truthyString(
+                                active ? 'text-white' : 'text-sky-700',
+                                'absolute inset-y-0 left-0 flex items-start pt-2 pl-1.5'
+                              )}
+                            >
+                              {Icon && <Icon className="h-5 w-5" aria-hidden="true" />}
+                            </span>
+                          ) : null}
                           <span
                             className={truthyString(
-                              active ? 'text-white' : 'text-sky-700',
-                              'absolute inset-y-0 left-0 flex items-center pl-1.5'
+                              selected ? 'font-semibold' : 'font-normal',
+                              'block truncate'
                             )}
                           >
-                            {Icon && <Icon className="h-5 w-5" aria-hidden="true" />}
+                            {option.name}
                           </span>
-                        ) : null}
+                        </div>
+                        {option.description && (
+                          <div
+                            className={truthyString(
+                              active ? 'text-white' : 'text-gray-500',
+                              'text-sm'
+                            )}
+                          >
+                            {option.description}
+                          </div>
+                        )}
                       </>
                     )}
                   </Listbox.Option>

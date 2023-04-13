@@ -4,3 +4,8 @@ export enum SessionTimeEnum {
   '15 Seconds' = '15 Seconds',
   '20 Seconds' = '20 Seconds',
 }
+
+export enum SessionOrderEnum {
+  Sort = 'Sort',
+  Random = 'Random',
+}

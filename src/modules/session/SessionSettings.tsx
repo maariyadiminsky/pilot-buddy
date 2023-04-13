@@ -1,7 +1,10 @@
 import SettingToggle, { type SettingToggleType } from '@modules/session/settings/SettingToggle';
 
+export interface SettingsToggleTypeWithId extends SettingToggleType {
+  id: number;
+}
 interface SessionSettingProps {
-  settings: SettingToggleType[];
+  settings: SettingsToggleTypeWithId[];
 }
 
 const SessionSettings = ({ settings }: SessionSettingProps) => (
@@ -11,8 +14,8 @@ const SessionSettings = ({ settings }: SessionSettingProps) => (
         <h2 className="text-sm font-semibold">Settings</h2>
       </div>
       <ul className="flex flex-col divide-y divide-gray-200 -mt-3">
-        {settings.map((setting, index) => (
-          <SettingToggle key={index} {...setting} />
+        {settings.map((setting) => (
+          <SettingToggle key={setting.id} {...setting} />
         ))}
       </ul>
     </div>

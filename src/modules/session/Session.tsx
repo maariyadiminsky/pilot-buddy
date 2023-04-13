@@ -6,9 +6,10 @@ import PageWrapper from '@modules/common/components/page/PageWrapper';
 import SessionNotes from '@modules/session/SessionNotes';
 import SessionQuestionsList from '@modules/session/SessionQuestionsList';
 import SessionSettings from '@modules/session/SessionSettings';
-import { type SettingToggleType } from '@modules/session/settings/SettingToggle';
+import { type SettingsToggleTypeWithId } from '@modules/session/settings/SessionSetting';
 import TimeSelectMenu from './settings/TimeSelectMenu';
-import { TIME_OPTIONS } from './constants';
+import OrderSelectMenu from './settings/OrderSelectMenu';
+import { TIME_OPTIONS, ORDER_OPTIONS } from './constants';
 
 import { useState, useMemo } from 'react';
 
@@ -17,8 +18,10 @@ const Session = () => {
   const [shouldShowQuestionAction, setShouldShowQuestionAction] = useState(false);
 
   const [shouldReadOutLoud, setShouldReadOutLoud] = useState(false);
+  const [shouldHaveOrder, setShouldHaveOrder] = useState(false);
   const [isTimed, setIsTimed] = useState(false);
-  // time selected in settings
+  // time and order selected in settings
+  const [settingsOrder, setSettingsOrder] = useState<SelectMenuItemType>(ORDER_OPTIONS[0]);
   const [settingsTime, setSettingsTime] = useState<SelectMenuItemType>(TIME_OPTIONS[0]);
 
   // eslint-disable-next-line
@@ -62,6 +65,17 @@ const Session = () => {
         },
         {
           id: 1,
+          title: 'Order',
+          description:
+            "Choose the order in which you'd like the session's questions to be presented to you.",
+          getter: shouldHaveOrder,
+          setter: setShouldHaveOrder,
+          settingChildren: shouldHaveOrder && (
+            <OrderSelectMenu order={settingsOrder} setOrder={setSettingsOrder} />
+          ),
+        },
+        {
+          id: 2,
           title: 'Timed',
           description: 'Each question is timed and automatically transitions to the next one.',
           getter: isTimed,
@@ -70,8 +84,8 @@ const Session = () => {
             <TimeSelectMenu time={settingsTime} setTime={setSettingsTime} />
           ),
         },
-      ] as SettingToggleType,
-    [shouldReadOutLoud, isTimed, settingsTime]
+      ] as SettingsToggleTypeWithId,
+    [shouldReadOutLoud, shouldHaveOrder, settingsOrder, isTimed, settingsTime]
   );
 
   return (
