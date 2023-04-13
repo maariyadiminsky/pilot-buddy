@@ -1,16 +1,24 @@
 import { truthyString } from '@common/utils';
 import { Switch } from '@headlessui/react';
+import { ReactNode } from 'react';
 
 interface SettingToggleProps {
   title: string;
   description: string;
   getter: boolean;
   setter: (value: boolean) => void;
+  settingChildren?: ReactNode;
 }
 
 export type SettingToggleType = SettingToggleProps;
 
-const SettingToggle = ({ title, description, getter, setter }: SettingToggleProps) => (
+const SettingToggle = ({
+  title,
+  description,
+  getter,
+  setter,
+  settingChildren,
+}: SettingToggleProps) => (
   <Switch.Group as="div" className="flex items-center justify-between">
     <div className="flex flex-grow flex-col space-y-3 my-6">
       <Switch
@@ -35,6 +43,7 @@ const SettingToggle = ({ title, description, getter, setter }: SettingToggleProp
       <Switch.Description as="span" className="text-sm text-gray-500">
         {description}
       </Switch.Description>
+      {settingChildren}
     </div>
   </Switch.Group>
 );

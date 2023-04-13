@@ -54,19 +54,24 @@ const Session = () => {
     () =>
       [
         {
+          id: 0,
           title: 'Text-to-Speech',
           description: 'During the session, your questions will be read aloud for you.',
           getter: shouldReadOutLoud,
           setter: setShouldReadOutLoud,
         },
         {
+          id: 1,
           title: 'Timed',
           description: 'Each question is timed and automatically transitions to the next one.',
           getter: isTimed,
           setter: setIsTimed,
+          settingChildren: isTimed && (
+            <TimeSelectMenu time={settingsTime} setTime={setSettingsTime} />
+          ),
         },
       ] as SettingToggleType,
-    [shouldReadOutLoud, isTimed]
+    [shouldReadOutLoud, isTimed, settingsTime]
   );
 
   return (
@@ -84,9 +89,7 @@ const Session = () => {
               />
             </div>
             <div className="flex flex-col items-start">
-              <SessionSettings settings={settings}>
-                {isTimed && <TimeSelectMenu time={settingsTime} setTime={setSettingsTime} />}
-              </SessionSettings>
+              <SessionSettings settings={settings} />
             </div>
           </div>
         </div>
