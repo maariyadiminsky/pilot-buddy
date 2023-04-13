@@ -91,7 +91,7 @@ const StudyRoom = () => {
 
   return (
     <PageWrapper title="Study Room" headerActions={headerActions}>
-      <div className="h-screen">
+      <div className="min-h-full">
         <PinnedItems
           title="Pinned Sessions"
           items={pinnedItems}

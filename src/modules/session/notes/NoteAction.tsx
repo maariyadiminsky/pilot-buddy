@@ -2,7 +2,7 @@ import { SyntheticEvent, Fragment, useState, useEffect } from 'react';
 import { PlusCircleIcon, EyeIcon } from '@heroicons/react/20/solid';
 import { Listbox, Transition } from '@headlessui/react';
 import { truthyString, getUniqId } from '@common/utils';
-import { NOTE_TYPES } from '@modules/session/notes/constants';
+import { NOTE_TYPES } from '@modules/session/constants';
 import NoteIcon from '@modules/session/notes/NoteIcon';
 import { type NoteDataType } from '@modules/session/notes/Note';
 
@@ -59,7 +59,7 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
   if (shouldHide) return null;
 
   return (
-    <div className="flex items-start space-x-4 px-4">
+    <div className="flex items-start space-x-4 px-4 mb-3">
       <div className="min-w-0 flex-1">
         <form onSubmit={handleFormSubmit} className="relative">
           <div className="overflow-hidden w-full rounded-lg shadow-sm ring-1 ring-inset bg-white ring-gray-300 focus-within:ring-2 focus-within:ring-sky-700">

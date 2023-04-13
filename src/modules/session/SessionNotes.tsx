@@ -69,7 +69,7 @@ const SessionNotes = () => {
                     onClick={() => setShouldHideNoteAction(false)}
                   >
                     <EyeSlashIcon
-                      className="w-6 h-6 flex-shrink-0 text-gray-300 hover:text-sky-700"
+                      className="w-6 h-6 flex-shrink-0 text-gray-300 hover:text-sky-700 mb-3"
                       aria-hidden="true"
                     />
                   </button>
@@ -87,6 +87,7 @@ const SessionNotes = () => {
                 notes={notes}
                 handleRemoveNote={handleRemoveNote}
                 handleEditNote={handleEditNote}
+                shouldHideNoteAction={shouldHideNoteAction}
               />
             </div>
           </div>
