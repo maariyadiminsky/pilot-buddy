@@ -74,7 +74,7 @@ const PinnedSession = ({
                 <button
                   type="button"
                   onClick={() => handleStartSession(id)}
-                  className="font-medium text-gray-900 hover:text-sky-700 antialiased"
+                  className="font-medium text-gray-900 hover:text-sky-600 antialiased"
                 >
                   {text} dasdddsfsdfsdfsdfsdfsdfds
                 </button>

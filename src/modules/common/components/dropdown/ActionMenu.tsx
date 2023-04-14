@@ -58,7 +58,7 @@ const ActionMenu = ({ name, actions, className, type, useCustomPosition }: Actio
           <EllipsisVerticalIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
         );
         buttonClassName =
-          'h-8 w-8 items-center justify-center rounded-full text-gray-900 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-700 focus:ring-offset-2';
+          'h-8 w-8 items-center justify-center rounded-full text-gray-900 hover:text-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2';
     }
 
     return (
@@ -86,7 +86,7 @@ const ActionMenu = ({ name, actions, className, type, useCustomPosition }: Actio
       >
         <Menu.Items
           className={truthyString(
-            'absolute z-10 mt-1 w-40 origin-top-right divide-y divide-gray-200 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
+            'absolute z-20 mt-1 w-40 origin-top-right divide-y divide-gray-200 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
             className,
             menuAdjustment,
             !useCustomPosition && 'right-0'
@@ -97,9 +97,9 @@ const ActionMenu = ({ name, actions, className, type, useCustomPosition }: Actio
             // Property 'icon' does not exist on type 'JSX.IntrinsicElements'.
             const Icon = icon;
 
-            const hasIconClass = (active: boolean) => (active ? 'text-sky-700' : 'text-gray-700');
+            const hasIconClass = (active: boolean) => (active ? 'text-sky-600' : 'text-gray-700');
             const noIconClass = (active: boolean) =>
-              active ? 'bg-sky-700 text-white' : 'text-gray-700';
+              active ? 'bg-sky-600 text-white' : 'text-gray-700';
 
             return (
               <Menu.Item key={index}>

@@ -103,8 +103,8 @@ const Dictaphone = ({
       >
         <MicrophoneIcon
           className={truthyString(
-            'h-5 w-5 enabled:group-hover:text-sky-700 enabled:group-hover:cursor-pointer',
-            isOn ? 'text-sky-700' : 'text-gray-400'
+            'h-5 w-5 enabled:group-hover:text-sky-600 enabled:group-hover:cursor-pointer',
+            isOn ? 'text-sky-600' : 'text-gray-400'
           )}
           aria-hidden="true"
         />

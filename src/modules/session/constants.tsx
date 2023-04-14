@@ -68,7 +68,7 @@ export const NOTE_TYPES = [
     name: 'Link',
     value: 'link',
     icon: LinkIcon,
-    iconColor: 'text-sky-700',
+    iconColor: 'text-sky-600',
     bgColor: 'bg-white',
   },
 ];

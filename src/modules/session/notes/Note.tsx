@@ -41,7 +41,7 @@ const Note = ({ id, text, icon, handleRemoveNote, handleEditNote }: NoteDataProp
               className="flex justify-center items-center group pr-1"
             >
               <PencilIcon
-                className="h-6 w-6 xl:w-4 xl:h-4 opacity-75 flex-shrink-0 text-gray-900 group-hover:text-sky-700"
+                className="h-6 w-6 xl:w-4 xl:h-4 opacity-75 flex-shrink-0 text-gray-900 group-hover:text-sky-600"
                 aria-hidden="true"
               />
               <span className="sr-only">Edit note</span>
@@ -52,7 +52,7 @@ const Note = ({ id, text, icon, handleRemoveNote, handleEditNote }: NoteDataProp
               className="flex justify-center items-center group"
             >
               <XMarkIcon
-                className="h-8 w-8 xl:w-5 xl:h-5 opacity-75 flex-shrink-0 text-gray-900 group-hover:text-sky-700"
+                className="h-8 w-8 xl:w-5 xl:h-5 opacity-75 flex-shrink-0 text-gray-900 group-hover:text-sky-600"
                 aria-hidden="true"
               />
               <span className="sr-only">Remove note</span>

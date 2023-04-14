@@ -7,7 +7,7 @@ const sessions = [
     name: 'Pilot Exam sdfdsf fdsdfsd fsdsdfsd dasdsafasafasfasfasfasd dadasdasdasdsad',
     topic: 'Private Pilot Exam sdfdsf fdsdfsd fsdsdfsd dasdsafasafasfasfasfasd dadasdasdasdsad ',
     questions: 12,
-    color: 'bg-sky-700',
+    color: 'bg-sky-600',
   },
   {
     id: 2,
@@ -35,7 +35,7 @@ const sessions = [
     name: 'Practice',
     topic: 'Commercial',
     questions: 6,
-    color: 'bg-sky-700',
+    color: 'bg-sky-600',
   },
   {
     id: 6,
@@ -49,7 +49,7 @@ const sessions = [
     name: 'Pilot Exam Test #2',
     topic: 'Private Pilot',
     questions: 17,
-    color: 'bg-sky-700',
+    color: 'bg-sky-600',
   },
   {
     id: 8,
@@ -63,7 +63,7 @@ const sessions = [
     name: 'Practice',
     topic: 'Commercial',
     questions: 6,
-    color: 'bg-sky-700',
+    color: 'bg-sky-600',
   },
   {
     id: 6,
@@ -77,7 +77,7 @@ const sessions = [
     name: 'Pilot Exam Test #2',
     topic: 'Private Pilot',
     questions: 17,
-    color: 'bg-sky-700',
+    color: 'bg-sky-600',
   },
   {
     id: 8,
@@ -91,7 +91,7 @@ const sessions = [
     name: 'Practice',
     topic: 'Commercial',
     questions: 6,
-    color: 'bg-sky-700',
+    color: 'bg-sky-600',
   },
   {
     id: 6,
@@ -105,7 +105,7 @@ const sessions = [
     name: 'Pilot Exam Test #2',
     topic: 'Private Pilot',
     questions: 17,
-    color: 'bg-sky-700',
+    color: 'bg-sky-600',
   },
   {
     id: 8,
@@ -119,7 +119,7 @@ const sessions = [
     name: 'Practice',
     topic: 'Commercial',
     questions: 6,
-    color: 'bg-sky-700',
+    color: 'bg-sky-600',
   },
   {
     id: 6,
@@ -133,7 +133,7 @@ const sessions = [
     name: 'Pilot Exam Test #2',
     topic: 'Private Pilot',
     questions: 17,
-    color: 'bg-sky-700',
+    color: 'bg-sky-600',
   },
   {
     id: 8,
@@ -147,7 +147,7 @@ const sessions = [
     name: 'Practice',
     topic: 'Commercial',
     questions: 6,
-    color: 'bg-sky-700',
+    color: 'bg-sky-600',
   },
   {
     id: 6,
@@ -161,7 +161,7 @@ const sessions = [
     name: 'Pilot Exam Test #2',
     topic: 'Private Pilot',
     questions: 17,
-    color: 'bg-sky-700',
+    color: 'bg-sky-600',
   },
   {
     id: 8,
@@ -187,7 +187,7 @@ const SessionsTable = ({
 }: SessionsTableProps) => (
   <div className="px-4 sm:px-6 lg:px-8 mt-4 h-[calc(100vh-200px)] overflow-y-auto smooth-scroll">
     <div className="-mx-4 mt-10 sm:mx-0 rounded-t-md">
-      <table className="min-w-full divide-y divide-sky-700">
+      <table className="min-w-full divide-y divide-sky-600">
         <thead className="sticky backdrop-blur backdrop-filter bg-white bg-opacity-75 top-0 z-10 min-w-full border-separate border-spacing-0">
           <tr>
             <th scope="col" className="py-3.5 text-left text-sm text-gray-900 sm:pl-9">
@@ -273,7 +273,7 @@ const SessionsTable = ({
                   className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
                 >
                   <PlayCircleIcon
-                    className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-pink-700 hover:text-sky-700"
+                    className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-pink-600 hover:text-sky-600"
                     aria-hidden="true"
                   />
                   <span className="sr-only">Start test</span>
@@ -284,7 +284,7 @@ const SessionsTable = ({
                   className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
                 >
                   <PencilSquareIcon
-                    className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-700"
+                    className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-600"
                     aria-hidden="true"
                   />
                   <span className="sr-only">Edit test</span>
@@ -295,7 +295,7 @@ const SessionsTable = ({
                   className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
                 >
                   <TrashIcon
-                    className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-700"
+                    className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-600"
                     aria-hidden="true"
                   />
                   <span className="sr-only">Delete test</span>

@@ -14,7 +14,7 @@ const pinnedItems = [
     lastUpdated: 'March 17, 2020',
     total: 21,
     type: 'question',
-    className: 'bg-pink-700', // todo: temporary, remove this decision being made here and decide later in a static location
+    className: 'bg-pink-600', // todo: temporary, remove this decision being made here and decide later in a static location
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ const pinnedItems = [
     lastUpdated: 'March 17, 2020',
     total: 8,
     type: 'question',
-    className: 'bg-sky-700', // todo: temporary, remove this decision being made here and decide later in a static location
+    className: 'bg-sky-600', // todo: temporary, remove this decision being made here and decide later in a static location
   },
   {
     id: 1,
@@ -30,7 +30,7 @@ const pinnedItems = [
     lastUpdated: 'March 17, 2020',
     total: 21,
     type: 'question',
-    className: 'bg-red-700', // todo: temporary, remove this decision being made here and decide later in a static location
+    className: 'bg-red-500', // todo: temporary, remove this decision being made here and decide later in a static location
   },
   {
     id: 2,

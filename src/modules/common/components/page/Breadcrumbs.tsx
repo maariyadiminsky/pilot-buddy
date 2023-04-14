@@ -6,7 +6,7 @@ const pages = [
 ];
 
 const Breadcrumbs = () => (
-  <nav className="flex border-b border-gray-200 bg-sky-700" aria-label="Breadcrumb">
+  <nav className="flex border-b border-gray-200 bg-sky-600" aria-label="Breadcrumb">
     <ol className="mx-left flex w-full max-w-screen-xl space-x-4 px-4 sm:px-6 lg:px-8">
       <li className="flex">
         <div className="flex items-center">

@@ -31,7 +31,7 @@ const SelectMenu = ({ title, icon, options, currentlySelected, handleSelect }: S
             {title}
           </Listbox.Label>
           <div className="relative mt-2">
-            <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-700 sm:text-sm sm:leading-6">
+            <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6">
               <span className="block truncate">{currentlySelected.name}</span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -45,13 +45,13 @@ const SelectMenu = ({ title, icon, options, currentlySelected, handleSelect }: S
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              <Listbox.Options className="absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                 {options.map((option) => (
                   <Listbox.Option
                     key={option.id}
                     className={({ active }) =>
                       truthyString(
-                        active ? 'bg-sky-700 text-white' : 'text-gray-900',
+                        active ? 'bg-sky-600 text-white' : 'text-gray-900',
                         'relative cursor-default select-none py-2 pl-8 pr-4'
                       )
                     }
@@ -63,7 +63,7 @@ const SelectMenu = ({ title, icon, options, currentlySelected, handleSelect }: S
                           {selected ? (
                             <span
                               className={truthyString(
-                                active ? 'text-white' : 'text-sky-700',
+                                active ? 'text-white' : 'text-sky-600',
                                 'absolute inset-y-0 left-0 flex items-start pt-2 pl-1.5'
                               )}
                             >

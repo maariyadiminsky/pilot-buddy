@@ -50,12 +50,12 @@ const SessionQuestion = ({
                 aria-hidden="true"
               >
                 <StarIcon
-                  className="h-4 w-4 text-sky-700 flex items-center justify-center"
+                  className="h-4 w-4 text-sky-600 flex items-center justify-center"
                   aria-hidden="true"
                 />
               </span>
             </div>
-            <div className="w-96 text-sm font-small italic text-sky-700">
+            <div className="w-96 text-sm font-small italic text-sky-600">
               <span className="font-semibold text-base not-italic">A:</span> {answer}
               <span className="sr-only">{answer}</span>
             </div>
@@ -71,7 +71,7 @@ const SessionQuestion = ({
             className="inline-flex items-center bg-white mx-0 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
           >
             <PencilSquareIcon
-              className="h-7 w-7 flex-shrink-0 text-gray-600 hover:text-sky-700"
+              className="h-7 w-7 flex-shrink-0 text-gray-600 hover:text-sky-600"
               aria-hidden="true"
             />
             <span className="sr-only">Edit question</span>
@@ -82,7 +82,7 @@ const SessionQuestion = ({
             className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
           >
             <TrashIcon
-              className="h-7 w-7 flex-shrink-0 text-gray-600 hover:text-sky-700"
+              className="h-7 w-7 flex-shrink-0 text-gray-600 hover:text-sky-600"
               aria-hidden="true"
             />
             <span className="sr-only">Delete question</span>
@@ -91,10 +91,10 @@ const SessionQuestion = ({
         {isTimed && time && (
           <div className="flex flex-row justify-end space-x-0.5">
             <ClockIcon
-              className="h-3 w-3 mt-0.5 flex-shrink-0 font-medium text-sky-700"
+              className="h-3 w-3 mt-0.5 flex-shrink-0 font-medium text-sky-600"
               aria-hidden="true"
             />
-            <div className="flex justify-end text-sky-700 text-xs font-medium pr-2">
+            <div className="flex justify-end text-sky-600 text-xs font-medium pr-2">
               {time.name}
             </div>
           </div>

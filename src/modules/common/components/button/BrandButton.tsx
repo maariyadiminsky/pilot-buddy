@@ -26,11 +26,11 @@ export type BrandButtonType = BrandButtonProps;
 
 const styles = {
   clear:
-    'bg-gray-100 text-gray-900 ring-1 ring-inset ring-gray-300 enabled:hover:bg-sky-700 disabled:text-gray-400 disabled:bg-gray-100 enabled:hover:text-white',
+    'bg-gray-100 text-gray-900 ring-1 ring-inset ring-gray-300 enabled:hover:bg-sky-600 disabled:text-gray-400 disabled:bg-gray-100 enabled:hover:text-white',
   solid:
-    'enabled:text-white enabled:bg-sky-700 enabled:hover:bg-sky-600 disabled:text-gray-40 disabled:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800',
+    'enabled:text-white enabled:bg-sky-600 enabled:hover:bg-sky-500 disabled:text-gray-40 disabled:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800',
   solidPink:
-    'enabled:text-white enabled:bg-pink-700 enabled:hover:bg-sky-700 disabled:text-gray-40 disabled:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800',
+    'enabled:text-white enabled:bg-pink-600 enabled:hover:bg-sky-600 disabled:text-gray-40 disabled:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800',
 };
 
 const BrandButton = ({
