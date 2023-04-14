@@ -45,7 +45,7 @@ const Session = () => {
           text: 'Add Question',
           srText: 'Add question to session',
           icon: PlusIcon,
-          buttonClassType: 'clear',
+          buttonClassType: 'solid',
           disabled: shouldShowQuestionAction,
           handleOnClick: () => setShouldShowQuestionAction(true),
         },

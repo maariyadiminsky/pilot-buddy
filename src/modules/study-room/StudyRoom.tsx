@@ -68,7 +68,7 @@ const StudyRoom = () => {
     () =>
       [
         {
-          text: 'Create',
+          text: 'Create Session',
           srText: 'Create new session',
           icon: PlusIcon,
           buttonClassType: 'solid',
