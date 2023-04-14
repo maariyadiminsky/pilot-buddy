@@ -14,7 +14,7 @@ const pinnedItems = [
     lastUpdated: 'March 17, 2020',
     total: 21,
     type: 'question',
-    className: 'bg-yellow-600', // todo: temporary, remove this decision being made here and decide later in a static location
+    className: 'bg-pink-700', // todo: temporary, remove this decision being made here and decide later in a static location
   },
   {
     id: 2,
@@ -82,7 +82,7 @@ const StudyRoom = () => {
 
   return (
     <PageWrapper title="Study Room" headerActions={headerActions}>
-      <div className="min-h-full">
+      <div className="h-full min-w-full">
         <PinnedItems
           title="Pinned Sessions"
           items={pinnedItems}
@@ -90,11 +90,9 @@ const StudyRoom = () => {
         />
         <SessionsTable
           {...{
-            handleCreateSession,
             handleStartSession,
             handleEditSession,
             handleRemoveSession,
-            handleRemoveAllSessions,
           }}
         />
       </div>

@@ -58,6 +58,118 @@ const sessions = [
     questions: 3,
     color: 'bg-yellow-600',
   },
+  {
+    id: 5,
+    name: 'Practice',
+    topic: 'Commercial',
+    questions: 6,
+    color: 'bg-sky-700',
+  },
+  {
+    id: 6,
+    name: 'CM Codes',
+    topic: 'Commercial Test dass',
+    questions: 3,
+    color: 'bg-pink-700',
+  },
+  {
+    id: 7,
+    name: 'Pilot Exam Test #2',
+    topic: 'Private Pilot',
+    questions: 17,
+    color: 'bg-sky-700',
+  },
+  {
+    id: 8,
+    name: 'CM Codes',
+    topic: 'Commercial Test dass',
+    questions: 3,
+    color: 'bg-yellow-600',
+  },
+  {
+    id: 5,
+    name: 'Practice',
+    topic: 'Commercial',
+    questions: 6,
+    color: 'bg-sky-700',
+  },
+  {
+    id: 6,
+    name: 'CM Codes',
+    topic: 'Commercial Test dass',
+    questions: 3,
+    color: 'bg-pink-700',
+  },
+  {
+    id: 7,
+    name: 'Pilot Exam Test #2',
+    topic: 'Private Pilot',
+    questions: 17,
+    color: 'bg-sky-700',
+  },
+  {
+    id: 8,
+    name: 'CM Codes',
+    topic: 'Commercial Test dass',
+    questions: 3,
+    color: 'bg-yellow-600',
+  },
+  {
+    id: 5,
+    name: 'Practice',
+    topic: 'Commercial',
+    questions: 6,
+    color: 'bg-sky-700',
+  },
+  {
+    id: 6,
+    name: 'CM Codes',
+    topic: 'Commercial Test dass',
+    questions: 3,
+    color: 'bg-pink-700',
+  },
+  {
+    id: 7,
+    name: 'Pilot Exam Test #2',
+    topic: 'Private Pilot',
+    questions: 17,
+    color: 'bg-sky-700',
+  },
+  {
+    id: 8,
+    name: 'CM Codes',
+    topic: 'Commercial Test dass',
+    questions: 3,
+    color: 'bg-yellow-600',
+  },
+  {
+    id: 5,
+    name: 'Practice',
+    topic: 'Commercial',
+    questions: 6,
+    color: 'bg-sky-700',
+  },
+  {
+    id: 6,
+    name: 'CM Codes',
+    topic: 'Commercial Test dass',
+    questions: 3,
+    color: 'bg-pink-700',
+  },
+  {
+    id: 7,
+    name: 'Pilot Exam Test #2',
+    topic: 'Private Pilot',
+    questions: 17,
+    color: 'bg-sky-700',
+  },
+  {
+    id: 8,
+    name: 'CM Codes',
+    topic: 'Commercial Test dass',
+    questions: 3,
+    color: 'bg-yellow-600',
+  },
   // More plans...
 ];
 
@@ -73,13 +185,13 @@ const SessionsTable = ({
   handleEditSession,
   handleRemoveSession,
 }: SessionsTableProps) => (
-  <div className="px-4 sm:px-6 lg:px-8">
+  <div className="px-4 sm:px-6 lg:px-8 mt-4 h-[calc(100vh-200px)] overflow-y-auto smooth-scroll">
     <div className="-mx-4 mt-10 sm:mx-0 rounded-t-md">
-      <table className="min-w-full divide-y-2 divide-sky-700">
-        <thead>
+      <table className="min-w-full divide-y divide-sky-700">
+        <thead className="sticky backdrop-blur backdrop-filter bg-white bg-opacity-75 top-0 z-10 min-w-full border-separate border-spacing-0">
           <tr>
-            <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 sm:pl-6">
-              <div className="flex flex-row items-center">Name</div>
+            <th scope="col" className="py-3.5 text-left text-sm text-gray-900 sm:pl-9">
+              Name
             </th>
             <th
               scope="col"
@@ -93,6 +205,11 @@ const SessionsTable = ({
             >
               Questions
             </th>
+            {/* empty element created so blur applies on all "titles" */}
+            <th
+              scope="col"
+              className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+            />
           </tr>
         </thead>
         <tbody>
@@ -117,7 +234,7 @@ const SessionsTable = ({
                   </div>
                 </div>
                 {/* mobile */}
-                <div className="mt-1 flex flex-col text-gray-700 xs:block sm:hidden">
+                <div className="mt-1 flex flex-col text-gray-700 xs:block sm:hidden ">
                   <span className="xs:block sm:hidden">
                     <span className="sm:hidden xs:inline pl-2">·</span> {questions} Question
                     {questions > 1 ? 's' : ''}
@@ -131,7 +248,7 @@ const SessionsTable = ({
               <td
                 className={truthyString(
                   planIdx === 0 ? '' : 'border-t border-gray-300',
-                  'px-3 py-3.5 text-sm text-gray-700 sm:table-cell'
+                  'px-3 py-3.5 text-sm text-gray-500 sm:table-cell'
                 )}
               >
                 <div className="w-36 lg:w-52 xl:w-72 truncate">{topic}</div>
@@ -139,7 +256,7 @@ const SessionsTable = ({
               <td
                 className={truthyString(
                   planIdx === 0 ? '' : 'border-t border-gray-300',
-                  'hidden px-3 py-3.5 text-sm text-gray-700 sm:table-cell'
+                  'hidden px-3 py-3.5 text-sm text-gray-700 sm:table-cell font-semibold'
                 )}
               >
                 {questions}
