@@ -1,7 +1,7 @@
 import ActionMenu from '@common/components/dropdown/ActionMenu';
 
 import { truthyString } from '@common/utils';
-import { getInitials, getTypeAmount } from '@modules/study-room/pinned-session/utils';
+import { getInitials, getTypeAmount } from '@modules/study-room/utils';
 import { useCallback } from 'react';
 
 import { BookmarkSlashIcon } from '@heroicons/react/20/solid';

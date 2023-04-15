@@ -1,3 +1,7 @@
+const COLORS = ['bg-sky-600', 'bg-pink-600', 'bg-red-500', 'bg-purple-600', 'bg-red-600'];
+
+export const getRandomBrandColor = () => COLORS[Math.floor(Math.random() * COLORS.length)];
+
 export const getInitials = (text: string) =>
   text
     .split(' ')

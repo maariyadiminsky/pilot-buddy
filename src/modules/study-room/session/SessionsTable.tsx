@@ -1,186 +1,17 @@
 import { truthyString } from '@common/utils';
 import { PlayCircleIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
-
-const sessions = [
-  {
-    id: 1,
-    name: 'Pilot Exam sdfdsf fdsdfsd fsdsdfsd dasdsafasafasfasfasfasd dadasdasdasdsad',
-    topic: 'Private Pilot Exam sdfdsf fdsdfsd fsdsdfsd dasdsafasafasfasfasfasd dadasdasdasdsad ',
-    questions: 12,
-    color: 'bg-sky-600',
-  },
-  {
-    id: 2,
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 10,
-    color: 'bg-yellow-600',
-  },
-  {
-    id: 3,
-    name: 'Instruments Test #1',
-    topic: 'Instruments ',
-    questions: 24,
-    color: 'bg-purple-700',
-  },
-  {
-    id: 4,
-    name: 'Instruments Test #2',
-    topic: 'Instruments',
-    questions: 9,
-    color: 'bg-yellow-600',
-  },
-  {
-    id: 5,
-    name: 'Practice',
-    topic: 'Commercial',
-    questions: 6,
-    color: 'bg-sky-600',
-  },
-  {
-    id: 6,
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-pink-700',
-  },
-  {
-    id: 7,
-    name: 'Pilot Exam Test #2',
-    topic: 'Private Pilot',
-    questions: 17,
-    color: 'bg-sky-600',
-  },
-  {
-    id: 8,
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-yellow-600',
-  },
-  {
-    id: 5,
-    name: 'Practice',
-    topic: 'Commercial',
-    questions: 6,
-    color: 'bg-sky-600',
-  },
-  {
-    id: 6,
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-pink-700',
-  },
-  {
-    id: 7,
-    name: 'Pilot Exam Test #2',
-    topic: 'Private Pilot',
-    questions: 17,
-    color: 'bg-sky-600',
-  },
-  {
-    id: 8,
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-yellow-600',
-  },
-  {
-    id: 5,
-    name: 'Practice',
-    topic: 'Commercial',
-    questions: 6,
-    color: 'bg-sky-600',
-  },
-  {
-    id: 6,
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-pink-700',
-  },
-  {
-    id: 7,
-    name: 'Pilot Exam Test #2',
-    topic: 'Private Pilot',
-    questions: 17,
-    color: 'bg-sky-600',
-  },
-  {
-    id: 8,
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-yellow-600',
-  },
-  {
-    id: 5,
-    name: 'Practice',
-    topic: 'Commercial',
-    questions: 6,
-    color: 'bg-sky-600',
-  },
-  {
-    id: 6,
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-pink-700',
-  },
-  {
-    id: 7,
-    name: 'Pilot Exam Test #2',
-    topic: 'Private Pilot',
-    questions: 17,
-    color: 'bg-sky-600',
-  },
-  {
-    id: 8,
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-yellow-600',
-  },
-  {
-    id: 5,
-    name: 'Practice',
-    topic: 'Commercial',
-    questions: 6,
-    color: 'bg-sky-600',
-  },
-  {
-    id: 6,
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-pink-700',
-  },
-  {
-    id: 7,
-    name: 'Pilot Exam Test #2',
-    topic: 'Private Pilot',
-    questions: 17,
-    color: 'bg-sky-600',
-  },
-  {
-    id: 8,
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-yellow-600',
-  },
-  // More plans...
-];
+import { type SessionType } from './SessionCreate';
 
 interface SessionsTableProps {
-  handleStartSession: (id: number) => void;
-  handleEditSession: (id: number) => void;
-  handleRemoveSession: (id: number) => void;
+  sessions: SessionType[];
+  handleStartSession: (id: string) => void;
+  handleEditSession: (id: string) => void;
+  handleRemoveSession: (id: string) => void;
 }
 
 // todo: add sorting
 const SessionsTable = ({
+  sessions,
   handleStartSession,
   handleEditSession,
   handleRemoveSession,
@@ -190,18 +21,18 @@ const SessionsTable = ({
       <table className="min-w-full divide-y divide-sky-600">
         <thead className="sticky backdrop-blur backdrop-filter bg-white bg-opacity-75 top-0 z-10 min-w-full border-separate border-spacing-0">
           <tr>
-            <th scope="col" className="py-3.5 text-left text-sm text-gray-900 sm:pl-9">
+            <th scope="col" className="sm:pl-8 py-3.5 text-left text-sm text-gray-900">
               Name
             </th>
             <th
               scope="col"
-              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+              className="sm: pl-4 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
             >
               Topic
             </th>
             <th
               scope="col"
-              className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+              className="hidden py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
             >
               Questions
             </th>
@@ -276,7 +107,7 @@ const SessionsTable = ({
                     className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-pink-600 hover:text-sky-600"
                     aria-hidden="true"
                   />
-                  <span className="sr-only">Start test</span>
+                  <span className="sr-only">Start session</span>
                 </button>
                 <button
                   type="button"
@@ -287,7 +118,7 @@ const SessionsTable = ({
                     className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-600"
                     aria-hidden="true"
                   />
-                  <span className="sr-only">Edit test</span>
+                  <span className="sr-only">Edit session</span>
                 </button>
                 <button
                   type="button"
@@ -298,7 +129,7 @@ const SessionsTable = ({
                     className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-600"
                     aria-hidden="true"
                   />
-                  <span className="sr-only">Delete test</span>
+                  <span className="sr-only">Delete session</span>
                 </button>
                 {planIdx !== 0 ? (
                   <div className="absolute -top-px left-0 right-6 h-px bg-gray-300" />

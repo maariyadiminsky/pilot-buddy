@@ -60,7 +60,7 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
 
   return (
     <div className="flex items-start space-x-4 px-4 mb-3">
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 h-36">
         <form onSubmit={handleFormSubmit} className="relative">
           <div className="overflow-hidden w-full rounded-lg shadow-sm ring-1 ring-inset bg-white ring-gray-300 focus-within:ring-2 focus-within:ring-sky-600">
             <label htmlFor="note" className="sr-only">
@@ -158,7 +158,7 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
           </div>
         </form>
         {shouldShowEmptyTextWarning && (
-          <div className="flex items-center justify-start text-sm text-rose-500 py-2">
+          <div className="flex items-center justify-start text-sm md:text-xs text-rose-500 py-2">
             Note cannot be empty.
           </div>
         )}
