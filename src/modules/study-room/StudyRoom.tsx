@@ -261,7 +261,7 @@ const StudyRoom = () => {
     // save update in storage
   };
 
-  const handleEditSession = (id: string) => {
+  const handleEditSession = async (id: string) => {
     // in the case they were editing before and just hit edit again
     // add back the last item user was editing.
     // This also acts as a cancel of the last edit.

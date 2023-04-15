@@ -15,7 +15,7 @@ const App: React.FC = () => (
         <Routes>
           <Route path="*" element={<NotFoundPage />} />
           <Route path={ROUTES.STUDY_ROOM_ROUTE} element={<StudyRoom />} />
-          <Route path={ROUTES.HOMEPAGE_ROUTE} element={<StudySession />} />
+          <Route path="/sessions/:id" element={<StudySession />} />
         </Routes>
       </Router>
     </PersistGate>

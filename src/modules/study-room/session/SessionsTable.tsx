@@ -1,6 +1,12 @@
 import { truthyString } from '@common/utils';
-import { PlayCircleIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
+import {
+  PlayCircleIcon,
+  PencilSquareIcon,
+  TrashIcon,
+  ArrowTopRightOnSquareIcon,
+} from '@heroicons/react/20/solid';
 import { type SessionType } from './SessionAction';
+import { Link } from 'react-router-dom';
 
 interface SessionsTableProps {
   sessions: SessionType[];
@@ -131,6 +137,14 @@ const SessionsTable = ({
                   />
                   <span className="sr-only">Delete session</span>
                 </button>
+                <Link to={`/sessions/${id}`}>
+                  <button type="button">
+                    <ArrowTopRightOnSquareIcon
+                      className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-600"
+                      aria-hidden="true"
+                    />
+                  </button>
+                </Link>
                 {planIdx !== 0 ? (
                   <div className="absolute -top-px left-0 right-6 h-px bg-gray-300" />
                 ) : null}
