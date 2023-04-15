@@ -1,4 +1,4 @@
-import { type SessionType } from './session/SessionCreate';
+import { type SessionType } from './session/SessionAction';
 
 const COLORS = ['bg-sky-600', 'bg-pink-600', 'bg-red-500', 'bg-purple-600', 'bg-red-600'];
 export const getRandomBrandColor = () => COLORS[Math.floor(Math.random() * COLORS.length)];
@@ -34,7 +34,10 @@ export const sessionsWithNewSessionInOrder = (
     ({ topic }) => topic.trim() === newSession.topic.trim()
   );
 
-  if (firstSessionWithTopicIndex === -1) return sessionsData;
+  // if not topic exists, it means it's a new topic so place in correct order
+  if (firstSessionWithTopicIndex === -1) {
+    return sessionsOrderedByTopic([...sessionsData, newSession]);
+  }
 
   return [
     ...sessionsData.slice(0, firstSessionWithTopicIndex),

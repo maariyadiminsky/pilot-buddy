@@ -6,8 +6,9 @@ import PinnedItems from '@modules/study-room/pinned-session/PinnedSessions';
 import SessionsTable from '@modules/study-room/session/SessionsTable';
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import { type BrandButtonType } from '@common/components/button/BrandButton';
-import SessionCreate, { type SessionType } from '@modules/study-room/session/SessionCreate';
+import SessionAction, { type SessionType } from '@modules/study-room/session/SessionAction';
 import { sessionsWithNewSessionInOrder, sessionsOrderedByTopic } from '@modules/study-room/utils';
+import { removeObjectFromArray } from '@common/utils';
 
 const pinnedItems = [
   {
@@ -46,168 +47,168 @@ const pinnedItems = [
 
 const SESSIONS_DATA = [
   {
-    id: 1,
+    id: '1',
     name: 'Pilot Exam sdfdsf fdsdfsd fsdsdfsd dasdsafasafasfasfasfasd dadasdasdasdsad',
     topic: 'Private Pilot Exam sdfdsf fdsdfsd fsdsdfsd dasdsafasafasfasfasfasd dadasdasdasdsad ',
     questions: 12,
     color: 'bg-sky-600',
   },
   {
-    id: 2,
+    id: '2',
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 10,
     color: 'bg-yellow-600',
   },
   {
-    id: 3,
+    id: '3',
     name: 'Instruments Test #1',
     topic: 'Instruments',
     questions: 24,
     color: 'bg-purple-700',
   },
   {
-    id: 4,
+    id: '4',
     name: 'Instruments Test #2',
     topic: 'Instruments',
     questions: 9,
     color: 'bg-yellow-600',
   },
   {
-    id: 5,
+    id: '5',
     name: 'Practice',
     topic: 'Commercial',
     questions: 6,
     color: 'bg-sky-600',
   },
   {
-    id: 6,
+    id: '6',
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-pink-700',
   },
   {
-    id: 7,
+    id: '7',
     name: 'Pilot Exam Test #2',
     topic: 'Private Pilot',
     questions: 17,
     color: 'bg-sky-600',
   },
   {
-    id: 8,
+    id: '8',
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-yellow-600',
   },
   {
-    id: 9,
+    id: '9',
     name: 'Practice',
     topic: 'Commercial',
     questions: 6,
     color: 'bg-sky-600',
   },
   {
-    id: 10,
+    id: '10',
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-pink-700',
   },
   {
-    id: 11,
+    id: '11',
     name: 'Pilot Exam Test #2',
     topic: 'Private Pilot',
     questions: 17,
     color: 'bg-sky-600',
   },
   {
-    id: 12,
+    id: '12',
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-yellow-600',
   },
   {
-    id: 13,
+    id: '13',
     name: 'Practice',
     topic: 'Commercial',
     questions: 6,
     color: 'bg-sky-600',
   },
   {
-    id: 14,
+    id: '14',
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-pink-700',
   },
   {
-    id: 15,
+    id: '15',
     name: 'Pilot Exam Test #2',
     topic: 'Private Pilot',
     questions: 17,
     color: 'bg-sky-600',
   },
   {
-    id: 16,
+    id: '16',
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-yellow-600',
   },
   {
-    id: 17,
+    id: '17',
     name: 'Practice',
     topic: 'Commercial',
     questions: 6,
     color: 'bg-sky-600',
   },
   {
-    id: 18,
+    id: '18',
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-pink-700',
   },
   {
-    id: 19,
+    id: '19',
     name: 'Pilot Exam Test #2',
     topic: 'Private Pilot',
     questions: 17,
     color: 'bg-sky-600',
   },
   {
-    id: 20,
+    id: '20',
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-yellow-600',
   },
   {
-    id: 21,
+    id: '21',
     name: 'Practice',
     topic: 'Commercial',
     questions: 6,
     color: 'bg-sky-600',
   },
   {
-    id: 22,
+    id: '22',
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-pink-700',
   },
   {
-    id: 23,
+    id: '23',
     name: 'Pilot Exam Test #2',
     topic: 'Private Pilot',
     questions: 17,
     color: 'bg-sky-600',
   },
   {
-    id: 24,
+    id: '24',
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
@@ -217,20 +218,36 @@ const SESSIONS_DATA = [
 ];
 
 const StudyRoom = () => {
-  const [shouldShowSessionCreate, setShouldShowSectionCreate] = useState(false);
+  const [shouldShowSessionAction, setShouldShowSessionAction] = useState(false);
   // todo: get this from storage
   const [sessions, setSessions] = useState<SessionType[]>([]);
+  const [currentSession, setCurrentSession] = useState<SessionType>();
 
+  // sessions should be ordered by topic for easier search
   useEffect(() => {
     setSessions([...sessionsOrderedByTopic(SESSIONS_DATA)]);
   }, []);
 
-  // eslint-disable-next-line
-  const handleCreateSession = (session: SessionType) => {
-    const sessionsOrderedWithMatchingTopic = sessionsWithNewSessionInOrder(session, sessions);
-    setSessions(sessionsOrderedWithMatchingTopic);
+  const handleAddSession = (session: SessionSessionType) => {
+    const SessionsWithNewSession = sessionsWithNewSessionInOrder(session, sessions);
+    setSessions(SessionsWithNewSession);
+    return SessionsWithNewSession;
+  };
 
+  const handleSubmitSession = (session: SessionType) => {
+    setSessions(sessionsWithNewSessionInOrder(session, sessions));
+    setCurrentSession(undefined);
+    setShouldShowSessionAction(false);
     // save in storage
+  };
+
+  const handleCancelAction = () => {
+    if (currentSession) {
+      handleAddSession(currentSession);
+      setCurrentSession(undefined);
+    }
+
+    setShouldShowSessionAction(false);
   };
 
   // eslint-disable-next-line
@@ -238,14 +255,27 @@ const StudyRoom = () => {
     // handle start session
   };
 
-  // eslint-disable-next-line
-  const handleEditSession = (id: string) => {
-    // handle edit session
+  const handleRemoveSession = (id: string, customSessions?: SessionType[]) => {
+    setSessions(removeObjectFromArray(customSessions || sessions, id, 'id'));
+
+    // save update in storage
   };
 
-  // eslint-disable-next-line
-  const handleRemoveSession = (id: string) => {
-    // handle remove session
+  const handleEditSession = (id: string) => {
+    // in the case they were editing before and just hit edit again
+    // add back the last item user was editing.
+    // This also acts as a cancel of the last edit.
+    if (currentSession) {
+      const currentSessions = handleAddSession(currentSession);
+      handleRemoveSession(id, currentSessions);
+    } else {
+      handleRemoveSession(id);
+    }
+
+    setCurrentSession(sessions.find((session) => session.id === id));
+    setShouldShowSessionAction(true);
+
+    // save update in storage
   };
 
   const getHeaderActions = useCallback(
@@ -256,7 +286,7 @@ const StudyRoom = () => {
           srText: 'Create new session',
           icon: PlusIcon,
           buttonClassType: 'solid',
-          handleOnClick: () => setShouldShowSectionCreate(true),
+          handleOnClick: () => setShouldShowSessionAction(true),
         },
       ] as BrandButtonType[],
     []
@@ -273,10 +303,11 @@ const StudyRoom = () => {
           {...{ handleStartSession, handleEditSession }}
         />
         <div className="flex flex-col space-y-4 mt-4">
-          {shouldShowSessionCreate && (
-            <SessionCreate
-              handleSubmit={handleCreateSession}
-              handleCancel={() => setShouldShowSectionCreate(false)}
+          {shouldShowSessionAction && (
+            <SessionAction
+              currentSession={currentSession}
+              handleSubmit={handleSubmitSession}
+              handleCancel={handleCancelAction}
             />
           )}
           <SessionsTable

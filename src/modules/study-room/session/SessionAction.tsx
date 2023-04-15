@@ -2,7 +2,7 @@ import BrandButton from '@common/components/button/BrandButton';
 import { getUniqId } from '@common/utils';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import { getRandomBrandColor } from '@modules/study-room/utils';
-import { SyntheticEvent, useState, useMemo } from 'react';
+import { SyntheticEvent, useState, useMemo, useEffect } from 'react';
 
 interface SessionFormDetailsType {
   id: string;
@@ -21,16 +21,24 @@ export interface SessionType {
   color: string;
 }
 
-interface SessionCreateProps {
+interface SessionActionProps {
+  currentSession?: SessionType;
   handleSubmit: (value: SessionType) => void;
   handleCancel: () => void;
 }
 
-const SessionCreate = ({ handleSubmit, handleCancel }: SessionCreateProps) => {
+const SessionAction = ({ currentSession, handleSubmit, handleCancel }: SessionActionProps) => {
   const [name, setName] = useState('');
   const [topic, setTopic] = useState('');
   const [shouldShowEmptyNameWarning, setShouldShowEmptyNameWarning] = useState(false);
   const [shouldShowEmptyTopicWarning, setShouldShowEmptyTopicWarning] = useState(false);
+
+  useEffect(() => {
+    if (currentSession) {
+      setName(currentSession.name);
+      setTopic(currentSession.topic);
+    }
+  }, [currentSession?.name, currentSession?.topic]);
 
   const formDetails = useMemo(
     () =>
@@ -69,11 +77,11 @@ const SessionCreate = ({ handleSubmit, handleCancel }: SessionCreateProps) => {
     if (!name || !topic) return;
 
     handleSubmit({
-      id: getUniqId(),
+      id: currentSession?.id || getUniqId(),
+      questions: currentSession?.questions || 0,
+      color: currentSession?.color || getRandomBrandColor(),
       name,
       topic,
-      questions: 0,
-      color: getRandomBrandColor(),
     });
 
     setName('');
@@ -89,7 +97,7 @@ const SessionCreate = ({ handleSubmit, handleCancel }: SessionCreateProps) => {
               className="h-6 w-6 xl:h-5 xl:h5 flex-shrink-0 text-gray-900 hover:text-sky-600"
               aria-hidden="true"
             />
-            Add Session
+            {currentSession ? 'Edit' : 'Action'} Session
           </h2>
           <div className="flex flex-row justify-end items-center space-x-3">
             <button type="button" onClick={() => handleCancel()}>
@@ -145,4 +153,4 @@ const SessionCreate = ({ handleSubmit, handleCancel }: SessionCreateProps) => {
   );
 };
 
-export default SessionCreate;
+export default SessionAction;

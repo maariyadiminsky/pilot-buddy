@@ -1,6 +1,6 @@
 import { truthyString } from '@common/utils';
 import { PlayCircleIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
-import { type SessionType } from './SessionCreate';
+import { type SessionType } from './SessionAction';
 
 interface SessionsTableProps {
   sessions: SessionType[];

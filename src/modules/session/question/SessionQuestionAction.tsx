@@ -27,8 +27,8 @@ const SessionQuestionAction = ({
 }: SessionQuestionActionProps) => {
   const modalRef = useRef<ModalRef>(null);
 
-  const [question, setQuestion] = useState(currentQuestion?.question || '');
-  const [answer, setAnswer] = useState<string | null | undefined>(currentQuestion?.answer || '');
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState<string | null | undefined>('');
   const [shouldShowEmptyQuestionWarning, setShouldShowEmptyQuestionWarning] = useState(false);
 
   const [isQuestionMicrophoneOn, setIsQuestionMicrophoneOn] = useState(false);
@@ -54,7 +54,7 @@ const SessionQuestionAction = ({
       setQuestion(currentQuestion.question);
       setAnswer(currentQuestion?.answer);
     }
-  }, [currentQuestion]);
+  }, [currentQuestion?.question, currentQuestion?.answer]);
 
   // when user uses microphone update correct one
   useEffect(() => {
@@ -83,7 +83,6 @@ const SessionQuestionAction = ({
     }
 
     handleSubmit({
-      ...(currentQuestion || {}),
       id: currentQuestion?.id || getUniqId(),
       question,
       answer,
