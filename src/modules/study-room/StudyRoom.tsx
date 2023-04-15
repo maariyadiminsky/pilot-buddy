@@ -4,9 +4,10 @@ import { PlusIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@modules/common/components/page/PageWrapper';
 import PinnedItems from '@modules/study-room/pinned-session/PinnedSessions';
 import SessionsTable from '@modules/study-room/session/SessionsTable';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import { type BrandButtonType } from '@common/components/button/BrandButton';
-import SessionCreate, { type SessionType } from './session/SessionCreate';
+import SessionCreate, { type SessionType } from '@modules/study-room/session/SessionCreate';
+import { sessionsWithNewSessionInOrder, sessionsOrderedByTopic } from '@modules/study-room/utils';
 
 const pinnedItems = [
   {
@@ -26,7 +27,7 @@ const pinnedItems = [
     className: 'bg-sky-600', // todo: temporary, remove this decision being made here and decide later in a static location
   },
   {
-    id: 1,
+    id: 3,
     text: 'Private Pilot Exam (Full)',
     lastUpdated: 'March 17, 2020',
     total: 21,
@@ -34,7 +35,7 @@ const pinnedItems = [
     className: 'bg-red-500', // todo: temporary, remove this decision being made here and decide later in a static location
   },
   {
-    id: 2,
+    id: 4,
     text: 'Code Test Study',
     lastUpdated: 'March 17, 2020',
     total: 8,
@@ -61,7 +62,7 @@ const SESSIONS_DATA = [
   {
     id: 3,
     name: 'Instruments Test #1',
-    topic: 'Instruments ',
+    topic: 'Instruments',
     questions: 24,
     color: 'bg-purple-700',
   },
@@ -101,112 +102,112 @@ const SESSIONS_DATA = [
     color: 'bg-yellow-600',
   },
   {
-    id: 5,
+    id: 9,
     name: 'Practice',
     topic: 'Commercial',
     questions: 6,
     color: 'bg-sky-600',
   },
   {
-    id: 6,
+    id: 10,
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-pink-700',
   },
   {
-    id: 7,
+    id: 11,
     name: 'Pilot Exam Test #2',
     topic: 'Private Pilot',
     questions: 17,
     color: 'bg-sky-600',
   },
   {
-    id: 8,
+    id: 12,
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-yellow-600',
   },
   {
-    id: 5,
+    id: 13,
     name: 'Practice',
     topic: 'Commercial',
     questions: 6,
     color: 'bg-sky-600',
   },
   {
-    id: 6,
+    id: 14,
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-pink-700',
   },
   {
-    id: 7,
+    id: 15,
     name: 'Pilot Exam Test #2',
     topic: 'Private Pilot',
     questions: 17,
     color: 'bg-sky-600',
   },
   {
-    id: 8,
+    id: 16,
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-yellow-600',
   },
   {
-    id: 5,
+    id: 17,
     name: 'Practice',
     topic: 'Commercial',
     questions: 6,
     color: 'bg-sky-600',
   },
   {
-    id: 6,
+    id: 18,
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-pink-700',
   },
   {
-    id: 7,
+    id: 19,
     name: 'Pilot Exam Test #2',
     topic: 'Private Pilot',
     questions: 17,
     color: 'bg-sky-600',
   },
   {
-    id: 8,
+    id: 20,
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-yellow-600',
   },
   {
-    id: 5,
+    id: 21,
     name: 'Practice',
     topic: 'Commercial',
     questions: 6,
     color: 'bg-sky-600',
   },
   {
-    id: 6,
+    id: 22,
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-pink-700',
   },
   {
-    id: 7,
+    id: 23,
     name: 'Pilot Exam Test #2',
     topic: 'Private Pilot',
     questions: 17,
     color: 'bg-sky-600',
   },
   {
-    id: 8,
+    id: 24,
     name: 'CM Codes',
     topic: 'Commercial Test dass',
     questions: 3,
@@ -218,11 +219,16 @@ const SESSIONS_DATA = [
 const StudyRoom = () => {
   const [shouldShowSessionCreate, setShouldShowSectionCreate] = useState(false);
   // todo: get this from storage
-  const [sessions, setSessions] = useState<SessionType[]>(SESSIONS_DATA);
+  const [sessions, setSessions] = useState<SessionType[]>([]);
+
+  useEffect(() => {
+    setSessions([...sessionsOrderedByTopic(SESSIONS_DATA)]);
+  }, []);
 
   // eslint-disable-next-line
   const handleCreateSession = (session: SessionType) => {
-    setSessions([session, ...sessions]);
+    const sessionsOrderedWithMatchingTopic = sessionsWithNewSessionInOrder(session, sessions);
+    setSessions(sessionsOrderedWithMatchingTopic);
 
     // save in storage
   };
