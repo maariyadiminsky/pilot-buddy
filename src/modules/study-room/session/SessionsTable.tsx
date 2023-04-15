@@ -16,7 +16,7 @@ const SessionsTable = ({
   handleEditSession,
   handleRemoveSession,
 }: SessionsTableProps) => (
-  <div className="px-4 sm:px-6 lg:px-8 mt-4 h-[calc(100vh-200px)] overflow-y-auto smooth-scroll">
+  <div className="px-4 sm:px-6 lg:px-8 h-[calc(100vh-200px)] overflow-y-auto smooth-scroll">
     <div className="-mx-4 mt-10 sm:mx-0 rounded-t-md">
       <table className="min-w-full divide-y divide-sky-600">
         <thead className="sticky backdrop-blur backdrop-filter bg-white bg-opacity-75 top-0 z-10 min-w-full border-separate border-spacing-0">
@@ -39,7 +39,7 @@ const SessionsTable = ({
             {/* empty element created so blur applies on all "titles" */}
             <th
               scope="col"
-              className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
             />
           </tr>
         </thead>

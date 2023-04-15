@@ -272,7 +272,7 @@ const StudyRoom = () => {
           items={pinnedItems}
           {...{ handleStartSession, handleEditSession }}
         />
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-4 mt-4">
           {shouldShowSessionCreate && (
             <SessionCreate
               handleSubmit={handleCreateSession}
