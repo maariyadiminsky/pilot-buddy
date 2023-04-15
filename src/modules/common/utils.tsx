@@ -27,6 +27,8 @@ export const removeObjectFromArray = (
 
 export const removeLineBreaksFromText = (text: string) => text.replace(/(\r\n|\n|\r)/gm, ' ');
 
+export const jumpPageToTop = () => window.scrollTo(0, 0);
+
 // note: not full proof but helps with most common cases
 export const includeProtocolAndHostWithinLink = (link: string) => {
   if (link.includes('https://www') && link.includes('com')) return link;

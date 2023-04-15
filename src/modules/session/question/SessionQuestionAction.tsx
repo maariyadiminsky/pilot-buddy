@@ -95,7 +95,7 @@ const SessionQuestionAction = ({
 
   return (
     <>
-      <form onSubmit={handleFormSubmit} className="pb-10 px-8 lg:px-28 xl:px-52">
+      <form onSubmit={handleFormSubmit} className="pb-10 px-8 xl:px-28">
         <div className="flex flex-row justify-between items-center">
           <h2 className="flex flex-row items-center py-4 text-gray-900 font-medium">
             <PencilSquareIcon

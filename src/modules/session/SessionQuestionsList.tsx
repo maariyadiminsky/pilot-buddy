@@ -1,4 +1,4 @@
-import { removeObjectFromArray } from '@common/utils';
+import { removeObjectFromArray, jumpPageToTop } from '@common/utils';
 import ActionMenu from '@common/components/dropdown/ActionMenu';
 import EmptyDataAction from '@common/components/empty/EmptyDataAction';
 import SessionQuestion, {
@@ -87,6 +87,7 @@ const SessionQuestionsList = ({
   };
 
   const handleEditQuestion = (id: string) => {
+    jumpPageToTop();
     // in the case they were editing before and just hit edit again
     // add back the last item user was editing.
     // This also acts as a cancel of the last edit.
