@@ -1,6 +1,6 @@
 // todo add typescript
 // @ts-nocheck
-import { PlusIcon } from '@heroicons/react/20/solid';
+import { PlusIcon, BookmarkSlashIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@modules/common/components/page/PageWrapper';
 import PinnedSessions, { type PinnedSessionType } from '@modules/study-room/session/PinnedSessions';
 import SessionsTable from '@modules/study-room/session/SessionsTable';
@@ -13,6 +13,7 @@ import {
   getPinnedSessionsIds,
 } from '@modules/study-room/utils';
 import { removeObjectFromArray, getUniqId } from '@common/utils';
+import { useNavigate } from 'react-router-dom';
 
 const PINNED_SESSIONS_DATA = [
   {
@@ -105,10 +106,12 @@ const SESSIONS_DATA = [
 ];
 
 const StudyRoom = () => {
+  const navigate = useNavigate();
+
   const [shouldShowSessionAction, setShouldShowSessionAction] = useState(false);
   // todo: get this from storage
   const [sessions, setSessions] = useState<SessionType[]>([]);
-  const [pinnedSessions] = useState<PinnedSessionType[]>(PINNED_SESSIONS_DATA);
+  const [pinnedSessions, setPinnedSessions] = useState<PinnedSessionType[]>(PINNED_SESSIONS_DATA);
   const [currentSession, setCurrentSession] = useState<SessionType>();
 
   const pinnedSessionIds = useMemo(
@@ -154,16 +157,7 @@ const StudyRoom = () => {
     // save update in storage
   };
 
-  console.log('sessions:', sessions);
   const handleEditSession = (id: string) => {
-    console.log(
-      'in edit',
-      id,
-      'session:',
-      sessions.find((session) => session.id === id),
-      'sessions:',
-      sessions
-    );
     // in the case they were editing before and just hit edit again
     // add back the last item user was editing.
     // This also acts as a cancel of the last edit.
@@ -198,7 +192,7 @@ const StudyRoom = () => {
     };
 
     if (pinnedSessions.length < 4) {
-      setPinnedSessions([newPinnedSession, pinnedSessions]);
+      setPinnedSessions([newPinnedSession, ...pinnedSessions]);
     }
   };
 
@@ -216,6 +210,30 @@ const StudyRoom = () => {
     []
   );
 
+  const getDropdownActions = (id: string) => [
+    {
+      text: 'Unpin',
+      srText: 'Unpin session',
+      icon: BookmarkSlashIcon,
+      handleOnClick: () => handleUnpinSession(id),
+    },
+    {
+      text: 'Start',
+      srText: 'Start session',
+      handleOnClick: () => handleStartSession(id),
+    },
+    {
+      text: 'Edit',
+      srText: 'Edit session',
+      handleOnClick: () => handleEditSession(id),
+    },
+    {
+      text: 'View',
+      srText: 'View session',
+      handleOnClick: () => navigate(`/sessions/${id}`),
+    },
+  ];
+
   const headerActions = useMemo(() => getHeaderActions(), []);
 
   return (
@@ -224,7 +242,8 @@ const StudyRoom = () => {
         <PinnedSessions
           title="Pinned Sessions"
           sessions={pinnedSessions}
-          {...{ handleUnpinSession, handleStartSession, handleEditSession }}
+          getDropdownActions={getDropdownActions}
+          handleEditSession={handleEditSession}
         />
         <div className="flex flex-col space-y-4 mt-4">
           {shouldShowSessionAction && (

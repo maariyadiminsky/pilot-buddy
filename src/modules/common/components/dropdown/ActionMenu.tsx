@@ -8,7 +8,7 @@ export enum DropdownTypeEnum {
   sort = 'sort',
 }
 
-interface MenuOption {
+export interface MenuOptionType {
   text: string;
   srText: string;
   icon?: HeroIconType;
@@ -17,7 +17,7 @@ interface MenuOption {
 
 interface ActionMenuProps {
   name: string;
-  actions: MenuOption[];
+  actions: MenuOptionType[];
   className?: string;
   useCustomPosition?: boolean;
   type?: keyof typeof DropdownTypeEnum;
@@ -28,12 +28,11 @@ const ActionMenu = ({ name, actions, className, type, useCustomPosition }: Actio
   const [menuAdjustment, setMenuAdjustment] = useState('');
 
   const shouldAdjustMenuRelativeToWindow = () => {
-    if (!menuRef.current) return;
-
-    const elementDimensions = menuRef.current?.getBoundingClientRect();
-    const { x } = elementDimensions;
-
-    setMenuAdjustment(x > window.outerWidth - 200 ? 'right-0' : '');
+    console.log(setMenuAdjustment);
+    // if (!menuRef.current) return;
+    // const elementDimensions = menuRef.current?.getBoundingClientRect();
+    // const { x } = elementDimensions;
+    // setMenuAdjustment(x > window.outerWidth - 200 ? 'right-0' : '');
   };
 
   const renderButton = () => {
