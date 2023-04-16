@@ -90,24 +90,22 @@ const Session = () => {
 
   return (
     <PageWrapper title="Session Room" headerActions={headerActions}>
-      <>
-        <div className="relative flex h-full min-w-full flex-col bg-inherit">
-          <div className="w-full flex-grow xl:flex">
-            <div className="min-w-0 flex-1 bg-inherit xl:flex">
-              <SessionNotes />
-              <SessionQuestionsList
-                isTimed={isTimed}
-                settingsTime={isTimed && settingsTime}
-                shouldShowQuestionAction={shouldShowQuestionAction}
-                setShouldShowQuestionAction={setShouldShowQuestionAction}
-              />
-            </div>
-            <div className="flex flex-col items-start">
-              <SessionSettings settings={settings} />
-            </div>
+      <div className="relative flex h-full min-w-full flex-col bg-inherit">
+        <div className="w-full flex-grow xl:flex">
+          <div className="min-w-0 flex-1 bg-inherit xl:flex">
+            <SessionNotes />
+            <SessionQuestionsList
+              isTimed={isTimed}
+              settingsTime={isTimed && settingsTime}
+              shouldShowQuestionAction={shouldShowQuestionAction}
+              setShouldShowQuestionAction={setShouldShowQuestionAction}
+            />
+          </div>
+          <div className="flex flex-col items-start">
+            <SessionSettings settings={settings} />
           </div>
         </div>
-      </>
+      </div>
     </PageWrapper>
   );
 };

@@ -1,5 +1,4 @@
 import { removeObjectFromArray, jumpPageToTop } from '@common/utils';
-import ActionMenu from '@common/components/dropdown/ActionMenu';
 import EmptyDataAction from '@common/components/empty/EmptyDataAction';
 import SessionQuestion, {
   type SessionQuestionType,
@@ -34,19 +33,6 @@ const questionData = [
     id: '4',
     question: 'sfsd',
     answer: null,
-  },
-];
-
-const getDropdownActions = () => [
-  {
-    text: 'Create',
-    srText: 'Create new session',
-    handleOnClick: () => console.log('derp'),
-  },
-  {
-    text: 'Delete all',
-    srText: 'Remove all sessions',
-    handleOnClick: () => console.log('derp'),
   },
 ];
 
@@ -151,8 +137,8 @@ const SessionQuestionsList = ({
 
   return (
     <div className="bg-white lg:min-w-0 lg:flex-1 flex flex-col h-[calc(100vh-75px)] overflow-y-auto smooth-scroll">
-      <div className="flex flex-col justify-start py-4">
-        {shouldShowQuestionAction ? (
+      <div className="flex flex-col justify-start">
+        {shouldShowQuestionAction && (
           <QuestionAction
             isTimed={isTimed}
             settingsTime={settingsTime}
@@ -160,10 +146,6 @@ const SessionQuestionsList = ({
             handleSubmit={handleSubmitQuestion}
             handleCancelAction={handleCancelAction}
           />
-        ) : (
-          <div className="flex justify-end items-center pr-4">
-            <ActionMenu name="pinned-items" actions={getDropdownActions()} type="sort" />
-          </div>
         )}
       </div>
       {renderQuestionsOrEmptyAction()}
