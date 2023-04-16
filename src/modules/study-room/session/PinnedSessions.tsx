@@ -1,40 +1,41 @@
 import ActionMenu from '@common/components/dropdown/ActionMenu';
 
 import { truthyString } from '@common/utils';
-import { getInitials, getTypeAmount } from '@modules/study-room/utils';
+import { getInitials, getTextBasedOnAmount } from '@modules/study-room/utils';
 import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { BookmarkSlashIcon } from '@heroicons/react/20/solid';
 
-interface Item {
-  id: number; // todo change to unique uuid
+export interface PinnedSessionItem {
+  id: string;
+  sessionId: string;
   total: number;
   text: string;
-  lastUpdated: string;
-  type: string;
-  className?: string; // todo do not pass this here
+  className?: string;
 }
 
 interface PinnedSessionProps {
   title: string;
-  items: Item[];
-  handleStartSession: (id: number) => void;
-  handleEditSession: (id: number) => void;
+  sessions: PinnedSessionItem[];
+  handleUnpinSession: (id: string) => void;
+  handleStartSession: (id: string) => void;
+  handleEditSession: (id: string) => void;
 }
+
+export type PinnedSessionType = PinnedSessionItem;
 
 const PinnedSession = ({
   title,
-  items,
+  sessions,
+  handleUnpinSession,
   handleStartSession,
   handleEditSession,
 }: PinnedSessionProps) => {
-  // eslint-disable-next-line
-  const handleUnpinSession = (id: number) => {
-    // handle unpin here
-  };
+  const navigate = useNavigate();
 
   const getDropdownActions = useCallback(
-    (id: number) => [
+    (id: string) => [
       {
         text: 'Unpin',
         srText: 'Unpin session',
@@ -51,6 +52,11 @@ const PinnedSession = ({
         srText: 'Edit session',
         handleOnClick: () => handleEditSession(id),
       },
+      {
+        text: 'View',
+        srText: 'View session',
+        handleOnClick: () => navigate(`/sessions/${id}`),
+      },
     ],
     []
   );
@@ -59,7 +65,7 @@ const PinnedSession = ({
     <div className="mt-6 px-4 sm:px-6 lg:px-8">
       <h2 className="text-sm font-medium text-gray-900">{title}</h2>
       <ul className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-4">
-        {items.map(({ id, text, type, total, className }) => (
+        {sessions.map(({ id, sessionId, text, total, className }) => (
           <li key={id} className="col-span-1 flex rounded-md shadow-sm">
             <div
               className={truthyString(
@@ -73,14 +79,18 @@ const PinnedSession = ({
               <div className="flex-1 items-center justify-between truncate px-4 py-2 text-sm">
                 <button
                   type="button"
-                  onClick={() => handleStartSession(id)}
+                  onClick={() => handleStartSession(sessionId)}
                   className="font-medium text-gray-900 hover:text-sky-600 antialiased"
                 >
-                  {text} dasdddsfsdfsdfsdfsdfsdfds
+                  {text}
                 </button>
-                <p className="text-gray-500">{getTypeAmount(type, total)}</p>
+                <p className="text-gray-500">{getTextBasedOnAmount('question', total)}</p>
               </div>
-              <ActionMenu name="pinned-items" actions={getDropdownActions(id)} useCustomPosition />
+              <ActionMenu
+                name="pinned-items"
+                actions={getDropdownActions(sessionId)}
+                useCustomPosition
+              />
             </div>
           </li>
         ))}

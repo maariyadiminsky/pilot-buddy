@@ -1,7 +1,23 @@
-import { type SessionType } from './session/SessionAction';
+import { type SessionType } from '@modules/study-room/session/SessionAction';
+import { type PinnedSessionType } from '@modules/study-room/session/PinnedSessions';
 
-const COLORS = ['bg-sky-600', 'bg-pink-600', 'bg-red-500', 'bg-purple-600', 'bg-red-600'];
-export const getRandomBrandColor = () => COLORS[Math.floor(Math.random() * COLORS.length)];
+enum COLOR_TYPE {
+  background = 'background',
+  text = 'text',
+}
+
+const COLORS = ['sky-600', 'pink-600', 'red-500', 'purple-600', 'red-600'];
+export const getRandomBrandColor = (colorType: keyof typeof COLOR_TYPE) => {
+  const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+
+  switch (colorType) {
+    case COLOR_TYPE.text:
+      return `text-${color}`;
+    case COLOR_TYPE.background:
+    default:
+      return `bg-${color}`;
+  }
+};
 
 export const getInitials = (text: string) =>
   text
@@ -10,7 +26,7 @@ export const getInitials = (text: string) =>
     .join('')
     .replace(/[\W_]+/g, '');
 
-export const getTypeAmount = (type: string, total: number) =>
+export const getTextBasedOnAmount = (type: string, total: number) =>
   `${total} ${type.charAt(0).toUpperCase()}${type.slice(1)}${total > 1 ? 's' : ''}`;
 
 export const sessionsOrderedByTopic = (sessions: SessionType[]) =>
@@ -45,3 +61,9 @@ export const sessionsWithNewSessionInOrder = (
     ...sessionsData.slice(firstSessionWithTopicIndex),
   ];
 };
+
+export const getPinnedSessionsIds = (pinnedSessions: PinnedSessionType[]) =>
+  pinnedSessions.map(({ sessionId }) => sessionId);
+
+export const isSessionPinned = (id: string, pinnedSessions: string[]) =>
+  pinnedSessions.indexOf(id) >= 0;

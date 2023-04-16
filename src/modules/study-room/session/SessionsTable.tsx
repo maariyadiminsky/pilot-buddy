@@ -1,15 +1,22 @@
 import SessionItem from '@modules/study-room/session/SessionItem';
 import { type SessionType } from '@modules/study-room/session/SessionAction';
+import { isSessionPinned } from '@modules/study-room/utils';
 
 interface SessionsTableProps {
+  pinnedSessions: string[];
   sessions: SessionType[];
+  handlePinSession: (session: SessionType) => void;
+  handleUnpinSession: (id: string) => void;
   handleStartSession: (id: string) => void;
   handleEditSession: (id: string) => void;
   handleRemoveSession: (id: string) => void;
 }
 
 const SessionsTable = ({
+  pinnedSessions,
   sessions,
+  handlePinSession,
+  handleUnpinSession,
   handleStartSession,
   handleEditSession,
   handleRemoveSession,
@@ -45,7 +52,16 @@ const SessionsTable = ({
           {sessions.map((session, index) => (
             <SessionItem
               key={session.id}
-              {...{ ...session, index, handleStartSession, handleEditSession, handleRemoveSession }}
+              isSessionPinned={isSessionPinned(session.id, pinnedSessions)}
+              {...{
+                ...session,
+                index,
+                handlePinSession,
+                handleUnpinSession,
+                handleStartSession,
+                handleEditSession,
+                handleRemoveSession,
+              }}
             />
           ))}
         </tbody>

@@ -19,6 +19,7 @@ export interface SessionType {
   topic: string;
   questions: number;
   color: string;
+  textColor: string;
 }
 
 interface SessionActionProps {
@@ -76,10 +77,13 @@ const SessionAction = ({ currentSession, handleSubmit, handleCancel }: SessionAc
     setShouldShowEmptyTopicWarning(!topic);
     if (!name || !topic) return;
 
+    const randomBrandColor = getRandomBrandColor('background');
+
     handleSubmit({
       id: currentSession?.id || getUniqId(),
       questions: currentSession?.questions || 0,
-      color: currentSession?.color || getRandomBrandColor(),
+      color: currentSession?.color || randomBrandColor,
+      textColor: currentSession?.textColor || `text-${randomBrandColor}`,
       name,
       topic,
     });

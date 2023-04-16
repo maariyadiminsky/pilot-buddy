@@ -2,46 +2,46 @@
 // @ts-nocheck
 import { PlusIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@modules/common/components/page/PageWrapper';
-import PinnedItems from '@modules/study-room/pinned-session/PinnedSessions';
+import PinnedSessions, { type PinnedSessionType } from '@modules/study-room/session/PinnedSessions';
 import SessionsTable from '@modules/study-room/session/SessionsTable';
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import { type BrandButtonType } from '@common/components/button/BrandButton';
 import SessionAction, { type SessionType } from '@modules/study-room/session/SessionAction';
-import { sessionsWithNewSessionInOrder, sessionsOrderedByTopic } from '@modules/study-room/utils';
-import { removeObjectFromArray } from '@common/utils';
+import {
+  sessionsWithNewSessionInOrder,
+  sessionsOrderedByTopic,
+  getPinnedSessionsIds,
+} from '@modules/study-room/utils';
+import { removeObjectFromArray, getUniqId } from '@common/utils';
 
-const pinnedItems = [
+const PINNED_SESSIONS_DATA = [
   {
-    id: 1,
-    text: 'Private Pilot Exam (Full)',
-    lastUpdated: 'March 17, 2020',
-    total: 21,
-    type: 'question',
-    className: 'bg-pink-600', // todo: temporary, remove this decision being made here and decide later in a static location
-  },
-  {
-    id: 2,
-    text: 'Code Test Study',
-    lastUpdated: 'March 17, 2020',
-    total: 8,
-    type: 'question',
+    id: '1',
+    sessionId: '7',
+    text: 'Pilot Exam Test #2',
+    total: 17,
     className: 'bg-sky-600', // todo: temporary, remove this decision being made here and decide later in a static location
   },
   {
-    id: 3,
-    text: 'Private Pilot Exam (Full)',
-    lastUpdated: 'March 17, 2020',
-    total: 21,
-    type: 'question',
-    className: 'bg-red-500', // todo: temporary, remove this decision being made here and decide later in a static location
+    id: '2',
+    sessionId: '6',
+    text: 'CM Codes',
+    total: 3,
+    className: 'bg-pink-600', // todo: temporary, remove this decision being made here and decide later in a static location
   },
   {
-    id: 4,
-    text: 'Code Test Study',
-    lastUpdated: 'March 17, 2020',
-    total: 8,
-    type: 'question',
-    className: 'bg-red-600', // todo: temporary, remove this decision being made here and decide later in a static location
+    id: '3',
+    sessionId: '5',
+    text: 'Practice',
+    total: 6,
+    className: 'bg-sky-600', // todo: temporary, remove this decision being made here and decide later in a static location
+  },
+  {
+    id: '4',
+    sessionId: '4',
+    text: 'Instruments Test #2',
+    total: 9,
+    className: 'bg-yellow-600', // todo: temporary, remove this decision being made here and decide later in a static location
   },
 ];
 
@@ -52,6 +52,7 @@ const SESSIONS_DATA = [
     topic: 'Private Pilot Exam sdfdsf fdsdfsd fsdsdfsd dasdsafasafasfasfasfasd dadasdasdasdsad ',
     questions: 12,
     color: 'bg-sky-600',
+    textColor: 'text-sky-600',
   },
   {
     id: '2',
@@ -59,6 +60,7 @@ const SESSIONS_DATA = [
     topic: 'Commercial Test dass',
     questions: 10,
     color: 'bg-yellow-600',
+    textColor: 'text-yellow-600',
   },
   {
     id: '3',
@@ -66,6 +68,7 @@ const SESSIONS_DATA = [
     topic: 'Instruments',
     questions: 24,
     color: 'bg-purple-700',
+    textColor: 'text-purple-700',
   },
   {
     id: '4',
@@ -73,6 +76,7 @@ const SESSIONS_DATA = [
     topic: 'Instruments',
     questions: 9,
     color: 'bg-yellow-600',
+    textColor: 'text-yellow-600',
   },
   {
     id: '5',
@@ -80,6 +84,7 @@ const SESSIONS_DATA = [
     topic: 'Commercial',
     questions: 6,
     color: 'bg-sky-600',
+    textColor: 'text-sky-600',
   },
   {
     id: '6',
@@ -87,6 +92,7 @@ const SESSIONS_DATA = [
     topic: 'Commercial Test dass',
     questions: 3,
     color: 'bg-pink-700',
+    textColor: 'text-pink-700',
   },
   {
     id: '7',
@@ -94,134 +100,21 @@ const SESSIONS_DATA = [
     topic: 'Private Pilot',
     questions: 17,
     color: 'bg-sky-600',
+    textColor: 'text-sky-600',
   },
-  {
-    id: '8',
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-yellow-600',
-  },
-  {
-    id: '9',
-    name: 'Practice',
-    topic: 'Commercial',
-    questions: 6,
-    color: 'bg-sky-600',
-  },
-  {
-    id: '10',
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-pink-700',
-  },
-  {
-    id: '11',
-    name: 'Pilot Exam Test #2',
-    topic: 'Private Pilot',
-    questions: 17,
-    color: 'bg-sky-600',
-  },
-  {
-    id: '12',
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-yellow-600',
-  },
-  {
-    id: '13',
-    name: 'Practice',
-    topic: 'Commercial',
-    questions: 6,
-    color: 'bg-sky-600',
-  },
-  {
-    id: '14',
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-pink-700',
-  },
-  {
-    id: '15',
-    name: 'Pilot Exam Test #2',
-    topic: 'Private Pilot',
-    questions: 17,
-    color: 'bg-sky-600',
-  },
-  {
-    id: '16',
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-yellow-600',
-  },
-  {
-    id: '17',
-    name: 'Practice',
-    topic: 'Commercial',
-    questions: 6,
-    color: 'bg-sky-600',
-  },
-  {
-    id: '18',
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-pink-700',
-  },
-  {
-    id: '19',
-    name: 'Pilot Exam Test #2',
-    topic: 'Private Pilot',
-    questions: 17,
-    color: 'bg-sky-600',
-  },
-  {
-    id: '20',
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-yellow-600',
-  },
-  {
-    id: '21',
-    name: 'Practice',
-    topic: 'Commercial',
-    questions: 6,
-    color: 'bg-sky-600',
-  },
-  {
-    id: '22',
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-pink-700',
-  },
-  {
-    id: '23',
-    name: 'Pilot Exam Test #2',
-    topic: 'Private Pilot',
-    questions: 17,
-    color: 'bg-sky-600',
-  },
-  {
-    id: '24',
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-yellow-600',
-  },
-  // More plans...
 ];
 
 const StudyRoom = () => {
   const [shouldShowSessionAction, setShouldShowSessionAction] = useState(false);
   // todo: get this from storage
   const [sessions, setSessions] = useState<SessionType[]>([]);
+  const [pinnedSessions] = useState<PinnedSessionType[]>(PINNED_SESSIONS_DATA);
   const [currentSession, setCurrentSession] = useState<SessionType>();
+
+  const pinnedSessionIds = useMemo(
+    () => (pinnedSessions.length ? getPinnedSessionsIds(pinnedSessions) : []),
+    [pinnedSessions.length]
+  );
 
   // sessions should be ordered by topic for easier search
   useEffect(() => {
@@ -261,7 +154,16 @@ const StudyRoom = () => {
     // save update in storage
   };
 
-  const handleEditSession = async (id: string) => {
+  console.log('sessions:', sessions);
+  const handleEditSession = (id: string) => {
+    console.log(
+      'in edit',
+      id,
+      'session:',
+      sessions.find((session) => session.id === id),
+      'sessions:',
+      sessions
+    );
     // in the case they were editing before and just hit edit again
     // add back the last item user was editing.
     // This also acts as a cancel of the last edit.
@@ -276,6 +178,28 @@ const StudyRoom = () => {
     setShouldShowSessionAction(true);
 
     // save update in storage
+  };
+
+  const handleUnpinSession = (sessionId: string) => {
+    setPinnedSessions(removeObjectFromArray(pinnedSessions, sessionId, 'sessionId'));
+
+    // save update in storage
+  };
+
+  const handlePinSession = (session: SessionType) => {
+    const { id, questions, name, color } = session;
+
+    const newPinnedSession = {
+      id: getUniqId(),
+      sessionId: id,
+      total: questions,
+      text: name,
+      className: color,
+    };
+
+    if (pinnedSessions.length < 4) {
+      setPinnedSessions([newPinnedSession, pinnedSessions]);
+    }
   };
 
   const getHeaderActions = useCallback(
@@ -297,10 +221,10 @@ const StudyRoom = () => {
   return (
     <PageWrapper title="Study Room" headerActions={headerActions}>
       <div className="h-full min-w-full">
-        <PinnedItems
+        <PinnedSessions
           title="Pinned Sessions"
-          items={pinnedItems}
-          {...{ handleStartSession, handleEditSession }}
+          sessions={pinnedSessions}
+          {...{ handleUnpinSession, handleStartSession, handleEditSession }}
         />
         <div className="flex flex-col space-y-4 mt-4">
           {shouldShowSessionAction && (
@@ -311,8 +235,11 @@ const StudyRoom = () => {
             />
           )}
           <SessionsTable
+            pinnedSessions={pinnedSessionIds}
             {...{
               sessions,
+              handleUnpinSession,
+              handlePinSession,
               handleStartSession,
               handleEditSession,
               handleRemoveSession,
