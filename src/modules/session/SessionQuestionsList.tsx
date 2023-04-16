@@ -122,6 +122,7 @@ const SessionQuestionsList = ({
         <EmptyDataAction
           title="Add your first question"
           description="Kick off your study session by adding some questions!"
+          buttonText="Add Question"
           handleOnClick={() => setShouldShowQuestionAction(true)}
         />
       );

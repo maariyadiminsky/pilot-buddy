@@ -4,10 +4,16 @@ import BrandButton from '@common/components/button/BrandButton';
 interface EmptyDataActionsProps {
   title: string;
   description: string;
+  buttonText: string;
   handleOnClick: (value: boolean) => void;
 }
 
-const EmptyDataAction = ({ title, description, handleOnClick }: EmptyDataActionsProps) => (
+const EmptyDataAction = ({
+  title,
+  description,
+  buttonText,
+  handleOnClick,
+}: EmptyDataActionsProps) => (
   <div className="flex flex-col justify-center items-center text-center mt-12">
     <svg
       fill="none"
@@ -30,8 +36,8 @@ const EmptyDataAction = ({ title, description, handleOnClick }: EmptyDataActions
         handleOnClick={handleOnClick}
         icon={PlusIcon}
         buttonType="button"
-        text="Add Question"
-        srText="add question"
+        text={buttonText}
+        srText={buttonText}
         buttonClassType="solidPink"
       />
     </div>

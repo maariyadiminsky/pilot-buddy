@@ -16,6 +16,7 @@ import {
 import { removeObjectFromArray, getUniqId } from '@common/utils';
 import { useNavigate } from 'react-router-dom';
 import Modal, { type ModalRef, type ModalDataType } from '@common/components/modal/Modal';
+import EmptyDataAction from '@common/components/empty/EmptyDataAction';
 
 const PINNED_SESSIONS_DATA = [
   {
@@ -23,28 +24,28 @@ const PINNED_SESSIONS_DATA = [
     sessionId: '7',
     text: 'Pilot Exam Test #2',
     total: 17,
-    className: 'bg-sky-600', // todo: temporary, remove this decision being made here and decide later in a static location
+    className: 'bg-sky-600',
   },
   {
     id: '2',
     sessionId: '6',
     text: 'CM Codes',
     total: 3,
-    className: 'bg-pink-600', // todo: temporary, remove this decision being made here and decide later in a static location
+    className: 'bg-pink-600',
   },
   {
     id: '3',
     sessionId: '5',
     text: 'Practice',
     total: 6,
-    className: 'bg-sky-600', // todo: temporary, remove this decision being made here and decide later in a static location
+    className: 'bg-sky-600',
   },
   {
     id: '4',
     sessionId: '4',
     text: 'Instruments Test #2',
     total: 9,
-    className: 'bg-yellow-600', // todo: temporary, remove this decision being made here and decide later in a static location
+    className: 'bg-yellow-600',
   },
 ];
 
@@ -116,12 +117,12 @@ const StudyRoom = () => {
   const [shouldShowSessionAction, setShouldShowSessionAction] = useState(false);
   // todo: get this from storage
   const [sessions, setSessions] = useState<SessionType[]>([]);
-  const [pinnedSessions, setPinnedSessions] = useState<PinnedSessionType[]>(PINNED_SESSIONS_DATA);
+  const [pinnedSessions, setPinnedSessions] = useState<PinnedSessionType[]>(PINNED_SESSION_DATA);
   const [currentSession, setCurrentSession] = useState<SessionType>();
 
   const pinnedSessionIds = useMemo(
-    () => (pinnedSessions.length ? getPinnedSessionsIds(pinnedSessions) : []),
-    [pinnedSessions.length]
+    () => (pinnedSessions?.length ? getPinnedSessionsIds(pinnedSessions) : []),
+    [pinnedSessions?.length]
   );
 
   // sessions should be ordered by topic for easier search
@@ -168,8 +169,8 @@ const StudyRoom = () => {
       className: color,
     };
 
-    if (pinnedSessions.length < 4) {
-      setPinnedSessions([newPinnedSession, ...pinnedSessions]);
+    if (!pinnedSessions || pinnedSessions.length < 4) {
+      setPinnedSessions([newPinnedSession, ...(pinnedSessions || [])]);
     } else {
       setModalData({
         title: 'Pin Limit',
@@ -293,17 +294,27 @@ const StudyRoom = () => {
               handleCancel={handleCancelAction}
             />
           )}
-          <SessionsTable
-            pinnedSessions={pinnedSessionIds}
-            handleRemoveSession={handleRemoveConfirm}
-            {...{
-              sessions,
-              handleUnpinSession,
-              handlePinSession,
-              handleStartSession,
-              handleEditSession,
-            }}
-          />
+          {sessions?.length ? (
+            <SessionsTable
+              pinnedSessions={pinnedSessionIds}
+              handleRemoveSession={handleRemoveConfirm}
+              {...{
+                sessions,
+                handleUnpinSession,
+                handlePinSession,
+                handleStartSession,
+                handleEditSession,
+              }}
+            />
+          ) : null}
+          {!sessions?.length && !shouldShowSessionAction && (
+            <EmptyDataAction
+              title="Add your first session"
+              description="Let's create your first study session!"
+              buttonText="Add Session"
+              handleOnClick={() => setShouldShowSessionAction(true)}
+            />
+          )}
         </div>
         <Modal ref={modalRef} {...modalData} />
       </div>

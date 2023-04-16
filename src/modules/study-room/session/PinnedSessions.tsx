@@ -34,7 +34,7 @@ const PinnedSession = ({
           <div
             className={truthyString(
               'flex w-16 antialiased first-letter:flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white',
-              className
+              className || 'bg-gray-900'
             )}
           >
             {getInitials(text)}

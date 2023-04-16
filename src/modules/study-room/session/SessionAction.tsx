@@ -78,12 +78,13 @@ const SessionAction = ({ currentSession, handleSubmit, handleCancel }: SessionAc
     if (!name || !topic) return;
 
     const randomBrandColor = getRandomBrandColor('background');
+    console.log(`text-${randomBrandColor.slice(3)}`, randomBrandColor);
 
     handleSubmit({
       id: currentSession?.id || getUniqId(),
       questions: currentSession?.questions || 0,
       color: currentSession?.color || randomBrandColor,
-      textColor: currentSession?.textColor || `text-${randomBrandColor}`,
+      textColor: currentSession?.textColor || `text-${randomBrandColor.slice(3)}`,
       name,
       topic,
     });
@@ -101,7 +102,7 @@ const SessionAction = ({ currentSession, handleSubmit, handleCancel }: SessionAc
               className="h-6 w-6 xl:h-5 xl:h5 flex-shrink-0 text-gray-900 hover:text-sky-600"
               aria-hidden="true"
             />
-            {currentSession ? 'Edit' : 'Action'} Session
+            {currentSession ? 'Edit' : 'Add'} Session
           </h2>
           <div className="flex flex-row justify-end items-center space-x-3">
             <button type="button" onClick={() => handleCancel()}>
