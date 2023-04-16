@@ -6,6 +6,7 @@ import SessionQuestion, {
 import QuestionAction from '@modules/session/question/SessionQuestionAction';
 import { useState } from 'react';
 import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 const questionData = [
   {
@@ -98,6 +99,11 @@ const SessionQuestionsList = ({
     setShouldShowQuestionAction(false);
   };
 
+  // eslint-disable-next-line
+  const handleDragEnd = (result: any) => {
+    console.log('Drag end, result:', result);
+  };
+
   const renderQuestionsOrEmptyAction = () => {
     if (!questions?.length) {
       // if user is creating a new question there is
@@ -115,23 +121,25 @@ const SessionQuestionsList = ({
     }
 
     return (
-      <ul className="divide-y divide-gray-200 border-b border-gray-200 border-t">
-        {questions.map((question) => {
-          const questionWithTime = {
-            ...question,
-            time: question.time || settingsTime,
-          };
-          return (
-            <SessionQuestion
-              key={question.id}
-              {...questionWithTime}
-              isTimed={isTimed}
-              handleRemoveQuestion={handleRemoveQuestion}
-              handleEditQuestion={handleEditQuestion}
-            />
-          );
-        })}
-      </ul>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <ul className="divide-y divide-gray-200 border-b border-gray-200 border-t">
+          {questions.map((question) => {
+            const questionWithTime = {
+              ...question,
+              time: question.time || settingsTime,
+            };
+            return (
+              <SessionQuestion
+                key={question.id}
+                {...questionWithTime}
+                isTimed={isTimed}
+                handleRemoveQuestion={handleRemoveQuestion}
+                handleEditQuestion={handleEditQuestion}
+              />
+            );
+          })}
+        </ul>
+      </DragDropContext>
     );
   };
 
