@@ -11,6 +11,7 @@ import {
   sessionsWithNewSessionInOrder,
   sessionsOrderedByTopic,
   getPinnedSessionsIds,
+  isSessionPinned,
 } from '@modules/study-room/utils';
 import { removeObjectFromArray, getUniqId } from '@common/utils';
 import { useNavigate } from 'react-router-dom';
@@ -138,6 +139,7 @@ const StudyRoom = () => {
     setSessions(sessionsWithNewSessionInOrder(session, sessions));
     setCurrentSession(undefined);
     setShouldShowSessionAction(false);
+    setModalData(undefined);
     // save in storage
   };
 
@@ -153,35 +155,6 @@ const StudyRoom = () => {
   // eslint-disable-next-line
   const handleStartSession = (id: string) => {
     // handle start session
-  };
-
-  const handleRemoveSession = (id: string, customSessions?: SessionType[]) => {
-    setSessions(removeObjectFromArray(customSessions || sessions, id, 'id'));
-
-    // save update in storage
-  };
-
-  const handleEditSession = (id: string) => {
-    // in the case they were editing before and just hit edit again
-    // add back the last item user was editing.
-    // This also acts as a cancel of the last edit.
-    if (currentSession) {
-      const currentSessions = handleAddSession(currentSession);
-      handleRemoveSession(id, currentSessions);
-    } else {
-      handleRemoveSession(id);
-    }
-
-    setCurrentSession(sessions.find((session) => session.id === id));
-    setShouldShowSessionAction(true);
-
-    // save update in storage
-  };
-
-  const handleUnpinSession = (sessionId: string) => {
-    setPinnedSessions(removeObjectFromArray(pinnedSessions, sessionId, 'sessionId'));
-
-    // save update in storage
   };
 
   const handlePinSession = (session: SessionType) => {
@@ -210,6 +183,55 @@ const StudyRoom = () => {
 
       modalRef.current.setModalOpen(true);
     }
+  };
+
+  const handleUnpinSession = (sessionId: string) => {
+    setPinnedSessions(removeObjectFromArray(pinnedSessions, sessionId, 'sessionId'));
+
+    // save update in storage
+  };
+
+  const handleRemoveSession = (id: string, customSessions?: SessionType[]) => {
+    setSessions(removeObjectFromArray(customSessions || sessions, id, 'id'));
+
+    if (isSessionPinned(id, pinnedSessionIds)) {
+      handleUnpinSession(id);
+    }
+
+    // save update in storage
+  };
+
+  const handleRemoveConfirm = (id: string) => {
+    setModalData({
+      title: 'Are you sure?',
+      children: (
+        <div className="flex justify-center items-center">
+          All questions and answers will be deleted.
+        </div>
+      ),
+      handleConfirm: () => handleRemoveSession(id),
+      confirmChildren: "Yes, I'm sure",
+      cancelChildren: 'Nevermind',
+    });
+
+    modalRef.current.setModalOpen(true);
+  };
+
+  const handleEditSession = (id: string) => {
+    // in the case they were editing before and just hit edit again
+    // add back the last item user was editing.
+    // This also acts as a cancel of the last edit.
+    if (currentSession) {
+      const currentSessions = handleAddSession(currentSession);
+      handleRemoveSession(id, currentSessions);
+    } else {
+      handleRemoveSession(id);
+    }
+
+    setCurrentSession(sessions.find((session) => session.id === id));
+    setShouldShowSessionAction(true);
+
+    // save update in storage
   };
 
   const getHeaderActions = useCallback(
@@ -273,13 +295,13 @@ const StudyRoom = () => {
           )}
           <SessionsTable
             pinnedSessions={pinnedSessionIds}
+            handleRemoveSession={handleRemoveConfirm}
             {...{
               sessions,
               handleUnpinSession,
               handlePinSession,
               handleStartSession,
               handleEditSession,
-              handleRemoveSession,
             }}
           />
         </div>
