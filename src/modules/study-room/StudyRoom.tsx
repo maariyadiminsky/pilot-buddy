@@ -4,7 +4,7 @@ import { PlusIcon, BookmarkSlashIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@modules/common/components/page/PageWrapper';
 import PinnedSessions, { type PinnedSessionType } from '@modules/study-room/session/PinnedSessions';
 import SessionsTable from '@modules/study-room/session/SessionsTable';
-import { useCallback, useMemo, useState, useEffect } from 'react';
+import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import { type BrandButtonType } from '@common/components/button/BrandButton';
 import SessionAction, { type SessionType } from '@modules/study-room/session/SessionAction';
 import {
@@ -14,6 +14,7 @@ import {
 } from '@modules/study-room/utils';
 import { removeObjectFromArray, getUniqId } from '@common/utils';
 import { useNavigate } from 'react-router-dom';
+import Modal, { type ModalRef, type ModalDataType } from '@common/components/modal/Modal';
 
 const PINNED_SESSIONS_DATA = [
   {
@@ -106,6 +107,9 @@ const SESSIONS_DATA = [
 ];
 
 const StudyRoom = () => {
+  const modalRef = useRef<ModalRef>(null);
+  const [modalData, setModalData] = useState<ModalDataType>();
+
   const navigate = useNavigate();
 
   const [shouldShowSessionAction, setShouldShowSessionAction] = useState(false);
@@ -193,6 +197,18 @@ const StudyRoom = () => {
 
     if (pinnedSessions.length < 4) {
       setPinnedSessions([newPinnedSession, ...pinnedSessions]);
+    } else {
+      setModalData({
+        title: 'Pin Limit',
+        children: (
+          <div className="flex justify-center items-center">
+            Apologies, session pin limit reached.
+          </div>
+        ),
+        confirmChildren: 'Ok',
+      });
+
+      modalRef.current.setModalOpen(true);
     }
   };
 
@@ -239,12 +255,14 @@ const StudyRoom = () => {
   return (
     <PageWrapper title="Study Room" headerActions={headerActions}>
       <div className="h-full min-w-full">
-        <PinnedSessions
-          title="Pinned Sessions"
-          sessions={pinnedSessions}
-          getDropdownActions={getDropdownActions}
-          handleEditSession={handleEditSession}
-        />
+        {pinnedSessions?.length ? (
+          <PinnedSessions
+            title="Pinned Sessions"
+            sessions={pinnedSessions}
+            getDropdownActions={getDropdownActions}
+            handleEditSession={handleEditSession}
+          />
+        ) : null}
         <div className="flex flex-col space-y-4 mt-4">
           {shouldShowSessionAction && (
             <SessionAction
@@ -265,6 +283,7 @@ const StudyRoom = () => {
             }}
           />
         </div>
+        <Modal ref={modalRef} {...modalData} />
       </div>
     </PageWrapper>
   );

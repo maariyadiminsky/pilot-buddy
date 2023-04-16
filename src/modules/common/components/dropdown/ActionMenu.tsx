@@ -28,11 +28,10 @@ const ActionMenu = ({ name, actions, className, type, useCustomPosition }: Actio
   const [menuAdjustment, setMenuAdjustment] = useState('');
 
   const shouldAdjustMenuRelativeToWindow = () => {
-    console.log(setMenuAdjustment);
-    // if (!menuRef.current) return;
-    // const elementDimensions = menuRef.current?.getBoundingClientRect();
-    // const { x } = elementDimensions;
-    // setMenuAdjustment(x > window.outerWidth - 200 ? 'right-0' : '');
+    if (!menuRef.current) return;
+    const elementDimensions = menuRef.current?.getBoundingClientRect();
+    const { x } = elementDimensions;
+    setMenuAdjustment(x > window.outerWidth - 200 ? 'right-0' : '');
   };
 
   const renderButton = () => {
