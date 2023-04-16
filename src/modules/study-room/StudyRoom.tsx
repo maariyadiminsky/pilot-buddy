@@ -117,7 +117,7 @@ const StudyRoom = () => {
   const [shouldShowSessionAction, setShouldShowSessionAction] = useState(false);
   // todo: get this from storage
   const [sessions, setSessions] = useState<SessionType[]>([]);
-  const [pinnedSessions, setPinnedSessions] = useState<PinnedSessionType[]>(PINNED_SESSION_DATA);
+  const [pinnedSessions, setPinnedSessions] = useState<PinnedSessionType[]>(PINNED_SESSIONS_DATA);
   const [currentSession, setCurrentSession] = useState<SessionType>();
 
   const pinnedSessionIds = useMemo(
