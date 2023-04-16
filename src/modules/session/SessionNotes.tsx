@@ -87,7 +87,6 @@ const SessionNotes = () => {
                 notes={notes}
                 handleRemoveNote={handleRemoveNote}
                 handleEditNote={handleEditNote}
-                shouldHideNoteAction={shouldHideNoteAction}
               />
             </div>
           </div>

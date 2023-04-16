@@ -150,7 +150,7 @@ const SessionQuestionsList = ({
   };
 
   return (
-    <div className="bg-white lg:min-w-0 lg:flex-1 flex flex-col h-[calc(100vh-74px)] overflow-y-auto smooth-scroll">
+    <div className="bg-white lg:min-w-0 lg:flex-1 flex flex-col h-[calc(100vh-75px)] overflow-y-auto smooth-scroll">
       <div className="flex flex-col justify-start py-4">
         {shouldShowQuestionAction ? (
           <QuestionAction
