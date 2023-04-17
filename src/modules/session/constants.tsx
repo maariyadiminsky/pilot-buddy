@@ -24,7 +24,7 @@ export const ORDER_OPTIONS = [
   {
     id: 1,
     name: SessionOrderEnum.Random,
-    description: 'Questions will be displayed in random order.',
+    description: 'Questions will appear in random order.',
   },
 ];
 

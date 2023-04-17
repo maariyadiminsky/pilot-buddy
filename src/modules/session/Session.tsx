@@ -4,7 +4,7 @@ import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu'
 import { PlayCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@modules/common/components/page/PageWrapper';
 import SessionNotes from '@modules/session/SessionNotes';
-import SessionQuestionsList from '@modules/session/SessionQuestionsList';
+import SessionQuestions from '@modules/session/SessionQuestions';
 import SessionSettings from '@modules/session/SessionSettings';
 import { type SettingsToggleTypeWithId } from '@modules/session/settings/SessionSetting';
 import TimeSelectMenu from './settings/TimeSelectMenu';
@@ -94,7 +94,7 @@ const Session = () => {
         <div className="w-full flex-grow xl:flex">
           <div className="min-w-0 flex-1 bg-inherit xl:flex">
             <SessionNotes />
-            <SessionQuestionsList
+            <SessionQuestions
               isTimed={isTimed}
               settingsTime={isTimed && settingsTime}
               shouldShowQuestionAction={shouldShowQuestionAction}

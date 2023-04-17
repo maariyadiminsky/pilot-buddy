@@ -1,12 +1,12 @@
 import { removeObjectFromArray, jumpPageToTop } from '@common/utils';
 import EmptyDataAction from '@common/components/empty/EmptyDataAction';
-import SessionQuestion, {
-  type SessionQuestionType,
-} from '@modules/session/question/SessionQuestion';
 import QuestionAction from '@modules/session/question/SessionQuestionAction';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, type DropResult } from 'react-beautiful-dnd';
+import SessionQuestionsList, {
+  type SessionQuestionType,
+} from '@modules/session/question/SessionQuestionsList';
 
 const questionData = [
   {
@@ -37,21 +37,31 @@ const questionData = [
   },
 ];
 
-interface SessionQuestionsListProps {
+interface SessionQuestionsProps {
   isTimed: boolean;
   settingsTime: SelectMenuItemType;
   shouldShowQuestionAction: boolean;
   setShouldShowQuestionAction: (value: boolean) => void;
 }
 
-const SessionQuestionsList = ({
+const DropStyles = {
+  isDragging: 'bg-slate-100',
+  isNotDragging: 'bg-white',
+};
+
+const SessionQuestions = ({
   isTimed,
   settingsTime,
   shouldShowQuestionAction,
   setShouldShowQuestionAction,
-}: SessionQuestionsListProps) => {
+}: SessionQuestionsProps) => {
   const [questions, setQuestions] = useState<SessionQuestionType[]>(questionData);
   const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>();
+
+  // Issue: https://medium.com/@wbern/getting-react-18s-strict-mode-to-work-with-react-beautiful-dnd-47bc909348e4
+  // Cleanest fix: https://github.com/atlassian/react-beautiful-dnd/issues/2399#issuecomment-1503025577
+  const [isComponentMounted, setIsMounted] = useState(false);
+  useEffect(() => setIsMounted(true), []);
 
   const handleAddQuestion = (question: SessionQuestionType) => {
     const questionsWithNewQuestion = [...questions, { ...question }];
@@ -99,9 +109,32 @@ const SessionQuestionsList = ({
     setShouldShowQuestionAction(false);
   };
 
-  // eslint-disable-next-line
-  const handleDragEnd = (result: any) => {
-    console.log('Drag end, result:', result);
+  const handleDragEnd = (data: DropResult) => {
+    const { destination, source, draggableId } = data;
+
+    // if user dragged outside possible drop area
+    if (!destination) return;
+
+    const draggedTo = destination.index;
+
+    // if placement is the same
+    if (destination.droppableId === source.droppableId && draggedTo === source.index) return;
+
+    // otherwise find the question and place in correct order
+    const question = questions.find(({ id }) => id === draggableId);
+
+    // if question doesn't exist
+    if (!question) return;
+
+    // get questions array without question
+    const questionsWithoutMovedQuestion = removeObjectFromArray(questions, draggableId, 'id');
+
+    // add question to correct index
+    setQuestions([
+      ...questionsWithoutMovedQuestion.slice(0, draggedTo),
+      question,
+      ...questionsWithoutMovedQuestion.slice(draggedTo),
+    ]);
   };
 
   const renderQuestionsOrEmptyAction = () => {
@@ -122,29 +155,34 @@ const SessionQuestionsList = ({
 
     return (
       <DragDropContext onDragEnd={handleDragEnd}>
-        <ul className="divide-y divide-gray-200 border-b border-gray-200 border-t">
-          {questions.map((question) => {
-            const questionWithTime = {
-              ...question,
-              time: question.time || settingsTime,
-            };
-            return (
-              <SessionQuestion
-                key={question.id}
-                {...questionWithTime}
-                isTimed={isTimed}
-                handleRemoveQuestion={handleRemoveQuestion}
-                handleEditQuestion={handleEditQuestion}
-              />
-            );
-          })}
-        </ul>
+        {isComponentMounted ? (
+          <Droppable droppableId="session-questions" direction="vertical">
+            {({ innerRef, droppableProps, placeholder }, { isDraggingOver }) => (
+              <div
+                ref={innerRef}
+                className={`${isDraggingOver ? DropStyles.isDragging : DropStyles.isNotDragging}`}
+              >
+                <SessionQuestionsList
+                  {...{
+                    ...droppableProps,
+                    placeholder,
+                    questions,
+                    settingsTime,
+                    isTimed,
+                    handleRemoveQuestion,
+                    handleEditQuestion,
+                  }}
+                />
+              </div>
+            )}
+          </Droppable>
+        ) : null}
       </DragDropContext>
     );
   };
 
   return (
-    <div className="bg-white lg:min-w-0 lg:flex-1 flex flex-col h-[calc(100vh-75px)] overflow-y-auto smooth-scroll">
+    <div className="bg-white xl:min-w-0 xl:flex-1 flex flex-col h-[calc(100vh-75px)] overflow-y-auto smooth-scroll">
       <div className="flex flex-col justify-start">
         {shouldShowQuestionAction && (
           <QuestionAction
@@ -161,4 +199,4 @@ const SessionQuestionsList = ({
   );
 };
 
-export default SessionQuestionsList;
+export default SessionQuestions;

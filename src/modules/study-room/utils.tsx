@@ -1,5 +1,6 @@
 import { type SessionType } from '@modules/study-room/session/SessionAction';
 import { type PinnedSessionType } from '@modules/study-room/session/PinnedSessions';
+import { type SessionQuestionType } from '@modules/session/question/SessionQuestionsList';
 
 enum COLOR_TYPE {
   background = 'background',
@@ -41,6 +42,12 @@ export const sessionsOrderedByTopic = (sessions: SessionType[]) =>
 
     return 0;
   });
+
+export const reorderQuestionsBasedOnUserDragChoice = (
+  question: SessionQuestionType,
+  questions: SessionQuestionType[],
+  draggedToIndex: number
+) => [...questions.slice(0, draggedToIndex), question, ...questions.slice(draggedToIndex)];
 
 export const sessionsWithNewSessionInOrder = (
   newSession: SessionType,
