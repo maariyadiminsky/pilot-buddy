@@ -2,14 +2,10 @@ import { truthyString } from '@common/utils';
 import { MicrophoneIcon } from '@heroicons/react/20/solid';
 import { useEffect } from 'react';
 import { DictaphoneModalErrorType } from '@modules/speech-recognition/hooks/useInitializeSpeechToText';
+import { ListeningOptions } from 'react-speech-recognition';
 
-interface SpeechRecognitionStartListeningProps {
-  continuous?: boolean;
-  interimResults?: boolean;
-  lang?: string;
-}
 interface SpeechRecognitionType {
-  startListening: (props: SpeechRecognitionStartListeningProps) => Promise<void>;
+  startListening: (props: ListeningOptions) => Promise<void>;
   stopListening: () => Promise<void>;
 }
 

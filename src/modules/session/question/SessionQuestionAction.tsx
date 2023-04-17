@@ -133,7 +133,6 @@ const SessionQuestionAction = ({
             />
             <div className="absolute inset-y-0 right-0 flex items-center pr-3 group">
               <Dictaphone
-                /* @ts-ignore - until issue fixed: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/65058 */
                 SpeechRecognition={SpeechRecognition}
                 isOn={isQuestionMicrophoneOn}
                 isDisabled={Boolean(isAnswerMicrophoneOn)}
@@ -168,7 +167,6 @@ const SessionQuestionAction = ({
             />
             <div className="absolute inset-y-0 right-0 flex items-center pr-3 group">
               <Dictaphone
-                /* @ts-ignore - until issue fixed: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/65058 */
                 SpeechRecognition={SpeechRecognition}
                 isOn={isAnswerMicrophoneOn}
                 isDisabled={Boolean(isQuestionMicrophoneOn)}
