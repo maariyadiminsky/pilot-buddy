@@ -6,7 +6,7 @@ interface HeaderWithActionsProps {
 }
 
 const HeaderWithActions = ({ title, actions }: HeaderWithActionsProps) => (
-  <div className="border-b border-gray-200 px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
+  <div className="border-b border-gray-200 px-4 py-4 md:py-0 md:h-16 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
     <div className="min-w-0 flex-1">
       <h1 className="text-md font-semibold leading-6 text-gray-900 antialiased sm:truncate">
         {title}

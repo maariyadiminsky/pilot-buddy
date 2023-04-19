@@ -8,10 +8,10 @@ import SessionQuestionsList, {
   type SessionQuestionType,
 } from '@modules/session/question/SessionQuestionsList';
 
-const questionData = [
+export const questionData = [
   {
     id: '0',
-    question: 'dsfdsfdsf df sdfsdsd sdfsdfsdfssd  fdsfsd ',
+    question: 'What is the biggest ballooon in the world?',
     answer: 'dsfdsfsd',
   },
   {

@@ -62,7 +62,7 @@ export const NOTE_TYPES = [
     value: 'location',
     icon: MapPinIcon,
     iconColor: 'text-white',
-    bgColor: 'bg-purple-700',
+    bgColor: 'bg-purple-600',
   },
   {
     name: 'Link',

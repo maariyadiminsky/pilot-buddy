@@ -4,6 +4,11 @@ import { useEffect } from 'react';
 import { DictaphoneModalErrorType } from '@modules/speech-recognition/hooks/useInitializeSpeechToText';
 import { ListeningOptions } from 'react-speech-recognition';
 
+enum MicrophoneSize {
+  sm = 'sm',
+  md = 'md',
+}
+
 interface SpeechRecognitionType {
   startListening: (props: ListeningOptions) => Promise<void>;
   stopListening: () => Promise<void>;
@@ -12,12 +17,23 @@ interface SpeechRecognitionType {
 interface DictaphoneProps {
   SpeechRecognition: SpeechRecognitionType;
   isOn: boolean;
-  isDisabled: boolean;
+  isDisabled?: boolean;
   isMicrophoneAvailable: boolean;
   setIsOn: (value: boolean) => void;
   setModalError: (errorType: DictaphoneModalErrorType) => void;
   setModalOpen?: (value: boolean) => void;
+  microphoneSize?: keyof typeof MicrophoneSize;
 }
+
+const getMicrophoneSize = (size: string = MicrophoneSize.sm) => {
+  switch (size) {
+    case MicrophoneSize.md:
+      return 'h-7 w-7';
+    case MicrophoneSize.sm:
+    default:
+      return 'h-5 w-5';
+  }
+};
 
 const Dictaphone = ({
   SpeechRecognition,
@@ -27,6 +43,7 @@ const Dictaphone = ({
   setIsOn,
   setModalError,
   setModalOpen,
+  microphoneSize,
 }: DictaphoneProps) => {
   const { startListening, stopListening } = SpeechRecognition;
 
@@ -99,7 +116,8 @@ const Dictaphone = ({
       >
         <MicrophoneIcon
           className={truthyString(
-            'h-5 w-5 enabled:group-hover:text-sky-600 enabled:group-hover:cursor-pointer',
+            getMicrophoneSize(microphoneSize),
+            'enabled:group-hover:text-sky-600 enabled:group-hover:cursor-pointer',
             isOn ? 'text-sky-600' : 'text-gray-400'
           )}
           aria-hidden="true"

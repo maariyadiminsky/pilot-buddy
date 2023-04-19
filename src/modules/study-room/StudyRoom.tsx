@@ -71,8 +71,8 @@ const SESSIONS_DATA = [
     name: 'Instruments Test #1',
     topic: 'Instruments',
     questions: 24,
-    color: 'bg-purple-700',
-    textColor: 'text-purple-700',
+    color: 'bg-purple-600',
+    textColor: 'text-purple-600',
   },
   {
     id: '4',
