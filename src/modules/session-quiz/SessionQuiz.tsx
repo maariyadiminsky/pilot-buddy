@@ -1,6 +1,8 @@
-// import PageWrapper from '@modules/common/components/page/PageWrapper';
-// import { truthyString } from '@common/utils';
-// import { CheckIcon } from '@heroicons/react/20/solid';
+import {
+  ChatBubbleLeftEllipsisIcon,
+  CheckBadgeIcon,
+  ArrowUturnLeftIcon,
+} from '@heroicons/react/20/solid';
 import { questionData } from '@modules/session/SessionQuestions';
 import { type SessionQuestionType } from '@modules/session/question/SessionQuestionsList';
 import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks/useInitializeSpeechToText';
@@ -104,84 +106,121 @@ const SessionQuiz = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white sm:bg-inherit flex flex-col items-center justify-center 2xl:mx-96">
-      <div className="flex flex-col w-full px-20">
-        {questionsLeft ? (
-          <div
-            className={`flex flex-row ${
-              isTimed ? 'justify-between' : 'justify-end'
-            } items-center w-full py-3 text-sm font-light text-gray-600`}
-          >
-            {isTimed && <div>Time: {timeLeft}</div>}
-            <div>
-              {questionsLeft}/{questionData.length} question{questionData.length > 1 ? 's' : ''}
-            </div>
-          </div>
-        ) : null}
-        <div className="flex flex-col w-full justify-center items-center mb-20 pb-20 pt-16 px-3 sm:px-10 sm:min-h-min space-y-10 sm:border sm:border-sky-100 sm:rounded-2xl sm:shadow-xl bg-white">
+    <div className="min-h-screen bg-white sm:bg-inherit">
+      <div className="flex items-start h-20 group hover:cursor-pointer mx-10 py-4 2xl:mx-72">
+        <ArrowUturnLeftIcon className="h-8 w-8 text-gray-500 group-hover:text-sky-600" />
+      </div>
+      <div className="justify-center flex flex-col 2xl:mx-96 mt-10">
+        <div className="flex flex-col w-full pb-20">
           {questionsLeft ? (
-            <>
-              <div className="font-semibold text-center w-full text-xl sm:text-2xl text-gray-900">
-                {currentQuestion.question}
+            <div
+              className={`flex flex-row ${
+                isTimed ? 'justify-between' : 'justify-end'
+              } items-center w-full py-3 text-sm font-light text-gray-600`}
+            >
+              {isTimed && <div>Time: {timeLeft}</div>}
+              <div>
+                {questionsLeft}/{questionData.length} question{questionData.length > 1 ? 's' : ''}
               </div>
-              <form
-                onSubmit={handleSetQuizAnswer}
-                className="px-3 w-full flex flex-col space-y-10 justify-center items-center"
-              >
-                <div className="relative overflow-hidden flex w-full rounded-lg shadow-sm ring-1 p-1 pt-2 py-10 ring-inset bg-white ring-sky-600 focus-within:ring-2 focus-within:ring-sky-700">
-                  <label htmlFor="quizAnswer" className="sr-only">
-                    Share the answer to the question here
-                  </label>
-                  <textarea
-                    rows={6}
-                    name="quizAnswer"
-                    id="quizAnswer"
-                    aria-label="quizAnswer"
-                    className="block whitespace-pre-wrap w-full resize-none border-0 bg-transparent text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:py-1.5 sm:text-md sm:leading-6"
-                    value={currentQuizAnswer}
-                    placeholder={isMicrophoneOn ? 'Please wait a moment...' : ''}
-                    onChange={(event) => setCurrentQuizAnswer(event.target.value)}
-                  />
-                  <div className="absolute inset-y-0 right-0 flex items-end pr-3 pb-3 group">
-                    <Dictaphone
-                      SpeechRecognition={SpeechRecognition}
-                      isOn={isMicrophoneOn}
-                      isMicrophoneAvailable={isMicrophoneAvailable}
-                      setIsOn={(value) => handleSetMicrophoneOn(value)}
-                      setModalError={setModalError}
-                      setModalOpen={modalRef.current?.setModalOpen}
-                      microphoneSize="md"
-                      time={isTimed ? currentQuestion.time?.name : undefined}
-                    />
-                  </div>
+            </div>
+          ) : null}
+          <div className="flex flex-col w-full justify-center items-center mb-20 pb-20 pt-16 px-3 sm:px-10 space-y-10 sm:border sm:border-sky-100 sm:rounded-2xl sm:shadow-xl bg-white">
+            {questionsLeft ? (
+              <>
+                <div className="font-semibold text-center w-full text-xl sm:text-2xl text-gray-900">
+                  {currentQuestion.question}
                 </div>
-                <button
-                  type="submit"
-                  className="btn group flex items-center bg-sky-600 rounded-md px-12 p-2 text-lg font-md"
+                <form
+                  onSubmit={handleSetQuizAnswer}
+                  className="px-3 w-full flex flex-col space-y-10 justify-center items-center"
                 >
-                  <span className="relative pr-4 pb-1 text-white">Next Question</span>
-                  <svg
-                    viewBox="0 0 46 16"
-                    height="10"
-                    width="30"
-                    xmlns="http://www.w3.org/2000/svg"
-                    id="arrow-horizontal"
-                    className="-translate-x-2 fill-white transition-all duration-300 ease-out group-hover:translate-x-2 group-hover:scale-x-105 group-hover:fill-white"
-                  >
-                    <path
-                      transform="translate(30)"
-                      d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z"
-                      data-name="Path 10"
-                      id="Path_10"
+                  <div className="relative overflow-hidden flex w-full rounded-lg shadow-sm ring-1 p-1 pt-2 py-10 ring-inset bg-white ring-sky-600 focus-within:ring-2 focus-within:ring-sky-700">
+                    <label htmlFor="quizAnswer" className="sr-only">
+                      Share the answer to the question here
+                    </label>
+                    <textarea
+                      rows={6}
+                      name="quizAnswer"
+                      id="quizAnswer"
+                      aria-label="quizAnswer"
+                      className="block whitespace-pre-wrap w-full resize-none border-0 bg-transparent text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:py-1.5 sm:text-md sm:leading-6"
+                      value={currentQuizAnswer}
+                      placeholder={isMicrophoneOn ? 'Please wait a moment...' : ''}
+                      onChange={(event) => setCurrentQuizAnswer(event.target.value)}
                     />
-                  </svg>
-                </button>
-              </form>
-              <Modal ref={modalRef} {...modalData} />
-            </>
-          ) : (
-            <div className="h-52">Done!</div>
-          )}
+                    <div className="absolute inset-y-0 right-0 flex items-end pr-3 pb-3 group">
+                      <Dictaphone
+                        SpeechRecognition={SpeechRecognition}
+                        isOn={isMicrophoneOn}
+                        isMicrophoneAvailable={isMicrophoneAvailable}
+                        setIsOn={(value) => handleSetMicrophoneOn(value)}
+                        setModalError={setModalError}
+                        setModalOpen={modalRef.current?.setModalOpen}
+                        microphoneSize="md"
+                        time={isTimed ? currentQuestion.time?.name : undefined}
+                      />
+                    </div>
+                  </div>
+                  <button
+                    type="submit"
+                    className="btn group flex items-center bg-sky-600 rounded-md px-12 p-2 text-lg font-md"
+                  >
+                    <span className="relative pr-4 pb-1 text-white">Next Question</span>
+                    <svg
+                      viewBox="0 0 46 16"
+                      height="10"
+                      width="30"
+                      xmlns="http://www.w3.org/2000/svg"
+                      id="arrow-horizontal"
+                      className="-translate-x-2 fill-white transition-all duration-300 ease-out group-hover:translate-x-2 group-hover:scale-x-105 group-hover:fill-white"
+                    >
+                      <path
+                        transform="translate(30)"
+                        d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z"
+                        data-name="Path 10"
+                        id="Path_10"
+                      />
+                    </svg>
+                  </button>
+                </form>
+                <Modal ref={modalRef} {...modalData} />
+              </>
+            ) : (
+              <div className="flex flex-col justify-center space-y-6 h-[calc(100vh-250px)] w-full px-12">
+                <div className="flex text-xl font-bold text-gray-900 justify-center ">Results</div>
+                <div className="overflow-y-auto smooth-scroll space-y-4">
+                  {questionsWithAnswers?.map(({ id, question, answer, quizAnswer }, index) => (
+                    <div key={id} className="flex flex-col space-y-4">
+                      <div className="flex justify-start items-start bg-gray-100 text-gray-500 font-semibold text-md p-4 rounded-sm">
+                        {index + 1}. {question}
+                      </div>
+                      <div className="flex flex-col justify-start items-start space-y-3 ring-1 ring-inset ring-sky-200 bg-sky-50 text-gray-500 p-4 rounded-md">
+                        <div className="flex flex-row space-x-3 text-sm">
+                          <ChatBubbleLeftEllipsisIcon
+                            className="-mr-1 h-4 w-4 text-green-400 -scale-x-100"
+                            aria-hidden="true"
+                          />
+                          <div className="text-xs font-medium">Your answer</div>
+                        </div>
+                        <div className="font-light text-md">{quizAnswer}</div>
+                      </div>
+                      <div className="flex flex-col justify-start items-start space-y-3 ring-1 ring-inset ring-purple-300 bg-purple-200 text-gray-700 p-4 rounded-md">
+                        <div className="flex flex-row space-x-3 text-sm">
+                          <CheckBadgeIcon
+                            className="-mr-1 h-4 w-4 text-rose-400"
+                            aria-hidden="true"
+                          />
+                          <div className="text-xs font-medium">Actual answer</div>
+                        </div>
+                        <div className="font-light text-md">{answer}</div>
+                      </div>
+                      <div className="border border-gray-100 w-full flex justify-center" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
