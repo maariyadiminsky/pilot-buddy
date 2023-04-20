@@ -66,7 +66,7 @@ const SessionQuiz = () => {
 
   // add time if user enabled Timed option
   useEffect(() => {
-    if (!isTimed) return undefined;
+    if (!isTimed || !questionsLeft) return undefined;
 
     let timer: ReturnType<typeof setInterval>;
 
@@ -81,7 +81,7 @@ const SessionQuiz = () => {
     }
 
     return () => clearInterval(timer);
-  }, [isTimed, currentTime?.id, timeLeft]);
+  }, [isTimed, currentQuestion?.id, timeLeft, questionsLeft]);
 
   const {
     SpeechRecognition,
