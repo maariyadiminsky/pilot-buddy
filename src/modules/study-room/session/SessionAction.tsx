@@ -78,7 +78,6 @@ const SessionAction = ({ currentSession, handleSubmit, handleCancel }: SessionAc
     if (!name || !topic) return;
 
     const randomBrandColor = getRandomBrandColor('background');
-    console.log(`text-${randomBrandColor.slice(3)}`, randomBrandColor);
 
     handleSubmit({
       id: currentSession?.id || getUniqId(),
@@ -147,8 +146,8 @@ const SessionAction = ({ currentSession, handleSubmit, handleCancel }: SessionAc
           <div className="flex justify-end items-end">
             <BrandButton
               buttonType="submit"
-              text="Submit"
-              srText="add question"
+              text={currentSession ? 'Ok' : 'Submit'}
+              srText={currentSession ? 'edit question' : 'add question'}
               buttonClassType="solid"
             />
           </div>

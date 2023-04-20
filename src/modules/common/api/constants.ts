@@ -5,5 +5,6 @@ export const getData = (userId: number): string => `${baseUrl}/data/${userId}`;
 export const ROUTES = {
   HOMEPAGE_ROUTE: '/',
   STUDY_ROOM_ROUTE: '/study-room',
-  SESSION_ROUTE: '/study-room/session/:id',
+  SESSION_ROUTE: '/sessions/:id',
+  SESSION_START_ROUTE: '/sessions/:id/start',
 };

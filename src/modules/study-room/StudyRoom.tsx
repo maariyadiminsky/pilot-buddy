@@ -1,5 +1,3 @@
-// todo add typescript
-// @ts-nocheck
 import { PlusIcon, BookmarkSlashIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@modules/common/components/page/PageWrapper';
 import PinnedSessions, { type PinnedSessionType } from '@modules/study-room/session/PinnedSessions';
@@ -17,31 +15,32 @@ import { removeObjectFromArray, getUniqId } from '@common/utils';
 import { useNavigate } from 'react-router-dom';
 import Modal, { type ModalRef, type ModalDataType } from '@common/components/modal/Modal';
 import EmptyDataAction from '@common/components/empty/EmptyDataAction';
+import { type MenuOptionType } from '@common/components/dropdown/ActionMenu';
 
 const PINNED_SESSIONS_DATA = [
   {
-    id: '1',
+    id: '0',
     sessionId: '7',
     text: 'Pilot Exam Test #2',
     total: 17,
     className: 'bg-sky-600',
   },
   {
-    id: '2',
+    id: '1',
     sessionId: '6',
     text: 'CM Codes',
     total: 3,
     className: 'bg-pink-600',
   },
   {
-    id: '3',
+    id: '2',
     sessionId: '5',
     text: 'Practice',
     total: 6,
     className: 'bg-sky-600',
   },
   {
-    id: '4',
+    id: '3',
     sessionId: '4',
     text: 'Instruments Test #2',
     total: 9,
@@ -62,7 +61,7 @@ const SESSIONS_DATA = [
     id: '2',
     name: 'CM Codes',
     topic: 'Commercial Test dass',
-    questions: 10,
+    questions: 0,
     color: 'bg-yellow-600',
     textColor: 'text-yellow-600',
   },
@@ -130,32 +129,10 @@ const StudyRoom = () => {
     setSessions([...sessionsOrderedByTopic(SESSIONS_DATA)]);
   }, []);
 
-  const handleAddSession = (session: SessionSessionType) => {
+  const handleAddSession = (session: SessionType) => {
     const SessionsWithNewSession = sessionsWithNewSessionInOrder(session, sessions);
     setSessions(SessionsWithNewSession);
     return SessionsWithNewSession;
-  };
-
-  const handleSubmitSession = (session: SessionType) => {
-    setSessions(sessionsWithNewSessionInOrder(session, sessions));
-    setCurrentSession(undefined);
-    setShouldShowSessionAction(false);
-    setModalData(undefined);
-    // save in storage
-  };
-
-  const handleCancelAction = () => {
-    if (currentSession) {
-      handleAddSession(currentSession);
-      setCurrentSession(undefined);
-    }
-
-    setShouldShowSessionAction(false);
-  };
-
-  // eslint-disable-next-line
-  const handleStartSession = (id: string) => {
-    // handle start session
   };
 
   const handlePinSession = (session: SessionType) => {
@@ -182,7 +159,7 @@ const StudyRoom = () => {
         confirmChildren: 'Ok',
       });
 
-      modalRef.current.setModalOpen(true);
+      modalRef.current?.setModalOpen(true);
     }
   };
 
@@ -190,6 +167,29 @@ const StudyRoom = () => {
     setPinnedSessions(removeObjectFromArray(pinnedSessions, sessionId, 'sessionId'));
 
     // save update in storage
+  };
+
+  const handleSubmitSession = (session: SessionType) => {
+    setSessions(sessionsWithNewSessionInOrder(session, sessions));
+    setCurrentSession(undefined);
+    setShouldShowSessionAction(false);
+    setModalData(undefined);
+    handlePinSession(session);
+    // save in storage
+  };
+
+  const handleCancelAction = () => {
+    if (currentSession) {
+      handleAddSession(currentSession);
+      setCurrentSession(undefined);
+    }
+
+    setShouldShowSessionAction(false);
+  };
+
+  // eslint-disable-next-line
+  const handleStartSession = (id: string) => {
+    // handle start session
   };
 
   const handleRemoveSession = (id: string, customSessions?: SessionType[]) => {
@@ -215,7 +215,7 @@ const StudyRoom = () => {
       cancelChildren: 'Nevermind',
     });
 
-    modalRef.current.setModalOpen(true);
+    modalRef.current?.setModalOpen(true);
   };
 
   const handleEditSession = (id: string) => {
@@ -249,29 +249,32 @@ const StudyRoom = () => {
     []
   );
 
-  const getDropdownActions = (id: string) => [
-    {
-      text: 'Unpin',
-      srText: 'Unpin session',
-      icon: BookmarkSlashIcon,
-      handleOnClick: () => handleUnpinSession(id),
-    },
-    {
-      text: 'Start',
-      srText: 'Start session',
-      handleOnClick: () => handleStartSession(id),
-    },
-    {
-      text: 'Edit',
-      srText: 'Edit session',
-      handleOnClick: () => handleEditSession(id),
-    },
-    {
-      text: 'View',
-      srText: 'View session',
-      handleOnClick: () => navigate(`/sessions/${id}`),
-    },
-  ];
+  const getDropdownActions = (id: string, questionsCount: number) =>
+    [
+      {
+        text: 'Unpin',
+        srText: 'Unpin session',
+        icon: BookmarkSlashIcon,
+        handleOnClick: () => handleUnpinSession(id),
+      },
+      questionsCount
+        ? {
+            text: 'Start',
+            srText: 'Start session',
+            handleOnClick: () => navigate(`/sessions/${id}/start`),
+          }
+        : undefined,
+      {
+        text: 'Edit',
+        srText: 'Edit session',
+        handleOnClick: () => handleEditSession(id),
+      },
+      {
+        text: 'View',
+        srText: 'View session',
+        handleOnClick: () => navigate(`/sessions/${id}`),
+      },
+    ].filter((menuItem) => menuItem) as MenuOptionType[];
 
   const headerActions = useMemo(() => getHeaderActions(), []);
 

@@ -11,6 +11,7 @@ import { SyntheticEvent, useState, useEffect, useRef, useMemo } from 'react';
 import Modal, { type ModalRef } from '@common/components/modal/Modal';
 import { usePrevious } from '@common/hooks';
 import { getTimeData, getQuestionOrder } from '@modules/session-quiz/utils';
+import { useParams, useNavigate } from 'react-router-dom';
 
 interface SessionQuestionWithAnswerProps extends SessionQuestionType {
   quizAnswer: string;
@@ -26,6 +27,9 @@ const settingsOrder = 'sort'; // sort or random
 // todo: questions will come from an api endpoint within storage
 // temporarily using same data as in SessionQuestions
 const SessionQuiz = () => {
+  const { id: sessionId } = useParams();
+  const navigate = useNavigate();
+
   const modalRef = useRef<ModalRef>(null);
 
   const questionsOrdered = useMemo(
@@ -104,10 +108,14 @@ const SessionQuiz = () => {
 
   return (
     <div className="min-h-screen bg-white sm:bg-inherit">
-      <div className="flex items-start h-20 group hover:cursor-pointer mx-10 pt-10 2xl:mx-72">
+      <button
+        type="button"
+        onClick={() => navigate(`/sessions/${sessionId}`)}
+        className="flex items-start h-20 group hover:cursor-pointer mx-10 pt-10 2xl:mx-72"
+      >
         <ArrowUturnLeftIcon className="h-8 w-8 text-gray-500 group-hover:text-sky-600" />
-      </div>
-      <div className="justify-center flex flex-col 2xl:mx-96 mt-10">
+      </button>
+      <div className="justify-center flex flex-col mx-6 md:mx-24 2xl:mx-96 mt-10">
         <div className="flex flex-col w-full pb-20">
           {questionsLeft ? (
             <div
@@ -125,12 +133,12 @@ const SessionQuiz = () => {
           <div className="flex flex-col w-full justify-center items-center mb-20 pb-20 pt-16 px-3 sm:px-10 space-y-10 sm:border sm:border-sky-100 sm:rounded-2xl sm:shadow-xl bg-white">
             {questionsLeft ? (
               <>
-                <div className="font-semibold text-center w-full text-xl sm:text-2xl text-gray-900">
+                <div className="font-semibold text-center w-full text-2xl text-gray-900">
                   {currentQuestion.question}
                 </div>
                 <form
                   onSubmit={handleSetQuizAnswer}
-                  className="px-3 w-full flex flex-col space-y-10 justify-center items-center"
+                  className="px-3 2xl:px-24 w-full flex flex-col space-y-10 justify-center items-center"
                 >
                   <div className="relative overflow-hidden flex w-full rounded-lg shadow-sm ring-1 p-1 pt-2 py-10 ring-inset bg-white ring-sky-600 focus-within:ring-2 focus-within:ring-sky-700">
                     <label htmlFor="quizAnswer" className="sr-only">

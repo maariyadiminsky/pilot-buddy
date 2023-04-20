@@ -15,7 +15,7 @@ interface PinnedSessionProps {
   title: string;
   sessions: PinnedSessionItem[];
   handleEditSession: (id: string) => void;
-  getDropdownActions: (id: string) => MenuOptionType[];
+  getDropdownActions: (id: string, questionsCount: number) => MenuOptionType[];
 }
 
 export type PinnedSessionType = PinnedSessionItem;
@@ -52,7 +52,7 @@ const PinnedSession = ({
             </div>
             <ActionMenu
               name="pinned-items"
-              actions={getDropdownActions(sessionId)}
+              actions={getDropdownActions(sessionId, total)}
               useCustomPosition
             />
           </div>

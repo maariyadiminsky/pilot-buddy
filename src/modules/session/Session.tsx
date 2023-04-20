@@ -10,11 +10,14 @@ import { type SettingsToggleTypeWithId } from '@modules/session/settings/Session
 import TimeSelectMenu from './settings/TimeSelectMenu';
 import OrderSelectMenu from './settings/OrderSelectMenu';
 import { TIME_OPTIONS, ORDER_OPTIONS } from './constants';
-
+import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useMemo } from 'react';
 
 // todo: get session name and add to PageWrapper title
 const Session = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [shouldShowQuestionAction, setShouldShowQuestionAction] = useState(false);
   // if there are questions disable start session button
   const [questionsCount, setQuestionsCount] = useState(0);
@@ -25,13 +28,6 @@ const Session = () => {
   const [settingsOrder, setSettingsOrder] = useState<SelectMenuItemType>(ORDER_OPTIONS[0]);
   const [settingsTime, setSettingsTime] = useState<SelectMenuItemType>(TIME_OPTIONS[0]);
 
-  // eslint-disable-next-line
-  const handleStartSession = (id: number) => {
-    // handle start session
-  };
-
-  // const handleSetTime = (value: SelectMenuItemType) => setTimeSelected(value.name);
-
   const headerActions = useMemo(
     () =>
       [
@@ -41,7 +37,7 @@ const Session = () => {
           icon: PlayCircleIcon,
           buttonClassType: 'solidPink',
           isDisabled: questionsCount === 0,
-          handleOnClick: (id: number) => handleStartSession(id),
+          handleOnClick: () => navigate(`/sessions/${id}/start`),
         },
         {
           text: 'Add Question',

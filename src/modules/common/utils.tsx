@@ -1,6 +1,10 @@
-import uniqueId from 'lodash/uniqueId';
-
-export const getUniqId = (text?: string) => uniqueId(text);
+export const getUniqId = () =>
+  window?.crypto?.randomUUID()?.slice(16) ||
+  // backup incase former fails due to unexpected browser issues (but it shouldn't)
+  'xxxx-xxxx-xxx-xxxx'.replace(/[x]/g, () => {
+    const r = Math.floor(Math.random() * 16);
+    return r.toString(16);
+  });
 
 export const truthyString = (...classes: (string | undefined | boolean)[]) =>
   classes.filter(Boolean).join(' ');

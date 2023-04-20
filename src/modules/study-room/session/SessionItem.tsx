@@ -96,17 +96,20 @@ const SessionItem = ({
           'relative py-3.5 pl-3 pr-4 text-center text-sm font-medium sm:pr-6'
         )}
       >
-        <button
-          type="button"
-          onClick={() => handleStartSession(id)}
-          className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-        >
-          <PlayCircleIcon
-            className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-pink-600 hover:text-sky-600"
-            aria-hidden="true"
-          />
-          <span className="sr-only">Start session</span>
-        </button>
+        <Link to={`/sessions/${id}/start`}>
+          <button
+            type="button"
+            onClick={() => handleStartSession(id)}
+            disabled={!questions}
+            className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
+          >
+            <PlayCircleIcon
+              className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-pink-600 enabled:hover:text-sky-600"
+              aria-hidden="true"
+            />
+            <span className="sr-only">Start session</span>
+          </button>
+        </Link>
         <button
           type="button"
           onClick={() => handleEditSession(id)}
