@@ -74,7 +74,9 @@ const SessionQuiz = () => {
       setTimeLeft(currentTime?.timeUI);
     } else if (!timeLeft) {
       handleSetQuizAnswer();
-    } else if (timeLeft) {
+    }
+
+    if (timeLeft) {
       timer = setInterval(() => setTimeLeft(timeLeft - 1), 1200);
     }
 
