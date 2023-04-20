@@ -18,12 +18,12 @@ export const TIME_OPTIONS = [
 export const ORDER_OPTIONS = [
   {
     id: '0',
-    name: SessionOrderEnum.Sort,
+    name: SessionOrderEnum.sort,
     description: 'Questions will appear just as they are currently sorted now.',
   },
   {
     id: '1',
-    name: SessionOrderEnum.Random,
+    name: SessionOrderEnum.random,
     description: 'Questions will appear in random order.',
   },
 ];

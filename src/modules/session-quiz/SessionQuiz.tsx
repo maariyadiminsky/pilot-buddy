@@ -9,8 +9,8 @@ import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks/use
 import Dictaphone from '@modules/speech-recognition/Dictaphone';
 import { SyntheticEvent, useState, useEffect, useRef, useMemo } from 'react';
 import Modal, { type ModalRef } from '@common/components/modal/Modal';
-import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
 import { usePrevious } from '@common/hooks';
+import { getTimeData, getQuestionOrder } from '@modules/session-quiz/utils';
 
 interface SessionQuestionWithAnswerProps extends SessionQuestionType {
   quizAnswer: string;
@@ -20,24 +20,21 @@ type SessionQuestionWithAnswerType = SessionQuestionWithAnswerProps;
 
 // todo: get this from storage
 const isTimed = false;
-
-const getTimeData = (time?: SelectMenuItemType) => {
-  const timeNumber = time ? Number(time.name.split(' ')[0]) : 0;
-
-  return {
-    id: time?.id,
-    timeUI: timeNumber,
-    timeActual: timeNumber ? timeNumber * 1000 : 0,
-  };
-};
+const shouldHaveOrder = true;
+const settingsOrder = 'sort'; // sort or random
 
 // todo: questions will come from an api endpoint within storage
 // temporarily using same data as in SessionQuestions
 const SessionQuiz = () => {
   const modalRef = useRef<ModalRef>(null);
 
-  const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>(questionData?.[0]);
-  const [questionsLeft, setQuestionsLeft] = useState(questionData.length);
+  const questionsOrdered = useMemo(
+    () => (shouldHaveOrder ? getQuestionOrder(settingsOrder, questionData) : questionData),
+    []
+  );
+
+  const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>(questionsOrdered[0]);
+  const [questionsLeft, setQuestionsLeft] = useState(questionsOrdered.length);
   const [currentQuizAnswer, setCurrentQuizAnswer] = useState('');
   const [questionsWithAnswers, setQuestionsWithAnswers] =
     useState<SessionQuestionWithAnswerType[]>();
@@ -54,7 +51,7 @@ const SessionQuiz = () => {
       { ...currentQuestion, quizAnswer: currentQuizAnswer },
     ]);
     setCurrentQuizAnswer('');
-    setCurrentQuestion({ ...questionData[questionData.length - questionsLeftCount] });
+    setCurrentQuestion({ ...questionsOrdered[questionsOrdered.length - questionsLeftCount] });
   };
 
   const previousQuestion = usePrevious(currentQuestion);
@@ -120,7 +117,8 @@ const SessionQuiz = () => {
             >
               {isTimed && <div>Time: {timeLeft}</div>}
               <div>
-                {questionsLeft}/{questionData.length} question{questionData.length > 1 ? 's' : ''}
+                {questionsLeft}/{questionsOrdered.length} question
+                {questionsOrdered.length > 1 ? 's' : ''}
               </div>
             </div>
           ) : null}
