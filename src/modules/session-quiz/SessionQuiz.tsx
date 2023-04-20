@@ -17,7 +17,7 @@ interface SessionQuestionWithAnswerProps extends SessionQuestionType {
 type SessionQuestionWithAnswerType = SessionQuestionWithAnswerProps;
 
 // todo: get this from storage
-const isTimed = true;
+const isTimed = false;
 
 const getTimeData = (time?: SelectMenuItemType) => {
   const timeNumber = time ? Number(time.name.split(' ')[0]) : 0;
@@ -151,7 +151,7 @@ const SessionQuiz = () => {
                       setModalError={setModalError}
                       setModalOpen={modalRef.current?.setModalOpen}
                       microphoneSize="md"
-                      time={currentQuestion.time?.name}
+                      time={isTimed ? currentQuestion.time?.name : undefined}
                     />
                   </div>
                 </div>
