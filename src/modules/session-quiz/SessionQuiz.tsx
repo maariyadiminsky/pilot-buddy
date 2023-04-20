@@ -71,14 +71,10 @@ const SessionQuiz = () => {
     let timer: ReturnType<typeof setInterval>;
 
     if (previousQuestion?.id !== currentQuestion?.id) {
-      console.log('new time');
       setTimeLeft(currentTime?.timeUI);
     } else if (!timeLeft) {
       handleSetQuizAnswer();
-    }
-
-    if (timeLeft) {
-      console.log('less time');
+    } else if (timeLeft) {
       timer = setInterval(() => setTimeLeft(timeLeft - 1), 1200);
     }
 
