@@ -107,7 +107,7 @@ const SessionQuiz = () => {
 
   return (
     <div className="min-h-screen bg-white sm:bg-inherit">
-      <div className="flex items-start h-20 group hover:cursor-pointer mx-10 py-4 2xl:mx-72">
+      <div className="flex items-start h-20 group hover:cursor-pointer mx-10 pt-10 2xl:mx-72">
         <ArrowUturnLeftIcon className="h-8 w-8 text-gray-500 group-hover:text-sky-600" />
       </div>
       <div className="justify-center flex flex-col 2xl:mx-96 mt-10">

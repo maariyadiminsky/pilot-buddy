@@ -16,7 +16,7 @@ interface BrandButtonProps {
   text: string;
   srText: string;
   buttonClassType: keyof typeof ButtonClassTypeEnum;
-  disabled?: boolean;
+  isDisabled?: boolean;
   buttonType?: keyof typeof ButtonType;
   icon?: HeroIconType;
   handleOnClick?: (value?: any) => void;
@@ -38,7 +38,7 @@ const BrandButton = ({
   srText,
   buttonType,
   buttonClassType,
-  disabled,
+  isDisabled,
   icon,
   handleOnClick,
 }: BrandButtonProps) => {
@@ -48,7 +48,7 @@ const BrandButton = ({
     <button
       /* eslint-disable react/button-has-type */
       type={buttonType ?? 'button'}
-      disabled={disabled}
+      disabled={isDisabled}
       className={truthyString(
         'group subpixel-antialiased inline-flex justify-center items-center rounded-md w-44 h-9 text-sm shadow-sm disabled:group:text-gray-400 text-gray-900',
         styles[buttonClassType]
@@ -61,7 +61,7 @@ const BrandButton = ({
           className={truthyString(
             buttonClassType === 'clear' ? 'enabled:group-hover:text-white' : 'enabled:text-white',
             'font-light h-5 w-5 mr-1',
-            disabled ? ' group-hover:text-gray-400' : ''
+            isDisabled ? ' group-hover:text-gray-400' : ''
           )}
           aria-hidden="true"
         />

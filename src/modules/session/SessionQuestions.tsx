@@ -46,6 +46,7 @@ interface SessionQuestionsProps {
   isTimed: boolean;
   settingsTime: SelectMenuItemType;
   shouldShowQuestionAction: boolean;
+  setQuestionsCount: (value: number) => void;
   setShouldShowQuestionAction: (value: boolean) => void;
 }
 
@@ -58,19 +59,29 @@ const SessionQuestions = ({
   isTimed,
   settingsTime,
   shouldShowQuestionAction,
+  setQuestionsCount,
   setShouldShowQuestionAction,
 }: SessionQuestionsProps) => {
   const [questions, setQuestions] = useState<SessionQuestionType[]>(questionData);
   const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>();
 
+  const handleSetQuestions = (updatedQuestions: SessionQuestionType[]) => {
+    setQuestions(updatedQuestions);
+    setQuestionsCount(updatedQuestions?.length || 0);
+  };
+
   // Issue: https://medium.com/@wbern/getting-react-18s-strict-mode-to-work-with-react-beautiful-dnd-47bc909348e4
   // Cleanest fix: https://github.com/atlassian/react-beautiful-dnd/issues/2399#issuecomment-1503025577
   const [isComponentMounted, setIsMounted] = useState(false);
-  useEffect(() => setIsMounted(true), []);
+  useEffect(() => {
+    setIsMounted(true);
+    // for start session button
+    setQuestionsCount(questions?.length || 0);
+  }, []);
 
   const handleAddQuestion = (question: SessionQuestionType) => {
     const questionsWithNewQuestion = [...questions, { ...question }];
-    setQuestions(questionsWithNewQuestion);
+    handleSetQuestions(questionsWithNewQuestion);
     return questionsWithNewQuestion;
   };
 
@@ -83,7 +94,7 @@ const SessionQuestions = ({
   };
 
   const handleRemoveQuestion = (id: string, customQuestions?: SessionQuestionType[]) => {
-    setQuestions(removeObjectFromArray(customQuestions || questions, id, 'id'));
+    handleSetQuestions(removeObjectFromArray(customQuestions || questions, id, 'id'));
 
     // save to local or hidden folder in google drive
   };
@@ -135,7 +146,7 @@ const SessionQuestions = ({
     const questionsWithoutMovedQuestion = removeObjectFromArray(questions, draggableId, 'id');
 
     // add question to correct index
-    setQuestions([
+    handleSetQuestions([
       ...questionsWithoutMovedQuestion.slice(0, draggedTo),
       question,
       ...questionsWithoutMovedQuestion.slice(draggedTo),

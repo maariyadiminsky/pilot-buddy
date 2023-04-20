@@ -16,7 +16,8 @@ import { useState, useMemo } from 'react';
 // todo: get session name and add to PageWrapper title
 const Session = () => {
   const [shouldShowQuestionAction, setShouldShowQuestionAction] = useState(false);
-
+  // if there are questions disable start session button
+  const [questionsCount, setQuestionsCount] = useState(0);
   const [shouldReadOutLoud, setShouldReadOutLoud] = useState(false);
   const [shouldHaveOrder, setShouldHaveOrder] = useState(false);
   const [isTimed, setIsTimed] = useState(false);
@@ -39,6 +40,7 @@ const Session = () => {
           srText: 'Start session',
           icon: PlayCircleIcon,
           buttonClassType: 'solidPink',
+          isDisabled: questionsCount === 0,
           handleOnClick: (id: number) => handleStartSession(id),
         },
         {
@@ -46,11 +48,11 @@ const Session = () => {
           srText: 'Add question to session',
           icon: PlusIcon,
           buttonClassType: 'solid',
-          disabled: shouldShowQuestionAction,
+          isDisabled: shouldShowQuestionAction,
           handleOnClick: () => setShouldShowQuestionAction(true),
         },
       ] as BrandButtonType[],
-    [shouldShowQuestionAction]
+    [shouldShowQuestionAction, questionsCount]
   );
 
   const settings = useMemo(
@@ -97,6 +99,7 @@ const Session = () => {
             <SessionNotes />
             <SessionQuestions
               isTimed={isTimed}
+              setQuestionsCount={setQuestionsCount}
               settingsTime={isTimed && settingsTime}
               shouldShowQuestionAction={shouldShowQuestionAction}
               setShouldShowQuestionAction={setShouldShowQuestionAction}
