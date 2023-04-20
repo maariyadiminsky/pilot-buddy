@@ -5,7 +5,7 @@ import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { Fragment } from 'react';
 
 export interface SelectMenuItemType {
-  id: number;
+  id: string;
   name: string;
   description?: string;
 }

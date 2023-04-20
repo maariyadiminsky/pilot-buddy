@@ -23,6 +23,7 @@ interface DictaphoneProps {
   setModalError: (errorType: DictaphoneModalErrorType) => void;
   setModalOpen?: (value: boolean) => void;
   microphoneSize?: keyof typeof MicrophoneSize;
+  time?: string;
 }
 
 const getMicrophoneSize = (size: string = MicrophoneSize.sm) => {
@@ -44,6 +45,7 @@ const Dictaphone = ({
   setModalError,
   setModalOpen,
   microphoneSize,
+  time,
 }: DictaphoneProps) => {
   const { startListening, stopListening } = SpeechRecognition;
 
@@ -60,7 +62,7 @@ const Dictaphone = ({
   const stopListeningToAudio = async () => {
     let hasError = null;
     try {
-      await stopListening();
+      stopListening();
     } catch (error) {
       hasError = error;
     } finally {
@@ -71,7 +73,7 @@ const Dictaphone = ({
     }
   };
 
-  const startListeningToAudio = async () => {
+  const startListeningToAudio = () => {
     if (isDisabled) return;
 
     if (!isMicrophoneAvailable) {
@@ -81,7 +83,7 @@ const Dictaphone = ({
 
     let hasError = null;
     try {
-      await startListening({ continuous: false });
+      startListening({ continuous: false });
     } catch (error) {
       hasError = error;
     } finally {
@@ -96,15 +98,17 @@ const Dictaphone = ({
   useEffect(() => {
     if (isDisabled || !isMicrophoneAvailable) return undefined;
 
+    const timeToWaitUntilTurnOffMic = time ? Number(time.split(' ')[0]) * 1000 : 5000;
+
     // Turn off mic if user forgets or background noise persists.
     const timer = setTimeout(() => {
       if (isOn) {
         stopListeningToAudio();
       }
-    }, 5000);
+    }, timeToWaitUntilTurnOffMic);
 
     return () => clearTimeout(timer);
-  }, [isOn, isDisabled, isMicrophoneAvailable]);
+  }, [isOn, isDisabled, isMicrophoneAvailable, time]);
 
   return (
     <>

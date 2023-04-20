@@ -9,20 +9,20 @@ import {
 } from '@heroicons/react/20/solid';
 
 export const TIME_OPTIONS = [
-  { id: 0, name: SessionTimeEnum['5 Seconds'] },
-  { id: 1, name: SessionTimeEnum['10 Seconds'] },
-  { id: 2, name: SessionTimeEnum['15 Seconds'] },
-  { id: 3, name: SessionTimeEnum['20 Seconds'] },
+  { id: '0', name: SessionTimeEnum['5 Seconds'] },
+  { id: '1', name: SessionTimeEnum['10 Seconds'] },
+  { id: '2', name: SessionTimeEnum['15 Seconds'] },
+  { id: '3', name: SessionTimeEnum['20 Seconds'] },
 ];
 
 export const ORDER_OPTIONS = [
   {
-    id: 0,
+    id: '0',
     name: SessionOrderEnum.Sort,
     description: 'Questions will appear just as they are currently sorted now.',
   },
   {
-    id: 1,
+    id: '1',
     name: SessionOrderEnum.Random,
     description: 'Questions will appear in random order.',
   },

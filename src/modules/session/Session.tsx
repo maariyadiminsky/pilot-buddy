@@ -77,7 +77,8 @@ const Session = () => {
         {
           id: 2,
           title: 'Timed',
-          description: 'Each question is timed and automatically transitions to the next one.',
+          description:
+            "Every question has a timer and smoothly moves to the next (If the microphone is enabled during the quiz, it's duration aligns with the question's time).",
           getter: isTimed,
           setter: setIsTimed,
           settingChildren: isTimed && (

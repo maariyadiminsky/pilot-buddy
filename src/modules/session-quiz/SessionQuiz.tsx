@@ -5,14 +5,29 @@ import { questionData } from '@modules/session/SessionQuestions';
 import { type SessionQuestionType } from '@modules/session/question/SessionQuestionsList';
 import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks/useInitializeSpeechToText';
 import Dictaphone from '@modules/speech-recognition/Dictaphone';
-import { SyntheticEvent, useState, useEffect, useRef } from 'react';
+import { SyntheticEvent, useState, useEffect, useRef, useMemo } from 'react';
 import Modal, { type ModalRef } from '@common/components/modal/Modal';
+import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
+import { usePrevious } from '@common/hooks';
 
 interface SessionQuestionWithAnswerProps extends SessionQuestionType {
   quizAnswer: string;
 }
 
 type SessionQuestionWithAnswerType = SessionQuestionWithAnswerProps;
+
+// todo: get this from storage
+const isTimed = true;
+
+const getTimeData = (time?: SelectMenuItemType) => {
+  const timeNumber = time ? Number(time.name.split(' ')[0]) : 0;
+
+  return {
+    id: time?.id,
+    timeUI: timeNumber,
+    timeActual: timeNumber ? timeNumber * 1000 : 0,
+  };
+};
 
 // todo: questions will come from an api endpoint within storage
 // temporarily using same data as in SessionQuestions
@@ -25,6 +40,50 @@ const SessionQuiz = () => {
   const [questionsWithAnswers, setQuestionsWithAnswers] =
     useState<SessionQuestionWithAnswerType[]>();
   const [isMicrophoneOn, setIsMicrophoneOn] = useState(false);
+
+  const handleSetQuizAnswer = (event?: SyntheticEvent<Element>) => {
+    if (event) event.preventDefault();
+
+    const questionsLeftCount = questionsLeft - 1;
+
+    setQuestionsLeft(questionsLeftCount);
+    setQuestionsWithAnswers([
+      ...(questionsWithAnswers || []),
+      { ...currentQuestion, quizAnswer: currentQuizAnswer },
+    ]);
+    setCurrentQuizAnswer('');
+    setCurrentQuestion({ ...questionData[questionData.length - questionsLeftCount] });
+  };
+
+  const previousQuestion = usePrevious(currentQuestion);
+
+  const currentTime = useMemo(
+    () => (isTimed ? getTimeData(currentQuestion?.time) : null),
+    [currentQuestion?.time, currentQuestion?.id]
+  );
+
+  const [timeLeft, setTimeLeft] = useState(currentTime?.timeUI);
+
+  // add time if user enabled Timed option
+  useEffect(() => {
+    if (!isTimed) return undefined;
+
+    let timer: ReturnType<typeof setInterval>;
+
+    if (previousQuestion?.id !== currentQuestion?.id) {
+      console.log('new time');
+      setTimeLeft(currentTime?.timeUI);
+    } else if (!timeLeft) {
+      handleSetQuizAnswer();
+    }
+
+    if (timeLeft) {
+      console.log('less time');
+      timer = setInterval(() => setTimeLeft(timeLeft - 1), 1200);
+    }
+
+    return () => clearInterval(timer);
+  }, [isTimed, currentTime?.id, timeLeft]);
 
   const {
     SpeechRecognition,
@@ -46,31 +105,22 @@ const SessionQuiz = () => {
     setIsMicrophoneOn(value);
   };
 
-  const handleSetQuizAnswer = (event: SyntheticEvent<Element>) => {
-    event.preventDefault();
-
-    const questionsLeftCount = questionsLeft - 1;
-
-    setQuestionsLeft(questionsLeftCount);
-    setQuestionsWithAnswers([
-      ...(questionsWithAnswers || []),
-      { ...currentQuestion, quizAnswer: currentQuizAnswer },
-    ]);
-    setCurrentQuestion({ ...questionData[questionData.length - questionsLeftCount] });
-  };
-
   return (
     <div className="min-h-screen bg-white sm:bg-inherit flex flex-col items-center justify-center 2xl:mx-96">
       <div className="flex flex-col w-full px-20">
         {questionsLeft ? (
-          <div className="flex flex-row justify-between items-center w-full py-3 text-sm font-light text-gray-600">
-            <div>Time: ...</div>
-            <div className="">
+          <div
+            className={`flex flex-row ${
+              isTimed ? 'justify-between' : 'justify-end'
+            } items-center w-full py-3 text-sm font-light text-gray-600`}
+          >
+            {isTimed && <div>Time: {timeLeft}</div>}
+            <div>
               {questionsLeft}/{questionData.length} question{questionData.length > 1 ? 's' : ''}
             </div>
           </div>
         ) : null}
-        <div className="flex flex-col w-full justify-center items-center pb-20 pt-16 px-3 sm:px-10 sm:min-h-min space-y-10 sm:border sm:border-sky-100 sm:rounded-2xl sm:shadow-xl bg-white">
+        <div className="flex flex-col w-full justify-center items-center mb-20 pb-20 pt-16 px-3 sm:px-10 sm:min-h-min space-y-10 sm:border sm:border-sky-100 sm:rounded-2xl sm:shadow-xl bg-white">
           {questionsLeft ? (
             <>
               <div className="font-semibold text-center w-full text-xl sm:text-2xl text-gray-900">
@@ -103,6 +153,7 @@ const SessionQuiz = () => {
                       setModalError={setModalError}
                       setModalOpen={modalRef.current?.setModalOpen}
                       microphoneSize="md"
+                      time={currentQuestion.time?.name}
                     />
                   </div>
                 </div>

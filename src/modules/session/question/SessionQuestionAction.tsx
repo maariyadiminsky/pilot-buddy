@@ -96,7 +96,7 @@ const SessionQuestionAction = ({
   return (
     <>
       <form onSubmit={handleFormSubmit} className="py-10 px-8 xl:px-28">
-        <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-row justify-between items-center pb-4">
           <h2 className="flex flex-row items-center text-gray-900 font-medium">
             <PencilSquareIcon
               className="h-6 w-6 xl:h-5 xl:h5 flex-shrink-0 text-gray-700 hover:text-sky-600"
@@ -105,7 +105,7 @@ const SessionQuestionAction = ({
             {currentQuestion ? 'Edit' : 'Add a'} Question
           </h2>
           <div className="flex flex-row justify-end items-center space-x-3">
-            <TimeSelectMenu time={time} setTime={setTime} />
+            {isTimed && <TimeSelectMenu time={time} setTime={setTime} />}
             <button type="button" onClick={() => handleCancelAction()}>
               <XMarkIcon
                 className="h-6 w-6 -mt-1 flex-shrink-0 text-gray-700 hover:text-sky-600 hover:cursor-pointer"
@@ -180,8 +180,8 @@ const SessionQuestionAction = ({
           <div className="flex justify-end items-end pt-4">
             <BrandButton
               buttonType="submit"
-              text="Submit"
-              srText="add question"
+              text={currentQuestion ? 'Ok' : 'Submit'}
+              srText={currentQuestion ? 'Edit question' : 'Add a question'}
               buttonClassType="solid"
             />
           </div>
