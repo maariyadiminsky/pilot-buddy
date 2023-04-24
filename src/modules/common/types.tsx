@@ -4,6 +4,7 @@ import {
   SVGProps,
   PropsWithoutRef,
   RefAttributes,
+  ReactNode,
 } from 'react';
 
 export enum WrapperTypeEnum {
@@ -11,7 +12,7 @@ export enum WrapperTypeEnum {
   sidebar = 'sidebar',
 }
 
-export type ChildrenArrayType = PropsWithChildren;
+export type ChildrenArrayType = PropsWithChildren | ReactNode;
 
 export type HeroIconType = ForwardRefExoticComponent<
   PropsWithoutRef<SVGProps<SVGSVGElement>> & {

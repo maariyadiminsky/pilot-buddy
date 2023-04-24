@@ -1,31 +1,43 @@
 import BrandButton from '@common/components/button/BrandButton';
 import { getUniqId } from '@common/utils';
 import { PencilSquareIcon, XMarkIcon } from '@heroicons/react/20/solid';
-import { type SessionQuestionType } from '@modules/session/question/SessionQuestion';
+import { type SessionQuestionType } from '@modules/session/question/SessionQuestionsList';
 import Dictaphone from '@modules/speech-recognition/Dictaphone';
 import { SyntheticEvent, useState, useRef, useEffect } from 'react';
 import Modal, { type ModalRef } from '@common/components/modal/Modal';
 import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks/useInitializeSpeechToText';
+import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
+import TimeSelectMenu from '../settings/TimeSelectMenu';
+import { TIME_OPTIONS } from '../constants';
 
-interface QuestionActionProps {
+interface SessionQuestionActionProps {
+  isTimed: boolean;
+  settingsTime: SelectMenuItemType;
   currentQuestion?: SessionQuestionType;
   handleSubmit: (value: SessionQuestionType) => void;
   handleCancelAction: () => void;
 }
 
-const QuestionAction = ({
+const SessionQuestionAction = ({
+  isTimed,
+  settingsTime,
   handleSubmit,
   handleCancelAction,
   currentQuestion,
-}: QuestionActionProps) => {
+}: SessionQuestionActionProps) => {
   const modalRef = useRef<ModalRef>(null);
 
-  const [question, setQuestion] = useState(currentQuestion?.question || '');
-  const [answer, setAnswer] = useState<string | null | undefined>(currentQuestion?.answer || '');
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState<string | null | undefined>('');
   const [shouldShowEmptyQuestionWarning, setShouldShowEmptyQuestionWarning] = useState(false);
 
   const [isQuestionMicrophoneOn, setIsQuestionMicrophoneOn] = useState(false);
   const [isAnswerMicrophoneOn, setIsAnswerMicrophoneOn] = useState(false);
+
+  // time selected in edit panel
+  // only visible if Timed toggle is selecte in Settings
+  // Override initial settings
+  const [time, setTime] = useState<SelectMenuItemType>(settingsTime || TIME_OPTIONS[0]);
 
   const {
     SpeechRecognition,
@@ -42,7 +54,7 @@ const QuestionAction = ({
       setQuestion(currentQuestion.question);
       setAnswer(currentQuestion?.answer);
     }
-  }, [currentQuestion]);
+  }, [currentQuestion?.question, currentQuestion?.answer]);
 
   // when user uses microphone update correct one
   useEffect(() => {
@@ -71,10 +83,10 @@ const QuestionAction = ({
     }
 
     handleSubmit({
-      ...(currentQuestion || {}),
       id: currentQuestion?.id || getUniqId(),
       question,
       answer,
+      time: isTimed ? time || settingsTime : undefined,
     });
 
     setQuestion('');
@@ -83,23 +95,26 @@ const QuestionAction = ({
 
   return (
     <>
-      <form onSubmit={handleFormSubmit} className="pb-10 px-6">
-        <div className="flex flex-row justify-between items-center">
-          <h2 className="flex flex-row items-center py-4 text-gray-900 font-medium">
+      <form onSubmit={handleFormSubmit} className="py-10 px-8 xl:px-28">
+        <div className="flex flex-row justify-between items-center pb-4">
+          <h2 className="flex flex-row items-center text-gray-900 font-medium">
             <PencilSquareIcon
-              className="h-6 w-6 xl:h-5 xl:h5 flex-shrink-0 text-gray-700 hover:text-sky-700"
+              className="h-6 w-6 xl:h-5 xl:h5 flex-shrink-0 text-gray-700 hover:text-sky-600"
               aria-hidden="true"
             />
-            Add Question
+            {currentQuestion ? 'Edit' : 'Add a'} Question
           </h2>
-          <button type="button" onClick={() => handleCancelAction()}>
-            <XMarkIcon
-              className="h-6 w-6 flex-shrink-0 text-gray-700 hover:text-sky-700 hover:cursor-pointer"
-              aria-hidden="true"
-            />
-          </button>
+          <div className="flex flex-row justify-end items-center space-x-3">
+            {isTimed && <TimeSelectMenu time={time} setTime={setTime} />}
+            <button type="button" onClick={() => handleCancelAction()}>
+              <XMarkIcon
+                className="h-6 w-6 -mt-1 flex-shrink-0 text-gray-700 hover:text-sky-600 hover:cursor-pointer"
+                aria-hidden="true"
+              />
+            </button>
+          </div>
         </div>
-        <div className="flex flex-col mb-6">
+        <div className="flex flex-col h-24 -mb-2">
           <label
             htmlFor="question"
             className="justify-start items-start block text-sm font-semibold leading-6 text-pink-600"
@@ -111,7 +126,7 @@ const QuestionAction = ({
               type="text"
               name="question"
               id="question"
-              className="flex w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-700 sm:text-sm sm:leading-6"
+              className="flex w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
               placeholder="Write your question or use Voice Recognition --->"
               value={question}
               onChange={(event) => handleSetQuestion(event.target.value)}
@@ -129,14 +144,14 @@ const QuestionAction = ({
             </div>
           </div>
           {shouldShowEmptyQuestionWarning && (
-            <div className="flex items-center justify-start text-sm text-rose-500 pt-2 pb-0 mb-0">
+            <div className="flex items-center justify-start text-sm md:text-xs text-rose-500 pt-2 pb-0 mb-0">
               Question cannot be empty.
             </div>
           )}
         </div>
-        <div className="flex flex-col mt-2">
+        <div className="flex flex-col">
           <div className="flex justify-between">
-            <label htmlFor="answer" className="block text-sm font-semibold leading-6 text-sky-700">
+            <label htmlFor="answer" className="block text-sm font-semibold leading-6 text-sky-600">
               Answer <span className="font-normal">(Optional)</span>
             </label>
           </div>
@@ -145,7 +160,7 @@ const QuestionAction = ({
               type="text"
               name="answer"
               id="answer"
-              className="flex w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-700 sm:text-sm sm:leading-6"
+              className="flex w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
               placeholder="Write your answer or use Voice Recognition --->"
               value={answer || ''}
               onChange={(event) => setAnswer(event.target.value)}
@@ -165,8 +180,8 @@ const QuestionAction = ({
           <div className="flex justify-end items-end pt-4">
             <BrandButton
               buttonType="submit"
-              text="Submit"
-              srText="add question"
+              text={currentQuestion ? 'Ok' : 'Submit'}
+              srText={currentQuestion ? 'Edit question' : 'Add a question'}
               buttonClassType="solid"
             />
           </div>
@@ -177,4 +192,4 @@ const QuestionAction = ({
   );
 };
 
-export default QuestionAction;
+export default SessionQuestionAction;

@@ -1,3 +1,4 @@
+import { SessionTimeEnum, SessionOrderEnum } from './types';
 import {
   ExclamationTriangleIcon,
   InformationCircleIcon,
@@ -6,6 +7,26 @@ import {
   LightBulbIcon,
   MapPinIcon,
 } from '@heroicons/react/20/solid';
+
+export const TIME_OPTIONS = [
+  { id: '0', name: SessionTimeEnum['5 Seconds'] },
+  { id: '1', name: SessionTimeEnum['10 Seconds'] },
+  { id: '2', name: SessionTimeEnum['15 Seconds'] },
+  { id: '3', name: SessionTimeEnum['20 Seconds'] },
+];
+
+export const ORDER_OPTIONS = [
+  {
+    id: '0',
+    name: SessionOrderEnum.sort,
+    description: 'Questions will appear just as they are currently sorted now.',
+  },
+  {
+    id: '1',
+    name: SessionOrderEnum.random,
+    description: 'Questions will appear in random order.',
+  },
+];
 
 export const NOTE_TYPES = [
   {
@@ -41,13 +62,13 @@ export const NOTE_TYPES = [
     value: 'location',
     icon: MapPinIcon,
     iconColor: 'text-white',
-    bgColor: 'bg-purple-700',
+    bgColor: 'bg-purple-600',
   },
   {
     name: 'Link',
     value: 'link',
     icon: LinkIcon,
-    iconColor: 'text-sky-700',
+    iconColor: 'text-sky-600',
     bgColor: 'bg-white',
   },
 ];

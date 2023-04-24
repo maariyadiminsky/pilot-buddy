@@ -1,6 +1,7 @@
 import { ROUTES } from '@modules/common/api/constants';
 import NotFoundPage from '@modules/common/components/page/page-status/NotFoundPage';
-import StudySession from '@modules/session/Session';
+import Session from '@modules/session/Session';
+import SessionQuiz from '@modules/session-quiz/SessionQuiz';
 import StudyRoom from '@modules/study-room/StudyRoom';
 import { persistor, store } from '@redux/store/reducers/store';
 import React from 'react';
@@ -14,8 +15,9 @@ const App: React.FC = () => (
       <Router>
         <Routes>
           <Route path="*" element={<NotFoundPage />} />
-          <Route path={ROUTES.STUDY_ROOM_ROUTE} element={<StudyRoom />} />
-          <Route path={ROUTES.HOMEPAGE_ROUTE} element={<StudySession />} />
+          <Route path="/" element={<StudyRoom />} />
+          <Route path={ROUTES.SESSION_ROUTE} element={<Session />} />
+          <Route path={ROUTES.SESSION_START_ROUTE} element={<SessionQuiz />} />
         </Routes>
       </Router>
     </PersistGate>

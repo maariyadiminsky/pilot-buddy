@@ -19,10 +19,11 @@ export interface ModalDataType {
   children?: ReactNode;
   confirmChildren?: ReactNode;
   cancelChildren?: ReactNode;
+  handleConfirm?: () => void;
 }
 
 const Modal = (
-  { title, children, confirmChildren, cancelChildren }: ModalDataType,
+  { title, children, confirmChildren, cancelChildren, handleConfirm }: ModalDataType,
   ref: ForwardedRef<ModalRef>
 ) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,6 +31,11 @@ const Modal = (
   useImperativeHandle(ref, () => ({
     setModalOpen: setIsOpen,
   }));
+
+  const handleButtonConfirm = () => {
+    handleConfirm?.();
+    setIsOpen(false);
+  };
 
   const cancelButtonRef = useRef(null);
 
@@ -72,7 +78,7 @@ const Modal = (
                     </div>
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                       <Dialog.Title
-                        as="h3"
+                        as="h2"
                         className="text-base font-semibold leading-6 text-gray-900"
                       >
                         {title}
@@ -96,7 +102,7 @@ const Modal = (
                     <button
                       type="button"
                       className="inline-flex w-full justify-end rounded-md bg-red-600 px-12 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                      onClick={() => setIsOpen(false)}
+                      onClick={handleButtonConfirm}
                     >
                       {confirmChildren}
                     </button>

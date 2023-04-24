@@ -2,7 +2,7 @@ import { SyntheticEvent, Fragment, useState, useEffect } from 'react';
 import { PlusCircleIcon, EyeIcon } from '@heroicons/react/20/solid';
 import { Listbox, Transition } from '@headlessui/react';
 import { truthyString, getUniqId } from '@common/utils';
-import { NOTE_TYPES } from '@modules/session/notes/constants';
+import { NOTE_TYPES } from '@modules/session/constants';
 import NoteIcon from '@modules/session/notes/NoteIcon';
 import { type NoteDataType } from '@modules/session/notes/Note';
 
@@ -59,10 +59,10 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
   if (shouldHide) return null;
 
   return (
-    <div className="flex items-start space-x-4 px-4">
-      <div className="min-w-0 flex-1">
+    <div className="flex items-start space-x-4 px-4 mb-3">
+      <div className="min-w-0 flex-1 h-36">
         <form onSubmit={handleFormSubmit} className="relative">
-          <div className="overflow-hidden w-full rounded-lg shadow-sm ring-1 ring-inset bg-white ring-gray-300 focus-within:ring-2 focus-within:ring-sky-700">
+          <div className="overflow-hidden w-full rounded-lg shadow-sm ring-1 ring-inset bg-white ring-gray-300 focus-within:ring-2 focus-within:ring-sky-600">
             <label htmlFor="note" className="sr-only">
               Add a note here
             </label>
@@ -105,7 +105,7 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
                             onClick={() => handleHideNote(true)}
                           >
                             <EyeIcon
-                              className="w-6 h-6 flex-shrink-0 text-gray-300 hover:text-sky-700"
+                              className="w-6 h-6 flex-shrink-0 text-gray-300 hover:text-sky-600"
                               aria-hidden="true"
                             />
                           </button>
@@ -149,7 +149,7 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
               </span>
               <button
                 type="submit"
-                className="inline-flex items-center rounded-md bg-sky-700 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="inline-flex items-center rounded-md bg-sky-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 <span className="sr-only">Add a note</span>
                 <PlusCircleIcon className="h-4 w-4" aria-hidden="true" />
@@ -158,7 +158,7 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
           </div>
         </form>
         {shouldShowEmptyTextWarning && (
-          <div className="flex items-center justify-start text-sm text-rose-500 py-2">
+          <div className="flex items-center justify-start text-sm md:text-xs text-rose-500 py-2">
             Note cannot be empty.
           </div>
         )}

@@ -1,5 +1,4 @@
 import Note, { type NoteDataType } from '@modules/session/notes/Note';
-import { getUniqId } from '@common/utils';
 
 interface NotesProps {
   notes: NoteDataType[];
@@ -8,10 +7,10 @@ interface NotesProps {
 }
 
 const Notes = ({ notes, handleRemoveNote, handleEditNote }: NotesProps) => (
-  <ul className="divide-y divide-solid max-h-screen overflow-y-auto smooth-scroll overscroll-contain relative">
+  <ul className="divide-y divide-solid overflow-y-auto xl:h-[calc(100vh-250px)] smooth-scroll relative">
     {notes.map((note) => (
       <Note
-        key={getUniqId()}
+        key={note.id}
         {...note}
         handleRemoveNote={handleRemoveNote}
         handleEditNote={handleEditNote}

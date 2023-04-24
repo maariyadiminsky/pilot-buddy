@@ -1,5 +1,5 @@
 import { type HeroIconType } from '@common/types';
-import { truthyString, getUniqId } from '@common/utils';
+import { truthyString } from '@common/utils';
 import { Menu, Transition } from '@headlessui/react';
 import { EllipsisVerticalIcon, BarsArrowUpIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Fragment, useRef, useState } from 'react';
@@ -8,31 +8,29 @@ export enum DropdownTypeEnum {
   sort = 'sort',
 }
 
-interface MenuOption {
+export interface MenuOptionType {
   text: string;
   srText: string;
   icon?: HeroIconType;
   handleOnClick?: () => void;
 }
 
-interface DropdownMenuProps {
+interface ActionMenuProps {
   name: string;
-  actions: MenuOption[];
+  actions: MenuOptionType[];
   className?: string;
   useCustomPosition?: boolean;
   type?: keyof typeof DropdownTypeEnum;
 }
 
-const DropdownMenu = ({ name, actions, className, type, useCustomPosition }: DropdownMenuProps) => {
+const ActionMenu = ({ name, actions, className, type, useCustomPosition }: ActionMenuProps) => {
   const menuRef = useRef<HTMLElement | null>(null);
   const [menuAdjustment, setMenuAdjustment] = useState('');
 
   const shouldAdjustMenuRelativeToWindow = () => {
     if (!menuRef.current) return;
-
     const elementDimensions = menuRef.current?.getBoundingClientRect();
     const { x } = elementDimensions;
-
     setMenuAdjustment(x > window.outerWidth - 200 ? 'right-0' : '');
   };
 
@@ -58,7 +56,7 @@ const DropdownMenu = ({ name, actions, className, type, useCustomPosition }: Dro
           <EllipsisVerticalIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
         );
         buttonClassName =
-          'h-8 w-8 items-center justify-center rounded-full text-gray-900 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-700 focus:ring-offset-2';
+          'h-8 w-8 items-center justify-center rounded-full text-gray-900 hover:text-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2';
     }
 
     return (
@@ -86,7 +84,7 @@ const DropdownMenu = ({ name, actions, className, type, useCustomPosition }: Dro
       >
         <Menu.Items
           className={truthyString(
-            'absolute z-10 mt-1 w-40 origin-top-right divide-y divide-gray-200 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
+            'absolute z-20 mt-1 w-40 origin-top-right divide-y divide-gray-200 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
             className,
             menuAdjustment,
             !useCustomPosition && 'right-0'
@@ -97,12 +95,12 @@ const DropdownMenu = ({ name, actions, className, type, useCustomPosition }: Dro
             // Property 'icon' does not exist on type 'JSX.IntrinsicElements'.
             const Icon = icon;
 
-            const hasIconClass = (active: boolean) => (active ? 'text-sky-700' : 'text-gray-700');
+            const hasIconClass = (active: boolean) => (active ? 'text-sky-600' : 'text-gray-700');
             const noIconClass = (active: boolean) =>
-              active ? 'bg-sky-700 text-white' : 'text-gray-700';
+              active ? 'bg-sky-600 text-white' : 'text-gray-700';
 
             return (
-              <Menu.Item key={getUniqId(text)}>
+              <Menu.Item key={index}>
                 {({ active }) => (
                   <button
                     type="button"
@@ -129,4 +127,4 @@ const DropdownMenu = ({ name, actions, className, type, useCustomPosition }: Dro
     </Menu>
   );
 };
-export default DropdownMenu;
+export default ActionMenu;
