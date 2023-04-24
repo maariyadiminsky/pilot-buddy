@@ -18,9 +18,9 @@ export const getQuestionOrder = (
   sessions: SessionQuestionType[]
 ) => {
   switch (orderType) {
-    case SessionOrderEnum.random:
+    case SessionOrderEnum.Random:
       return shuffle(sessions);
-    case SessionOrderEnum.sort:
+    case SessionOrderEnum.Sort:
     default:
       return sessions;
   }

@@ -5,7 +5,7 @@ import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { Fragment } from 'react';
 
 export interface SelectMenuItemType {
-  id: string;
+  id: number;
   name: string;
   description?: string;
 }
@@ -73,6 +73,7 @@ const SelectMenu = ({ title, icon, options, currentlySelected, handleSelect }: S
                           <span
                             className={truthyString(
                               selected ? 'font-semibold' : 'font-normal',
+                              icon && 'pl-1',
                               'block truncate'
                             )}
                           >

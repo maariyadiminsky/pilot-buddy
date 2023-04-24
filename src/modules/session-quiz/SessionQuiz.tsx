@@ -22,7 +22,7 @@ type SessionQuestionWithAnswerType = SessionQuestionWithAnswerProps;
 // todo: get this from storage
 const isTimed = false;
 const shouldHaveOrder = true;
-const settingsOrder = 'sort'; // sort or random
+const settingsOrder = 'Sort'; // sort or random
 
 // todo: questions will come from an api endpoint within storage
 // temporarily using same data as in SessionQuestions
@@ -80,6 +80,8 @@ const SessionQuiz = () => {
     }
 
     if (timeLeft) {
+      // a few milliseconds in case user is using speech to text
+      // since there is a slight delay for the text to print
       timer = setInterval(() => setTimeLeft(timeLeft - 1), 1200);
     }
 
