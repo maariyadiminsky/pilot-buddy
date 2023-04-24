@@ -3,14 +3,20 @@ import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu'
 import { VOICE_OPTIONS, APPROVED_VOICES } from '@modules/speech-synthesis/constants';
 
 // todo: issues on mobile - https://talkrapp.com/speechSynthesis.html
-export const useSpeechSynthesis = (text: string) => {
+export const useSpeechSynthesis = (
+  text?: string,
+  initialVoice?: SelectMenuItemType,
+  initialRate?: number,
+  initialPitch?: number,
+  initialVolume?: number
+) => {
   const [isPaused, setIsPaused] = useState(false);
   const [speech, setSpeech] = useState<SpeechSynthesisUtterance>();
-  const [voice, setVoice] = useState<SelectMenuItemType>(VOICE_OPTIONS[0]);
+  const [voice, setVoice] = useState<SelectMenuItemType>(initialVoice || VOICE_OPTIONS[0]);
   const [voiceOptions, setVoiceOptions] = useState<SpeechSynthesisVoice[]>([]);
-  const [pitch, setPitch] = useState(1);
-  const [rate, setRate] = useState(1);
-  const [volume, setVolume] = useState(1);
+  const [pitch, setPitch] = useState(initialPitch || 1);
+  const [rate, setRate] = useState(initialRate || 1);
+  const [volume, setVolume] = useState(initialVolume || 1);
 
   // window.speechSynthesis.getVoices() has a loading delay
   useEffect(() => {
@@ -27,7 +33,7 @@ export const useSpeechSynthesis = (text: string) => {
         const approvedVoices = voices.filter(({ name }) => APPROVED_VOICES.includes(name));
 
         setVoiceOptions(approvedVoices);
-        setVoice(VOICE_OPTIONS[0]);
+        setVoice(initialVoice || VOICE_OPTIONS[0]);
 
         clearTimeout(timer);
       }
@@ -48,10 +54,24 @@ export const useSpeechSynthesis = (text: string) => {
     };
   }, [text]);
 
-  const handlePlay = () => {
+  const handleVoicePlay = (customText?: string) => {
     if (isPaused) {
       window.speechSynthesis.resume();
+    } else if (customText) {
+      const speechSynthesisUtterance = new SpeechSynthesisUtterance(customText);
+
+      speechSynthesisUtterance.voice =
+        voiceOptions.find((voiceOption) => voiceOption.name === voice.name) || null;
+
+      speechSynthesisUtterance.pitch = pitch;
+      speechSynthesisUtterance.rate = rate;
+      speechSynthesisUtterance.volume = volume;
+
+      setSpeech(speechSynthesisUtterance);
+
+      window.speechSynthesis.speak(speechSynthesisUtterance);
     } else if (speech && voice) {
+      console.log('in speech and voice');
       speech.voice = voiceOptions.find((voiceOption) => voiceOption.name === voice.name) || null;
       speech.pitch = pitch;
       speech.rate = rate;
@@ -63,12 +83,12 @@ export const useSpeechSynthesis = (text: string) => {
     setIsPaused(false);
   };
 
-  const handlePause = () => {
+  const handleVoicePause = () => {
     setIsPaused(true);
     window.speechSynthesis.pause();
   };
 
-  const handleStop = () => {
+  const handleVoiceStop = () => {
     setIsPaused(false);
     window.speechSynthesis.cancel();
   };
@@ -95,9 +115,9 @@ export const useSpeechSynthesis = (text: string) => {
     volume,
     isPaused,
     voiceOptions,
-    handlePlay,
-    handlePause,
-    handleStop,
+    handleVoicePlay,
+    handleVoicePause,
+    handleVoiceStop,
     handleVoiceChange,
     handlePitchChange,
     handleRateChange,
