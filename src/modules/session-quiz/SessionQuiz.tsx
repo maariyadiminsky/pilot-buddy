@@ -11,6 +11,7 @@ import { SyntheticEvent, useState, useEffect, useRef, useMemo } from 'react';
 import Modal, { type ModalRef } from '@common/components/modal/Modal';
 import { usePrevious } from '@common/hooks';
 import { getTimeData, getQuestionOrder } from '@modules/session-quiz/utils';
+import { useSpeechSynthesis } from '@modules/speech-synthesis/hooks';
 import { useParams, useNavigate } from 'react-router-dom';
 
 interface SessionQuestionWithAnswerProps extends SessionQuestionType {
@@ -22,7 +23,14 @@ type SessionQuestionWithAnswerType = SessionQuestionWithAnswerProps;
 // todo: get this from storage
 const isTimed = false;
 const shouldHaveOrder = true;
-const settingsOrder = 'sort'; // sort or random
+const settingsOrder = 'Sort'; // sort or random
+const shouldReadOutLoud = true;
+const speechSynthesisData = {
+  voice: { id: 0, name: 'Daniel' },
+  pitch: 1,
+  rate: 1,
+  volume: 1,
+};
 
 // todo: questions will come from an api endpoint within storage
 // temporarily using same data as in SessionQuestions
@@ -44,8 +52,38 @@ const SessionQuiz = () => {
     useState<SessionQuestionWithAnswerType[]>();
   const [isMicrophoneOn, setIsMicrophoneOn] = useState(false);
 
+  const previousQuestion = usePrevious(currentQuestion);
+
+  const { handleVoicePlay, handleVoiceStop } = useSpeechSynthesis(
+    undefined,
+    speechSynthesisData.voice,
+    speechSynthesisData.rate,
+    speechSynthesisData.pitch,
+    speechSynthesisData.volume
+  );
+
+  useEffect(() => {
+    window.onpopstate = () => handleVoiceStop();
+  });
+
+  useEffect(() => {
+    // voice setting is on and page loaded and
+    // not last question item(edge case where page re-renders when they are in results page.)
+    if (
+      shouldReadOutLoud &&
+      previousQuestion?.id === currentQuestion?.id &&
+      currentQuestion.id !== questionsOrdered[questionsOrdered.length - 1].id
+    ) {
+      // todo - bug - plays default voice first
+      // I suspect because window.speechSynthesis.getVoices() hasn't completed loading.
+      handleVoicePlay(currentQuestion?.question);
+    }
+  }, [previousQuestion?.id, currentQuestion?.id]);
+
   const handleSetQuizAnswer = (event?: SyntheticEvent<Element>) => {
     if (event) event.preventDefault();
+
+    if (shouldReadOutLoud) handleVoiceStop();
 
     const questionsLeftCount = questionsLeft - 1;
 
@@ -55,10 +93,14 @@ const SessionQuiz = () => {
       { ...currentQuestion, quizAnswer: currentQuizAnswer },
     ]);
     setCurrentQuizAnswer('');
-    setCurrentQuestion({ ...questionsOrdered[questionsOrdered.length - questionsLeftCount] });
-  };
 
-  const previousQuestion = usePrevious(currentQuestion);
+    const current = questionsOrdered[questionsOrdered.length - questionsLeftCount];
+    setCurrentQuestion({ ...current });
+
+    if (shouldReadOutLoud && current) {
+      handleVoicePlay(current?.question);
+    }
+  };
 
   const currentTime = useMemo(
     () => (isTimed ? getTimeData(currentQuestion?.time) : null),
@@ -80,6 +122,8 @@ const SessionQuiz = () => {
     }
 
     if (timeLeft) {
+      // a few milliseconds in case user is using speech to text
+      // since there is a slight delay for the text to print
       timer = setInterval(() => setTimeLeft(timeLeft - 1), 1200);
     }
 
@@ -110,7 +154,10 @@ const SessionQuiz = () => {
     <div className="min-h-screen bg-white sm:bg-inherit">
       <button
         type="button"
-        onClick={() => navigate(`/sessions/${sessionId}`)}
+        onClick={() => {
+          handleVoiceStop();
+          navigate(`/sessions/${sessionId}`);
+        }}
         className="flex items-start h-20 group hover:cursor-pointer mx-10 pt-10 2xl:mx-72"
       >
         <ArrowUturnLeftIcon className="h-8 w-8 text-gray-500 group-hover:text-sky-600" />

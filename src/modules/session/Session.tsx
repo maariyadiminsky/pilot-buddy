@@ -7,6 +7,7 @@ import SessionNotes from '@modules/session/SessionNotes';
 import SessionQuestions from '@modules/session/SessionQuestions';
 import SessionSettings from '@modules/session/SessionSettings';
 import { type SettingsToggleTypeWithId } from '@modules/session/settings/SessionSetting';
+import SpeechSynthesis from '@modules/speech-synthesis/SpeechSynthesis';
 import TimeSelectMenu from './settings/TimeSelectMenu';
 import OrderSelectMenu from './settings/OrderSelectMenu';
 import { TIME_OPTIONS, ORDER_OPTIONS } from './constants';
@@ -56,10 +57,13 @@ const Session = () => {
       [
         {
           id: 0,
-          title: 'Text-to-Speech',
+          title: 'Voice',
           description: 'During the session, your questions will be read aloud for you.',
           getter: shouldReadOutLoud,
           setter: setShouldReadOutLoud,
+          settingChildren: shouldReadOutLoud && (
+            <SpeechSynthesis text="This is how your question will sound." />
+          ),
         },
         {
           id: 1,

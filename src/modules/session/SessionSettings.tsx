@@ -13,7 +13,7 @@ const SessionSettings = ({ settings }: SessionSettingProps) => (
       <div className="pt-8">
         <h2 className="text-sm font-semibold">Settings</h2>
       </div>
-      <ul className="flex flex-col divide-y divide-gray-200 -mt-3">
+      <ul className="flex flex-col divide-y divide-gray-200">
         {settings.map((setting) => (
           <SettingToggle key={setting.id} {...setting} />
         ))}

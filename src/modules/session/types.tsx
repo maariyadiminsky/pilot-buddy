@@ -6,6 +6,6 @@ export enum SessionTimeEnum {
 }
 
 export enum SessionOrderEnum {
-  sort = 'sort',
-  random = 'random',
+  Sort = 'Sort',
+  Random = 'Random',
 }
