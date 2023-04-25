@@ -63,6 +63,10 @@ const SessionQuiz = () => {
   );
 
   useEffect(() => {
+    window.onpopstate = () => handleVoiceStop();
+  });
+
+  useEffect(() => {
     // voice setting is on and page loaded and
     // not last question item(edge case where page re-renders when they are in results page.)
     if (
