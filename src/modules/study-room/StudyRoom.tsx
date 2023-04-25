@@ -118,6 +118,7 @@ const StudyRoom = () => {
   const [sessions, setSessions] = useState<SessionType[]>([]);
   const [pinnedSessions, setPinnedSessions] = useState<PinnedSessionType[]>(PINNED_SESSIONS_DATA);
   const [currentSession, setCurrentSession] = useState<SessionType>();
+  const [isEditingPinnedSession, setIsEditingPinnedSession] = useState(false);
 
   const pinnedSessionIds = useMemo(
     () => (pinnedSessions?.length ? getPinnedSessionsIds(pinnedSessions) : []),
@@ -174,7 +175,12 @@ const StudyRoom = () => {
     setCurrentSession(undefined);
     setShouldShowSessionAction(false);
     setModalData(undefined);
-    handlePinSession(session);
+
+    if (isEditingPinnedSession) {
+      handlePinSession(session);
+      setIsEditingPinnedSession(false);
+    }
+
     // save in storage
   };
 
@@ -218,7 +224,7 @@ const StudyRoom = () => {
     modalRef.current?.setModalOpen(true);
   };
 
-  const handleEditSession = (id: string) => {
+  const handleEditSession = (id: string, isPin?: boolean) => {
     // in the case they were editing before and just hit edit again
     // add back the last item user was editing.
     // This also acts as a cancel of the last edit.
@@ -230,6 +236,7 @@ const StudyRoom = () => {
     }
 
     setCurrentSession(sessions.find((session) => session.id === id));
+    setIsEditingPinnedSession(Boolean(isPin));
     setShouldShowSessionAction(true);
 
     // save update in storage
@@ -267,7 +274,7 @@ const StudyRoom = () => {
       {
         text: 'Edit',
         srText: 'Edit session',
-        handleOnClick: () => handleEditSession(id),
+        handleOnClick: () => handleEditSession(id, true),
       },
       {
         text: 'View',
