@@ -1,4 +1,5 @@
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
+import { Link } from 'react-router-dom';
 
 const Homepage = () => {
   const handleStartSession = () => {
@@ -41,18 +42,20 @@ const Homepage = () => {
             ease.
           </p>
           <div className="mt-10 flex justify-start">
-            <button
-              type="button"
-              onClick={() => handleStartSession()}
-              className="flex justify-center items-center group space-x-3 bg-sky-600 hover:bg-sky-500 px-6 py-3 rounded-md"
-            >
-              <span className="text-white">Get Started</span>
-              <ArrowRightIcon
-                className="h-5 w-5 opacity-90 flex-shrink-0 text-white"
-                aria-hidden="true"
-              />
-              <span className="sr-only">Login</span>
-            </button>
+            <Link to="/auth">
+              <button
+                type="button"
+                onClick={() => handleStartSession()}
+                className="flex justify-center items-center group space-x-3 bg-sky-600 hover:bg-sky-500 px-6 py-3 rounded-md"
+              >
+                <span className="text-white">Get Started</span>
+                <ArrowRightIcon
+                  className="h-5 w-5 opacity-90 flex-shrink-0 text-white"
+                  aria-hidden="true"
+                />
+                <span className="sr-only">Login</span>
+              </button>
+            </Link>
           </div>
         </div>
         <div className="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32">
