@@ -5,27 +5,27 @@ import SessionQuiz from '@modules/session-quiz/SessionQuiz';
 import StudyRoom from '@modules/study-room/StudyRoom';
 import Homepage from '@modules/home/Homepage';
 import Login from '@modules/auth/Login';
-import { persistor, store } from '@redux/store/reducers/store';
-import React from 'react';
-import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { PersistGate } from 'redux-persist/integration/react';
+import { FC, useContext } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { AuthContext } from '@modules/auth/AuthProvider';
+import PrivateRoutes from '@modules/auth/PrivateRoutes';
 
-const App: React.FC = () => (
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <Router>
-        <Routes>
-          <Route path="*" element={<NotFoundPage />} />
-          <Route path="/" element={<Homepage />} />
-          <Route path={ROUTES.LOGIN_ROUTE} element={<Login />} />
-          <Route path={ROUTES.STUDY_ROOM_ROUTE} element={<StudyRoom />} />
-          <Route path={ROUTES.SESSION_ROUTE} element={<Session />} />
-          <Route path={ROUTES.SESSION_START_ROUTE} element={<SessionQuiz />} />
-        </Routes>
-      </Router>
-    </PersistGate>
-  </Provider>
-);
+const App: FC = () => {
+  const { isLoggedIn, isAuthLoading } = useContext(AuthContext);
+
+  return isAuthLoading ? (
+    <div>Loading...</div>
+  ) : (
+    <Routes>
+      <Route path="*" element={<NotFoundPage />} />
+      <Route path="/" element={isLoggedIn ? <StudyRoom /> : <Homepage />} />
+      <Route path={ROUTES.LOGIN_ROUTE} element={<Login />} />
+      <Route element={<PrivateRoutes isLoggedIn={isLoggedIn} />}>
+        <Route path={ROUTES.SESSION_ROUTE} element={<Session />} />
+        <Route path={ROUTES.SESSION_START_ROUTE} element={<SessionQuiz />} />
+      </Route>
+    </Routes>
+  );
+};
 
 export default App;

@@ -46,7 +46,6 @@ module.exports = {
     '@typescript-eslint/ban-ts-ignore': 0,
     '@typescript-eslint/explicit-member-accessibility': 0,
     '@typescript-eslint/member-delimiter-style': 0,
-    '@typescript-eslint/no-empty-function': 0,
     '@typescript-eslint/no-explicit-any': 0,
     indent: 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
@@ -145,7 +144,7 @@ module.exports = {
 
     // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-empty-function.md
     'no-empty-function': 'off',
-    '@typescript-eslint/no-empty-function': ['error'],
+    '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions'] }],
 
     // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-shadow.md
     'no-shadow': 'off',
