@@ -1,4 +1,4 @@
-import { getUniqId } from '@common/utils';
+import { getUniqId, capitalize } from '@common/utils';
 import { getRandomBrandColor } from '@modules/study-room/utils';
 import { SyntheticEvent, useState, useMemo, useEffect } from 'react';
 import { SessionsTableDataType, SessionFormDetailsType } from '@modules/study-room/types';
@@ -62,8 +62,8 @@ export const useSessionAction = (
       questions: currentSession?.questions || 0,
       color: currentSession?.color || randomBrandColor,
       textColor: currentSession?.textColor || `text-${randomBrandColor.slice(3)}`,
-      name,
-      topic,
+      name: capitalize(name),
+      topic: capitalize(topic),
       isPinned: false,
     });
 
