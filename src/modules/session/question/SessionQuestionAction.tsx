@@ -5,7 +5,7 @@ import { type SessionQuestionType } from '@modules/session/types';
 import Dictaphone from '@modules/speech-recognition/Dictaphone';
 import { SyntheticEvent, useState, useRef, useEffect } from 'react';
 import Modal, { type ModalRef } from '@common/components/modal/Modal';
-import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks/useInitializeSpeechToText';
+import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks';
 import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
 import TimeSelectMenu from '../settings/TimeSelectMenu';
 import { TIME_OPTIONS } from '../constants';

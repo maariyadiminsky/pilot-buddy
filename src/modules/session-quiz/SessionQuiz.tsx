@@ -5,7 +5,7 @@ import {
 } from '@heroicons/react/20/solid';
 import { questions as questionData } from '@modules/session/Session';
 import { type SessionQuestionType } from '@modules/session/types';
-import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks/useInitializeSpeechToText';
+import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks';
 import Dictaphone from '@modules/speech-recognition/Dictaphone';
 import { SyntheticEvent, useState, useEffect, useRef, useMemo } from 'react';
 import Modal, { type ModalRef } from '@common/components/modal/Modal';
