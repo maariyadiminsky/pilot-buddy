@@ -54,15 +54,28 @@ export const usePinnedSessions = (
     // todo: save update in storage
   };
 
+  const handleSubmitSessionPinTry = (session: SessionsTableDataType) => {
+    if (isEditingPinnedSession) {
+      handlePinSession(session);
+      setIsEditingPinnedSession(false);
+    }
+  };
+
+  const handleRemoveSessionPinTry = (id: string) => {
+    if (isSessionPinned(id, pinnedSessionIds)) {
+      handleUnpinSession(id);
+    }
+  };
+
   return {
     handleSetInitialPins,
     pinnedSessions,
     pinnedSessionIds,
     setPinnedSessions,
-    isSessionPinned,
     handlePinSession,
     handleUnpinSession,
-    isEditingPinnedSession,
     setIsEditingPinnedSession,
+    handleSubmitSessionPinTry,
+    handleRemoveSessionPinTry,
   };
 };

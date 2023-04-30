@@ -7,7 +7,6 @@ interface SessionsTableProps {
   sessions: SessionsTableDataType[];
   handlePinSession: (session: SessionsTableDataType) => void;
   handleUnpinSession: (id: string) => void;
-  handleStartSession: (id: string) => void;
   handleEditSession: (id: string) => void;
   handleRemoveSession: (id: string) => void;
 }
@@ -17,7 +16,6 @@ const SessionsTable = ({
   sessions,
   handlePinSession,
   handleUnpinSession,
-  handleStartSession,
   handleEditSession,
   handleRemoveSession,
 }: SessionsTableProps) => (
@@ -58,7 +56,6 @@ const SessionsTable = ({
                 index,
                 handlePinSession,
                 handleUnpinSession,
-                handleStartSession,
                 handleEditSession,
                 handleRemoveSession,
               }}

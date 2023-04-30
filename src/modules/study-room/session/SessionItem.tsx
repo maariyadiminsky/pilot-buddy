@@ -15,7 +15,6 @@ interface SessionItemProps extends SessionsTableDataType {
   isSessionPinned: boolean;
   handlePinSession: (session: SessionsTableDataType) => void;
   handleUnpinSession: (id: string) => void;
-  handleStartSession: (id: string) => void;
   handleEditSession: (id: string) => void;
   handleRemoveSession: (id: string) => void;
 }
@@ -32,7 +31,6 @@ const SessionItem = ({
   isSessionPinned,
   handlePinSession,
   handleUnpinSession,
-  handleStartSession,
   handleEditSession,
   handleRemoveSession,
 }: SessionItemProps) => {
@@ -100,7 +98,6 @@ const SessionItem = ({
         <Link to={`/sessions/${id}/start`}>
           <button
             type="button"
-            onClick={() => handleStartSession(id)}
             disabled={!questions}
             className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
           >
@@ -139,6 +136,7 @@ const SessionItem = ({
               className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-600"
               aria-hidden="true"
             />
+            <span className="sr-only">Open session</span>
           </button>
         </Link>
         {index !== 0 ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-300" /> : null}
