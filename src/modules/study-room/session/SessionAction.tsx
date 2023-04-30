@@ -3,28 +3,10 @@ import { getUniqId } from '@common/utils';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import { getRandomBrandColor } from '@modules/study-room/utils';
 import { SyntheticEvent, useState, useMemo, useEffect } from 'react';
-
-interface SessionFormDetailsType {
-  id: string;
-  title: string;
-  placeholder: string;
-  showEmpty: boolean;
-  getter: string;
-  setter: (value: string) => void;
-}
-
-export interface SessionType {
-  id: string;
-  name: string;
-  topic: string;
-  questions: number;
-  color: string;
-  textColor: string;
-}
-
+import { SessionsTableDataType, SessionFormDetailsType } from '@modules/study-room/types';
 interface SessionActionProps {
-  currentSession?: SessionType;
-  handleSubmit: (value: SessionType) => void;
+  currentSession?: SessionsTableDataType;
+  handleSubmit: (value: SessionsTableDataType) => void;
   handleCancel: () => void;
 }
 
@@ -86,6 +68,7 @@ const SessionAction = ({ currentSession, handleSubmit, handleCancel }: SessionAc
       textColor: currentSession?.textColor || `text-${randomBrandColor.slice(3)}`,
       name,
       topic,
+      isPinned: false,
     });
 
     setName('');

@@ -1,11 +1,11 @@
 import SessionItem from '@modules/study-room/session/SessionItem';
-import { type SessionType } from '@modules/study-room/session/SessionAction';
+import { type SessionsTableDataType } from '@modules/study-room/types';
 import { isSessionPinned } from '@modules/study-room/utils';
 
 interface SessionsTableProps {
   pinnedSessions: string[];
-  sessions: SessionType[];
-  handlePinSession: (session: SessionType) => void;
+  sessions: SessionsTableDataType[];
+  handlePinSession: (session: SessionsTableDataType) => void;
   handleUnpinSession: (id: string) => void;
   handleStartSession: (id: string) => void;
   handleEditSession: (id: string) => void;

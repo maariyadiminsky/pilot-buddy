@@ -1,5 +1,5 @@
 import { truthyString } from '@common/utils';
-import { type SessionType } from './SessionAction';
+import { type SessionsTableDataType } from '@modules/study-room/types';
 import {
   PlayCircleIcon,
   PencilSquareIcon,
@@ -10,10 +10,10 @@ import {
 } from '@heroicons/react/20/solid';
 import { Link } from 'react-router-dom';
 
-interface SessionItemProps extends SessionType {
+interface SessionItemProps extends SessionsTableDataType {
   index: number;
   isSessionPinned: boolean;
-  handlePinSession: (session: SessionType) => void;
+  handlePinSession: (session: SessionsTableDataType) => void;
   handleUnpinSession: (id: string) => void;
   handleStartSession: (id: string) => void;
   handleEditSession: (id: string) => void;
@@ -27,6 +27,7 @@ const SessionItem = ({
   questions,
   textColor,
   color,
+  isPinned,
   index,
   isSessionPinned,
   handlePinSession,
@@ -41,7 +42,7 @@ const SessionItem = ({
     if (isSessionPinned) {
       handleUnpinSession(id);
     } else {
-      handlePinSession({ id, name, topic, questions, color, textColor });
+      handlePinSession({ id, name, topic, questions, color, textColor, isPinned });
     }
   };
 

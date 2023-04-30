@@ -1,21 +1,18 @@
 import { PlusIcon, BookmarkSlashIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@modules/common/components/page/PageWrapper';
-import PinnedSessions, { type PinnedSessionType } from '@modules/study-room/session/PinnedSessions';
+import PinnedSessions from '@modules/study-room/session/PinnedSessions';
 import SessionsTable from '@modules/study-room/session/SessionsTable';
 import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import { type BrandButtonType } from '@common/components/button/BrandButton';
-import SessionAction, { type SessionType } from '@modules/study-room/session/SessionAction';
-import {
-  sessionsWithNewSessionInOrder,
-  sessionsOrderedByTopic,
-  getPinnedSessionsIds,
-  isSessionPinned,
-} from '@modules/study-room/utils';
-import { removeObjectFromArray, getUniqId } from '@common/utils';
+import SessionAction from '@modules/study-room/session/SessionAction';
+import { sessionsWithNewSessionInOrder, sessionsOrderedByTopic } from '@modules/study-room/utils';
+import { removeObjectFromArray } from '@common/utils';
 import { useNavigate } from 'react-router-dom';
 import Modal, { type ModalRef, type ModalDataType } from '@common/components/modal/Modal';
 import EmptyDataAction from '@common/components/empty/EmptyDataAction';
 import { type MenuOptionType } from '@common/components/dropdown/ActionMenu';
+import { type SessionsTableDataType } from '@modules/study-room/types';
+import { usePinnedSessions } from '@modules/study-room/hooks';
 
 const sessionsTableData = [
   {
@@ -81,7 +78,7 @@ const sessionsTableData = [
     textColor: 'text-sky-600',
     isPinned: true,
   },
-];
+] as SessionsTableDataType[];
 
 const StudyRoom = () => {
   const modalRef = useRef<ModalRef>(null);
@@ -91,73 +88,36 @@ const StudyRoom = () => {
 
   const [shouldShowSessionAction, setShouldShowSessionAction] = useState(false);
   // todo: get this from storage
-  const [sessions, setSessions] = useState<SessionType[]>([]);
-  const [pinnedSessions, setPinnedSessions] = useState<PinnedSessionType[]>([]);
-  const [currentSession, setCurrentSession] = useState<SessionType>();
-  const [isEditingPinnedSession, setIsEditingPinnedSession] = useState(false);
+  const [sessions, setSessions] = useState<SessionsTableDataType[]>([]);
+  const [currentSession, setCurrentSession] = useState<SessionsTableDataType>();
 
-  const pinnedSessionIds = useMemo(
-    () => (pinnedSessions?.length ? getPinnedSessionsIds(pinnedSessions) : []),
-    [pinnedSessions?.length]
-  );
+  const {
+    handleSetInitialPins,
+    pinnedSessions,
+    pinnedSessionIds,
+    isSessionPinned,
+    handlePinSession,
+    handleUnpinSession,
+    isEditingPinnedSession,
+    setIsEditingPinnedSession,
+  } = usePinnedSessions(setModalData, modalRef?.current?.setModalOpen);
 
   useEffect(() => {
-    // set pinned sessions
-    const pinnedTableSessions = sessionsTableData.filter(({ isPinned }) => isPinned);
-    const createPinnedSessionData = pinnedTableSessions.map(({ id, name, questions, color }) => ({
-      id: getUniqId(),
-      sessionId: id,
-      text: name,
-      total: questions,
-      className: color,
-    }));
-    setPinnedSessions(createPinnedSessionData);
+    // todo: get sessionsData from storage if it exists here
 
+    // set pinned sessions
+    handleSetInitialPins(sessionsTableData);
     // set table session data ordered by topic for easier find
     setSessions([...sessionsOrderedByTopic(sessionsTableData)]);
   }, []);
 
-  const handleAddSession = (session: SessionType) => {
+  const handleAddSession = (session: SessionsTableDataType) => {
     const SessionsWithNewSession = sessionsWithNewSessionInOrder(session, sessions);
     setSessions(SessionsWithNewSession);
     return SessionsWithNewSession;
   };
 
-  const handlePinSession = (session: SessionType) => {
-    const { id, questions, name, color } = session;
-
-    const newPinnedSession = {
-      id: getUniqId(),
-      sessionId: id,
-      total: questions,
-      text: name,
-      className: color,
-    };
-
-    if (!pinnedSessions || pinnedSessions.length < 4) {
-      setPinnedSessions([newPinnedSession, ...(pinnedSessions || [])]);
-    } else {
-      setModalData({
-        title: 'Pin Limit',
-        children: (
-          <div className="flex justify-center items-center">
-            Apologies, session pin limit reached.
-          </div>
-        ),
-        confirmChildren: 'Ok',
-      });
-
-      modalRef.current?.setModalOpen(true);
-    }
-  };
-
-  const handleUnpinSession = (sessionId: string) => {
-    setPinnedSessions(removeObjectFromArray(pinnedSessions, sessionId, 'sessionId'));
-
-    // save update in storage
-  };
-
-  const handleSubmitSession = (session: SessionType) => {
+  const handleSubmitSession = (session: SessionsTableDataType) => {
     setSessions(sessionsWithNewSessionInOrder(session, sessions));
     setCurrentSession(undefined);
     setShouldShowSessionAction(false);
@@ -185,7 +145,7 @@ const StudyRoom = () => {
     // handle start session
   };
 
-  const handleRemoveSession = (id: string, customSessions?: SessionType[]) => {
+  const handleRemoveSession = (id: string, customSessions?: SessionsTableDataType[]) => {
     setSessions(removeObjectFromArray(customSessions || sessions, id, 'id'));
 
     if (isSessionPinned(id, pinnedSessionIds)) {

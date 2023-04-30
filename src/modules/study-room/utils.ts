@@ -1,6 +1,4 @@
-import { type SessionType } from '@modules/study-room/session/SessionAction';
-import { type PinnedSessionType } from '@modules/study-room/session/PinnedSessions';
-import { type SessionQuestionType } from '@modules/session/types';
+import { type PinnedSessionType, type SessionsTableDataType } from '@modules/study-room/types';
 
 enum COLOR_TYPE {
   background = 'background',
@@ -30,7 +28,7 @@ export const getInitials = (text: string) =>
 export const getTextBasedOnAmount = (type: string, total: number) =>
   `${total} ${type.charAt(0).toUpperCase()}${type.slice(1)}${total > 1 ? 's' : ''}`;
 
-export const sessionsOrderedByTopic = (sessions: SessionType[]) =>
+export const sessionsOrderedByTopic = (sessions: SessionsTableDataType[]) =>
   sessions.sort((s1, s2) => {
     if (s1.topic > s2.topic) {
       return 1;
@@ -43,15 +41,15 @@ export const sessionsOrderedByTopic = (sessions: SessionType[]) =>
     return 0;
   });
 
-export const reorderQuestionsBasedOnUserDragChoice = (
-  question: SessionQuestionType,
-  questions: SessionQuestionType[],
-  draggedToIndex: number
-) => [...questions.slice(0, draggedToIndex), question, ...questions.slice(draggedToIndex)];
+// export const reorderQuestionsBasedOnUserDragChoice = (
+//   question: SessionQuestionType,
+//   questions: SessionQuestionType[],
+//   draggedToIndex: number
+// ) => [...questions.slice(0, draggedToIndex), question, ...questions.slice(draggedToIndex)];
 
 export const sessionsWithNewSessionInOrder = (
-  newSession: SessionType,
-  sessionsData: SessionType[]
+  newSession: SessionsTableDataType,
+  sessionsData: SessionsTableDataType[]
 ) => {
   const firstSessionWithTopicIndex = sessionsData.findIndex(
     ({ topic }) => topic.trim() === newSession.topic.trim()

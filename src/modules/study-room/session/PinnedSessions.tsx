@@ -2,23 +2,14 @@ import ActionMenu, { type MenuOptionType } from '@common/components/dropdown/Act
 
 import { truthyString } from '@common/utils';
 import { getInitials, getTextBasedOnAmount } from '@modules/study-room/utils';
-
-export interface PinnedSessionItem {
-  id: string;
-  sessionId: string;
-  total: number;
-  text: string;
-  className?: string;
-}
+import { type PinnedSessionType } from '@modules/study-room/types';
 
 interface PinnedSessionProps {
   title: string;
-  sessions: PinnedSessionItem[];
+  sessions: PinnedSessionType[];
   handleEditSession: (id: string) => void;
   getDropdownActions: (id: string, questionsCount: number) => MenuOptionType[];
 }
-
-export type PinnedSessionType = PinnedSessionItem;
 
 const PinnedSession = ({
   title,
