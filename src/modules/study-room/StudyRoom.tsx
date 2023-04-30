@@ -46,20 +46,6 @@ const StudyRoom = () => {
     modalRef?.current?.setModalOpen
   );
 
-  const getHeaderActions = useCallback(
-    () =>
-      [
-        {
-          text: 'Create Session',
-          srText: 'Create new session',
-          icon: PlusIcon,
-          buttonClassType: 'solid',
-          handleOnClick: () => setShouldShowSessionAction(true),
-        },
-      ] as BrandButtonType[],
-    []
-  );
-
   const getDropdownActions = (id: string, questionsCount: number) =>
     [
       {
@@ -87,6 +73,19 @@ const StudyRoom = () => {
       },
     ].filter((menuItem) => menuItem) as MenuOptionType[];
 
+  const getHeaderActions = useCallback(
+    () =>
+      [
+        {
+          text: 'Create Session',
+          srText: 'Create new session',
+          icon: PlusIcon,
+          buttonClassType: 'solid',
+          handleOnClick: () => setShouldShowSessionAction(true),
+        },
+      ] as BrandButtonType[],
+    []
+  );
   const headerActions = useMemo(() => getHeaderActions(), []);
 
   return (

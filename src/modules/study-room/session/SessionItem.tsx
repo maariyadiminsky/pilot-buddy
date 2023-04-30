@@ -8,7 +8,7 @@ import {
   BookmarkIcon,
   BookmarkSlashIcon,
 } from '@heroicons/react/20/solid';
-import { Link } from 'react-router-dom';
+import SessionItemIconButton from '@modules/study-room/session/SessionItemIconButton';
 
 interface SessionItemProps extends SessionsTableDataType {
   index: number;
@@ -95,50 +95,28 @@ const SessionItem = ({
           'relative py-3.5 pl-3 pr-4 text-center text-sm font-medium sm:pr-6'
         )}
       >
-        <Link to={`/sessions/${id}/start`}>
-          <button
-            type="button"
-            disabled={!questions}
-            className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-          >
-            <PlayCircleIcon
-              className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-pink-600 enabled:hover:text-sky-600"
-              aria-hidden="true"
-            />
-            <span className="sr-only">Start session</span>
-          </button>
-        </Link>
-        <button
-          type="button"
-          onClick={() => handleEditSession(id)}
-          className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-        >
-          <PencilSquareIcon
-            className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-600"
-            aria-hidden="true"
-          />
-          <span className="sr-only">Edit session</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => handleRemoveSession(id)}
-          className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-        >
-          <TrashIcon
-            className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-600"
-            aria-hidden="true"
-          />
-          <span className="sr-only">Delete session</span>
-        </button>
-        <Link to={`/sessions/${id}`}>
-          <button type="button">
-            <ArrowTopRightOnSquareIcon
-              className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-600"
-              aria-hidden="true"
-            />
-            <span className="sr-only">Open session</span>
-          </button>
-        </Link>
+        <SessionItemIconButton
+          icon={PlayCircleIcon}
+          srText="Start Session"
+          link={`/sessions/${id}/start`}
+          isDisabled={!questions}
+          color="text-pink-600"
+        />
+        <SessionItemIconButton
+          icon={PencilSquareIcon}
+          srText="Edit Session"
+          handleOnClick={() => handleEditSession(id)}
+        />
+        <SessionItemIconButton
+          icon={TrashIcon}
+          srText="Delete Session"
+          handleOnClick={() => handleRemoveSession(id)}
+        />
+        <SessionItemIconButton
+          icon={ArrowTopRightOnSquareIcon}
+          srText="Open Session"
+          link={`/sessions/${id}`}
+        />
         {index !== 0 ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-300" /> : null}
       </td>
     </tr>
