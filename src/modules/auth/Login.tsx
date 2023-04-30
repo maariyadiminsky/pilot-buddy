@@ -58,6 +58,14 @@ const Login = () => {
           if (!theDb.objectStoreNames.contains('users')) {
             theDb.createObjectStore('users', { keyPath: 'email' });
           }
+
+          if (!theDb.objectStoreNames.contains('sessions')) {
+            theDb.createObjectStore('sessions', { keyPath: 'id' });
+          }
+
+          if (!theDb.objectStoreNames.contains('sessionData')) {
+            theDb.createObjectStore('sessionData', { keyPath: 'id' });
+          }
         },
       });
 

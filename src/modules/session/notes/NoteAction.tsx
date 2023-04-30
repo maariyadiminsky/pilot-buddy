@@ -4,7 +4,7 @@ import { Listbox, Transition } from '@headlessui/react';
 import { truthyString, getUniqId } from '@common/utils';
 import { NOTE_TYPES } from '@modules/session/constants';
 import NoteIcon from '@modules/session/notes/NoteIcon';
-import { type NoteDataType } from '@modules/session/notes/Note';
+import { type NoteDataType } from '@modules/session/types';
 
 const CHAR_LIMIT = 100;
 const getCharLeft = (text: string) => CHAR_LIMIT - text.length;

@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import Notes from '@modules/session/notes/Notes';
 import NoteAction from '@modules/session/notes/NoteAction';
-import { type NoteDataType } from '@modules/session/notes/Note';
+import { type NoteDataType } from '@modules/session/types';
 import { removeObjectFromArray } from '@common/utils';
 import { EyeSlashIcon } from '@heroicons/react/20/solid';
 

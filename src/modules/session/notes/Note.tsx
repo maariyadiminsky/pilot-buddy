@@ -1,24 +1,11 @@
 import NoteIcon from '@modules/session/notes/NoteIcon';
-import { type HeroIconType } from '@common/types';
 import {
   truthyString,
   removeLineBreaksFromText,
   includeProtocolAndHostWithinLink,
 } from '@common/utils';
 import { XMarkIcon, PencilIcon } from '@heroicons/react/20/solid';
-interface NoteIconType {
-  name: string;
-  value: string | null;
-  icon: HeroIconType;
-  iconColor: string;
-  bgColor: string;
-}
-
-export interface NoteDataType {
-  id: string;
-  text: string;
-  icon: NoteIconType;
-}
+import { type NoteDataType } from '@modules/session/types';
 
 interface NoteDataProps extends NoteDataType {
   handleRemoveNote: (id: string) => void;

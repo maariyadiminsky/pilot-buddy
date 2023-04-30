@@ -13,6 +13,59 @@ import OrderSelectMenu from './settings/OrderSelectMenu';
 import { TIME_OPTIONS, ORDER_OPTIONS } from './constants';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useMemo } from 'react';
+import { SessionQuestionType, SettingsType, NoteDataType } from '@modules/session/types';
+
+interface SessionData {
+  questions: SessionQuestionType[];
+  notes?: NoteDataType[];
+  settings: SettingsType;
+}
+
+export const questions = [
+  {
+    id: '0',
+    question: 'What is the biggest ballooon in the world?',
+    answer: 'dsfdsfsd',
+    time: { id: 0, name: '5 seconds' },
+  },
+  {
+    id: '1',
+    question: '342342jkh4h54k5khjdsjklclksdf',
+    answer:
+      'fgfghfghfg fghfgh fghfgklhfglhjgf lg fgfghfghfg fghfgh fghfgklhfglhjgf lg fgfghfghfg fghfgh fghfgklhfglhjgf lg fgfghfghfg fghfgh fghfgklhfglhjgf lg fgfghfghfg fghfgh fghfgklhfglhjgf lggfdhgdhgfhfghfgfgfghfghfg fghfgh fghfgklhfglhjgf lgfhj fglkjh lgkfj hlkjgf jfg hjgdlfk hjdglfh jdfj kd jsf klgslkj sjk djklsjkl fsdljk sjkd klsd sljkd  jkds fjklgsd',
+    time: { id: 1, name: '10 seconds' },
+  },
+  {
+    id: '2',
+    question: 'sfddsfdsfsdfsdfds sdfsdfsdfsdfds sd fsdfsdfs',
+    answer: '4534tfdggdf ',
+    time: { id: 2, name: '5 seconds' },
+  },
+  {
+    id: '3',
+    question: 'eeeeesfdsf 765bgfdfdgfd',
+    answer: 'sdfdsffdssd',
+    time: { id: 3, name: '5 seconds' },
+  },
+  {
+    id: '4',
+    question: 'sfsd',
+    answer: null,
+    time: { id: 4, name: '5 seconds' },
+  },
+];
+
+const sessionData = {
+  questions,
+  notes: [],
+  settings: {
+    isTimed: false,
+    shouldHaveOrder: false,
+    shouldReadOutLoud: false,
+    time: null,
+    order: null,
+  },
+} as SessionData;
 
 // todo: get session name and add to PageWrapper title
 const Session = () => {
@@ -21,13 +74,21 @@ const Session = () => {
 
   const [shouldShowQuestionAction, setShouldShowQuestionAction] = useState(false);
   // if there are questions disable start session button
-  const [questionsCount, setQuestionsCount] = useState(0);
-  const [shouldReadOutLoud, setShouldReadOutLoud] = useState(false);
-  const [shouldHaveOrder, setShouldHaveOrder] = useState(false);
-  const [isTimed, setIsTimed] = useState(false);
+  const [questionsCount, setQuestionsCount] = useState(sessionData?.questions?.length || 0);
+  const [shouldReadOutLoud, setShouldReadOutLoud] = useState(
+    sessionData?.settings.shouldRedOutLoud || false
+  );
+  const [shouldHaveOrder, setShouldHaveOrder] = useState(
+    sessionData?.settings.shouldHaveOrder || false
+  );
+  const [isTimed, setIsTimed] = useState(sessionData?.settings.isTimed || false);
   // time and order selected in settings
-  const [settingsOrder, setSettingsOrder] = useState<SelectMenuItemType>(ORDER_OPTIONS[0]);
-  const [settingsTime, setSettingsTime] = useState<SelectMenuItemType>(TIME_OPTIONS[0]);
+  const [settingsOrder, setSettingsOrder] = useState<SelectMenuItemType>(
+    sessionData?.settings.order || ORDER_OPTIONS[0]
+  );
+  const [settingsTime, setSettingsTime] = useState<SelectMenuItemType>(
+    sessionData?.settings.time || TIME_OPTIONS[0]
+  );
 
   const headerActions = useMemo(
     () =>
@@ -98,6 +159,7 @@ const Session = () => {
           <div className="min-w-0 flex-1 bg-inherit xl:flex">
             <SessionNotes />
             <SessionQuestions
+              questionsData={sessionData.questions}
               isTimed={isTimed}
               setQuestionsCount={setQuestionsCount}
               settingsTime={isTimed && settingsTime}

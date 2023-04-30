@@ -1,6 +1,5 @@
 import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
-import { type SessionQuestionType } from '@modules/session/question/SessionQuestionsList';
-import { SessionOrderEnum } from '@modules/session/types';
+import { SessionOrderEnum, type SessionQuestionType } from '@modules/session/types';
 import shuffle from 'lodash/shuffle';
 
 export const getTimeData = (time?: SelectMenuItemType) => {

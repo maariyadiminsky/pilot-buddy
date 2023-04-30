@@ -4,45 +4,11 @@ import QuestionAction from '@modules/session/question/SessionQuestionAction';
 import { useState, useEffect } from 'react';
 import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
 import { DragDropContext, Droppable, type DropResult } from 'react-beautiful-dnd';
-import SessionQuestionsList, {
-  type SessionQuestionType,
-} from '@modules/session/question/SessionQuestionsList';
-
-export const questionData = [
-  {
-    id: '0',
-    question: 'What is the biggest ballooon in the world?',
-    answer: 'dsfdsfsd',
-    time: { id: 0, name: '5 seconds' },
-  },
-  {
-    id: '1',
-    question: '342342jkh4h54k5khjdsjklclksdf',
-    answer:
-      'fgfghfghfg fghfgh fghfgklhfglhjgf lg fgfghfghfg fghfgh fghfgklhfglhjgf lg fgfghfghfg fghfgh fghfgklhfglhjgf lg fgfghfghfg fghfgh fghfgklhfglhjgf lg fgfghfghfg fghfgh fghfgklhfglhjgf lggfdhgdhgfhfghfgfgfghfghfg fghfgh fghfgklhfglhjgf lgfhj fglkjh lgkfj hlkjgf jfg hjgdlfk hjdglfh jdfj kd jsf klgslkj sjk djklsjkl fsdljk sjkd klsd sljkd  jkds fjklgsd',
-    time: { id: 1, name: '10 seconds' },
-  },
-  {
-    id: '2',
-    question: 'sfddsfdsfsdfsdfds sdfsdfsdfsdfds sd fsdfsdfs',
-    answer: '4534tfdggdf ',
-    time: { id: 2, name: '5 seconds' },
-  },
-  {
-    id: '3',
-    question: 'eeeeesfdsf 765bgfdfdgfd',
-    answer: 'sdfdsffdssd',
-    time: { id: 3, name: '5 seconds' },
-  },
-  {
-    id: '4',
-    question: 'sfsd',
-    answer: null,
-    time: { id: 4, name: '5 seconds' },
-  },
-];
+import SessionQuestionsList from '@modules/session/question/SessionQuestionsList';
+import { SessionQuestionType } from '@modules/session/types';
 
 interface SessionQuestionsProps {
+  questionsData: SessionQuestionType[];
   isTimed: boolean;
   settingsTime: SelectMenuItemType;
   shouldShowQuestionAction: boolean;
@@ -56,13 +22,14 @@ const DropStyles = {
 };
 
 const SessionQuestions = ({
+  questionsData,
   isTimed,
   settingsTime,
   shouldShowQuestionAction,
   setQuestionsCount,
   setShouldShowQuestionAction,
 }: SessionQuestionsProps) => {
-  const [questions, setQuestions] = useState<SessionQuestionType[]>(questionData);
+  const [questions, setQuestions] = useState<SessionQuestionType[]>(questionsData || []);
   const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>();
 
   const handleSetQuestions = (updatedQuestions: SessionQuestionType[]) => {

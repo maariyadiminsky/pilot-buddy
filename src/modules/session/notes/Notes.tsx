@@ -1,4 +1,5 @@
-import Note, { type NoteDataType } from '@modules/session/notes/Note';
+import Note from '@modules/session/notes/Note';
+import { type NoteDataType } from '@modules/session/types';
 
 interface NotesProps {
   notes: NoteDataType[];

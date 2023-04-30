@@ -17,38 +17,7 @@ import Modal, { type ModalRef, type ModalDataType } from '@common/components/mod
 import EmptyDataAction from '@common/components/empty/EmptyDataAction';
 import { type MenuOptionType } from '@common/components/dropdown/ActionMenu';
 
-const PINNED_SESSIONS_DATA = [
-  {
-    id: '0',
-    sessionId: '7',
-    text: 'Pilot Exam Test #2',
-    total: 17,
-    className: 'bg-sky-600',
-  },
-  {
-    id: '1',
-    sessionId: '6',
-    text: 'CM Codes',
-    total: 3,
-    className: 'bg-pink-600',
-  },
-  {
-    id: '2',
-    sessionId: '5',
-    text: 'Practice',
-    total: 6,
-    className: 'bg-sky-600',
-  },
-  {
-    id: '3',
-    sessionId: '4',
-    text: 'Instruments Test #2',
-    total: 9,
-    className: 'bg-yellow-600',
-  },
-];
-
-const SESSIONS_DATA = [
+const sessionsTableData = [
   {
     id: '1',
     name: 'Pilot Exam sdfdsf fdsdfsd fsdsdfsd dasdsafasafasfasfasfasd dadasdasdasdsad',
@@ -56,6 +25,7 @@ const SESSIONS_DATA = [
     questions: 12,
     color: 'bg-sky-600',
     textColor: 'text-sky-600',
+    isPinned: false,
   },
   {
     id: '2',
@@ -64,6 +34,7 @@ const SESSIONS_DATA = [
     questions: 0,
     color: 'bg-yellow-600',
     textColor: 'text-yellow-600',
+    isPinned: true,
   },
   {
     id: '3',
@@ -72,6 +43,7 @@ const SESSIONS_DATA = [
     questions: 24,
     color: 'bg-purple-600',
     textColor: 'text-purple-600',
+    isPinned: false,
   },
   {
     id: '4',
@@ -80,6 +52,7 @@ const SESSIONS_DATA = [
     questions: 9,
     color: 'bg-yellow-600',
     textColor: 'text-yellow-600',
+    isPinned: false,
   },
   {
     id: '5',
@@ -88,6 +61,7 @@ const SESSIONS_DATA = [
     questions: 6,
     color: 'bg-sky-600',
     textColor: 'text-sky-600',
+    isPinned: true,
   },
   {
     id: '6',
@@ -96,6 +70,7 @@ const SESSIONS_DATA = [
     questions: 3,
     color: 'bg-pink-700',
     textColor: 'text-pink-700',
+    isPinned: true,
   },
   {
     id: '7',
@@ -104,6 +79,7 @@ const SESSIONS_DATA = [
     questions: 17,
     color: 'bg-sky-600',
     textColor: 'text-sky-600',
+    isPinned: true,
   },
 ];
 
@@ -116,7 +92,7 @@ const StudyRoom = () => {
   const [shouldShowSessionAction, setShouldShowSessionAction] = useState(false);
   // todo: get this from storage
   const [sessions, setSessions] = useState<SessionType[]>([]);
-  const [pinnedSessions, setPinnedSessions] = useState<PinnedSessionType[]>(PINNED_SESSIONS_DATA);
+  const [pinnedSessions, setPinnedSessions] = useState<PinnedSessionType[]>([]);
   const [currentSession, setCurrentSession] = useState<SessionType>();
   const [isEditingPinnedSession, setIsEditingPinnedSession] = useState(false);
 
@@ -125,9 +101,20 @@ const StudyRoom = () => {
     [pinnedSessions?.length]
   );
 
-  // sessions should be ordered by topic for easier search
   useEffect(() => {
-    setSessions([...sessionsOrderedByTopic(SESSIONS_DATA)]);
+    // set pinned sessions
+    const pinnedTableSessions = sessionsTableData.filter(({ isPinned }) => isPinned);
+    const createPinnedSessionData = pinnedTableSessions.map(({ id, name, questions, color }) => ({
+      id: getUniqId(),
+      sessionId: id,
+      text: name,
+      total: questions,
+      className: color,
+    }));
+    setPinnedSessions(createPinnedSessionData);
+
+    // set table session data ordered by topic for easier find
+    setSessions([...sessionsOrderedByTopic(sessionsTableData)]);
   }, []);
 
   const handleAddSession = (session: SessionType) => {

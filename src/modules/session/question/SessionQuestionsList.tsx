@@ -1,6 +1,7 @@
 import { Draggable, type DroppableProvidedProps } from 'react-beautiful-dnd';
 import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
 import { type ReactNode } from 'react';
+import { SessionQuestionType } from '@modules/session/types';
 
 import {
   PencilSquareIcon,
@@ -10,15 +11,6 @@ import {
   ClockIcon,
   Bars3Icon,
 } from '@heroicons/react/20/solid';
-
-interface SessionQuestionBaseType {
-  id: string;
-  question: string;
-  answer?: string | null;
-  time?: SelectMenuItemType;
-}
-
-export type SessionQuestionType = SessionQuestionBaseType;
 
 interface SessionQuestionsListProps extends DroppableProvidedProps {
   placeholder: ReactNode;

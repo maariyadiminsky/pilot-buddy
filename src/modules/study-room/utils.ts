@@ -1,6 +1,6 @@
 import { type SessionType } from '@modules/study-room/session/SessionAction';
 import { type PinnedSessionType } from '@modules/study-room/session/PinnedSessions';
-import { type SessionQuestionType } from '@modules/session/question/SessionQuestionsList';
+import { type SessionQuestionType } from '@modules/session/types';
 
 enum COLOR_TYPE {
   background = 'background',

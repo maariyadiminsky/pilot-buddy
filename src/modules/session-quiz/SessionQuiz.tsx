@@ -3,8 +3,8 @@ import {
   CheckBadgeIcon,
   ArrowUturnLeftIcon,
 } from '@heroicons/react/20/solid';
-import { questionData } from '@modules/session/SessionQuestions';
-import { type SessionQuestionType } from '@modules/session/question/SessionQuestionsList';
+import { questions as questionData } from '@modules/session/Session';
+import { type SessionQuestionType } from '@modules/session/types';
 import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks/useInitializeSpeechToText';
 import Dictaphone from '@modules/speech-recognition/Dictaphone';
 import { SyntheticEvent, useState, useEffect, useRef, useMemo } from 'react';
