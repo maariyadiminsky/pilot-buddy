@@ -5,7 +5,11 @@ import { useState, useEffect, useRef } from 'react';
 import Modal, { type ModalRef } from '@common/components/modal/Modal';
 import { useParams, useNavigate } from 'react-router-dom';
 import { SessionDataType } from '@modules/session/types';
-import { useSessionQuiz, useSessionQuizTime } from '@modules/session-quiz/hooks';
+import {
+  useSessionQuiz,
+  useSessionQuizTime,
+  useSessionQuizDictaphone,
+} from '@modules/session-quiz/hooks';
 import SessionQuizResults from '@modules/session-quiz/SessionQuizResults';
 
 import { questions as questionsData } from '@modules/session/Session'; // todo: remove after get this from storage
@@ -16,7 +20,7 @@ const SESSION_DATA_INITIAL_STATE = {
   settings: {
     isTimed: false,
     shouldHaveOrder: false,
-    shouldReadOutLoud: false,
+    shouldReadOutLoud: true,
     time: undefined,
     order: undefined,
     voice: {
@@ -34,12 +38,10 @@ const SessionQuiz = () => {
   const modalRef = useRef<ModalRef>(null);
   const { id: sessionId } = useParams();
   const navigate = useNavigate();
-
   const [sessionData, setSessionData] = useState<SessionDataType>(SESSION_DATA_INITIAL_STATE);
-  const [isMicrophoneOn, setIsMicrophoneOn] = useState(false);
-
   const { questions, settings } = sessionData;
 
+  // session data and voice if enabled
   const {
     currentQuizAnswer,
     setCurrentQuizAnswer,
@@ -57,6 +59,7 @@ const SessionQuiz = () => {
     setSessionData(SESSION_DATA_INITIAL_STATE);
   }, []);
 
+  // dictaphone
   const {
     SpeechRecognition,
     isMicrophoneAvailable,
@@ -66,6 +69,13 @@ const SessionQuiz = () => {
     clearModalData,
   } = useInitializeSpeechToText();
 
+  const { isMicrophoneOn, handleSetMicrophoneOn } = useSessionQuizDictaphone(
+    transcript,
+    setCurrentQuizAnswer,
+    clearModalData
+  );
+
+  // time if enabled
   const { timeLeft } = useSessionQuizTime(
     settings.isTimed,
     questionsLeft,
@@ -74,17 +84,6 @@ const SessionQuiz = () => {
     currentQuestion?.id,
     previousQuestion?.id
   );
-
-  useEffect(() => {
-    if (isMicrophoneOn) {
-      setCurrentQuizAnswer(transcript);
-    }
-  }, [isMicrophoneOn, transcript]);
-
-  const handleSetMicrophoneOn = (value: boolean) => {
-    clearModalData();
-    setIsMicrophoneOn(value);
-  };
 
   const { isTimed } = settings;
 

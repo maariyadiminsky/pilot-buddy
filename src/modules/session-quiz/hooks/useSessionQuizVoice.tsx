@@ -10,7 +10,7 @@ export const useSessionQuizVoice = (
   currentQuestionId?: string,
   currentQuestionText?: string
 ) => {
-  const { handleVoicePlay, handleVoiceStop } = useSpeechSynthesis(
+  const { handleVoicePlay, handleVoiceStop, voiceOptions } = useSpeechSynthesis(
     undefined,
     voice?.voice,
     voice?.rate,
@@ -24,18 +24,18 @@ export const useSessionQuizVoice = (
   }, []);
 
   useEffect(() => {
-    // voice setting is on and page loaded and
-    // not last question item(edge case where page re-renders when they are in results page.)
+    // read once on load
+    // and not last question item(edge case where page re-renders when they are in results page.)
     if (
       shouldReadOutLoud &&
       previousQuestionId === currentQuestionId &&
-      currentQuestionId !== lastQuestionId
+      currentQuestionId !== lastQuestionId &&
+      voiceOptions?.length
     ) {
-      // todo - bug - plays default voice first
-      // I suspect because window.speechSynthesis.getVoices() hasn't completed loading.
+      console.log('in handle voice play', 'currentQuestionText:', currentQuestionText);
       handleVoicePlay(currentQuestionText);
     }
-  }, [previousQuestionId, currentQuestionId]);
+  }, [previousQuestionId, currentQuestionId, shouldReadOutLoud, voiceOptions?.length]);
 
   return { handleVoicePlay, handleVoiceStop };
 };
