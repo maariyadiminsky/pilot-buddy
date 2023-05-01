@@ -17,8 +17,18 @@ export interface DatabaseType extends IDBPDatabase<DatabaseType> {
 }
 
 const DATABASE_NAME = 'my-db'; // temp
+const DATABASE_STORE = {
+  USERS: 'users',
+  SESSIONS_TABLE: 'sessionsTable',
+  SESSIONS: 'sessions',
+};
 export const DATABASE_ERROR = {
+  DATABASE_NOT_AVAILABLE: 'Database not available',
+  DATABASE_NOT_FOUND: 'Specified database not found',
+  DATA_EXISTS: 'Data already exists in the database',
+  TRANSACTION_ABORTED: 'Transaction aborted',
   USER_NOT_FOUND: 'User not found',
+  STORAGE_QUOTA: 'Storage quota exceeded',
 };
 
 export const useDatabase = () => {
@@ -29,16 +39,16 @@ export const useDatabase = () => {
     await openDB<DatabaseType>(DATABASE_NAME, 1, {
       // make sure all required stores exist
       upgrade(theDb) {
-        if (!theDb.objectStoreNames.contains('users')) {
-          theDb.createObjectStore('users', { keyPath: 'email' });
+        if (!theDb.objectStoreNames.contains(DATABASE_STORE.USERS)) {
+          theDb.createObjectStore(DATABASE_STORE.USERS, { keyPath: 'email' });
         }
 
-        if (!theDb.objectStoreNames.contains('sessions')) {
-          theDb.createObjectStore('sessions', { keyPath: 'id' });
+        if (!theDb.objectStoreNames.contains(DATABASE_STORE.SESSIONS_TABLE)) {
+          theDb.createObjectStore(DATABASE_STORE.SESSIONS_TABLE, { keyPath: 'id' });
         }
 
-        if (!theDb.objectStoreNames.contains('sessionData')) {
-          theDb.createObjectStore('sessionsTable', { keyPath: 'id' });
+        if (!theDb.objectStoreNames.contains(DATABASE_STORE.SESSIONS)) {
+          theDb.createObjectStore(DATABASE_STORE.SESSIONS, { keyPath: 'id' });
         }
       },
     });
@@ -63,16 +73,17 @@ export const useDatabase = () => {
       db = await openDatabase();
     }
 
-    if (!db) throw new Error('Database not available');
+    if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_AVAILABLE);
 
     return db;
   };
 
+  // user
   const getDBUser = async (encryptedEmail: string) => {
     const db = await getDatabase();
     if (!db) return null;
 
-    const user = await db.get('users', encryptedEmail);
+    const user = await db.get(DATABASE_STORE.USERS, encryptedEmail);
     if (!user) {
       throw new Error(DATABASE_ERROR.USER_NOT_FOUND);
     }
@@ -90,8 +101,8 @@ export const useDatabase = () => {
     const db = await getDatabase();
     if (!db) return;
 
-    const tx = db.transaction('users', 'readwrite');
-    const store = tx.objectStore('users');
+    const tx = db.transaction(DATABASE_STORE.USERS, 'readwrite');
+    const store = tx.objectStore(DATABASE_STORE.USERS);
     await store.put({
       email: encryptedEmail,
       password: encryptedPassword,
@@ -107,19 +118,19 @@ export const useDatabase = () => {
       switch (error.name) {
         case 'QuotaExceededError':
           // Handle quota exceeded error here
-          handleError?.('Storage quota exceeded');
+          handleError?.(DATABASE_ERROR.STORAGE_QUOTA);
           break;
         case 'NotFoundError':
           // Handle not found error here
-          handleError?.('Specified database not found');
+          handleError?.(DATABASE_ERROR.DATABASE_NOT_FOUND);
           break;
         case 'ConstraintError':
           // Handle constraint error here
-          handleError?.('Data already exists in the database');
+          handleError?.(DATABASE_ERROR.DATA_EXISTS);
           break;
         case 'AbortError':
           // Handle aborted transaction error here
-          handleError?.('Transaction aborted');
+          handleError?.(DATABASE_ERROR.TRANSACTION_ABORTED);
           break;
         default:
           // Handle other errors here
