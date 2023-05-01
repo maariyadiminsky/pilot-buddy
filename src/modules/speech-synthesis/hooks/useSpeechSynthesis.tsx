@@ -44,7 +44,7 @@ export const useSpeechSynthesis = (
 
       if (speech?.voice) {
         try {
-          cancel();
+          cancel?.();
         } catch (error) {
           // illegal invocation error when component unmounts during development changes
           // because cancel loses original window.speechSynthesis context.

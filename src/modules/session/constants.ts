@@ -1,4 +1,5 @@
 import { SessionTimeEnum, SessionOrderEnum } from './types';
+import { SessionDataType } from '@modules/session/types';
 import {
   ExclamationTriangleIcon,
   InformationCircleIcon,
@@ -7,6 +8,24 @@ import {
   LightBulbIcon,
   MapPinIcon,
 } from '@heroicons/react/20/solid';
+
+export const SESSION_DATA_INITIAL_STATE = {
+  questions: [],
+  notes: [],
+  settings: {
+    isTimed: false,
+    shouldHaveOrder: false,
+    shouldReadOutLoud: true,
+    time: undefined,
+    order: undefined,
+    voice: {
+      voice: { id: 0, name: 'Daniel' },
+      pitch: 1,
+      rate: 1,
+      volume: 1,
+    },
+  },
+} as SessionDataType;
 
 export const TIME_OPTIONS = [
   { id: 0, name: SessionTimeEnum['5 Seconds'] },

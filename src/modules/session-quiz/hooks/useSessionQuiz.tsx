@@ -1,4 +1,3 @@
-import { questions as questionData } from '@modules/session/Session';
 import { SyntheticEvent, useState, useMemo } from 'react';
 import { usePrevious } from '@common/hooks';
 import { getQuestionOrder } from '@modules/session-quiz/utils';
@@ -14,7 +13,7 @@ export const useSessionQuiz = (
   const { shouldHaveOrder, shouldReadOutLoud, voice, order } = settings;
 
   const questionsOrdered = useMemo(
-    () => (shouldHaveOrder && order ? getQuestionOrder(order.name, questionData) : questionData),
+    () => (shouldHaveOrder && order ? getQuestionOrder(order.name, questionsData) : questionsData),
     [questionsData]
   );
 

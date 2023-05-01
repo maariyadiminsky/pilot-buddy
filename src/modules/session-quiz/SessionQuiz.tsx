@@ -7,26 +7,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { SessionDataType } from '@modules/session/types';
 import { useSessionQuiz, useSessionQuizTime } from '@modules/session-quiz/hooks';
 import SessionQuizResults from '@modules/session-quiz/SessionQuizResults';
-
-import { questions as questionsData } from '@modules/session/Session'; // todo: remove after get this from storage
-
-const SESSION_DATA_INITIAL_STATE = {
-  questions: questionsData,
-  notes: [],
-  settings: {
-    isTimed: false,
-    shouldHaveOrder: false,
-    shouldReadOutLoud: true,
-    time: undefined,
-    order: undefined,
-    voice: {
-      voice: { id: 0, name: 'Daniel' },
-      pitch: 1,
-      rate: 1,
-      volume: 1,
-    },
-  },
-} as SessionDataType;
+import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
+import { questions as questionsData } from '@modules/session/hooks'; // todo: remove after get this from storage
 
 // todo: questions will come from an api endpoint within storage
 // temporarily using same data as in SessionQuestions
@@ -39,7 +21,7 @@ const SessionQuiz = () => {
 
   useEffect(() => {
     // todo replace SESSION_DATA_INITIAL_STATE here with sessionData from storage.
-    setSessionData(SESSION_DATA_INITIAL_STATE);
+    setSessionData({ ...SESSION_DATA_INITIAL_STATE, questions: questionsData });
   }, []);
 
   // dictaphone

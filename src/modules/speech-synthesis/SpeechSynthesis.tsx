@@ -50,7 +50,7 @@ const SpeechSynthesis = ({ text }: TextToSpeechProps) => {
   ) as BrandButtonType[];
 
   // todo: add a loader if no voice options
-  if (!voiceOptions?.length) return 'Loading...';
+  if (!voiceOptions?.length) return <div>Loading...</div>;
 
   return (
     <div className="flex flex-col">
