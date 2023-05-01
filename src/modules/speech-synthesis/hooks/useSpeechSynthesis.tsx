@@ -58,6 +58,7 @@ export const useSpeechSynthesis = (
     if (isPaused) {
       window.speechSynthesis.resume();
     } else if (customText) {
+      // in the case window context is lost or want to pass custom text
       const speechSynthesisUtterance = new SpeechSynthesisUtterance(customText);
 
       speechSynthesisUtterance.voice =
@@ -71,7 +72,7 @@ export const useSpeechSynthesis = (
 
       window.speechSynthesis.speak(speechSynthesisUtterance);
     } else if (speech && voice) {
-      console.log('in speech and voice');
+      // otherwise if context intact and have current speech set
       speech.voice = voiceOptions.find((voiceOption) => voiceOption.name === voice.name) || null;
       speech.pitch = pitch;
       speech.rate = rate;

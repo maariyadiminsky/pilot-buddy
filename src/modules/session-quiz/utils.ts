@@ -12,10 +12,7 @@ export const getTimeData = (time?: SelectMenuItemType) => {
   };
 };
 
-export const getQuestionOrder = (
-  orderType: keyof typeof SessionOrderEnum,
-  sessions: SessionQuestionType[]
-) => {
+export const getQuestionOrder = (orderType: string, sessions: SessionQuestionType[]) => {
   switch (orderType) {
     case SessionOrderEnum.Random:
       return shuffle(sessions);

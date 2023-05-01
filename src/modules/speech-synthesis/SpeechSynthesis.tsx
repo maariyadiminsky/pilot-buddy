@@ -2,6 +2,7 @@ import Range from '@common/components/range/Range';
 import { useSpeechSynthesis } from '@modules/speech-synthesis/hooks';
 import VoiceSelectMenu from '@modules/speech-synthesis/VoiceSelectMenu';
 import BrandButton, { type BrandButtonType } from '@common/components/button/BrandButton';
+import { useMemo } from 'react';
 
 interface TextToSpeechProps {
   text: string;
@@ -24,26 +25,29 @@ const SpeechSynthesis = ({ text }: TextToSpeechProps) => {
     handleVolumeChange,
   } = useSpeechSynthesis(text);
 
-  const buttonActions = [
-    {
-      text: isPaused ? 'Resume' : 'Play',
-      srText: 'play voice',
-      buttonClassType: 'clear',
-      handleOnClick: handleVoicePlay,
-    },
-    {
-      text: 'Pause',
-      srText: 'pause voice',
-      buttonClassType: 'clear',
-      handleOnClick: handleVoicePause,
-    },
-    {
-      text: 'Stop',
-      srText: 'stop voice',
-      buttonClassType: 'clear',
-      handleOnClick: handleVoiceStop,
-    },
-  ] as BrandButtonType[];
+  const buttonActions = useMemo(
+    () => [
+      {
+        text: isPaused ? 'Resume' : 'Play',
+        srText: 'play voice',
+        buttonClassType: 'clear',
+        handleOnClick: handleVoicePlay,
+      },
+      {
+        text: 'Pause',
+        srText: 'pause voice',
+        buttonClassType: 'clear',
+        handleOnClick: handleVoicePause,
+      },
+      {
+        text: 'Stop',
+        srText: 'stop voice',
+        buttonClassType: 'clear',
+        handleOnClick: handleVoiceStop,
+      },
+    ],
+    []
+  ) as BrandButtonType[];
 
   // todo: add a loader if no voice options
   if (!voiceOptions?.length) return 'Loading...';

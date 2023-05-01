@@ -13,13 +13,7 @@ import OrderSelectMenu from './settings/OrderSelectMenu';
 import { TIME_OPTIONS, ORDER_OPTIONS } from './constants';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useMemo } from 'react';
-import { SessionQuestionType, SettingsType, NoteDataType } from '@modules/session/types';
-
-interface SessionData {
-  questions: SessionQuestionType[];
-  notes?: NoteDataType[];
-  settings: SettingsType;
-}
+import { SessionDataType } from '@modules/session/types';
 
 export const questions = [
   {
@@ -62,10 +56,16 @@ const sessionData = {
     isTimed: false,
     shouldHaveOrder: false,
     shouldReadOutLoud: false,
-    time: null,
-    order: null,
+    time: undefined,
+    order: undefined,
+    // voice: {
+    //   voice: { id: 0, name: 'Daniel' },
+    //   pitch: 1,
+    //   rate: 1,
+    //   volume: 1,
+    // },
   },
-} as SessionData;
+} as SessionDataType;
 
 // todo: get session name and add to PageWrapper title
 const Session = () => {

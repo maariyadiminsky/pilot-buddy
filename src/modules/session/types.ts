@@ -12,6 +12,7 @@ export enum SessionOrderEnum {
   Sort = 'Sort',
   Random = 'Random',
 }
+
 interface NoteIconType {
   name: string;
   value: string | null;
@@ -26,12 +27,20 @@ export interface NoteDataType {
   icon: NoteIconType;
 }
 
+export interface SettingsVoiceType {
+  voice: SelectMenuItemType;
+  pitch: number;
+  rate: number;
+  volume: number;
+}
+
 export interface SettingsType {
   isTimed: boolean;
   shouldHaveOrder: boolean;
   shouldReadOutLoud: boolean;
   time?: SelectMenuItemType;
   order?: SelectMenuItemType;
+  voice?: SettingsVoiceType;
 }
 
 export interface SessionQuestionType {
@@ -39,4 +48,10 @@ export interface SessionQuestionType {
   question: string;
   answer?: string | null;
   time?: SelectMenuItemType;
+}
+
+export interface SessionDataType {
+  questions: SessionQuestionType[];
+  notes?: NoteDataType[];
+  settings: SettingsType;
 }
