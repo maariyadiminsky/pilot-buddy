@@ -3,6 +3,7 @@ import { useCallback, useState, useMemo } from 'react';
 import { getPinnedSessionsIds, isSessionPinned } from '@modules/study-room/utils';
 import { removeObjectFromArray, getUniqId } from '@common/utils';
 import { type ModalDataType } from '@common/components/modal/Modal';
+import { useDatabase } from '@common/hooks';
 
 const createPin = ({ id, questions, name, color }: SessionsTableDataType) => ({
   id: getUniqId(),
@@ -27,6 +28,8 @@ export const usePinnedSessions = (
   const [pinnedSessions, setPinnedSessions] = useState<PinnedSessionType[]>([]);
   const [isEditingPinnedSession, setIsEditingPinnedSession] = useState(false);
 
+  const { addOrUpdateDBSessionTableItem, updateDbPartialDataOfSessionTableItem } = useDatabase();
+
   const pinnedSessionIds = useMemo(
     () => (pinnedSessions?.length ? getPinnedSessionsIds(pinnedSessions) : []),
     [pinnedSessions?.length]
@@ -41,17 +44,18 @@ export const usePinnedSessions = (
   const handlePinSession = (session: SessionsTableDataType) => {
     if (!pinnedSessions || pinnedSessions.length < 4) {
       setPinnedSessions([createPin(session), ...(pinnedSessions || [])]);
+      // update storage
+      addOrUpdateDBSessionTableItem(session);
     } else {
       handleSetModalData(PIN_LIMIT_MODAL_DATA);
-
       handleModalOpen?.(true);
     }
   };
 
-  const handleUnpinSession = (sessionId: string) => {
-    setPinnedSessions(removeObjectFromArray(pinnedSessions, sessionId, 'sessionId'));
-
-    // todo: save update in storage
+  const handleUnpinSession = (id: string) => {
+    setPinnedSessions(removeObjectFromArray(pinnedSessions, id, 'sessionId'));
+    // update storage
+    updateDbPartialDataOfSessionTableItem({ isPinned: false }, id);
   };
 
   const handleSubmitSessionPinTry = (session: SessionsTableDataType) => {
@@ -63,7 +67,7 @@ export const usePinnedSessions = (
 
   const handleRemoveSessionPinTry = (id: string) => {
     if (isSessionPinned(id, pinnedSessionIds)) {
-      handleUnpinSession(id);
+      setPinnedSessions(removeObjectFromArray(pinnedSessions, id, 'sessionId'));
     }
   };
 

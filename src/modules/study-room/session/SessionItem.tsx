@@ -26,7 +26,6 @@ const SessionItem = ({
   questions,
   textColor,
   color,
-  isPinned,
   index,
   isSessionPinned,
   handlePinSession,
@@ -40,7 +39,7 @@ const SessionItem = ({
     if (isSessionPinned) {
       handleUnpinSession(id);
     } else {
-      handlePinSession({ id, name, topic, questions, color, textColor, isPinned });
+      handlePinSession({ id, name, topic, questions, color, textColor, isPinned: true });
     }
   };
 

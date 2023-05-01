@@ -29,6 +29,7 @@ export const DATABASE_ERROR = {
   STORAGE_QUOTA: 'Storage quota exceeded',
 };
 
+// ---> important: parent component should wrap each method in a try/catch
 export const useDatabase = () => {
   const [database, setDatabase] = useState<IDBPDatabase<DatabaseType>>();
 
@@ -81,24 +82,43 @@ export const useDatabase = () => {
     data: SessionsTableDataType | SessionDataType | UserType
   ) => {
     const db = await getDatabase();
-    if (!db) return null;
+    if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
+
+    const tx = db.transaction(storeName, 'readwrite');
+    const store = tx.objectStore(storeName);
+
+    // if key is not provided IndexedDB know to look by the key
+    // provided when creating the store and update this way as well
+    const item = await store.put(data);
+
+    // Wait for the transaction to complete.
+    await tx.done;
+
+    return item;
+  };
+
+  const updateDbPartialDataOfItem = async (storeName: string, data: any, keyToFindItem: string) => {
+    const db = await getDatabase();
+    if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
 
     const tx = db.transaction(storeName, 'readwrite');
     const store = tx.objectStore(storeName);
 
     // If the record with the same key exists, it will be updated.
     // Otherwise, a new record will be added.
-    await store.put(data);
+    const existingItem = keyToFindItem ? await store.get(keyToFindItem) : null;
+    if (existingItem) {
+      const item = await store.put({ ...existingItem, ...data });
+      await tx.done;
+      return item;
+    }
 
-    // Wait for the transaction to complete.
-    await tx.done;
-
-    return data;
+    return null;
   };
 
   const getDBAllStoreItems = async (storeName: string) => {
     const db = await getDatabase();
-    if (!db) return null;
+    if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
 
     const tx = db.transaction(storeName, 'readonly');
     const store = tx.objectStore(storeName);
@@ -110,7 +130,7 @@ export const useDatabase = () => {
 
   const deleteDBItem = async (storeName: string, keyToFindItem: string) => {
     const db = await getDatabase();
-    if (!db) return null;
+    if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
 
     const tx = db.transaction(storeName, 'readwrite');
     const store = tx.objectStore(storeName);
@@ -128,8 +148,11 @@ export const useDatabase = () => {
   const getAllDBSessionTableItems = async () =>
     await getDBAllStoreItems(DATABASE_STORE.SESSIONS_TABLE);
 
-  const updateDBSessionTableItem = async (tableSessionData: SessionsTableDataType) =>
+  const addOrUpdateDBSessionTableItem = async (tableSessionData: SessionsTableDataType) =>
     await addOrUpdateStoreItem(DATABASE_STORE.SESSIONS_TABLE, tableSessionData);
+
+  const updateDbPartialDataOfSessionTableItem = async (data: any, sessionId: string) =>
+    await updateDbPartialDataOfItem(DATABASE_STORE.SESSIONS_TABLE, data, sessionId);
 
   const deleteDBSessionTableItem = async (sessionId: string) =>
     await deleteDBItem(DATABASE_STORE.SESSIONS_TABLE, sessionId);
@@ -137,7 +160,7 @@ export const useDatabase = () => {
   // sessions
   const getAllDBSessions = async () => await getDBAllStoreItems(DATABASE_STORE.SESSIONS);
 
-  const updateDBSessionItem = async (sessionData: SessionDataType) =>
+  const addOrUpdateDBSessionItem = async (sessionData: SessionDataType) =>
     await addOrUpdateStoreItem(DATABASE_STORE.SESSIONS, sessionData);
 
   const deleteDBSessionItem = async (sessionId: string) =>
@@ -146,7 +169,7 @@ export const useDatabase = () => {
   // user
   const getDBUser = async (encryptedEmail: string) => {
     const db = await getDatabase();
-    if (!db) return null;
+    if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
 
     const user = await db.get(DATABASE_STORE.USERS, encryptedEmail);
     if (!user) {
@@ -196,10 +219,11 @@ export const useDatabase = () => {
     getDBUser,
     setDBUser,
     getAllDBSessions,
-    updateDBSessionItem,
+    addOrUpdateDBSessionItem,
     deleteDBSessionItem,
     getAllDBSessionTableItems,
-    updateDBSessionTableItem,
+    addOrUpdateDBSessionTableItem,
+    updateDbPartialDataOfSessionTableItem,
     deleteDBSessionTableItem,
   };
 };

@@ -4,72 +4,7 @@ import { type SessionsTableDataType } from '@modules/study-room/types';
 import { sessionsWithNewSessionInOrder, sessionsOrderedByTopic } from '@modules/study-room/utils';
 import { removeObjectFromArray } from '@common/utils';
 import { type ModalDataType } from '@common/components/modal/Modal';
-
-const sessionsTableData = [
-  {
-    id: '1',
-    name: 'Pilot Exam sdfdsf fdsdfsd fsdsdfsd dasdsafasafasfasfasfasd dadasdasdasdsad',
-    topic: 'Private Pilot Exam sdfdsf fdsdfsd fsdsdfsd dasdsafasafasfasfasfasd dadasdasdasdsad ',
-    questions: 12,
-    color: 'bg-sky-600',
-    textColor: 'text-sky-600',
-    isPinned: false,
-  },
-  {
-    id: '2',
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 0,
-    color: 'bg-yellow-600',
-    textColor: 'text-yellow-600',
-    isPinned: true,
-  },
-  {
-    id: '3',
-    name: 'Instruments Test #1',
-    topic: 'Instruments',
-    questions: 24,
-    color: 'bg-purple-600',
-    textColor: 'text-purple-600',
-    isPinned: false,
-  },
-  {
-    id: '4',
-    name: 'Instruments Test #2',
-    topic: 'Instruments',
-    questions: 9,
-    color: 'bg-yellow-600',
-    textColor: 'text-yellow-600',
-    isPinned: false,
-  },
-  {
-    id: '5',
-    name: 'Practice',
-    topic: 'Commercial',
-    questions: 6,
-    color: 'bg-sky-600',
-    textColor: 'text-sky-600',
-    isPinned: true,
-  },
-  {
-    id: '6',
-    name: 'CM Codes',
-    topic: 'Commercial Test dass',
-    questions: 3,
-    color: 'bg-pink-700',
-    textColor: 'text-pink-700',
-    isPinned: true,
-  },
-  {
-    id: '7',
-    name: 'Pilot Exam Test #2',
-    topic: 'Private Pilot',
-    questions: 17,
-    color: 'bg-sky-600',
-    textColor: 'text-sky-600',
-    isPinned: true,
-  },
-] as SessionsTableDataType[];
+import { useDatabase } from '@common/hooks';
 
 const REMOVE_SESSION_CONFIRMATION_STATIC_MODAL_DATA = {
   title: 'Are you sure?',
@@ -94,14 +29,29 @@ export const useTableSessions = (
   const [currentSession, setCurrentSession] = useState<SessionsTableDataType>();
   const [shouldShowSessionAction, setShouldShowSessionAction] = useState(false);
 
+  const { getAllDBSessionTableItems, addOrUpdateDBSessionTableItem, deleteDBSessionTableItem } =
+    useDatabase();
+
   useEffect(() => {
-    // todo: get sessionsTableData from storage if it exists there
-    if (sessionsTableData) {
-      // set pinned sessions
-      handleSetInitialPins(sessionsTableData);
-      // set table session data ordered by topic for easier find
-      setSessions([...sessionsOrderedByTopic(sessionsTableData)]);
-    }
+    const getTableSessions = async () => {
+      try {
+        const sessionsTableItems = await getAllDBSessionTableItems();
+
+        if (sessionsTableItems) {
+          // set pinned sessions
+          handleSetInitialPins(sessionsTableItems);
+          // set table session data ordered by topic for easier find
+          setSessions([...sessionsOrderedByTopic(sessionsTableItems)]);
+        }
+      } catch (error) {
+        if (error instanceof Error && error.message) {
+          // todo: add error monitoring
+          console.log(error);
+        }
+      }
+    };
+
+    getTableSessions();
   }, []);
 
   const handleAddSession = (session: SessionsTableDataType) => {
@@ -123,7 +73,8 @@ export const useTableSessions = (
     handleSetModalData(undefined);
     // check if this was a pin edit if so, update the pin
     handleSubmitSessionPinTry(session);
-    // todo: save in storage
+    // save in storage
+    addOrUpdateDBSessionTableItem(session);
   };
 
   const handleCancelAction = () => {
@@ -142,7 +93,8 @@ export const useTableSessions = (
     setSessions(removeObjectFromArray(customSessions || sessions, id, 'id'));
     // if session was a pin, remove it there too
     handleRemoveSessionPinTry(id);
-    // todo: save update in storage
+    // remove in storage
+    deleteDBSessionTableItem(id);
   };
 
   const handleRemoveSessionConfirm = (id: string) => {
@@ -172,7 +124,6 @@ export const useTableSessions = (
     handleIsEditingPinnedSession(Boolean(isPin));
     // hide session add/edit form
     setShouldShowSessionAction(true);
-    // todo: save update in storage
   };
 
   return {
