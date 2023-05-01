@@ -6,7 +6,11 @@ import { type SessionQuestionType, type SettingsType } from '@modules/session/ty
 import { SessionQuestionWithAnswerType } from '@modules/session-quiz/types';
 import { useSessionQuizVoice } from '@modules/session-quiz/hooks';
 
-export const useSessionQuiz = (questionsData: SessionQuestionType[], settings: SettingsType) => {
+export const useSessionQuiz = (
+  questionsData: SessionQuestionType[],
+  settings: SettingsType,
+  resetAndTurnOffMicrophone: () => void
+) => {
   const { shouldHaveOrder, shouldReadOutLoud, voice, order } = settings;
 
   const questionsOrdered = useMemo(
@@ -47,6 +51,7 @@ export const useSessionQuiz = (questionsData: SessionQuestionType[], settings: S
       { ...currentQuestion, quizAnswer: currentQuizAnswer },
     ]);
     setCurrentQuizAnswer('');
+    resetAndTurnOffMicrophone();
 
     const current = questionsOrdered[questionsOrdered.length - questionsLeftCount];
     setCurrentQuestion({ ...current });

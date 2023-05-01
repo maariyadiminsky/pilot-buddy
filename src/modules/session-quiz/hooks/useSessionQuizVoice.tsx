@@ -32,7 +32,6 @@ export const useSessionQuizVoice = (
       currentQuestionId !== lastQuestionId &&
       voiceOptions?.length
     ) {
-      console.log('in handle voice play', 'currentQuestionText:', currentQuestionText);
       handleVoicePlay(currentQuestionText);
     }
   }, [previousQuestionId, currentQuestionId, shouldReadOutLoud, voiceOptions?.length]);

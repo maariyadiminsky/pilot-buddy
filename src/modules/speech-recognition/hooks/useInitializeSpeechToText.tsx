@@ -10,7 +10,7 @@ export enum DictaphoneModalErrorType {
 }
 
 export const useInitializeSpeechToText = () => {
-  const { browserSupportsSpeechRecognition, transcript } = useSpeechRecognition();
+  const { browserSupportsSpeechRecognition, transcript, resetTranscript } = useSpeechRecognition();
 
   const [isMicrophoneAvailable, setIsMicrophoneAvailable] = useState(false);
   const [modalData, setModalData] = useState<ModalDataType>();
@@ -95,6 +95,7 @@ export const useInitializeSpeechToText = () => {
     SpeechRecognition,
     isMicrophoneAvailable,
     transcript,
+    resetTranscript,
     modalData,
     setModalError,
     clearModalData,
