@@ -28,7 +28,7 @@ export const usePinnedSessions = (
   const [pinnedSessions, setPinnedSessions] = useState<PinnedSessionType[]>([]);
   const [isEditingPinnedSession, setIsEditingPinnedSession] = useState(false);
 
-  const { addOrUpdateDBSessionTableItem, updateDbPartialDataOfSessionTableItem } = useDatabase();
+  const { addOrUpdateDBSessionTableItem, updateDBPartialDataOfSessionTableItem } = useDatabase();
 
   const pinnedSessionIds = useMemo(
     () => (pinnedSessions?.length ? getPinnedSessionsIds(pinnedSessions) : []),
@@ -43,9 +43,21 @@ export const usePinnedSessions = (
 
   const handlePinSession = (session: SessionsTableDataType) => {
     if (!pinnedSessions || pinnedSessions.length < 4) {
-      setPinnedSessions([createPin(session), ...(pinnedSessions || [])]);
       // update storage
-      addOrUpdateDBSessionTableItem(session);
+      let hasError = null;
+      try {
+        addOrUpdateDBSessionTableItem(session);
+      } catch (error) {
+        hasError = error;
+        if (error instanceof Error) {
+          console.log(error);
+          // todo: add error monitoring
+        }
+      } finally {
+        if (!hasError) {
+          setPinnedSessions([createPin(session), ...(pinnedSessions || [])]);
+        }
+      }
     } else {
       handleSetModalData(PIN_LIMIT_MODAL_DATA);
       handleModalOpen?.(true);
@@ -53,9 +65,20 @@ export const usePinnedSessions = (
   };
 
   const handleUnpinSession = (id: string) => {
-    setPinnedSessions(removeObjectFromArray(pinnedSessions, id, 'sessionId'));
-    // update storage
-    updateDbPartialDataOfSessionTableItem({ isPinned: false }, id);
+    let hasError = null;
+    try {
+      updateDBPartialDataOfSessionTableItem({ isPinned: false }, id);
+    } catch (error) {
+      hasError = error;
+      if (error instanceof Error) {
+        console.log(error);
+        // todo: add error monitoring
+      }
+    } finally {
+      if (!hasError) {
+        setPinnedSessions(removeObjectFromArray(pinnedSessions, id, 'sessionId'));
+      }
+    }
   };
 
   const handleSubmitSessionPinTry = (session: SessionsTableDataType) => {

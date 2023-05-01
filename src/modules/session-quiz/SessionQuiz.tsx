@@ -6,7 +6,7 @@ import Modal, { type ModalRef } from '@common/components/modal/Modal';
 import { useParams, useNavigate } from 'react-router-dom';
 import { type SessionDataType, type SessionQuestionType } from '@modules/session/types';
 import SessionQuizResults from '@modules/session-quiz/SessionQuizResults';
-import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
+import { getInitialSessionData } from '@modules/session/constants';
 import { questionsData } from '@modules/session/hooks'; // todo: remove after get this from storage
 import { usePrevious } from '@common/hooks';
 import { getQuestionOrder, getTimeData } from '@modules/session-quiz/utils';
@@ -21,9 +21,11 @@ const SessionQuiz = () => {
   const navigate = useNavigate();
   const [sessionData, setSessionData] = useState<SessionDataType | null>(null);
 
+  const initialSessionData = getInitialSessionData('0');
+
   useEffect(() => {
     // todo replace SESSION_DATA_INITIAL_STATE here with sessionData from storage.
-    setSessionData({ ...SESSION_DATA_INITIAL_STATE, questions: questionsData });
+    setSessionData({ ...initialSessionData, questions: questionsData });
   }, []);
   // session data and voice if enabled
   const questionsOrdered = useMemo(

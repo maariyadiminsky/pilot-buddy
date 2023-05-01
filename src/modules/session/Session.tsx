@@ -9,12 +9,50 @@ import TimeSelectMenu from './settings/TimeSelectMenu';
 import OrderSelectMenu from './settings/OrderSelectMenu';
 import { useSession } from '@modules/session/hooks/useSession';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { DATABASE_ERROR, useDatabase } from '@common/hooks';
+import { SessionDataType } from '@modules/session/types';
 
-// todo: get session name and add to PageWrapper title
 const Session = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const [session, setSession] = useState<SessionDataType>();
+  const [sessionName, setSessionName] = useState('');
+
+  const { getDBSession, getDBSessionTableItem } = useDatabase();
+
+  useEffect(() => {
+    const getSession = async () => {
+      let hasError = null;
+      let sessionData;
+      let sessionInTable;
+      try {
+        if (!id) return;
+
+        sessionData = await getDBSession(id);
+        sessionInTable = await getDBSessionTableItem(id);
+      } catch (error) {
+        hasError = error;
+        if (error instanceof Error && error.message) {
+          console.log(error);
+          // todo: add error monitoring
+          if (error.message === DATABASE_ERROR.SESSION_NOT_FOUND) {
+            navigate('/');
+          }
+        }
+      } finally {
+        if (!hasError && sessionData && sessionInTable) {
+          setSessionName(sessionInTable.name);
+          setSession(sessionData);
+        }
+      }
+    };
+
+    getSession();
+  }, [id]);
+
+  console.log('session:', session);
 
   const {
     questions,
@@ -103,7 +141,7 @@ const Session = () => {
   );
 
   return (
-    <PageWrapper title="Session Room" headerActions={headerActions}>
+    <PageWrapper title={sessionName} headerActions={headerActions}>
       <div className="relative flex h-full min-w-full flex-col bg-inherit">
         <div className="w-full flex-grow xl:flex">
           <div className="min-w-0 flex-1 bg-inherit xl:flex">

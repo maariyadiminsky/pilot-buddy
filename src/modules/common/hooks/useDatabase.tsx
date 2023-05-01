@@ -2,6 +2,7 @@ import { openDB, IDBPDatabase, IDBPObjectStore } from 'idb';
 import { type SessionsTableDataType } from '@modules/study-room/types';
 import { type SessionDataType } from '@modules/session/types';
 import { useState, useCallback } from 'react';
+import { getInitialSessionData } from '@modules/session/constants';
 
 interface UserType {
   encryptedEmail: string;
@@ -25,6 +26,7 @@ export const DATABASE_ERROR = {
   DATABASE_NOT_FOUND: 'Specified database not found',
   DATA_EXISTS: 'Data already exists in the database',
   TRANSACTION_ABORTED: 'Transaction aborted',
+  SESSION_NOT_FOUND: 'Session Not found',
   USER_NOT_FOUND: 'User not found',
   STORAGE_QUOTA: 'Storage quota exceeded',
 };
@@ -128,6 +130,13 @@ export const useDatabase = () => {
     return items || [];
   };
 
+  const getDBStoreItem = async (storeName: string, keytoFindItem: string) => {
+    const db = await getDatabase();
+    if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
+
+    return await db.get(storeName, keytoFindItem);
+  };
+
   const deleteDBItem = async (storeName: string, keyToFindItem: string) => {
     const db = await getDatabase();
     if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
@@ -148,10 +157,20 @@ export const useDatabase = () => {
   const getAllDBSessionTableItems = async () =>
     await getDBAllStoreItems(DATABASE_STORE.SESSIONS_TABLE);
 
+  const getDBSessionTableItem = async (sessionId: string) => {
+    const session = await getDBStoreItem(DATABASE_STORE.SESSIONS_TABLE, sessionId);
+
+    if (!session) {
+      throw new Error(DATABASE_ERROR.SESSION_NOT_FOUND);
+    }
+
+    return session;
+  };
+
   const addOrUpdateDBSessionTableItem = async (tableSessionData: SessionsTableDataType) =>
     await addOrUpdateStoreItem(DATABASE_STORE.SESSIONS_TABLE, tableSessionData);
 
-  const updateDbPartialDataOfSessionTableItem = async (data: any, sessionId: string) =>
+  const updateDBPartialDataOfSessionTableItem = async (data: any, sessionId: string) =>
     await updateDbPartialDataOfItem(DATABASE_STORE.SESSIONS_TABLE, data, sessionId);
 
   const deleteDBSessionTableItem = async (sessionId: string) =>
@@ -163,15 +182,24 @@ export const useDatabase = () => {
   const addOrUpdateDBSessionItem = async (sessionData: SessionDataType) =>
     await addOrUpdateStoreItem(DATABASE_STORE.SESSIONS, sessionData);
 
+  const getDBSession = async (sessionId: string) => {
+    let session = await getDBStoreItem(DATABASE_STORE.SESSIONS, sessionId);
+
+    if (!session) {
+      const initialSessionData = getInitialSessionData(sessionId);
+      session = await addOrUpdateDBSessionItem(initialSessionData);
+    }
+
+    return session;
+  };
+
   const deleteDBSessionItem = async (sessionId: string) =>
     await deleteDBItem(DATABASE_STORE.SESSIONS, sessionId);
 
   // user
   const getDBUser = async (encryptedEmail: string) => {
-    const db = await getDatabase();
-    if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
+    const user = await getDBStoreItem(DATABASE_STORE.USERS, encryptedEmail);
 
-    const user = await db.get(DATABASE_STORE.USERS, encryptedEmail);
     if (!user) {
       throw new Error(DATABASE_ERROR.USER_NOT_FOUND);
     }
@@ -220,10 +248,12 @@ export const useDatabase = () => {
     setDBUser,
     getAllDBSessions,
     addOrUpdateDBSessionItem,
+    getDBSession,
     deleteDBSessionItem,
     getAllDBSessionTableItems,
+    getDBSessionTableItem,
     addOrUpdateDBSessionTableItem,
-    updateDbPartialDataOfSessionTableItem,
+    updateDBPartialDataOfSessionTableItem,
     deleteDBSessionTableItem,
   };
 };

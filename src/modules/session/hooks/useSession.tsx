@@ -77,8 +77,6 @@ export const useSession = () => {
     }
   }, []);
 
-  console.log('questions:', questions);
-
   return {
     questions,
     shouldShowQuestionAction,

@@ -63,18 +63,30 @@ export const useTableSessions = (
   };
 
   const handleSubmitSession = (session: SessionsTableDataType) => {
-    // update sessions
-    setSessions(sessionsWithNewSessionInOrder(session, sessions));
-    // reset current session
-    setCurrentSession(undefined);
-    // hide session add/edit form
-    setShouldShowSessionAction(false);
-    // reset modal data if it had data previously
-    handleSetModalData(undefined);
-    // check if this was a pin edit if so, update the pin
-    handleSubmitSessionPinTry(session);
     // save in storage
-    addOrUpdateDBSessionTableItem(session);
+    let hasError = null;
+    try {
+      addOrUpdateDBSessionTableItem(session);
+    } catch (error) {
+      hasError = error;
+      if (error instanceof Error) {
+        console.log(error);
+        // todo: add error monitoring
+      }
+    } finally {
+      if (!hasError) {
+        // update sessions
+        setSessions(sessionsWithNewSessionInOrder(session, sessions));
+        // reset current session
+        setCurrentSession(undefined);
+        // hide session add/edit form
+        setShouldShowSessionAction(false);
+        // reset modal data if it had data previously
+        handleSetModalData(undefined);
+        // check if this was a pin edit if so, update the pin
+        handleSubmitSessionPinTry(session);
+      }
+    }
   };
 
   const handleCancelAction = () => {
@@ -89,12 +101,24 @@ export const useTableSessions = (
   };
 
   const handleRemoveSession = (id: string, customSessions?: SessionsTableDataType[]) => {
-    // remove session
-    setSessions(removeObjectFromArray(customSessions || sessions, id, 'id'));
-    // if session was a pin, remove it there too
-    handleRemoveSessionPinTry(id);
-    // remove in storage
-    deleteDBSessionTableItem(id);
+    // remove from storage
+    let hasError = null;
+    try {
+      deleteDBSessionTableItem(id);
+    } catch (error) {
+      hasError = error;
+      if (error instanceof Error) {
+        console.log(error);
+        // todo: add error monitoring
+      }
+    } finally {
+      if (!hasError) {
+        // remove session
+        setSessions(removeObjectFromArray(customSessions || sessions, id, 'id'));
+        // if session was a pin, remove it there too
+        handleRemoveSessionPinTry(id);
+      }
+    }
   };
 
   const handleRemoveSessionConfirm = (id: string) => {

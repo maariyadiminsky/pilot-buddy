@@ -35,7 +35,7 @@ export const SESSION_DATA_INITIAL_STATE = {
   settings: {
     isTimed: false,
     shouldHaveOrder: false,
-    shouldReadOutLoud: true,
+    shouldReadOutLoud: false,
     time: TIME_OPTIONS[0],
     order: ORDER_OPTIONS[0],
     voice: {
@@ -45,7 +45,10 @@ export const SESSION_DATA_INITIAL_STATE = {
       volume: 1,
     },
   },
-} as SessionDataType;
+};
+
+export const getInitialSessionData = (sessionId: string) =>
+  ({ id: sessionId, ...SESSION_DATA_INITIAL_STATE } as SessionDataType);
 
 export const NOTE_TYPES = [
   {
