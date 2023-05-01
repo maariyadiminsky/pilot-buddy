@@ -27,6 +27,10 @@ const AuthProvider = ({ children }: AuthContextProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // I am aware this isnt the safest solution in the world,
+  // but this app was built for fun and of course in serious
+  // production use you should really create a backend
+  // and store in a server db for added security.
   useEffect(() => {
     const sessionToken = getCookie('sessionToken');
     setIsLoggedIn(Boolean(sessionToken && sessionToken !== ''));

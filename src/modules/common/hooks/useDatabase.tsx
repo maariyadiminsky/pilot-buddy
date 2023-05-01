@@ -2,16 +2,14 @@ import { openDB, IDBPDatabase, IDBPObjectStore } from 'idb';
 import { type SessionsTableDataType } from '@modules/study-room/types';
 import { type SessionDataType } from '@modules/session/types';
 import { useState, useCallback } from 'react';
-import { ENCRYPTION_KEY } from '@modules/auth/utils';
 
-interface User {
-  email: string;
-  password: string;
-  key: string;
+interface UserType {
+  encryptedEmail: string;
+  encryptedPassword: string;
 }
 
 export interface DatabaseType extends IDBPDatabase<DatabaseType> {
-  users: IDBPObjectStore<User, string>;
+  users: IDBPObjectStore<UserType, string>;
   sessions: IDBPObjectStore<SessionsTableDataType, string>;
   sessionData: IDBPObjectStore<SessionDataType, string>;
 }
@@ -78,6 +76,73 @@ export const useDatabase = () => {
     return db;
   };
 
+  const addOrUpdateStoreItem = async (
+    storeName: string,
+    data: SessionsTableDataType | SessionDataType | UserType
+  ) => {
+    const db = await getDatabase();
+    if (!db) return null;
+
+    const tx = db.transaction(storeName, 'readwrite');
+    const store = tx.objectStore(storeName);
+
+    // If the record with the same key exists, it will be updated.
+    // Otherwise, a new record will be added.
+    await store.put(data);
+
+    // Wait for the transaction to complete.
+    await tx.done;
+
+    return data;
+  };
+
+  const getDBAllStoreItems = async (storeName: string) => {
+    const db = await getDatabase();
+    if (!db) return null;
+
+    const tx = db.transaction(storeName, 'readonly');
+    const store = tx.objectStore(storeName);
+    const items = await store.getAll();
+    await tx.done;
+
+    return items || [];
+  };
+
+  const deleteDBItem = async (storeName: string, keyToFindItem: string) => {
+    const db = await getDatabase();
+    if (!db) return null;
+
+    const tx = db.transaction(storeName, 'readwrite');
+    const store = tx.objectStore(storeName);
+
+    const item = await store.get(keyToFindItem);
+    if (!item) return null;
+
+    store.delete(keyToFindItem);
+    await tx.done;
+
+    return item;
+  };
+
+  // session table
+  const getAllDBSessionTableItems = async () =>
+    await getDBAllStoreItems(DATABASE_STORE.SESSIONS_TABLE);
+
+  const updateDBSessionTableItem = async (tableSessionData: SessionsTableDataType) =>
+    await addOrUpdateStoreItem(DATABASE_STORE.SESSIONS_TABLE, tableSessionData);
+
+  const deleteDBSessionTableItem = async (sessionId: string) =>
+    await deleteDBItem(DATABASE_STORE.SESSIONS_TABLE, sessionId);
+
+  // sessions
+  const getAllDBSessions = async () => await getDBAllStoreItems(DATABASE_STORE.SESSIONS);
+
+  const updateDBSessionItem = async (sessionData: SessionDataType) =>
+    await addOrUpdateStoreItem(DATABASE_STORE.SESSIONS, sessionData);
+
+  const deleteDBSessionItem = async (sessionId: string) =>
+    await deleteDBItem(DATABASE_STORE.SESSIONS, sessionId);
+
   // user
   const getDBUser = async (encryptedEmail: string) => {
     const db = await getDatabase();
@@ -91,26 +156,10 @@ export const useDatabase = () => {
     return user;
   };
 
-  const setDBUser = async ({
-    encryptedEmail,
-    encryptedPassword,
-  }: {
-    encryptedEmail: string;
-    encryptedPassword: string;
-  }) => {
-    const db = await getDatabase();
-    if (!db) return;
+  const setDBUser = async (data: UserType) =>
+    await addOrUpdateStoreItem(DATABASE_STORE.USERS, data);
 
-    const tx = db.transaction(DATABASE_STORE.USERS, 'readwrite');
-    const store = tx.objectStore(DATABASE_STORE.USERS);
-    await store.put({
-      email: encryptedEmail,
-      password: encryptedPassword,
-      key: ENCRYPTION_KEY,
-    });
-    await tx.done;
-  };
-
+  // error handling
   // handleError should either be an error monitoring tool.
   // setter for rendering error on ui, or etc.
   const getDBErrorHandling = (error: unknown, handleError?: (error: string) => void) => {
@@ -134,16 +183,23 @@ export const useDatabase = () => {
           break;
         default:
           // Handle other errors here
-          console.error(error);
           break;
       }
+
+      console.error(error);
     }
   };
 
   return {
     openDatabase,
+    getDBErrorHandling,
     getDBUser,
     setDBUser,
-    getDBErrorHandling,
+    getAllDBSessions,
+    updateDBSessionItem,
+    deleteDBSessionItem,
+    getAllDBSessionTableItems,
+    updateDBSessionTableItem,
+    deleteDBSessionTableItem,
   };
 };

@@ -49,6 +49,7 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 0,
     indent: 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
+    'no-return-await': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'no-confusing-arrow': 'off',
