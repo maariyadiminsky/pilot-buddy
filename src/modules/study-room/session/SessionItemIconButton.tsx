@@ -45,9 +45,9 @@ const Wrapper = ({ link, children }: SessionButtonWrapperProps) => (
 );
 
 const SessionItemIconButton = (props: SessionItemButtonWithPossibleWrapperProps) => {
-  const { link } = props;
+  const { link, isDisabled } = props;
 
-  return link ? (
+  return link && !isDisabled ? (
     <Wrapper link={link}>
       <Button {...props} />{' '}
     </Wrapper>
