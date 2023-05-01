@@ -1,25 +1,10 @@
 import { SyntheticEvent, useState, useEffect, useContext } from 'react';
 import bcrypt from 'bcryptjs';
-import { openDB, IDBPDatabase, IDBPObjectStore } from 'idb';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
-import {
-  setCookie,
-  encryptData,
-  decryptData,
-  ENCRYPTION_KEY,
-  getSessionToken,
-} from '@modules/auth/utils';
+import { setCookie, encryptData, decryptData, getSessionToken } from '@modules/auth/utils';
 import { AuthContext } from '@modules/auth/AuthProvider';
+import { DATABASE_ERROR, useDatabase } from '@common/hooks';
 import { useNavigate } from 'react-router-dom';
-
-interface User {
-  email: string;
-  password: string;
-  key: string;
-}
-interface DatabaseType extends IDBPDatabase<DatabaseType> {
-  users: IDBPObjectStore<User, string>;
-}
 
 const limiter = new RateLimiterMemory({
   points: 3, // 3 login attempts per minute
@@ -28,13 +13,14 @@ const limiter = new RateLimiterMemory({
 
 const Login = () => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isSignIn, setIsSignIn] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { openDatabase, getDBUser, setDBUser, getDBErrorHandling } = useDatabase();
 
   // in the case the user manually navigates to /auth.
   useEffect(() => {
@@ -52,25 +38,8 @@ const Login = () => {
     let hasError;
 
     try {
-      // Create the database if it doesn't exist
-      await openDB<DatabaseType>('my-db', 1, {
-        upgrade(theDb) {
-          if (!theDb.objectStoreNames.contains('users')) {
-            theDb.createObjectStore('users', { keyPath: 'email' });
-          }
-
-          if (!theDb.objectStoreNames.contains('sessions')) {
-            theDb.createObjectStore('sessions', { keyPath: 'id' });
-          }
-
-          if (!theDb.objectStoreNames.contains('sessionData')) {
-            theDb.createObjectStore('sessionData', { keyPath: 'id' });
-          }
-        },
-      });
-
       // Open the database
-      const db = await openDB<DatabaseType>('my-db', 1);
+      await openDatabase();
 
       // sign in or sign up
       if (isSignIn) {
@@ -94,17 +63,15 @@ const Login = () => {
         let user;
 
         try {
-          user = await db.get('users', encryptedEmail);
+          user = await getDBUser(encryptedEmail);
         } catch (userDBError) {
+          hasError = userDBError;
           if (
             userDBError instanceof Error &&
-            userDBError.message.includes('One of the specified object stores was not found')
+            (userDBError.message.includes('One of the specified object stores was not found') ||
+              userDBError.message.includes(DATABASE_ERROR.USER_NOT_FOUND))
           ) {
-            // Handle the userDBError here
-            hasError = userDBError;
             setError('Incorrect email or password.');
-            console.log('INCORRECT EMAIL OR PASS');
-            return;
           }
 
           // Handle other errors here
@@ -133,23 +100,17 @@ const Login = () => {
         const encryptedPassword = encryptData(hashedPassword);
 
         if (!encryptedEmail || !encryptedPassword) {
-          // todo: add to error monitoring
           throw new Error('Could not encrypt email or password');
         }
 
-        await db.put('users', {
-          email: encryptedEmail,
-          password: encryptedPassword,
-          key: ENCRYPTION_KEY,
-        });
-
+        await setDBUser({ encryptedEmail, encryptedPassword });
         setCookie('sessionToken', getSessionToken(), { path: '/', secure: true });
       }
     } catch (catchError) {
       hasError = catchError;
 
       // todo: add to error monitoring
-      console.log(catchError);
+      getDBErrorHandling(catchError);
     } finally {
       setEmail('');
       setPassword('');
