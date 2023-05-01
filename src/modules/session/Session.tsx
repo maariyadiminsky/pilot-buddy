@@ -17,7 +17,7 @@ const Session = () => {
   const navigate = useNavigate();
 
   const {
-    sessionData,
+    questions,
     shouldShowQuestionAction,
     setShouldShowQuestionAction,
     questionsCount,
@@ -32,6 +32,8 @@ const Session = () => {
     setSettingsOrder,
     settingsTime,
     setSettingsTime,
+    settingsVoice,
+    setSettingsVoice,
   } = useSession();
 
   const headerActions = useMemo(
@@ -67,7 +69,11 @@ const Session = () => {
           getter: shouldReadOutLoud,
           setter: setShouldReadOutLoud,
           settingChildren: shouldReadOutLoud && (
-            <SpeechSynthesis text="This is how your question will sound." />
+            <SpeechSynthesis
+              text="This is how your question will sound."
+              settingsVoice={settingsVoice}
+              setSettingsVoice={setSettingsVoice}
+            />
           ),
         },
         {
@@ -103,7 +109,7 @@ const Session = () => {
           <div className="min-w-0 flex-1 bg-inherit xl:flex">
             <SessionNotes />
             <SessionQuestions
-              questionsData={sessionData.questions}
+              questionsData={questions}
               isTimed={isTimed}
               setQuestionsCount={setQuestionsCount}
               settingsTime={settingsTime}

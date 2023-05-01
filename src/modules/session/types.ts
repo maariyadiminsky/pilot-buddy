@@ -38,15 +38,15 @@ export interface SettingsType {
   isTimed: boolean;
   shouldHaveOrder: boolean;
   shouldReadOutLoud: boolean;
-  time?: SelectMenuItemType;
-  order?: SelectMenuItemType;
-  voice?: SettingsVoiceType;
+  time: SelectMenuItemType;
+  order: SelectMenuItemType;
+  voice: SettingsVoiceType;
 }
 
 export interface SessionQuestionType {
   id: string;
   question: string;
-  answer?: string | null;
+  answer?: string;
   time?: SelectMenuItemType;
 }
 

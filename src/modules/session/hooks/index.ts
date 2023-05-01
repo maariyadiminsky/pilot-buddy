@@ -1,1 +1,1 @@
-export { questions, useSession } from '@modules/session/hooks/useSession';
+export { questionsData, useSession } from '@modules/session/hooks/useSession';

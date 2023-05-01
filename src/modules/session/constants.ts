@@ -9,24 +9,6 @@ import {
   MapPinIcon,
 } from '@heroicons/react/20/solid';
 
-export const SESSION_DATA_INITIAL_STATE = {
-  questions: [],
-  notes: [],
-  settings: {
-    isTimed: false,
-    shouldHaveOrder: false,
-    shouldReadOutLoud: true,
-    time: undefined,
-    order: undefined,
-    voice: {
-      voice: { id: 0, name: 'Daniel' },
-      pitch: 1,
-      rate: 1,
-      volume: 1,
-    },
-  },
-} as SessionDataType;
-
 export const TIME_OPTIONS = [
   { id: 0, name: SessionTimeEnum['5 Seconds'] },
   { id: 1, name: SessionTimeEnum['10 Seconds'] },
@@ -46,6 +28,24 @@ export const ORDER_OPTIONS = [
     description: 'Questions will appear in random order.',
   },
 ];
+
+export const SESSION_DATA_INITIAL_STATE = {
+  questions: [],
+  notes: [],
+  settings: {
+    isTimed: false,
+    shouldHaveOrder: false,
+    shouldReadOutLoud: true,
+    time: TIME_OPTIONS[0],
+    order: ORDER_OPTIONS[0],
+    voice: {
+      voice: { id: 0, name: 'Daniel' },
+      pitch: 1,
+      rate: 1,
+      volume: 1,
+    },
+  },
+} as SessionDataType;
 
 export const NOTE_TYPES = [
   {

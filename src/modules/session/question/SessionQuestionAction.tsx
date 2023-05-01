@@ -28,7 +28,7 @@ const SessionQuestionAction = ({
   const modalRef = useRef<ModalRef>(null);
 
   const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState<string | null | undefined>('');
+  const [answer, setAnswer] = useState<string | undefined>('');
   const [shouldShowEmptyQuestionWarning, setShouldShowEmptyQuestionWarning] = useState(false);
 
   const [isQuestionMicrophoneOn, setIsQuestionMicrophoneOn] = useState(false);

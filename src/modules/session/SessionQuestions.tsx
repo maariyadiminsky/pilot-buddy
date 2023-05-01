@@ -29,25 +29,30 @@ const SessionQuestions = ({
   setQuestionsCount,
   setShouldShowQuestionAction,
 }: SessionQuestionsProps) => {
-  const [questions, setQuestions] = useState<SessionQuestionType[]>(questionsData || []);
+  const [questions, setQuestions] = useState<SessionQuestionType[] | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>();
 
   const handleSetQuestions = (updatedQuestions: SessionQuestionType[]) => {
     setQuestions(updatedQuestions);
+    // for start session button
     setQuestionsCount(updatedQuestions?.length || 0);
   };
+
+  useEffect(() => {
+    if (!questions?.length && questionsData?.length) {
+      handleSetQuestions(questionsData);
+    }
+  }, [questionsData?.length]);
 
   // Issue: https://medium.com/@wbern/getting-react-18s-strict-mode-to-work-with-react-beautiful-dnd-47bc909348e4
   // Cleanest fix: https://github.com/atlassian/react-beautiful-dnd/issues/2399#issuecomment-1503025577
   const [isComponentMounted, setIsMounted] = useState(false);
   useEffect(() => {
     setIsMounted(true);
-    // for start session button
-    setQuestionsCount(questions?.length || 0);
   }, []);
 
   const handleAddQuestion = (question: SessionQuestionType) => {
-    const questionsWithNewQuestion = [...questions, { ...question }];
+    const questionsWithNewQuestion = [...(questions || []), { ...question }];
     handleSetQuestions(questionsWithNewQuestion);
     return questionsWithNewQuestion;
   };
@@ -61,7 +66,7 @@ const SessionQuestions = ({
   };
 
   const handleRemoveQuestion = (id: string, customQuestions?: SessionQuestionType[]) => {
-    handleSetQuestions(removeObjectFromArray(customQuestions || questions, id, 'id'));
+    handleSetQuestions(removeObjectFromArray(customQuestions || questions || [], id, 'id'));
 
     // save to local or hidden folder in google drive
   };
@@ -78,7 +83,7 @@ const SessionQuestions = ({
       handleRemoveQuestion(id);
     }
 
-    setCurrentQuestion(questions.find((question) => question.id === id));
+    setCurrentQuestion(questions?.find((question) => question.id === id));
     setShouldShowQuestionAction(true);
   };
 
@@ -93,6 +98,8 @@ const SessionQuestions = ({
   };
 
   const handleDragEnd = (data: DropResult) => {
+    if (!questions) return;
+
     const { destination, source, draggableId } = data;
 
     // if user dragged outside possible drop area
@@ -121,7 +128,9 @@ const SessionQuestions = ({
   };
 
   const renderQuestionsOrEmptyAction = () => {
-    if (!questions?.length) {
+    if (!questions) return <div>Loading...</div>;
+
+    if (!questions.length) {
       // if user is creating a new question there is
       // no need to show the empty data action component
       if (shouldShowQuestionAction) return null;

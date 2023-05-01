@@ -2,18 +2,18 @@ import Range from '@common/components/range/Range';
 import { useSpeechSynthesis } from '@modules/speech-synthesis/hooks';
 import VoiceSelectMenu from '@modules/speech-synthesis/VoiceSelectMenu';
 import BrandButton, { type BrandButtonType } from '@common/components/button/BrandButton';
+import { type SettingsVoiceType } from '@modules/session/types';
 import { useMemo } from 'react';
 
-interface TextToSpeechProps {
+interface SpeechSynthesisProps {
   text: string;
+  settingsVoice: SettingsVoiceType;
+  setSettingsVoice: (value: SettingsVoiceType) => void;
 }
 
-const SpeechSynthesis = ({ text }: TextToSpeechProps) => {
+const SpeechSynthesis = ({ text, settingsVoice, setSettingsVoice }: SpeechSynthesisProps) => {
   const {
     voice,
-    pitch,
-    rate,
-    volume,
     isPaused,
     voiceOptions,
     handleVoicePlay,
@@ -23,7 +23,7 @@ const SpeechSynthesis = ({ text }: TextToSpeechProps) => {
     handlePitchChange,
     handleRateChange,
     handleVolumeChange,
-  } = useSpeechSynthesis(text);
+  } = useSpeechSynthesis(text, settingsVoice, setSettingsVoice);
 
   const buttonActions = useMemo(
     () => [
@@ -52,12 +52,14 @@ const SpeechSynthesis = ({ text }: TextToSpeechProps) => {
   // todo: add a loader if no voice options
   if (!voiceOptions?.length) return <div>Loading...</div>;
 
+  const { voice: voiceData, volume, pitch, rate } = voice;
+
   return (
     <div className="flex flex-col">
       {voice && (
         <>
           <label className="sr-only">Choose a voice</label>
-          <VoiceSelectMenu voice={voice} setVoice={handleVoiceChange} />
+          <VoiceSelectMenu voice={voiceData} setVoice={handleVoiceChange} />
         </>
       )}
       <div className="flex flex-col items-start space-y-3 mt-6">
