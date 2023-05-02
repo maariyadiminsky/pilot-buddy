@@ -7,18 +7,12 @@ interface SettingToggleProps {
   description: string;
   getter: boolean;
   setter: (value: boolean) => void;
-  settingChildren?: ReactNode;
+  children?: ReactNode;
 }
 
 export type SettingToggleType = SettingToggleProps;
 
-const SettingToggle = ({
-  title,
-  description,
-  getter,
-  setter,
-  settingChildren,
-}: SettingToggleProps) => (
+const SettingToggle = ({ title, description, getter, setter, children }: SettingToggleProps) => (
   <Switch.Group as="div" className="flex items-center justify-between">
     <div className="flex flex-grow flex-col space-y-3 my-6">
       <Switch
@@ -43,7 +37,7 @@ const SettingToggle = ({
       <Switch.Description as="span" className="text-sm text-gray-500">
         {description}
       </Switch.Description>
-      {settingChildren}
+      {children}
     </div>
   </Switch.Group>
 );

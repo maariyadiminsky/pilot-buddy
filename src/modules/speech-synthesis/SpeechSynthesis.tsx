@@ -15,7 +15,6 @@ const SpeechSynthesis = ({ text, settingsVoice, setSettingsVoice }: SpeechSynthe
   const {
     voice,
     isPaused,
-    voiceOptions,
     handleVoicePlay,
     handleVoicePause,
     handleVoiceStop,
@@ -46,27 +45,24 @@ const SpeechSynthesis = ({ text, settingsVoice, setSettingsVoice }: SpeechSynthe
         handleOnClick: handleVoiceStop,
       },
     ],
-    []
+    [isPaused, handleVoicePlay, handleVoicePause, handleVoiceStop]
   ) as BrandButtonType[];
 
   // todo: add a loader if no voice options
-  if (!voiceOptions?.length) return <div>Loading...</div>;
-
-  const { voice: voiceData, volume, pitch, rate } = voice;
 
   return (
     <div className="flex flex-col">
       {voice && (
         <>
           <label className="sr-only">Choose a voice</label>
-          <VoiceSelectMenu voice={voiceData} setVoice={handleVoiceChange} />
+          <VoiceSelectMenu voice={voice?.voice} setVoice={handleVoiceChange} />
         </>
       )}
       <div className="flex flex-col items-start space-y-3 mt-6">
         <Range
           title="Volume"
           srText="change volume"
-          value={volume}
+          value={voice?.volume || 1}
           handleOnChange={handleVolumeChange}
           min="0"
           max="1"
@@ -75,7 +71,7 @@ const SpeechSynthesis = ({ text, settingsVoice, setSettingsVoice }: SpeechSynthe
         <Range
           title="Pitch"
           srText="change pitch"
-          value={pitch}
+          value={voice?.pitch || 1}
           handleOnChange={handlePitchChange}
           min="0.5"
           max="2"
@@ -84,7 +80,7 @@ const SpeechSynthesis = ({ text, settingsVoice, setSettingsVoice }: SpeechSynthe
         <Range
           title="Speed"
           srText="change speed"
-          value={rate}
+          value={voice?.rate || 1}
           handleOnChange={handleRateChange}
           min="0.5"
           max="2"

@@ -1,34 +1,71 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Notes from '@modules/session/notes/Notes';
 import NoteAction from '@modules/session/notes/NoteAction';
 import { type NoteDataType } from '@modules/session/types';
 import { removeObjectFromArray } from '@common/utils';
 import { EyeSlashIcon } from '@heroicons/react/20/solid';
+import { useDatabase } from '@common/hooks';
 
-const SessionNotes = () => {
-  const [notes, setNotes] = useState<NoteDataType[]>([]);
+interface SessionNotesProps {
+  notesData?: NoteDataType[];
+  sessionId: string;
+}
+
+const SessionNotes = ({ notesData, sessionId }: SessionNotesProps) => {
+  const [notes, setNotes] = useState<NoteDataType[]>(notesData || []);
   const [currentNote, setCurrentNote] = useState<NoteDataType>();
   const [shouldHideNoteAction, setShouldHideNoteAction] = useState(false);
 
-  const handleAddNote = (note: NoteDataType) => {
-    const notesWithNewNote = [...notes, { ...note }];
-    setNotes(notesWithNewNote);
-    return notesWithNewNote;
-  };
+  const { updateDBPartialDataOfSession } = useDatabase();
+
+  useEffect(() => {
+    if (!notes?.length && notesData) {
+      setNotes(notesData);
+    }
+  }, [notesData]);
+
+  const handleAddNote = (note: NoteDataType) => [...notes, { ...note }];
 
   // add to notes for ui, currentNote is undefined to clear if hiding, and save
   const handleSubmitNote = (note: NoteDataType) => {
-    handleAddNote(note);
-    setCurrentNote(undefined);
-
-    // handle saving note here
+    // save in storage
+    let hasError = null;
+    const updatedNotes = handleAddNote(note);
+    console.log('handleAdd Notes:', updatedNotes, 'sessionId:', sessionId);
+    try {
+      updateDBPartialDataOfSession({ notes: updatedNotes }, sessionId);
+    } catch (error) {
+      hasError = error;
+      if (error instanceof Error) {
+        console.log(error);
+        // todo: add error monitoring
+      }
+    } finally {
+      if (!hasError && updatedNotes) {
+        setCurrentNote(undefined);
+        setNotes(updatedNotes);
+      }
+    }
   };
 
   const handleRemoveNote = (id: string, customNotes?: NoteDataType[]) => {
-    setNotes(removeObjectFromArray(customNotes || notes, id, 'id'));
-
     // save to local or hidden folder in google drive
+    let hasError = null;
+    const updatedNotes = removeObjectFromArray(customNotes || notes, id, 'id');
+    try {
+      updateDBPartialDataOfSession({ notes: updatedNotes }, sessionId);
+    } catch (error) {
+      hasError = error;
+      if (error instanceof Error) {
+        console.log(error);
+        // todo: add error monitoring
+      }
+    } finally {
+      if (!hasError && updatedNotes) {
+        setNotes(updatedNotes);
+      }
+    }
   };
 
   const handleEditNote = (id: string) => {
@@ -36,8 +73,9 @@ const SessionNotes = () => {
     // add back the last item user was editing.
     // This also acts as a cancel of the last edit.
     if (currentNote) {
-      const currentNotes = handleAddNote(currentNote);
-      handleRemoveNote(id, currentNotes);
+      const updatedNotes = handleAddNote(currentNote);
+      setNotes(updatedNotes);
+      handleRemoveNote(id, updatedNotes);
     } else {
       handleRemoveNote(id);
     }
@@ -51,7 +89,10 @@ const SessionNotes = () => {
   // its back in notes but not set by default in NoteAction
   const handleHideNoteAction = (shouldHide: boolean) => {
     setShouldHideNoteAction(shouldHide);
-    if (currentNote) handleAddNote(currentNote);
+    if (currentNote) {
+      const updatedNotes = handleAddNote(currentNote);
+      setNotes(updatedNotes);
+    }
     setCurrentNote(undefined);
   };
 

@@ -1,5 +1,10 @@
-import { SessionTimeEnum, SessionOrderEnum } from './types';
-import { SessionDataType } from '@modules/session/types';
+import {
+  SessionTimeEnum,
+  SessionOrderEnum,
+  NoteEnum,
+  type SessionDataType,
+} from '@modules/session/types';
+
 import {
   ExclamationTriangleIcon,
   InformationCircleIcon,
@@ -49,6 +54,24 @@ export const SESSION_DATA_INITIAL_STATE = {
 
 export const getInitialSessionData = (sessionId: string) =>
   ({ id: sessionId, ...SESSION_DATA_INITIAL_STATE } as SessionDataType);
+
+export const getNoteIconFromName = (name: string) => {
+  switch (name) {
+    case NoteEnum.Important:
+      return ExclamationTriangleIcon;
+    case NoteEnum.Question:
+      return QuestionMarkCircleIcon;
+    case NoteEnum.Info:
+      return InformationCircleIcon;
+    case NoteEnum.Location:
+      return MapPinIcon;
+    case NoteEnum.Link:
+      return LinkIcon;
+    case NoteEnum.Idea:
+    default:
+      return LightBulbIcon;
+  }
+};
 
 export const NOTE_TYPES = [
   {

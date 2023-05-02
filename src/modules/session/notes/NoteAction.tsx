@@ -45,10 +45,12 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
       return;
     }
 
+    const { name, value, iconColor, bgColor } = selectedIcon;
+
     handleSubmit({
       ...(currentNote || {}),
       id: currentNote?.id || getUniqId(),
-      icon: selectedIcon,
+      icon: { name, value, iconColor, bgColor },
       text,
     });
 

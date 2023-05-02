@@ -1,4 +1,3 @@
-import { type HeroIconType } from '@common/types';
 import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
 
 export enum SessionTimeEnum {
@@ -6,6 +5,15 @@ export enum SessionTimeEnum {
   '10 Seconds' = '10 Seconds',
   '15 Seconds' = '15 Seconds',
   '20 Seconds' = '20 Seconds',
+}
+
+export enum NoteEnum {
+  Important = 'Important',
+  Question = 'Question',
+  Info = 'Info',
+  Location = 'Location',
+  Link = 'Link',
+  Idea = 'Idea',
 }
 
 export enum SessionOrderEnum {
@@ -16,7 +24,6 @@ export enum SessionOrderEnum {
 interface NoteIconType {
   name: string;
   value: string | null;
-  icon: HeroIconType;
   iconColor: string;
   bgColor: string;
 }

@@ -2,16 +2,14 @@ import { PlayCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@modules/common/components/page/PageWrapper';
 import SessionNotes from '@modules/session/SessionNotes';
 import SessionQuestions from '@modules/session/SessionQuestions';
-import SessionSettings, { type SettingsToggleTypeWithId } from '@modules/session/SessionSettings';
+import SessionSettings from '@modules/session/SessionSettings';
 import { type BrandButtonType } from '@common/components/button/BrandButton';
-import SpeechSynthesis from '@modules/speech-synthesis/SpeechSynthesis';
-import TimeSelectMenu from './settings/TimeSelectMenu';
-import OrderSelectMenu from './settings/OrderSelectMenu';
-import { useSession } from '@modules/session/hooks/useSession';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useMemo, useEffect } from 'react';
 import { DATABASE_ERROR, useDatabase } from '@common/hooks';
-import { SessionDataType } from '@modules/session/types';
+import { type SessionDataType } from '@modules/session/types';
+import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
+import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
 
 const Session = () => {
   const { id } = useParams();
@@ -19,6 +17,13 @@ const Session = () => {
 
   const [session, setSession] = useState<SessionDataType>();
   const [sessionName, setSessionName] = useState('');
+  const [shouldShowQuestionAction, setShouldShowQuestionAction] = useState(false);
+  // if there are questions disable start session button
+  const [questionsCount, setQuestionsCount] = useState(0);
+  const [isTimed, setIsTimed] = useState(false);
+  const [settingsTime, setSettingsTime] = useState<SelectMenuItemType>(
+    SESSION_DATA_INITIAL_STATE.settings.time
+  );
 
   const { getDBSession, getDBSessionTableItem } = useDatabase();
 
@@ -45,34 +50,13 @@ const Session = () => {
         if (!hasError && sessionData && sessionInTable) {
           setSessionName(sessionInTable.name);
           setSession(sessionData);
+          setQuestionsCount(sessionData.questions.length);
         }
       }
     };
 
     getSession();
   }, [id]);
-
-  console.log('session:', session);
-
-  const {
-    questions,
-    shouldShowQuestionAction,
-    setShouldShowQuestionAction,
-    questionsCount,
-    setQuestionsCount,
-    shouldReadOutLoud,
-    setShouldReadOutLoud,
-    shouldHaveOrder,
-    setShouldHaveOrder,
-    isTimed,
-    setIsTimed,
-    settingsOrder,
-    setSettingsOrder,
-    settingsTime,
-    setSettingsTime,
-    settingsVoice,
-    setSettingsVoice,
-  } = useSession();
 
   const headerActions = useMemo(
     () =>
@@ -97,57 +81,17 @@ const Session = () => {
     [shouldShowQuestionAction, questionsCount]
   );
 
-  const settings = useMemo(
-    () =>
-      [
-        {
-          id: 0,
-          title: 'Voice',
-          description: 'During the session, your questions will be read aloud for you.',
-          getter: shouldReadOutLoud,
-          setter: setShouldReadOutLoud,
-          settingChildren: shouldReadOutLoud && (
-            <SpeechSynthesis
-              text="This is how your question will sound."
-              settingsVoice={settingsVoice}
-              setSettingsVoice={setSettingsVoice}
-            />
-          ),
-        },
-        {
-          id: 1,
-          title: 'Order',
-          description:
-            "Choose the order in which you'd like the session's questions to be presented to you.",
-          getter: shouldHaveOrder,
-          setter: setShouldHaveOrder,
-          settingChildren: shouldHaveOrder && (
-            <OrderSelectMenu order={settingsOrder} setOrder={setSettingsOrder} />
-          ),
-        },
-        {
-          id: 2,
-          title: 'Timed',
-          description:
-            "Every question has a timer and smoothly moves to the next (If the microphone is enabled during the quiz, it's duration aligns with the question's time).",
-          getter: isTimed,
-          setter: setIsTimed,
-          settingChildren: isTimed && (
-            <TimeSelectMenu time={settingsTime} setTime={setSettingsTime} />
-          ),
-        },
-      ] as SettingsToggleTypeWithId[],
-    [shouldReadOutLoud, shouldHaveOrder, settingsOrder, isTimed, settingsTime]
-  );
+  if (!id) return null;
 
   return (
     <PageWrapper title={sessionName} headerActions={headerActions}>
       <div className="relative flex h-full min-w-full flex-col bg-inherit">
         <div className="w-full flex-grow xl:flex">
           <div className="min-w-0 flex-1 bg-inherit xl:flex">
-            <SessionNotes />
+            <SessionNotes notesData={session?.notes} sessionId={id} />
             <SessionQuestions
-              questionsData={questions}
+              questionsData={session?.questions}
+              sessionId={id}
               isTimed={isTimed}
               setQuestionsCount={setQuestionsCount}
               settingsTime={settingsTime}
@@ -156,7 +100,14 @@ const Session = () => {
             />
           </div>
           <div className="flex flex-col items-start">
-            <SessionSettings settings={settings} />
+            <SessionSettings
+              settings={session?.settings}
+              isTimed={isTimed}
+              setIsTimed={setIsTimed}
+              settingsTime={settingsTime}
+              setSettingsTime={setSettingsTime}
+              sessionId={id}
+            />
           </div>
         </div>
       </div>

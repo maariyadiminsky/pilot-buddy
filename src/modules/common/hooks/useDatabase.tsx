@@ -99,7 +99,12 @@ export const useDatabase = () => {
     return item;
   };
 
-  const updateDbPartialDataOfItem = async (storeName: string, data: any, keyToFindItem: string) => {
+  const updateDbPartialDataOfItem = async (
+    storeName: string,
+    data: any,
+    keyToFindItem: string,
+    isSettings?: boolean
+  ) => {
     const db = await getDatabase();
     if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
 
@@ -110,7 +115,11 @@ export const useDatabase = () => {
     // Otherwise, a new record will be added.
     const existingItem = keyToFindItem ? await store.get(keyToFindItem) : null;
     if (existingItem) {
-      const item = await store.put({ ...existingItem, ...data });
+      const dataToUpdate = isSettings
+        ? { ...existingItem, settings: { ...existingItem.settings, ...data } }
+        : { ...existingItem, ...data };
+
+      const item = await store.put(dataToUpdate);
       await tx.done;
       return item;
     }
@@ -182,6 +191,11 @@ export const useDatabase = () => {
   const addOrUpdateDBSessionItem = async (sessionData: SessionDataType) =>
     await addOrUpdateStoreItem(DATABASE_STORE.SESSIONS, sessionData);
 
+  // if keyToReplace is added it will replace the entire value of the key
+  // if not provided, it will add to existing data
+  const updateDBPartialDataOfSession = async (data: any, sessionId: string, isSettings?: boolean) =>
+    await updateDbPartialDataOfItem(DATABASE_STORE.SESSIONS, data, sessionId, isSettings);
+
   const getDBSession = async (sessionId: string) => {
     let session = await getDBStoreItem(DATABASE_STORE.SESSIONS, sessionId);
 
@@ -244,12 +258,16 @@ export const useDatabase = () => {
   return {
     openDatabase,
     getDBErrorHandling,
+    // user
     getDBUser,
     setDBUser,
+    // sessions
     getAllDBSessions,
-    addOrUpdateDBSessionItem,
     getDBSession,
+    addOrUpdateDBSessionItem,
+    updateDBPartialDataOfSession,
     deleteDBSessionItem,
+    // table sessions
     getAllDBSessionTableItems,
     getDBSessionTableItem,
     addOrUpdateDBSessionTableItem,

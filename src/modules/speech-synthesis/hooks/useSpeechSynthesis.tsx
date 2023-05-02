@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState, useEffect } from 'react';
+import { SyntheticEvent, useState, useEffect, useRef } from 'react';
 import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
 import { APPROVED_VOICES } from '@modules/speech-synthesis/constants';
 import { type SettingsVoiceType } from '@modules/session/types';
@@ -10,10 +10,21 @@ export const useSpeechSynthesis = (
   initialVoice?: SettingsVoiceType,
   setSettingsVoice?: (value: SettingsVoiceType) => void
 ) => {
+  const voiceOptionsRef = useRef<SpeechSynthesisVoice[]>();
+
   const [isPaused, setIsPaused] = useState(false);
   const [speech, setSpeech] = useState<SpeechSynthesisUtterance>();
-  const [voiceOptions, setVoiceOptions] = useState<SpeechSynthesisVoice[]>([]);
   const [voice, setVoice] = useState<SettingsVoiceType>(SESSION_DATA_INITIAL_STATE.settings.voice);
+
+  const loadVoices = () => {
+    const voices = window.speechSynthesis.getVoices();
+
+    if (voices?.length) {
+      const approvedVoices = voices.filter(({ name }) => APPROVED_VOICES.includes(name));
+
+      voiceOptionsRef.current = approvedVoices;
+    }
+  };
 
   // window.speechSynthesis.getVoices() has a loading delay
   useEffect(() => {
@@ -22,22 +33,17 @@ export const useSpeechSynthesis = (
     const speechSynthesisUtterance = new SpeechSynthesisUtterance(text);
 
     setSpeech(speechSynthesisUtterance);
+    setVoice(initialVoice || SESSION_DATA_INITIAL_STATE.settings.voice);
 
     const timer: ReturnType<typeof setTimeout> = setTimeout(() => {
-      const voices = window.speechSynthesis.getVoices();
-
-      if (voices?.length) {
-        const approvedVoices = voices.filter(({ name }) => APPROVED_VOICES.includes(name));
-
-        setVoiceOptions(approvedVoices);
-        setVoice(initialVoice || SESSION_DATA_INITIAL_STATE.settings.voice);
-
-        clearTimeout(timer);
-      }
-    }, 200);
+      loadVoices();
+      clearTimeout(timer);
+    }, 300);
 
     return () => {
-      clearTimeout(timer);
+      if (timer) {
+        clearTimeout(timer);
+      }
 
       if (speech?.voice) {
         try {
@@ -52,17 +58,19 @@ export const useSpeechSynthesis = (
   }, [text]);
 
   const handleVoicePlay = (customText?: string) => {
-    console.log('handlevoice play');
+    loadVoices();
+    console.log('HEERE', speech, voice, 'ref:', voiceOptionsRef.current);
     if (isPaused) {
       window.speechSynthesis.resume();
     } else if (customText) {
       // in the case window context is lost or want to pass custom text
-      const speechSynthesisUtterance = new SpeechSynthesisUtterance(customText);
+      const speechSynthesisUtterance = new SpeechSynthesisUtterance(text || customText);
 
       const { voice: voiceData, pitch, rate, volume } = voice;
 
       speechSynthesisUtterance.voice =
-        voiceOptions.find((voiceOption) => voiceOption.name === voiceData.name) || null;
+        voiceOptionsRef?.current?.find((voiceOption) => voiceOption.name === voiceData.name) ||
+        null;
 
       speechSynthesisUtterance.pitch = pitch;
       speechSynthesisUtterance.rate = rate;
@@ -76,7 +84,8 @@ export const useSpeechSynthesis = (
 
       // otherwise if context intact and have current speech set
       speech.voice =
-        voiceOptions.find((voiceOption) => voiceOption.name === voiceData.name) || null;
+        voiceOptionsRef?.current?.find((voiceOption) => voiceOption.name === voiceData.name) ||
+        null;
       speech.pitch = pitch;
       speech.rate = rate;
       speech.volume = volume;
@@ -125,7 +134,7 @@ export const useSpeechSynthesis = (
     speech,
     voice,
     isPaused,
-    voiceOptions,
+    voiceOptionsRef,
     handleVoicePlay,
     handleVoicePause,
     handleVoiceStop,

@@ -1,8 +1,7 @@
-import { HeroIconType } from '@common/types';
 import { truthyString } from '@common/utils';
+import { getNoteIconFromName } from '@modules/session/constants';
 
 interface NoteIconProps {
-  icon: HeroIconType;
   bgColor: string;
   iconColor: string;
   name: string;
@@ -14,11 +13,10 @@ const NoteIcon = ({
   bgColor,
   iconColor,
   name,
-  icon,
   className,
   shouldIncludeName = false,
 }: NoteIconProps) => {
-  const Icon = icon;
+  const Icon = getNoteIconFromName(name);
 
   return (
     <div className="flex flex-row justify-center items-center">

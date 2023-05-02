@@ -6,9 +6,11 @@ import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu'
 import { DragDropContext, Droppable, type DropResult } from 'react-beautiful-dnd';
 import SessionQuestionsList from '@modules/session/question/SessionQuestionsList';
 import { SessionQuestionType } from '@modules/session/types';
+import { useDatabase } from '@common/hooks';
 
 interface SessionQuestionsProps {
-  questionsData: SessionQuestionType[];
+  questionsData?: SessionQuestionType[];
+  sessionId: string;
   isTimed: boolean;
   settingsTime: SelectMenuItemType;
   shouldShowQuestionAction: boolean;
@@ -23,14 +25,17 @@ const DropStyles = {
 
 const SessionQuestions = ({
   questionsData,
+  sessionId,
   isTimed,
   settingsTime,
   shouldShowQuestionAction,
   setQuestionsCount,
   setShouldShowQuestionAction,
 }: SessionQuestionsProps) => {
-  const [questions, setQuestions] = useState<SessionQuestionType[] | null>(null);
+  const [questions, setQuestions] = useState<SessionQuestionType[]>();
   const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>();
+
+  const { updateDBPartialDataOfSession } = useDatabase();
 
   const handleSetQuestions = (updatedQuestions: SessionQuestionType[]) => {
     setQuestions(updatedQuestions);
@@ -39,8 +44,8 @@ const SessionQuestions = ({
   };
 
   useEffect(() => {
-    if (!questions?.length && questionsData?.length) {
-      handleSetQuestions(questionsData);
+    if (!questions?.length) {
+      handleSetQuestions(questionsData || []);
     }
   }, [questionsData?.length]);
 
@@ -51,24 +56,51 @@ const SessionQuestions = ({
     setIsMounted(true);
   }, []);
 
-  const handleAddQuestion = (question: SessionQuestionType) => {
-    const questionsWithNewQuestion = [...(questions || []), { ...question }];
-    handleSetQuestions(questionsWithNewQuestion);
-    return questionsWithNewQuestion;
-  };
+  const handleAddQuestion = (question: SessionQuestionType) => [
+    ...(questions || []),
+    { ...question },
+  ];
 
   const handleSubmitQuestion = (question: SessionQuestionType) => {
-    handleAddQuestion(question);
-    setCurrentQuestion(undefined);
-    setShouldShowQuestionAction(false);
-
-    // handle saving question here
+    // save in storage
+    let hasError = null;
+    const updatedQuestions = handleAddQuestion(question);
+    try {
+      updateDBPartialDataOfSession({ questions: updatedQuestions }, sessionId);
+    } catch (error) {
+      hasError = error;
+      if (error instanceof Error) {
+        console.log(error);
+        // todo: add error monitoring
+      }
+    } finally {
+      if (!hasError && updatedQuestions) {
+        setCurrentQuestion(undefined);
+        handleSetQuestions(updatedQuestions);
+        setShouldShowQuestionAction(false);
+      }
+    }
   };
 
   const handleRemoveQuestion = (id: string, customQuestions?: SessionQuestionType[]) => {
     handleSetQuestions(removeObjectFromArray(customQuestions || questions || [], id, 'id'));
 
-    // save to local or hidden folder in google drive
+    // save in storage
+    let hasError = null;
+    const updatedQuestions = removeObjectFromArray(customQuestions || questions || [], id, 'id');
+    try {
+      updateDBPartialDataOfSession({ questions: updatedQuestions }, sessionId);
+    } catch (error) {
+      hasError = error;
+      if (error instanceof Error) {
+        console.log(error);
+        // todo: add error monitoring
+      }
+    } finally {
+      if (!hasError && updatedQuestions) {
+        handleSetQuestions(updatedQuestions);
+      }
+    }
   };
 
   const handleEditQuestion = (id: string) => {
@@ -77,8 +109,9 @@ const SessionQuestions = ({
     // add back the last item user was editing.
     // This also acts as a cancel of the last edit.
     if (currentQuestion) {
-      const currentQuestions = handleAddQuestion(currentQuestion);
-      handleRemoveQuestion(id, currentQuestions);
+      const questionsUpdated = handleAddQuestion(currentQuestion);
+      handleSetQuestions(questionsUpdated);
+      handleRemoveQuestion(id, questionsUpdated);
     } else {
       handleRemoveQuestion(id);
     }
@@ -90,7 +123,8 @@ const SessionQuestions = ({
   // when user opens to edit or create and clicks cancel button
   const handleCancelAction = () => {
     if (currentQuestion) {
-      handleAddQuestion(currentQuestion);
+      const questionsUpdated = handleAddQuestion(currentQuestion);
+      handleSetQuestions(questionsUpdated);
       setCurrentQuestion(undefined);
     }
 
