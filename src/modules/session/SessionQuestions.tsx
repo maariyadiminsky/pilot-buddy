@@ -35,7 +35,7 @@ const SessionQuestions = ({
   const [questions, setQuestions] = useState<SessionQuestionType[]>();
   const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>();
 
-  const { updateDBPartialDataOfSession } = useDatabase();
+  const { updateDBPartialDataOfSession, updateDBPartialDataOfSessionTableItem } = useDatabase();
 
   const handleSetQuestions = (updatedQuestions: SessionQuestionType[]) => {
     setQuestions(updatedQuestions);
@@ -67,6 +67,7 @@ const SessionQuestions = ({
     const updatedQuestions = handleAddQuestion(question);
     try {
       updateDBPartialDataOfSession({ questions: updatedQuestions }, sessionId);
+      updateDBPartialDataOfSessionTableItem({ questions: updatedQuestions.length }, sessionId);
     } catch (error) {
       hasError = error;
       if (error instanceof Error) {
@@ -90,6 +91,7 @@ const SessionQuestions = ({
     const updatedQuestions = removeObjectFromArray(customQuestions || questions || [], id, 'id');
     try {
       updateDBPartialDataOfSession({ questions: updatedQuestions }, sessionId);
+      updateDBPartialDataOfSessionTableItem({ questions: updatedQuestions.length }, sessionId);
     } catch (error) {
       hasError = error;
       if (error instanceof Error) {

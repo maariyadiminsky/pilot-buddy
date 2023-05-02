@@ -32,7 +32,6 @@ const SessionNotes = ({ notesData, sessionId }: SessionNotesProps) => {
     // save in storage
     let hasError = null;
     const updatedNotes = handleAddNote(note);
-    console.log('handleAdd Notes:', updatedNotes, 'sessionId:', sessionId);
     try {
       updateDBPartialDataOfSession({ notes: updatedNotes }, sessionId);
     } catch (error) {
