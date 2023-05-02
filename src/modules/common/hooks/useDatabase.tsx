@@ -41,7 +41,7 @@ export const useDatabase = () => {
       // make sure all required stores exist
       upgrade(theDb) {
         if (!theDb.objectStoreNames.contains(DATABASE_STORE.USERS)) {
-          theDb.createObjectStore(DATABASE_STORE.USERS, { keyPath: 'email' });
+          theDb.createObjectStore(DATABASE_STORE.USERS, { keyPath: 'encryptedEmail' });
         }
 
         if (!theDb.objectStoreNames.contains(DATABASE_STORE.SESSIONS_TABLE)) {
