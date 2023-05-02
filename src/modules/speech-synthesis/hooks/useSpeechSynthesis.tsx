@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState, useEffect, useRef } from 'react';
+import { SyntheticEvent, useState, useEffect } from 'react';
 import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
 import { APPROVED_VOICES } from '@modules/speech-synthesis/constants';
 import { type SettingsVoiceType } from '@modules/session/types';
@@ -10,11 +10,10 @@ export const useSpeechSynthesis = (
   initialVoice?: SettingsVoiceType,
   setSettingsVoice?: (value: SettingsVoiceType) => void
 ) => {
-  const voiceOptionsRef = useRef<SpeechSynthesisVoice[]>();
-
   const [isPaused, setIsPaused] = useState(false);
   const [speech, setSpeech] = useState<SpeechSynthesisUtterance>();
   const [voice, setVoice] = useState<SettingsVoiceType>(SESSION_DATA_INITIAL_STATE.settings.voice);
+  const [voiceOptions, setVoiceOptions] = useState<SpeechSynthesisVoice[]>([]);
 
   const loadVoices = () => {
     const voices = window.speechSynthesis.getVoices();
@@ -22,7 +21,7 @@ export const useSpeechSynthesis = (
     if (voices?.length) {
       const approvedVoices = voices.filter(({ name }) => APPROVED_VOICES.includes(name));
 
-      voiceOptionsRef.current = approvedVoices;
+      setVoiceOptions(approvedVoices);
     }
   };
 
@@ -64,11 +63,10 @@ export const useSpeechSynthesis = (
       // in the case window context is lost or want to pass custom text
       const speechSynthesisUtterance = new SpeechSynthesisUtterance(text || customText);
 
-      const { voice: voiceData, pitch, rate, volume } = voice;
+      const { voice: voiceData, pitch, rate, volume } = initialVoice || voice;
 
       speechSynthesisUtterance.voice =
-        voiceOptionsRef?.current?.find((voiceOption) => voiceOption.name === voiceData.name) ||
-        null;
+        voiceOptions.find((voiceOption) => voiceOption.name === voiceData.name) || null;
 
       speechSynthesisUtterance.pitch = pitch;
       speechSynthesisUtterance.rate = rate;
@@ -82,8 +80,7 @@ export const useSpeechSynthesis = (
 
       // otherwise if context intact and have current speech set
       speech.voice =
-        voiceOptionsRef?.current?.find((voiceOption) => voiceOption.name === voiceData.name) ||
-        null;
+        voiceOptions.find((voiceOption) => voiceOption.name === voiceData.name) || null;
       speech.pitch = pitch;
       speech.rate = rate;
       speech.volume = volume;
@@ -132,7 +129,7 @@ export const useSpeechSynthesis = (
     speech,
     voice,
     isPaused,
-    voiceOptionsRef,
+    voiceOptions,
     handleVoicePlay,
     handleVoicePause,
     handleVoiceStop,

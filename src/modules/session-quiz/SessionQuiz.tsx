@@ -6,75 +6,74 @@ import Modal, { type ModalRef } from '@common/components/modal/Modal';
 import { useParams, useNavigate } from 'react-router-dom';
 import { type SessionDataType, type SessionQuestionType } from '@modules/session/types';
 import SessionQuizResults from '@modules/session-quiz/SessionQuizResults';
-import { getInitialSessionData } from '@modules/session/constants';
-import { usePrevious } from '@common/hooks';
+import { DATABASE_ERROR, useDatabase, usePrevious } from '@common/hooks';
 import { getQuestionOrder, getTimeData } from '@modules/session-quiz/utils';
 import { SessionQuestionWithAnswerType } from '@modules/session-quiz/types';
 import { useSpeechSynthesis } from '@modules/speech-synthesis/hooks';
 
-// todo: questions will come from an api endpoint within storage
-// temporarily using same data as in SessionQuestions
-export const questionsData = [
-  {
-    id: '0',
-    question: 'What is the biggest ballooon in the world?',
-    answer: 'dsfdsfsd',
-    time: { id: 0, name: '5 seconds' },
-  },
-  {
-    id: '1',
-    question: '342342jkh4h54k5khjdsjklclksdf',
-    answer:
-      'fgfghfghfg fghfgh fghfgklhfglhjgf lg fgfghfghfg fghfgh fghfgklhfglhjgf lg fgfghfghfg fghfgh fghfgklhfglhjgf lg fgfghfghfg fghfgh fghfgklhfglhjgf lg fgfghfghfg fghfgh fghfgklhfglhjgf lggfdhgdhgfhfghfgfgfghfghfg fghfgh fghfgklhfglhjgf lgfhj fglkjh lgkfj hlkjgf jfg hjgdlfk hjdglfh jdfj kd jsf klgslkj sjk djklsjkl fsdljk sjkd klsd sljkd  jkds fjklgsd',
-    time: { id: 1, name: '10 seconds' },
-  },
-  {
-    id: '2',
-    question: 'sfddsfdsfsdfsdfds sdfsdfsdfsdfds sd fsdfsdfs',
-    answer: '4534tfdggdf ',
-    time: { id: 2, name: '5 seconds' },
-  },
-  {
-    id: '3',
-    question: 'eeeeesfdsf 765bgfdfdgfd',
-    answer: 'sdfdsffdssd',
-    time: { id: 3, name: '5 seconds' },
-  },
-  {
-    id: '4',
-    question: 'sfsd',
-    answer: undefined,
-    time: { id: 4, name: '5 seconds' },
-  },
-];
 const SessionQuiz = () => {
   const modalRef = useRef<ModalRef>(null);
-  const { id: sessionId } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [sessionData, setSessionData] = useState<SessionDataType | null>(null);
+  const [session, setSession] = useState<SessionDataType | null>(null);
 
-  const initialSessionData = getInitialSessionData('0');
+  const { getDBSession } = useDatabase();
 
   useEffect(() => {
-    // todo replace SESSION_DATA_INITIAL_STATE here with sessionData from storage.
-    setSessionData({ ...initialSessionData, questions: [] });
-  }, []);
+    const getSession = async () => {
+      let hasError = null;
+      let sessionData;
+      try {
+        if (!id) return;
+
+        sessionData = await getDBSession(id);
+        if (!sessionData.questions || !sessionData.questions.length) {
+          navigate('/');
+        }
+      } catch (error) {
+        hasError = error;
+        if (error instanceof Error && error.message) {
+          console.log(error);
+          // todo: add error monitoring
+          if (error.message === DATABASE_ERROR.SESSION_NOT_FOUND) {
+            navigate('/');
+          }
+        }
+      } finally {
+        if (!hasError && sessionData) {
+          setSession(sessionData);
+        }
+      }
+    };
+
+    getSession();
+  }, [id]);
+
   // session data and voice if enabled
   const questionsOrdered = useMemo(
     () =>
-      sessionData?.settings.shouldHaveOrder && sessionData?.settings.order
-        ? getQuestionOrder(sessionData?.settings.order.name, questionsData)
-        : questionsData,
-    [questionsData]
+      session?.settings.shouldHaveOrder && session?.settings.order && session?.questions
+        ? getQuestionOrder(session?.settings.order.name, session?.questions)
+        : session?.questions,
+    [session?.questions]
   );
 
-  const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>(questionsOrdered[0]);
-  const [questionsLeft, setQuestionsLeft] = useState(questionsOrdered.length);
+  const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType | undefined>(
+    questionsOrdered?.[0]
+  );
+  const [questionsLeft, setQuestionsLeft] = useState(questionsOrdered?.length || 0);
   const [currentQuizAnswer, setCurrentQuizAnswer] = useState('');
   const [questionsWithAnswers, setQuestionsWithAnswers] =
     useState<SessionQuestionWithAnswerType[]>();
 
   const previousQuestion = usePrevious(currentQuestion);
+
+  useEffect(() => {
+    if (questionsOrdered?.length) {
+      setCurrentQuestion(questionsOrdered?.[0]);
+      setQuestionsLeft(questionsOrdered.length);
+    }
+  }, [questionsOrdered]);
 
   // speech recognition and speech synthesis
   const {
@@ -99,9 +98,9 @@ const SessionQuiz = () => {
     handleSetMicrophoneOn(false);
   };
 
-  const { handleVoicePlay, handleVoiceStop, voiceOptionsRef } = useSpeechSynthesis(
+  const { handleVoicePlay, handleVoiceStop, voiceOptions } = useSpeechSynthesis(
     undefined,
-    sessionData?.settings.voice
+    session?.settings.voice
   );
 
   useEffect(() => {
@@ -124,25 +123,28 @@ const SessionQuiz = () => {
     // read once on load
     // and not last question item(edge case where page re-renders when they are in results page.)
     if (
-      sessionData?.settings.shouldReadOutLoud &&
+      currentQuestion &&
+      session?.settings.shouldReadOutLoud &&
       previousQuestion?.id === currentQuestion.id &&
       currentQuestion.id !== lastQuestionId &&
-      voiceOptionsRef?.current?.length
+      voiceOptions.length
     ) {
       handleVoicePlay(currentQuestion.question);
     }
   }, [
     previousQuestion?.id,
-    currentQuestion.id,
-    sessionData?.settings.shouldReadOutLoud,
-    voiceOptionsRef.current?.length,
+    currentQuestion?.id,
+    session?.settings.shouldReadOutLoud,
+    voiceOptions.length,
   ]);
 
   // quiz
   const handleAddQuizAnswer = (event?: SyntheticEvent<Element>) => {
+    if (!currentQuestion || !questionsOrdered) return;
+
     if (event) event.preventDefault();
 
-    if (sessionData?.settings.shouldReadOutLoud) handleVoiceStop();
+    if (session?.settings.shouldReadOutLoud) handleVoiceStop();
 
     const questionsLeftCount = questionsLeft - 1;
 
@@ -157,21 +159,22 @@ const SessionQuiz = () => {
     const current = questionsOrdered[questionsOrdered.length - questionsLeftCount];
     setCurrentQuestion({ ...current });
 
-    if (sessionData?.settings.shouldReadOutLoud && current) {
+    if (session?.settings.shouldReadOutLoud && current) {
       handleVoicePlay(current?.question);
     }
   };
 
   // time
   const currentTime = useMemo(
-    () => (sessionData?.settings.isTimed ? getTimeData(currentQuestion.time) : null),
-    [currentQuestion.time, currentQuestion.id]
+    () =>
+      currentQuestion?.time && session?.settings.isTimed ? getTimeData(currentQuestion.time) : null,
+    [currentQuestion?.time, currentQuestion?.id]
   );
 
   const [timeLeft, setTimeLeft] = useState(currentTime?.timeUI);
 
   useEffect(() => {
-    if (!sessionData?.settings.isTimed || !questionsLeft) return undefined;
+    if (!session?.settings.isTimed || !questionsLeft) return undefined;
 
     let timer: ReturnType<typeof setInterval>;
 
@@ -189,12 +192,14 @@ const SessionQuiz = () => {
 
     return () => clearInterval(timer);
   }, [
-    sessionData?.settings.isTimed,
+    session?.settings.isTimed,
     previousQuestion?.id,
     currentQuestion?.id,
     timeLeft,
     questionsLeft,
   ]);
+
+  if (!questionsOrdered) return <div>Loading...</div>;
 
   return (
     <div className="min-h-screen bg-white sm:bg-inherit">
@@ -202,7 +207,7 @@ const SessionQuiz = () => {
         type="button"
         onClick={() => {
           handleVoiceStop();
-          navigate(`/sessions/${sessionId}`);
+          navigate(`/sessions/${id}`);
         }}
         className="flex items-start h-20 group hover:cursor-pointer mx-10 pt-10 2xl:mx-72"
       >
@@ -213,10 +218,10 @@ const SessionQuiz = () => {
           {questionsLeft ? (
             <div
               className={`flex flex-row ${
-                sessionData?.settings.isTimed ? 'justify-between' : 'justify-end'
+                session?.settings.isTimed ? 'justify-between' : 'justify-end'
               } items-center w-full py-3 text-sm font-light text-gray-600`}
             >
-              {sessionData?.settings.isTimed && <div>Time: {timeLeft}</div>}
+              {session?.settings.isTimed && <div>Time: {timeLeft}</div>}
               <div>
                 {questionsLeft}/{questionsOrdered.length} question
                 {questionsOrdered.length > 1 ? 's' : ''}
@@ -227,7 +232,7 @@ const SessionQuiz = () => {
             {questionsLeft ? (
               <>
                 <div className="font-semibold text-center w-full text-2xl text-gray-900">
-                  {currentQuestion.question}
+                  {currentQuestion?.question}
                 </div>
                 <form
                   onSubmit={handleAddQuizAnswer}
@@ -257,7 +262,9 @@ const SessionQuiz = () => {
                         setModalOpen={modalRef.current?.setModalOpen}
                         microphoneSize="md"
                         time={
-                          sessionData?.settings.isTimed ? currentQuestion.time?.name : undefined
+                          session?.settings.isTimed && currentQuestion?.time?.name
+                            ? currentQuestion?.time?.name
+                            : undefined
                         }
                       />
                     </div>

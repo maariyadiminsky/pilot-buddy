@@ -15,7 +15,7 @@ const Breadcrumbs = () => {
   const pages = useMemo(
     () =>
       [
-        { name: 'Study Room', href: ROUTES.STUDY_ROOM_ROUTE, current: Boolean(!sessionId) },
+        { name: 'Study Room', href: ROUTES.HOMEPAGE_ROUTE, current: Boolean(!sessionId) },
         sessionId
           ? {
               name: 'Session',
@@ -32,7 +32,7 @@ const Breadcrumbs = () => {
       <ol className="mx-left flex w-full max-w-screen-xl space-x-4 px-4 sm:px-6 lg:px-8">
         <li className="flex">
           <div className="flex items-center">
-            <Link to="/study-room" className="text-white hover:text-sky-100">
+            <Link to="/" className="text-white hover:text-sky-100">
               <HomeIcon className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
               <span className="sr-only">Home</span>
             </Link>
