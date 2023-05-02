@@ -58,8 +58,6 @@ export const useSpeechSynthesis = (
   }, [text]);
 
   const handleVoicePlay = (customText?: string) => {
-    loadVoices();
-    console.log('HEERE', speech, voice, 'ref:', voiceOptionsRef.current);
     if (isPaused) {
       window.speechSynthesis.resume();
     } else if (customText) {
