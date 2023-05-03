@@ -55,13 +55,7 @@ const SelectMenu = ({ title, icon, options, currentlySelected, handleSelect }: S
               </span>
             </Listbox.Button>
 
-            <div
-              ref={menuRef}
-              className={truthyString(
-                'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
-                menuAdjustment
-              )}
-            >
+            <div ref={menuRef}>
               <Transition
                 show={open}
                 as={Fragment}
@@ -69,7 +63,12 @@ const SelectMenu = ({ title, icon, options, currentlySelected, handleSelect }: S
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <Listbox.Options>
+                <Listbox.Options
+                  className={truthyString(
+                    'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
+                    menuAdjustment
+                  )}
+                >
                   {options.map((option) => (
                     <Listbox.Option
                       key={option.id}
