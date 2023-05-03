@@ -90,6 +90,7 @@ const StudyRoom = () => {
 
   return (
     <PageWrapper title="Study Room" headerActions={headerActions}>
+      <Modal ref={modalRef} {...modalData} />
       <div className="h-full min-w-full">
         {pinnedSessions?.length ? (
           <PinnedSessions
@@ -128,7 +129,6 @@ const StudyRoom = () => {
             />
           )}
         </div>
-        <Modal ref={modalRef} {...modalData} />
       </div>
     </PageWrapper>
   );
