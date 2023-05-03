@@ -183,6 +183,11 @@ const SessionQuestions = ({
       );
     }
 
+    const heightMobile = questions.length > 6 ? 'h-[calc(100vh-350px)]' : 'h-full';
+    const height = shouldShowQuestionAction
+      ? 'xl:h-[calc(100vh-375px)]'
+      : 'xl:h-[calc(100vh-75px)]';
+
     return (
       <DragDropContext onDragEnd={handleDragEnd}>
         {isComponentMounted ? (
@@ -190,7 +195,9 @@ const SessionQuestions = ({
             {({ innerRef, droppableProps, placeholder }, { isDraggingOver }) => (
               <div
                 ref={innerRef}
-                className={`${isDraggingOver ? DropStyles.isDragging : DropStyles.isNotDragging}`}
+                className={`${
+                  isDraggingOver ? DropStyles.isDragging : DropStyles.isNotDragging
+                } ${heightMobile} ${height}`}
               >
                 <SessionQuestionsList
                   {...{
@@ -212,7 +219,7 @@ const SessionQuestions = ({
   };
 
   return (
-    <div className="bg-white xl:min-w-0 xl:flex-1 flex flex-col h-[calc(100vh-75px)] overflow-y-auto smooth-scroll">
+    <div className="bg-white xl:min-w-0 xl:flex-1 flex flex-col">
       <div className="flex flex-col justify-start">
         {shouldShowQuestionAction && (
           <QuestionAction

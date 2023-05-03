@@ -14,7 +14,7 @@ const EmptyDataAction = ({
   buttonText,
   handleOnClick,
 }: EmptyDataActionsProps) => (
-  <div className="flex flex-col justify-start items-center text-center mt-12 h-screen">
+  <div className="flex flex-col justify-start items-center text-center my-12 h-full md:h-screen">
     <svg
       fill="none"
       viewBox="0 0 24 24"

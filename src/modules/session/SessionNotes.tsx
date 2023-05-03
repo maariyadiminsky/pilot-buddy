@@ -96,11 +96,11 @@ const SessionNotes = ({ notesData, sessionId }: SessionNotesProps) => {
   };
 
   const heightMobile = notes.length > 3 ? 'h-[calc(100vh-350px)]' : 'h-full';
-  const height = shouldHideNoteAction ? 'md:h-[calc(100vh-150px)]' : 'md:h-[calc(100vh-250px)]';
+  const height = shouldHideNoteAction ? 'xl:h-[calc(100vh-150px)]' : 'xl:h-[calc(100vh-250px)]';
 
   return (
     <div className="bg-zinc-50 xl:w-72 xl:flex-shrink-0 xl:border-r xl:border-gray-200">
-      <div className="py-4">
+      <div className="pt-4 py-8">
         <div className="items-center justify-between">
           <div className="flex-1 space-y-8">
             <div className={`flex flex-col mt-3 space-y-0 xl:block ${heightMobile} ${height}`}>
