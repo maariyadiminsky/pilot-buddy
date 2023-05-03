@@ -198,10 +198,23 @@ export const useDatabase = () => {
 
   const getDBSession = async (sessionId: string) => {
     let session = await getDBStoreItem(DATABASE_STORE.SESSIONS, sessionId);
-
+    let isExistInTable = false;
+    // if session doesn't exist in database, create it first
     if (!session) {
-      const initialSessionData = getInitialSessionData(sessionId);
-      session = await addOrUpdateDBSessionItem(initialSessionData);
+      // make sure it exists in table sessions
+      try {
+        isExistInTable = await getDBSessionTableItem(sessionId);
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error.message);
+          throw new Error(error.message);
+        }
+      }
+
+      if (isExistInTable) {
+        const initialSessionData = getInitialSessionData(sessionId);
+        session = await addOrUpdateDBSessionItem(initialSessionData);
+      }
     }
 
     return session;

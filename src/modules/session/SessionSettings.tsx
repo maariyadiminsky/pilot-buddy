@@ -38,6 +38,7 @@ const SessionSettings = ({
   const { updateDBPartialDataOfSession } = useDatabase();
 
   useEffect(() => {
+    console.log('USEEFFECT:', settings);
     if (settings) {
       setIsTimed(settings.isTimed);
       setShouldReadOutLoud(settings.shouldReadOutLoud);
@@ -111,6 +112,8 @@ const SessionSettings = ({
       }
     }
   };
+
+  console.log('settings:', settings);
 
   if (!settings) return <div>Loading...</div>;
 

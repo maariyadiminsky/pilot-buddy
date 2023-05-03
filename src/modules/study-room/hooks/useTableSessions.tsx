@@ -29,8 +29,12 @@ export const useTableSessions = (
   const [currentSession, setCurrentSession] = useState<SessionsTableDataType>();
   const [shouldShowSessionAction, setShouldShowSessionAction] = useState(false);
 
-  const { getAllDBSessionTableItems, addOrUpdateDBSessionTableItem, deleteDBSessionTableItem } =
-    useDatabase();
+  const {
+    getAllDBSessionTableItems,
+    addOrUpdateDBSessionTableItem,
+    deleteDBSessionTableItem,
+    deleteDBSessionItem,
+  } = useDatabase();
 
   useEffect(() => {
     const getTableSessions = async () => {
@@ -105,6 +109,7 @@ export const useTableSessions = (
     let hasError = null;
     try {
       deleteDBSessionTableItem(id);
+      deleteDBSessionItem(id);
     } catch (error) {
       hasError = error;
       if (error instanceof Error) {

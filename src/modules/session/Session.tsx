@@ -35,8 +35,8 @@ const Session = () => {
       try {
         if (!id) return;
 
-        sessionData = await getDBSession(id);
         sessionInTable = await getDBSessionTableItem(id);
+        sessionData = await getDBSession(id);
       } catch (error) {
         hasError = error;
         if (error instanceof Error && error.message) {
@@ -50,6 +50,7 @@ const Session = () => {
         if (!hasError && sessionData && sessionInTable) {
           setSessionName(sessionInTable.name);
           setSession(sessionData);
+          console.log('sessionData:', sessionData);
           setQuestionsCount(sessionData.questions.length);
         }
       }

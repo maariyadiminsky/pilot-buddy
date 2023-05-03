@@ -27,7 +27,7 @@ const SessionQuiz = () => {
         if (!id) return;
 
         sessionData = await getDBSession(id);
-        if (!sessionData.questions || !sessionData.questions.length) {
+        if (!sessionData?.questions || !sessionData.questions.length) {
           navigate('/');
         }
       } catch (error) {
