@@ -2,7 +2,8 @@ import { type HeroIconType } from '@common/types';
 import { truthyString } from '@common/utils';
 import { Menu, Transition } from '@headlessui/react';
 import { EllipsisVerticalIcon, BarsArrowUpIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
-import { Fragment, useRef, useState } from 'react';
+import { useMenuAdjustment } from '@common/hooks';
+import { Fragment } from 'react';
 
 export enum DropdownTypeEnum {
   sort = 'sort',
@@ -24,15 +25,7 @@ interface ActionMenuProps {
 }
 
 const ActionMenu = ({ name, actions, className, type, useCustomPosition }: ActionMenuProps) => {
-  const menuRef = useRef<HTMLElement | null>(null);
-  const [menuAdjustment, setMenuAdjustment] = useState('');
-
-  const shouldAdjustMenuRelativeToWindow = () => {
-    if (!menuRef.current) return;
-    const elementDimensions = menuRef.current?.getBoundingClientRect();
-    const { x } = elementDimensions;
-    setMenuAdjustment(x > window.outerWidth - 200 ? 'right-0' : '');
-  };
+  const { menuRef, menuAdjustment, adjustMenuToWindowWidth } = useMenuAdjustment();
 
   const renderButton = () => {
     let buttonContent = null;
@@ -61,7 +54,9 @@ const ActionMenu = ({ name, actions, className, type, useCustomPosition }: Actio
 
     return (
       <Menu.Button
-        onClick={() => shouldAdjustMenuRelativeToWindow()}
+        onClick={() => {
+          adjustMenuToWindowWidth('right-0');
+        }}
         className={`${buttonClassNameCommon} ${buttonClassName}`}
       >
         <span className="sr-only">Open {name} options</span>

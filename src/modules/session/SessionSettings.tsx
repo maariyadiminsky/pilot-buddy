@@ -115,7 +115,7 @@ const SessionSettings = ({
   if (!settings) return <div>Loading...</div>;
 
   return (
-    <div className="bg-zinc-50 lg:flex-shrink-0 lg:border-l lg:border-gray-200 flex xl:w-96 px-8 h-[calc(100vh-74px)] w-full">
+    <div className="bg-zinc-50 lg:flex-shrink-0 lg:border-l lg:border-gray-200 flex xl:w-96 px-8 h-full w-full">
       <div className="lg:w-80">
         <div className="pt-8">
           <h2 className="text-sm font-semibold">Settings</h2>

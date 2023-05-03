@@ -34,7 +34,7 @@ const SessionQuestionsList = ({
   handleRemoveQuestion,
   handleEditQuestion,
 }: SessionQuestionsListProps) => (
-  <ul className="divide-y divide-gray-200 border-b border-gray-200 border-t h-full xl:overscroll-contain overflow-y-auto smooth-scroll">
+  <ul className="divide-y divide-gray-200 border-b border-gray-200 border-t h-full xl:overscroll-contain overflow-y-auto smooth-scroll pb-4">
     {questions.map(({ id, question, answer, time }, index) => {
       const correctTime = time || settingsTime;
 
