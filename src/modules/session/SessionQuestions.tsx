@@ -219,7 +219,7 @@ const SessionQuestions = ({
   };
 
   return (
-    <div className="bg-white xl:min-w-0 xl:flex-1 flex flex-col">
+    <div className="bg-white xl:min-w-0 xl:flex-1 flex flex-col xl:h-[calc(100vh-75px)]">
       <div className="flex flex-col justify-start">
         {shouldShowQuestionAction && (
           <QuestionAction

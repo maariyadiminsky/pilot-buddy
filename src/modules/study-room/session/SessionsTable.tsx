@@ -19,8 +19,8 @@ const SessionsTable = ({
   handleEditSession,
   handleRemoveSession,
 }: SessionsTableProps) => (
-  <div className="px-4 sm:px-6 lg:px-8 h-[calc(100vh-200px)] overflow-y-auto smooth-scroll">
-    <div className="-mx-4 mt-10 sm:mx-0 rounded-t-md">
+  <div className="px-4 sm:px-6 lg:px-8 h-full ">
+    <div className="-mx-4 mt-10 sm:mx-0 rounded-t-md border border-slate-50 px-1 py-3 rounded-lg overflow-y-auto smooth-scroll h-[calc(100vh-100px)]">
       <table className="min-w-full divide-y divide-sky-600">
         <thead className="sticky backdrop-blur backdrop-filter bg-white bg-opacity-75 top-0 z-10 min-w-full border-separate border-spacing-0">
           <tr>

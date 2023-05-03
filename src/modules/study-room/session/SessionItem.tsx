@@ -47,7 +47,7 @@ const SessionItem = ({
     <tr key={id}>
       <td
         className={truthyString(
-          index === 0 ? '' : 'border-t border-gray-300',
+          index === 0 ? '' : 'border-t border-gray-200',
           'relative py-4 pl-4 pr-3 text-sm sm:pl-6'
         )}
       >
@@ -69,12 +69,12 @@ const SessionItem = ({
             {questions > 1 ? 's' : ''}
           </span>
         </div>
-        {index !== 0 ? <div className="absolute -top-px left-6 right-0 h-px bg-gray-300" /> : null}
+        {index !== 0 ? <div className="absolute -top-px left-6 right-0 h-px bg-gray-200" /> : null}
       </td>
       {/* desktop */}
       <td
         className={truthyString(
-          index === 0 ? '' : 'border-t border-gray-300',
+          index === 0 ? '' : 'border-t border-gray-200',
           'px-4 py-3.5 text-sm text-gray-500 sm:table-cell'
         )}
       >
@@ -82,7 +82,7 @@ const SessionItem = ({
       </td>
       <td
         className={truthyString(
-          index === 0 ? '' : 'border-t border-gray-300',
+          index === 0 ? '' : 'border-t border-gray-200',
           'hidden px-3 py-3.5 text-sm text-gray-700 sm:table-cell font-semibold'
         )}
       >
@@ -90,7 +90,7 @@ const SessionItem = ({
       </td>
       <td
         className={truthyString(
-          index === 0 ? '' : 'border-t border-gray-300',
+          index === 0 ? '' : 'border-t border-gray-200',
           'relative py-3.5 pl-3 pr-4 text-center text-sm font-medium sm:pr-6'
         )}
       >
@@ -116,7 +116,7 @@ const SessionItem = ({
           srText="Open Session"
           link={`/sessions/${id}`}
         />
-        {index !== 0 ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-300" /> : null}
+        {index !== 0 ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
       </td>
     </tr>
   );
