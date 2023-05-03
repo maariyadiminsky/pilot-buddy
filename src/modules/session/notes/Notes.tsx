@@ -8,7 +8,7 @@ interface NotesProps {
 }
 
 const Notes = ({ notes, handleRemoveNote, handleEditNote }: NotesProps) => (
-  <ul className="divide-y divide-solid overflow-y-auto xl:h-[calc(100vh-250px)] smooth-scroll relative">
+  <ul className="divide-y divide-solid h-full overflow-y-auto smooth-scroll relative">
     {notes.map((note) => (
       <Note
         key={note.id}
