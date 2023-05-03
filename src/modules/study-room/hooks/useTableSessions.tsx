@@ -104,6 +104,10 @@ export const useTableSessions = (
     setShouldShowSessionAction(false);
   };
 
+  const handleRemoveSessionFromUIOnly = (id: string, customSessions?: SessionsTableDataType[]) => {
+    setSessions(removeObjectFromArray(customSessions || sessions, id, 'id'));
+  };
+
   const handleRemoveSession = (id: string, customSessions?: SessionsTableDataType[]) => {
     // remove from storage
     let hasError = null;
@@ -119,7 +123,7 @@ export const useTableSessions = (
     } finally {
       if (!hasError) {
         // remove session
-        setSessions(removeObjectFromArray(customSessions || sessions, id, 'id'));
+        handleRemoveSessionFromUIOnly(id, customSessions);
         // if session was a pin, remove it there too
         handleRemoveSessionPinTry(id);
       }
@@ -142,9 +146,9 @@ export const useTableSessions = (
     // This also acts as a cancel of the last edit.
     if (currentSession) {
       const currentSessions = handleAddSession(currentSession);
-      handleRemoveSession(id, currentSessions);
+      handleRemoveSessionFromUIOnly(id, currentSessions);
     } else {
-      handleRemoveSession(id);
+      handleRemoveSessionFromUIOnly(id);
     }
     // set the session we are editing as the current session
     setCurrentSession(sessions.find((session) => session.id === id));

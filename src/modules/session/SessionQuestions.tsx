@@ -83,9 +83,11 @@ const SessionQuestions = ({
     }
   };
 
-  const handleRemoveQuestion = (id: string, customQuestions?: SessionQuestionType[]) => {
+  const handleRemoveQuestionFromUIOnly = (id: string, customQuestions?: SessionQuestionType[]) => {
     handleSetQuestions(removeObjectFromArray(customQuestions || questions || [], id, 'id'));
+  };
 
+  const handleRemoveQuestion = (id: string, customQuestions?: SessionQuestionType[]) => {
     // save in storage
     let hasError = null;
     const updatedQuestions = removeObjectFromArray(customQuestions || questions || [], id, 'id');
@@ -113,9 +115,9 @@ const SessionQuestions = ({
     if (currentQuestion) {
       const questionsUpdated = handleAddQuestion(currentQuestion);
       handleSetQuestions(questionsUpdated);
-      handleRemoveQuestion(id, questionsUpdated);
+      handleRemoveQuestionFromUIOnly(id, questionsUpdated);
     } else {
-      handleRemoveQuestion(id);
+      handleRemoveQuestionFromUIOnly(id);
     }
 
     setCurrentQuestion(questions?.find((question) => question.id === id));
