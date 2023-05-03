@@ -34,9 +34,8 @@ const Session = () => {
       let sessionInTable;
       try {
         if (!id) return;
-
-        sessionInTable = await getDBSessionTableItem(id);
         sessionData = await getDBSession(id);
+        sessionInTable = await getDBSessionTableItem(id);
       } catch (error) {
         hasError = error;
         if (error instanceof Error && error.message) {

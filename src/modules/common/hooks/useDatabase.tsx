@@ -79,26 +79,6 @@ export const useDatabase = () => {
     return db;
   };
 
-  const addOrUpdateStoreItem = async (
-    storeName: string,
-    data: SessionsTableDataType | SessionDataType | UserType
-  ) => {
-    const db = await getDatabase();
-    if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
-
-    const tx = db.transaction(storeName, 'readwrite');
-    const store = tx.objectStore(storeName);
-
-    // if key is not provided IndexedDB know to look by the key
-    // provided when creating the store and update this way as well
-    const item = await store.put(data);
-
-    // Wait for the transaction to complete.
-    await tx.done;
-
-    return item;
-  };
-
   const updateDbPartialDataOfItem = async (
     storeName: string,
     data: any,
@@ -144,6 +124,26 @@ export const useDatabase = () => {
     if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
 
     return await db.get(storeName, keytoFindItem);
+  };
+
+  const addOrUpdateStoreItem = async (
+    storeName: string,
+    data: SessionsTableDataType | SessionDataType | UserType
+  ) => {
+    const db = await getDatabase();
+    if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
+
+    const tx = db.transaction(storeName, 'readwrite');
+    const store = tx.objectStore(storeName);
+
+    // if key is not provided IndexedDB know to look by the key
+    // provided when creating the store and update this way as well
+    const itemKeyConfirmation = await store.put(data);
+
+    // Wait for the transaction to complete.
+    await tx.done;
+
+    return itemKeyConfirmation;
   };
 
   const deleteDBItem = async (storeName: string, keyToFindItem: string) => {
@@ -201,7 +201,7 @@ export const useDatabase = () => {
     let isExistInTable = false;
     // if session doesn't exist in database, create it first
     if (!session) {
-      // make sure it exists in table sessions
+      // make sure it exists in table
       try {
         isExistInTable = await getDBSessionTableItem(sessionId);
       } catch (error) {
@@ -211,9 +211,15 @@ export const useDatabase = () => {
         }
       }
 
+      // add to database and get the key confirming it was created
+      // then search once more in database for it
       if (isExistInTable) {
         const initialSessionData = getInitialSessionData(sessionId);
-        session = await addOrUpdateDBSessionItem(initialSessionData);
+        const sessionKeyConfirmation = await addOrUpdateDBSessionItem(initialSessionData);
+
+        if (sessionKeyConfirmation) {
+          session = await getDBStoreItem(DATABASE_STORE.SESSIONS, sessionId);
+        }
       }
     }
 
