@@ -2,7 +2,7 @@ import { PlusIcon, BookmarkSlashIcon } from '@heroicons/react/20/solid';
 import PageWrapper from '@modules/common/components/page/PageWrapper';
 import PinnedSessions from '@modules/study-room/session/PinnedSessions';
 import SessionsTable from '@modules/study-room/session/SessionsTable';
-import { useCallback, useMemo, useState, useRef } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import { type BrandButtonType } from '@common/components/button/BrandButton';
 import SessionAction from '@modules/study-room/session/SessionAction';
 import { useNavigate } from 'react-router-dom';
@@ -73,7 +73,7 @@ const StudyRoom = () => {
       },
     ].filter((menuItem) => menuItem) as MenuOptionType[];
 
-  const getHeaderActions = useCallback(
+  const headerActions = useMemo(
     () =>
       [
         {
@@ -81,12 +81,12 @@ const StudyRoom = () => {
           srText: 'Create new session',
           icon: PlusIcon,
           buttonClassType: 'solid',
+          isDisabled: shouldShowSessionAction,
           handleOnClick: () => setShouldShowSessionAction(true),
         },
       ] as BrandButtonType[],
-    []
+    [shouldShowSessionAction]
   );
-  const headerActions = useMemo(() => getHeaderActions(), []);
 
   return (
     <PageWrapper title="Study Room" headerActions={headerActions}>
