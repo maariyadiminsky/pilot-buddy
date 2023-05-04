@@ -1,5 +1,5 @@
 import { getUniqId, capitalize } from '@common/utils';
-import { getRandomBrandColor } from '@modules/study-room/utils';
+import { getRandomBrandColorData } from '@modules/study-room/utils';
 import { SyntheticEvent, useState, useMemo, useEffect } from 'react';
 import { SessionsTableDataType, SessionFormDetailsType } from '@modules/study-room/types';
 
@@ -55,13 +55,13 @@ export const useSessionAction = (
     setShouldShowEmptyTopicWarning(!topic);
     if (!name || !topic) return;
 
-    const randomBrandColor = getRandomBrandColor('background');
+    const randomBrandColor = getRandomBrandColorData();
 
     handleSubmit({
       id: currentSession?.id || getUniqId(),
       questions: currentSession?.questions || 0,
-      color: currentSession?.color || randomBrandColor,
-      textColor: currentSession?.textColor || `text-${randomBrandColor.slice(3)}`,
+      color: currentSession?.color || randomBrandColor.background,
+      textColor: currentSession?.textColor || randomBrandColor.text,
       name: capitalize(name),
       topic: capitalize(topic),
       isPinned: false,

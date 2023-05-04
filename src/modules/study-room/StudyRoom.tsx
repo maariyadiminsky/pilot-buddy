@@ -47,7 +47,7 @@ const StudyRoom = () => {
     modalRef?.current?.setModalOpen
   );
 
-  const getDropdownActions = (id: string, questionsCount: number) =>
+  const getPinDropdownActions = (id: string, questionsCount: number) =>
     [
       {
         text: 'Unpin',
@@ -99,13 +99,12 @@ const StudyRoom = () => {
 
   return (
     <PageWrapper title="Study Room" headerActions={headerActions}>
-      <Modal ref={modalRef} {...modalData} />
       <div className="h-full min-w-full bg-inherit">
         {pinnedSessions?.length ? (
           <PinnedSessions
             title="Pinned Sessions"
             sessions={pinnedSessions}
-            getDropdownActions={getDropdownActions}
+            getDropdownActions={getPinDropdownActions}
             handleEditSession={handleEditSession}
           />
         ) : null}
@@ -139,6 +138,7 @@ const StudyRoom = () => {
           )}
         </div>
       </div>
+      <Modal ref={modalRef} {...modalData} />
     </PageWrapper>
   );
 };

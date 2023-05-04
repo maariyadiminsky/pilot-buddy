@@ -134,7 +134,7 @@ const Sidebar = ({
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="flex flex-row space-x-2 rounded-lg border border-gray-300 py-2 px-6 hover:bg-gray-300 hover:text-gray-900"
+                    className="flex flex-row space-x-2 rounded-lg border border-gray-300 py-2 px-12 hover:bg-gray-300 hover:text-gray-900"
                   >
                     <ArrowRightOnRectangleIcon className="h-5 w-5" />
                     <span>Logout</span>
@@ -236,7 +236,7 @@ const Sidebar = ({
             <button
               type="button"
               onClick={handleLogout}
-              className="flex flex-row space-x-2 rounded-lg border border-gray-300 py-2 px-6 hover:bg-gray-300 hover:text-gray-900"
+              className="flex flex-row space-x-2 rounded-lg border border-gray-300 py-2 px-12 hover:bg-gray-300 hover:text-gray-900"
             >
               <ArrowRightOnRectangleIcon className="h-5 w-5" />
               <span>Logout</span>

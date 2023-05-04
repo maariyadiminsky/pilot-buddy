@@ -1,21 +1,40 @@
 import { type PinnedSessionType, type SessionsTableDataType } from '@modules/study-room/types';
 
-enum COLOR_TYPE {
-  background = 'background',
-  text = 'text',
+interface COLOR_TYPE {
+  background: string;
+  text: string;
 }
 
-const COLORS = ['sky-600', 'pink-600', 'red-500', 'purple-600', 'red-600'];
-export const getRandomBrandColor = (colorType: keyof typeof COLOR_TYPE) => {
-  const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+interface COLORS_TYPE {
+  [key: string]: COLOR_TYPE;
+}
 
-  switch (colorType) {
-    case COLOR_TYPE.text:
-      return `text-${color}`;
-    case COLOR_TYPE.background:
-    default:
-      return `bg-${color}`;
-  }
+const COLORS = {
+  sky: {
+    background: 'bg-sky-600',
+    text: 'text-sky-600',
+  },
+  pink: {
+    background: 'bg-pink-600',
+    text: 'text-pink-600',
+  },
+  red_500: {
+    background: 'bg-red-500',
+    text: 'text-red-500',
+  },
+  purple: {
+    background: 'bg-purple-600',
+    text: 'text-purple-600',
+  },
+  red_600: {
+    background: 'bg-red-600',
+    text: 'text-red-600',
+  },
+} as COLORS_TYPE;
+
+export const getRandomBrandColorData = () => {
+  const COLOR_KEYS = Object.keys(COLORS);
+  return COLORS[COLOR_KEYS[Math.floor(Math.random() * COLOR_KEYS.length)]];
 };
 
 export const getInitials = (text: string) =>
