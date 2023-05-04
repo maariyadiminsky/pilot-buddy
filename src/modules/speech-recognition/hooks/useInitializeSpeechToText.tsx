@@ -57,11 +57,16 @@ export const useInitializeSpeechToText = () => {
 
   useEffect(() => {
     const initialize = async () => {
+      // dev can choose whether to use polyfill or not
+      // while there are benefits, eventually there is also a cost: https://www.speechly.com/pricing
+      const shouldUseSpeechlyPolyfill = process.env.REACT_APP_USE_SPEECHLY === 'true';
       const appId = process.env.REACT_APP_SPEECHLY_APP_ID;
       let hasError = null;
 
       try {
-        if (!appId) throw new Error('Speechly APP ID - possibly nonexistent or incorrect.');
+        if (shouldUseSpeechlyPolyfill && !appId) {
+          throw new Error('Speechly APP ID - possibly nonexistent or incorrect.');
+        }
 
         if (!browserSupportsSpeechRecognition) {
           setModalError(DictaphoneModalErrorType.browser);
@@ -74,8 +79,12 @@ export const useInitializeSpeechToText = () => {
       } catch (error) {
         hasError = error;
       } finally {
-        if (appId && !hasError && !modalData) {
-          SpeechRecognition.applyPolyfill(createSpeechlySpeechRecognition(appId));
+        if (!hasError && !modalData) {
+          console.log('in micro finally');
+          if (shouldUseSpeechlyPolyfill && appId) {
+            console.log('applying polyfill');
+            SpeechRecognition.applyPolyfill(createSpeechlySpeechRecognition(appId));
+          }
 
           setIsMicrophoneAvailable(true);
         } else if (!modalData && hasError instanceof Error) {
