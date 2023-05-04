@@ -115,14 +115,11 @@ const SessionQuiz = () => {
     window.onpopstate = () => handleVoiceStop();
   }, []);
 
-  const lastQuestionId = useMemo(
-    () => (questionsOrdered?.length ? questionsOrdered[questionsOrdered.length - 1].id : null),
-    [questionsOrdered]
-  );
-
   const currentTime = useMemo(
     () =>
-      currentQuestion?.time && session?.settings.isTimed ? getTimeData(currentQuestion.time) : null,
+      session?.settings.isTimed
+        ? getTimeData(currentQuestion?.time || session?.settings.time)
+        : null,
     [currentQuestion?.time, currentQuestion?.id]
   );
 
@@ -148,14 +145,6 @@ const SessionQuiz = () => {
 
     const current = questionsOrdered[questionsOrdered.length - questionsLeftCount];
     setCurrentQuestion({ ...current });
-
-    if (
-      session?.settings.shouldReadOutLoud &&
-      current &&
-      (!session?.settings.isTimed || (session?.settings.isTimed && timeLeft !== 0))
-    ) {
-      handleVoicePlay(current?.question);
-    }
   };
 
   useEffect(() => {
@@ -189,15 +178,12 @@ const SessionQuiz = () => {
     // and not last question item(edge case where page re-renders when they are in results page.)
     const shouldHaveVoiceReadQuestions = session?.settings.shouldReadOutLoud;
     const isNextQuestion = previousQuestion?.id === currentQuestion?.id;
-    const isNotLastQuestion = currentQuestion?.id !== lastQuestionId;
-    const isOneAndOnlyQuestion = questionsOrdered?.length === 1;
     const voiceOptionsHaveLoaded = voiceOptions.length;
 
     if (
       currentQuestion &&
       shouldHaveVoiceReadQuestions &&
       isNextQuestion &&
-      (isOneAndOnlyQuestion || isNotLastQuestion) &&
       voiceOptionsHaveLoaded
     ) {
       handleVoicePlay(currentQuestion.question);
