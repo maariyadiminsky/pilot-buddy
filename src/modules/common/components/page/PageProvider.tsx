@@ -1,14 +1,10 @@
-import { ReactNode, useState, useMemo, createContext } from 'react';
-
+import { useState, useMemo, createContext } from 'react';
 import Sidebar from '@modules/common/components/sidebar/Sidebar';
 import SearchHeader from '@common/components/header/SearchHeader';
 import HeaderWithActions from '@common/components/header/HeaderWithActions';
 import Breadcrumbs from '@modules/common/components/page/Breadcrumbs';
 import { type BrandButtonType } from '@common/components/button/BrandButton';
-
-interface PageProps {
-  children: ReactNode;
-}
+import { Outlet } from 'react-router-dom';
 
 interface PageContextProps {
   pageTitle: string;
@@ -26,7 +22,7 @@ export const PageContext = createContext<PageContextProps>({
   setShouldUpdatePinnedSessions: () => {},
 });
 
-const PageProvider = ({ children }: PageProps) => {
+const PageProvider = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [pageTitle, setPageTitle] = useState('');
   const [pageHeaderActions, setPageHeaderActions] = useState<BrandButtonType[]>();
@@ -66,8 +62,9 @@ const PageProvider = ({ children }: PageProps) => {
             <Breadcrumbs>
               <HeaderWithActions title={pageTitle} actions={pageHeaderActions} />
             </Breadcrumbs>
-
-            <PageContext.Provider value={contextValues}>{children}</PageContext.Provider>
+            <PageContext.Provider value={contextValues}>
+              <Outlet />
+            </PageContext.Provider>
           </>
         </main>
       </div>

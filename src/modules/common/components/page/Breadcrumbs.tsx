@@ -5,7 +5,7 @@ import { Link, useParams, useLocation } from 'react-router-dom';
 
 interface PageType {
   name: string;
-  href: string;
+  route: string;
   current: boolean;
 }
 
@@ -14,24 +14,24 @@ interface BreadcrumbsProps {
 }
 
 const Breadcrumbs = ({ children }: BreadcrumbsProps) => {
-  const { id: sessionId } = useParams();
+  const { id } = useParams();
   const { pathname } = useLocation();
 
   const pages = useMemo(
     () =>
       [
         pathname === '/'
-          ? { name: 'Study Room', href: ROUTES.HOMEPAGE_ROUTE, current: Boolean(!sessionId) }
+          ? { name: 'Study Room', route: ROUTES.HOMEPAGE_ROUTE, current: Boolean(!id) }
           : undefined,
-        sessionId
+        id
           ? {
               name: 'Session',
-              href: ROUTES.SESSION_ROUTE.replace(':id', sessionId),
-              current: Boolean(sessionId),
+              route: `/sessions/${id}`,
+              current: Boolean(id),
             }
           : undefined,
       ].filter((page) => page) as PageType[],
-    [sessionId, pathname]
+    [id, pathname]
   );
 
   if (!pages?.length) return null;
@@ -49,7 +49,7 @@ const Breadcrumbs = ({ children }: BreadcrumbsProps) => {
               </Link>
             </div>
           </li>
-          {pages.map(({ name, href, current }) => (
+          {pages.map(({ name, route, current }) => (
             <li key={name} className="flex">
               <div className="flex items-center">
                 <svg
@@ -62,7 +62,7 @@ const Breadcrumbs = ({ children }: BreadcrumbsProps) => {
                   <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
                 </svg>
                 <Link
-                  to={href}
+                  to={route}
                   className="ml-4 text-sm subpixel-antialiased lg:text-xs text-white hover:text-sky-100"
                   aria-current={current ? 'page' : undefined}
                 >

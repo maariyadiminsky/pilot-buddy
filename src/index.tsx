@@ -7,7 +7,6 @@ import { persistor, store } from '@redux/store/reducers/store';
 import AuthProvider from '@modules/auth/AuthProvider';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
-import PageProvider from '@common/components/page/PageProvider';
 
 import './index.css';
 
@@ -20,9 +19,7 @@ root.render(
       <PersistGate loading={null} persistor={persistor}>
         <Router>
           <AuthProvider>
-            <PageProvider>
-              <App />
-            </PageProvider>
+            <App />
           </AuthProvider>
         </Router>
       </PersistGate>

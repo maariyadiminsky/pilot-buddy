@@ -9,6 +9,7 @@ import Logo from '@common/components/sidebar/images/airplane.png';
 import { type NavigationItem } from '@common/components/sidebar/types';
 import PinnedNavigation from '@common/components/sidebar/PinnedNavigation';
 import { useDatabase } from '@common/hooks';
+import { useParams, useLocation } from 'react-router-dom';
 
 const NAVIGATION_INITIAL = [
   { id: 0, name: 'Study Room', route: '/', icon: BookOpenIcon, current: true },
@@ -30,8 +31,10 @@ const Sidebar = ({
   const { handleLogout } = useContext(AuthContext);
   const [navigation, setNavigation] = useState<NavigationItem[]>(NAVIGATION_INITIAL);
   const [pinnedNavigation, setPinnedNavigation] = useState<NavigationItem[]>([]);
-
+  console.log('NAV:', navigation);
   const { getAllDBSessionTableItems } = useDatabase();
+  const { id: sessionId } = useParams();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     const getTableSessions = async () => {
@@ -43,10 +46,11 @@ const Sidebar = ({
 
           setPinnedNavigation(
             pinnedSessions.map(({ id, name }, index) => ({
-              id: index,
               name,
+              id: index,
+              routeId: id,
               icon: ArrowTopRightOnSquareIcon,
-              route: `sessions/${id}`,
+              route: `/sessions/${id}`,
               current: false,
             }))
           );
@@ -67,7 +71,7 @@ const Sidebar = ({
   }, [shouldUpdatePinnedSessions]);
 
   const handleSetCurrent = useCallback(
-    (id?: number | null, isPinnedNav?: boolean) => {
+    (id?: number | null, isPinnedNav?: boolean, ignoreUnSelectForOtherNav = false) => {
       const updatedData = (isPinnedNav ? pinnedNavigation : navigation).map((item) => {
         if (item.current) {
           return { ...item, current: false };
@@ -82,23 +86,51 @@ const Sidebar = ({
 
       if (isPinnedNav) {
         // check to make sure main nav doesn't have something selected
-        const mainNav = navigation.find(({ current }) => current);
-        if (mainNav) {
-          handleSetCurrent(null);
+        if (!ignoreUnSelectForOtherNav) {
+          const mainNav = navigation.find(({ current }) => current);
+          if (mainNav) {
+            handleSetCurrent(null);
+          }
         }
 
         setPinnedNavigation(updatedData);
       } else {
+        if (!ignoreUnSelectForOtherNav) {
+          const pinnedNav = pinnedNavigation.find(({ current }) => current);
+          if (pinnedNav) {
+            handleSetCurrent(null, true);
+          }
+        }
+
         // check to make sure pinned nav doesn't have something selected
         const pinnedNav = pinnedNavigation.find(({ current }) => current);
         if (pinnedNav) {
           handleSetCurrent(null, true);
         }
+
         setNavigation(updatedData);
       }
     },
     [navigation, pinnedNavigation]
   );
+
+  // will always keep nav correctly selected but
+  // results in double checks when navs are not clicked directly.
+  // I outweighed the pros/cons and see there would be more benefits here,
+  // especially because there are so few nav items, even if the future will
+  // have more, this shouldn't be much of a performance issue, if at all.
+  // I would like to find a cleaner solution when cleaning up.
+  useEffect(() => {
+    if (pathname === '/') {
+      setNavigation(NAVIGATION_INITIAL);
+      handleSetCurrent(null, true, true);
+    } else if (sessionId) {
+      const navItemToBeSelected = pinnedNavigation.find(({ routeId }) => routeId === sessionId);
+      // pass in id or null to unselect current in the
+      // case the user clicks on an unpinned session
+      handleSetCurrent(navItemToBeSelected?.id, true);
+    }
+  }, [sessionId, pathname]);
 
   return (
     <>
@@ -159,7 +191,7 @@ const Sidebar = ({
                     />
                     <PinnedNavigation
                       navigation={pinnedNavigation}
-                      handleSetCurrent={handleSetCurrent}
+                      handleSetCurrent={(id) => handleSetCurrent(id, true)}
                     />
                   </nav>
                   <div className="flex flex-col justify-end items-start ml-4 text-gray-500 text-sm font-medium">
@@ -191,7 +223,10 @@ const Sidebar = ({
                 handleSetCurrent={(id) => handleSetCurrent(id)}
               />
             </div>
-            <PinnedNavigation navigation={pinnedNavigation} handleSetCurrent={handleSetCurrent} />
+            <PinnedNavigation
+              navigation={pinnedNavigation}
+              handleSetCurrent={(id) => handleSetCurrent(id)}
+            />
           </nav>
           <div className="flex flex-col justify-end items-start ml-4 flex-1 text-gray-500 text-sm font-medium">
             <LogoutButton handleLogout={handleLogout} />

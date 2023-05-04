@@ -10,6 +10,7 @@ import { Route, Routes } from 'react-router-dom';
 import { AuthContext } from '@modules/auth/AuthProvider';
 import PrivateRoutes from '@modules/auth/PrivateRoutes';
 import Loader from '@common/components/loader/Loader';
+import PageProvider from '@common/components/page/PageProvider';
 
 const App: FC = () => {
   const { isLoggedIn, isAuthLoading } = useContext(AuthContext);
@@ -18,12 +19,14 @@ const App: FC = () => {
     <Loader />
   ) : (
     <Routes>
-      <Route path="*" element={<NotFoundPage />} />
-      <Route path="/" element={isLoggedIn ? <StudyRoom /> : <Homepage />} />
-      <Route path={ROUTES.LOGIN_ROUTE} element={<Login />} />
-      <Route element={<PrivateRoutes isLoggedIn={isLoggedIn} />}>
-        <Route path={ROUTES.SESSION_ROUTE} element={<Session />} />
-        <Route path={ROUTES.SESSION_START_ROUTE} element={<SessionQuiz />} />
+      <Route element={<PageProvider />}>
+        <Route path="*" element={<NotFoundPage />} />
+        <Route path="/" element={isLoggedIn ? <StudyRoom /> : <Homepage />} />
+        <Route path={ROUTES.LOGIN_ROUTE} element={<Login />} />
+        <Route element={<PrivateRoutes isLoggedIn={isLoggedIn} />}>
+          <Route path={ROUTES.SESSION_ROUTE} element={<Session />} />
+          <Route path={ROUTES.SESSION_START_ROUTE} element={<SessionQuiz />} />
+        </Route>
       </Route>
     </Routes>
   );
