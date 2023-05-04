@@ -36,6 +36,8 @@ const Sidebar = ({
   const { id: sessionId } = useParams();
   const { pathname } = useLocation();
 
+  useEffect(() => setShouldUpdatePinnedSessions(true), []);
+
   useEffect(() => {
     const getTableSessions = async () => {
       try {

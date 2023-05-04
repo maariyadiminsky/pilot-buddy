@@ -26,7 +26,7 @@ const PageProvider = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [pageTitle, setPageTitle] = useState('');
   const [pageHeaderActions, setPageHeaderActions] = useState<BrandButtonType[]>();
-  const [shouldUpdatePinnedSessions, setShouldUpdatePinnedSessions] = useState(true);
+  const [shouldUpdatePinnedSessions, setShouldUpdatePinnedSessions] = useState(false);
 
   const { id: sessionId } = useParams();
   const { pathname } = useLocation();
@@ -50,7 +50,6 @@ const PageProvider = () => {
 
   // will need to improve this if app grows
   const shouldHideMainElements = (!sessionId && pathname !== '/') || pathname.includes('start');
-
   return (
     <div className="relative isolate overflow-hidden bg-white h-full">
       {!shouldHideMainElements && (
