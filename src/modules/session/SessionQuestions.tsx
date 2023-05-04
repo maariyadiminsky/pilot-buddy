@@ -129,7 +129,6 @@ const SessionQuestions = ({
 
     setShouldShowQuestionAction(false);
   };
-
   const handleDragEnd = (data: DropResult) => {
     if (!questions) return;
 
@@ -152,12 +151,26 @@ const SessionQuestions = ({
     // get questions array without question
     const questionsWithoutMovedQuestion = removeObjectFromArray(questions, draggableId, 'id');
 
-    // add question to correct index
-    handleSetQuestions([
+    // save in storage
+    let hasError = null;
+    const updatedQuestions = [
       ...questionsWithoutMovedQuestion.slice(0, draggedTo),
       question,
       ...questionsWithoutMovedQuestion.slice(draggedTo),
-    ]);
+    ];
+    try {
+      updateDBPartialDataOfSession({ questions: updatedQuestions }, sessionId);
+    } catch (error) {
+      hasError = error;
+      if (error instanceof Error) {
+        console.log(error);
+        // todo: add error monitoring
+      }
+    } finally {
+      if (!hasError && updatedQuestions) {
+        handleSetQuestions(updatedQuestions);
+      }
+    }
   };
 
   const renderQuestionsOrEmptyAction = () => {
