@@ -187,12 +187,18 @@ const SessionQuiz = () => {
   useEffect(() => {
     // read once on load
     // and not last question item(edge case where page re-renders when they are in results page.)
+    const shouldHaveVoiceReadQuestions = session?.settings.shouldReadOutLoud;
+    const isNextQuestion = previousQuestion?.id === currentQuestion?.id;
+    const isNotLastQuestion = currentQuestion?.id !== lastQuestionId;
+    const isOneAndOnlyQuestion = questionsOrdered?.length === 1;
+    const voiceOptionsHaveLoaded = voiceOptions.length;
+
     if (
       currentQuestion &&
-      session?.settings.shouldReadOutLoud &&
-      previousQuestion?.id === currentQuestion.id &&
-      currentQuestion.id !== lastQuestionId &&
-      voiceOptions.length
+      shouldHaveVoiceReadQuestions &&
+      isNextQuestion &&
+      (isOneAndOnlyQuestion || isNotLastQuestion) &&
+      voiceOptionsHaveLoaded
     ) {
       handleVoicePlay(currentQuestion.question);
     }
