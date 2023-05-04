@@ -46,10 +46,10 @@ const SessionQuestions = ({
   };
 
   useEffect(() => {
-    if (!questions?.length && questionsData) {
+    if (questionsData) {
       handleSetQuestions(questionsData);
     }
-  }, [questionsData?.length]);
+  }, [questionsData]);
 
   const handleAddQuestion = (question: SessionQuestionType) => [
     ...(questions || []),

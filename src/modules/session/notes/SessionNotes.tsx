@@ -21,7 +21,7 @@ const SessionNotes = ({ notesData, sessionId }: SessionNotesProps) => {
   const { updateDBPartialDataOfSession } = useDatabase();
 
   useEffect(() => {
-    if (!notes?.length && notesData) {
+    if (notesData) {
       setNotes(notesData);
     }
   }, [notesData]);
