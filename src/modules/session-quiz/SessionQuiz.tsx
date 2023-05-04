@@ -10,6 +10,7 @@ import { DATABASE_ERROR, useDatabase, usePrevious } from '@common/hooks';
 import { getQuestionOrder, getTimeData } from '@modules/session-quiz/utils';
 import { SessionQuestionWithAnswerType } from '@modules/session-quiz/types';
 import { useSpeechSynthesis } from '@modules/speech-synthesis/hooks';
+import Loader from '@common/components/loader/Loader';
 
 const SessionQuiz = () => {
   const modalRef = useRef<ModalRef>(null);
@@ -199,7 +200,13 @@ const SessionQuiz = () => {
     questionsLeft,
   ]);
 
-  if (!questionsOrdered) return <div>Loading...</div>;
+  if (!questionsOrdered) {
+    return (
+      <div className="flex justify-center items-center xl:h-screen">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white sm:bg-inherit">

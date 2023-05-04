@@ -7,6 +7,7 @@ import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu'
 import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
 import { type SettingsType, type SettingsVoiceType } from '@modules/session/types';
 import { useDatabase } from '@common/hooks';
+import Loader from '@common/components/loader/Loader';
 
 interface SessionSettingProps {
   settings?: SettingsType;
@@ -112,63 +113,67 @@ const SessionSettings = ({
     }
   };
 
-  if (!settings) return <div>Loading...</div>;
-
   return (
-    <div className="bg-zinc-50 lg:flex-shrink-0 lg:border-l lg:border-gray-200 flex xl:w-96 px-8 h-full w-full">
-      <div className="lg:w-80">
-        <div className="pt-8">
-          <h2 className="text-sm font-semibold">Settings</h2>
+    <div className="bg-zinc-50 lg:flex-shrink-0 lg:border-l lg:border-gray-200 flex flex-col xl:w-96 px-8 h-full w-full">
+      {settings ? (
+        <div className="lg:w-80 flex flex-col items-start xl:h-[calc(100vh-75px)]">
+          <div className="pt-8">
+            <h2 className="text-sm font-semibold">Settings</h2>
+          </div>
+          <ul className="flex flex-col divide-y divide-gray-200">
+            <SettingToggle
+              title="Voice"
+              description="During the session, your questions will be read aloud for you."
+              getter={shouldReadOutLoud}
+              setter={(value: boolean) => handleToggle('voice', value, 'shouldReadOutLoud')}
+            >
+              {shouldReadOutLoud && (
+                <SpeechSynthesis
+                  text="This is how your question will sound."
+                  settingsVoice={settingsVoice}
+                  setSettingsVoice={(voiceToUpdate: SettingsVoiceType) =>
+                    handleSetSetting('voice', voiceToUpdate, 'voice')
+                  }
+                />
+              )}
+            </SettingToggle>
+            <SettingToggle
+              title="Order"
+              description="Choose the order in which you'd like the session's questions to be presented to you."
+              getter={shouldHaveOrder}
+              setter={(value: boolean) => handleToggle('order', value, 'shouldHaveOrder')}
+            >
+              {shouldHaveOrder && (
+                <OrderSelectMenu
+                  order={settingsOrder}
+                  setOrder={(orderToUpdate: SelectMenuItemType) =>
+                    handleSetSetting('order', orderToUpdate, 'order')
+                  }
+                />
+              )}
+            </SettingToggle>
+            <SettingToggle
+              title="Timed"
+              description="Every question has a timer and smoothly moves to the next (If the microphone is enabled during the quiz, it's duration aligns with the question's time)."
+              getter={isTimed}
+              setter={(value: boolean) => handleToggle('time', value, 'isTimed')}
+            >
+              {isTimed && (
+                <TimeSelectMenu
+                  time={settingsTime}
+                  setTime={(timeToUpdate: SelectMenuItemType) =>
+                    handleSetSetting('time', timeToUpdate, 'time')
+                  }
+                />
+              )}
+            </SettingToggle>
+          </ul>
         </div>
-        <ul className="flex flex-col divide-y divide-gray-200">
-          <SettingToggle
-            title="Voice"
-            description="During the session, your questions will be read aloud for you."
-            getter={shouldReadOutLoud}
-            setter={(value: boolean) => handleToggle('voice', value, 'shouldReadOutLoud')}
-          >
-            {shouldReadOutLoud && (
-              <SpeechSynthesis
-                text="This is how your question will sound."
-                settingsVoice={settingsVoice}
-                setSettingsVoice={(voiceToUpdate: SettingsVoiceType) =>
-                  handleSetSetting('voice', voiceToUpdate, 'voice')
-                }
-              />
-            )}
-          </SettingToggle>
-          <SettingToggle
-            title="Order"
-            description="Choose the order in which you'd like the session's questions to be presented to you."
-            getter={shouldHaveOrder}
-            setter={(value: boolean) => handleToggle('order', value, 'shouldHaveOrder')}
-          >
-            {shouldHaveOrder && (
-              <OrderSelectMenu
-                order={settingsOrder}
-                setOrder={(orderToUpdate: SelectMenuItemType) =>
-                  handleSetSetting('order', orderToUpdate, 'order')
-                }
-              />
-            )}
-          </SettingToggle>
-          <SettingToggle
-            title="Timed"
-            description="Every question has a timer and smoothly moves to the next (If the microphone is enabled during the quiz, it's duration aligns with the question's time)."
-            getter={isTimed}
-            setter={(value: boolean) => handleToggle('time', value, 'isTimed')}
-          >
-            {isTimed && (
-              <TimeSelectMenu
-                time={settingsTime}
-                setTime={(timeToUpdate: SelectMenuItemType) =>
-                  handleSetSetting('time', timeToUpdate, 'time')
-                }
-              />
-            )}
-          </SettingToggle>
-        </ul>
-      </div>
+      ) : (
+        <div className="py-12 xl:h-[calc(100vh-75px)]">
+          <Loader />
+        </div>
+      )}
     </div>
   );
 };

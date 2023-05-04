@@ -98,16 +98,14 @@ const Session = () => {
               setShouldShowQuestionAction={setShouldShowQuestionAction}
             />
           </div>
-          <div className="flex flex-col items-start">
-            <SessionSettings
-              settings={session?.settings}
-              isTimed={isTimed}
-              setIsTimed={setIsTimed}
-              settingsTime={settingsTime}
-              setSettingsTime={setSettingsTime}
-              sessionId={id}
-            />
-          </div>
+          <SessionSettings
+            settings={session?.settings}
+            isTimed={isTimed}
+            setIsTimed={setIsTimed}
+            settingsTime={settingsTime}
+            setSettingsTime={setSettingsTime}
+            sessionId={id}
+          />
         </div>
       </div>
     </PageWrapper>

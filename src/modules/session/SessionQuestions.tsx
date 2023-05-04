@@ -7,6 +7,7 @@ import { DragDropContext, Droppable, type DropResult } from 'react-beautiful-dnd
 import SessionQuestionsList from '@modules/session/question/SessionQuestionsList';
 import { SessionQuestionType } from '@modules/session/types';
 import { useDatabase } from '@common/hooks';
+import Loader from '@common/components/loader/Loader';
 
 interface SessionQuestionsProps {
   questionsData?: SessionQuestionType[];
@@ -44,8 +45,8 @@ const SessionQuestions = ({
   };
 
   useEffect(() => {
-    if (!questions?.length) {
-      handleSetQuestions(questionsData || []);
+    if (!questions?.length && questionsData) {
+      handleSetQuestions(questionsData);
     }
   }, [questionsData?.length]);
 
@@ -166,7 +167,7 @@ const SessionQuestions = ({
   };
 
   const renderQuestionsOrEmptyAction = () => {
-    if (!questions) return <div>Loading...</div>;
+    if (!questions) return <Loader />;
 
     if (!questions.length) {
       // if user is creating a new question there is

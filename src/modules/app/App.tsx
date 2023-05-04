@@ -9,12 +9,13 @@ import { FC, useContext } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { AuthContext } from '@modules/auth/AuthProvider';
 import PrivateRoutes from '@modules/auth/PrivateRoutes';
+import Loader from '@common/components/loader/Loader';
 
 const App: FC = () => {
   const { isLoggedIn, isAuthLoading } = useContext(AuthContext);
 
   return isAuthLoading ? (
-    <div>Loading...</div>
+    <Loader />
   ) : (
     <Routes>
       <Route path="*" element={<NotFoundPage />} />

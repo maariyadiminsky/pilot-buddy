@@ -25,7 +25,7 @@ export const useTableSessions = (
   handleSetModalData: (value?: ModalDataType) => void,
   handleModalOpen?: (value: boolean) => void
 ) => {
-  const [sessions, setSessions] = useState<SessionsTableDataType[]>([]);
+  const [sessions, setSessions] = useState<SessionsTableDataType[]>();
   const [currentSession, setCurrentSession] = useState<SessionsTableDataType>();
   const [shouldShowSessionAction, setShouldShowSessionAction] = useState(false);
 
@@ -59,6 +59,8 @@ export const useTableSessions = (
   }, []);
 
   const handleAddSession = (session: SessionsTableDataType) => {
+    if (!sessions) return null;
+
     // add session in correct order based on topic
     const SessionsWithNewSession = sessionsWithNewSessionInOrder(session, sessions);
     setSessions(SessionsWithNewSession);
@@ -78,7 +80,7 @@ export const useTableSessions = (
         // todo: add error monitoring
       }
     } finally {
-      if (!hasError) {
+      if (!hasError && sessions) {
         // update sessions
         setSessions(sessionsWithNewSessionInOrder(session, sessions));
         // reset current session
@@ -105,6 +107,7 @@ export const useTableSessions = (
   };
 
   const handleRemoveSessionFromUIOnly = (id: string, customSessions?: SessionsTableDataType[]) => {
+    if (!sessions) return;
     setSessions(removeObjectFromArray(customSessions || sessions, id, 'id'));
   };
 
@@ -141,11 +144,15 @@ export const useTableSessions = (
   };
 
   const handleEditSession = (id: string, isPin?: boolean) => {
+    if (!sessions) return;
+
     // in the case they were editing before and just hit edit again,
     // add back the last item user was editing.
     // This also acts as a cancel of the last edit.
     if (currentSession) {
       const currentSessions = handleAddSession(currentSession);
+      if (!currentSessions) return;
+
       handleRemoveSessionFromUIOnly(id, currentSessions);
     } else {
       handleRemoveSessionFromUIOnly(id);

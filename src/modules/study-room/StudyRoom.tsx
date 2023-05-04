@@ -10,6 +10,7 @@ import Modal, { type ModalRef, type ModalDataType } from '@common/components/mod
 import EmptyDataAction from '@common/components/empty/EmptyDataAction';
 import { type MenuOptionType } from '@common/components/dropdown/ActionMenu';
 import { usePinnedSessions, useTableSessions } from '@modules/study-room/hooks';
+import Loader from '@common/components/loader/Loader';
 
 const StudyRoom = () => {
   const modalRef = useRef<ModalRef>(null);
@@ -87,6 +88,14 @@ const StudyRoom = () => {
       ] as BrandButtonType[],
     [shouldShowSessionAction]
   );
+
+  if (!sessions) {
+    return (
+      <div className="flex justify-center items-center xl:h-screen">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <PageWrapper title="Study Room" headerActions={headerActions}>
