@@ -145,14 +145,6 @@ const SessionQuiz = () => {
 
     const current = questionsOrdered[questionsOrdered.length - questionsLeftCount];
     setCurrentQuestion({ ...current });
-
-    if (
-      session?.settings.shouldReadOutLoud &&
-      current &&
-      (!session?.settings.isTimed || (session?.settings.isTimed && timeLeft !== 0))
-    ) {
-      handleVoicePlay(current?.question);
-    }
   };
 
   useEffect(() => {
@@ -182,25 +174,22 @@ const SessionQuiz = () => {
   ]);
 
   useEffect(() => {
-    // read once on load
-    // and not last question item(edge case where page re-renders when they are in results page.)
     const shouldHaveVoiceReadQuestions = session?.settings.shouldReadOutLoud;
-    const isNextQuestion = previousQuestion?.id === currentQuestion?.id;
     const voiceOptionsHaveLoaded = voiceOptions.length;
 
     if (
       currentQuestion &&
       shouldHaveVoiceReadQuestions &&
-      isNextQuestion &&
-      voiceOptionsHaveLoaded
+      voiceOptionsHaveLoaded &&
+      questionsLeft !== 0
     ) {
       handleVoicePlay(currentQuestion.question);
     }
   }, [
-    previousQuestion?.id,
     currentQuestion?.id,
     session?.settings.shouldReadOutLoud,
     voiceOptions.length,
+    questionsLeft,
   ]);
 
   if (!questionsOrdered) {
