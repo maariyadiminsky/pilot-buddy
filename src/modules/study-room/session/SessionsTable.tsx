@@ -3,6 +3,7 @@ import { type SessionsTableDataType } from '@modules/study-room/types';
 import { isSessionPinned } from '@modules/study-room/utils';
 
 interface SessionsTableProps {
+  currentSessionId?: string;
   pinnedSessions: string[];
   sessions: SessionsTableDataType[];
   handlePinSession: (session: SessionsTableDataType) => void;
@@ -12,6 +13,7 @@ interface SessionsTableProps {
 }
 
 const SessionsTable = ({
+  currentSessionId,
   pinnedSessions,
   sessions,
   handlePinSession,
@@ -51,6 +53,7 @@ const SessionsTable = ({
             <SessionItem
               key={session.id}
               isSessionPinned={isSessionPinned(session.id, pinnedSessions)}
+              isEditingCurrentSession={currentSessionId === session.id}
               {...{
                 ...session,
                 index,
@@ -58,6 +61,7 @@ const SessionsTable = ({
                 handleUnpinSession,
                 handleEditSession,
                 handleRemoveSession,
+                currentSessionId,
               }}
             />
           ))}

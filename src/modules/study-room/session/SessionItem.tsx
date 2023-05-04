@@ -13,6 +13,7 @@ import SessionItemIconButton from '@modules/study-room/session/SessionItemIconBu
 interface SessionItemProps extends SessionsTableDataType {
   index: number;
   isSessionPinned: boolean;
+  isEditingCurrentSession: boolean;
   handlePinSession: (session: SessionsTableDataType) => void;
   handleUnpinSession: (id: string) => void;
   handleEditSession: (id: string) => void;
@@ -27,7 +28,9 @@ const SessionItem = ({
   textColor,
   color,
   index,
+
   isSessionPinned,
+  isEditingCurrentSession,
   handlePinSession,
   handleUnpinSession,
   handleEditSession,
@@ -109,7 +112,8 @@ const SessionItem = ({
         <SessionItemIconButton
           icon={PencilSquareIcon}
           srText="Edit Session"
-          handleOnClick={() => handleEditSession(id)}
+          isDisabled={isEditingCurrentSession}
+          handleOnClick={() => !isEditingCurrentSession && handleEditSession(id)}
         />
         <SessionItemIconButton
           icon={TrashIcon}

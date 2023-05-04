@@ -89,6 +89,19 @@ export const usePinnedSessions = (
     if (isEditingPinnedSession) {
       handlePinSession(session);
       setIsEditingPinnedSession(false);
+    } else {
+      // update pin if not adding it back in in case name has changed
+      const pinnedSession = pinnedSessions.find(({ sessionId }) => sessionId === session.id);
+      if (pinnedSession) {
+        const updatedPin = { ...pinnedSession, ...{ text: session.name } };
+        const pinnedSessionsWithoutPin = removeObjectFromArray(
+          pinnedSessions,
+          session.id,
+          'sessionId'
+        );
+
+        setPinnedSessions([updatedPin, ...(pinnedSessionsWithoutPin || [])]);
+      }
     }
   };
 

@@ -64,7 +64,7 @@ export const useSessionAction = (
       textColor: currentSession?.textColor || randomBrandColor.text,
       name: capitalize(name),
       topic: capitalize(topic),
-      isPinned: false,
+      isPinned: currentSession?.isPinned || false,
     });
 
     setName('');

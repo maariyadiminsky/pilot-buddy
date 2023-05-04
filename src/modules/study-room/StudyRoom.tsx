@@ -65,7 +65,7 @@ const StudyRoom = () => {
       {
         text: 'Edit',
         srText: 'Edit session',
-        handleOnClick: () => handleEditSession(id, true),
+        handleOnClick: () => !currentSession && handleEditSession(id, true),
       },
       {
         text: 'View',
@@ -112,7 +112,6 @@ const StudyRoom = () => {
             title="Pinned Sessions"
             sessions={pinnedSessions}
             getDropdownActions={getPinDropdownActions}
-            handleEditSession={handleEditSession}
           />
         ) : null}
         <div className="flex flex-col space-y-4 mt-4">
@@ -125,6 +124,7 @@ const StudyRoom = () => {
           )}
           {sessions?.length ? (
             <SessionsTable
+              currentSessionId={currentSession?.id}
               pinnedSessions={pinnedSessionIds}
               handleRemoveSession={handleRemoveSessionConfirm}
               {...{

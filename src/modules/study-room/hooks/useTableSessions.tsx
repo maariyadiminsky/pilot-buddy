@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import { type SessionsTableDataType } from '@modules/study-room/types';
 import { sessionsWithNewSessionInOrder, sessionsOrderedByTopic } from '@modules/study-room/utils';
 import { removeObjectFromArray } from '@common/utils';
 import { type ModalDataType } from '@common/components/modal/Modal';
 import { useDatabase } from '@common/hooks';
+import { PageContext } from '@common/components/page/PageProvider';
 
 const REMOVE_SESSION_CONFIRMATION_STATIC_MODAL_DATA = {
   title: 'Are you sure?',
@@ -28,6 +29,8 @@ export const useTableSessions = (
   const [sessions, setSessions] = useState<SessionsTableDataType[]>();
   const [currentSession, setCurrentSession] = useState<SessionsTableDataType>();
   const [shouldShowSessionAction, setShouldShowSessionAction] = useState(false);
+
+  const { setShouldUpdatePinnedSessions } = useContext(PageContext);
 
   const {
     getAllDBSessionTableItems,
@@ -89,6 +92,8 @@ export const useTableSessions = (
         setShouldShowSessionAction(false);
         // reset modal data if it had data previously
         handleSetModalData(undefined);
+        // update in sidebar in case name changed:
+        setShouldUpdatePinnedSessions(true);
         // check if this was a pin edit if so, update the pin
         handleSubmitSessionPinTry(session);
       }
@@ -151,10 +156,7 @@ export const useTableSessions = (
 
   const handleEditSession = (id: string, isPin?: boolean) => {
     if (!sessions) return;
-
-    // in the case they were editing before and just hit edit again,
-    // add back the last item user was editing.
-    // This also acts as a cancel of the last edit.
+    // Acts as a cancel of the last edit.
     if (currentSession) {
       const currentSessions = handleAddSession(currentSession);
       if (!currentSessions) return;
@@ -165,6 +167,7 @@ export const useTableSessions = (
     }
     // set the session we are editing as the current session
     setCurrentSession(sessions.find((session) => session.id === id));
+
     // if this session also is a pin, when submitting
     // it will be added back to the pins as well
     handleIsEditingPinnedSession(Boolean(isPin));
