@@ -22,7 +22,7 @@ const NavigationItems = ({ navigation, handleSetCurrent }: NavigationItemsProps)
               ? 'bg-gray-300 text-gray-900'
               : 'text-gray-700 hover:bg-gray-200 hover:text-gray-900',
             !Icon && 'pl-3',
-            'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
+            'group flex items-center rounded-md px-2 py-2 text-sm font-medium pr-3'
           )}
           aria-current={current ? 'page' : undefined}
         >
@@ -35,7 +35,7 @@ const NavigationItems = ({ navigation, handleSetCurrent }: NavigationItemsProps)
               aria-hidden="true"
             />
           )}
-          {name}
+          <div className="text-ellipsis overflow-hidden">{name}</div>
         </Link>
       );
     })}
