@@ -1,6 +1,6 @@
 import { useState, useMemo, createContext } from 'react';
 import Sidebar from '@modules/common/components/sidebar/Sidebar';
-import SearchHeader from '@common/components/header/SearchHeader';
+import MobileHeader from '@common/components/header/MobileHeader';
 import HeaderWithActions from '@common/components/header/HeaderWithActions';
 import Breadcrumbs from '@modules/common/components/page/Breadcrumbs';
 import { type BrandButtonType } from '@common/components/button/BrandButton';
@@ -63,7 +63,7 @@ const PageProvider = () => {
         />
       )}
       <div className={`flex flex-col ${shouldHideMainElements ? '' : 'lg:pl-64'}`}>
-        <SearchHeader {...{ setIsSidebarOpen }} shouldShowSearch={false} />
+        <MobileHeader {...{ setIsSidebarOpen }} />
         <main className="flex-1">
           <>
             {!shouldHideMainElements && (

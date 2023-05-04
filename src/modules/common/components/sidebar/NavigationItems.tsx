@@ -19,7 +19,7 @@ const NavigationItems = ({ navigation, handleSetCurrent }: NavigationItemsProps)
           onClick={() => handleSetCurrent(id)}
           className={truthyString(
             current
-              ? 'bg-gray-300 text-gray-900'
+              ? 'bg-gray-200 text-gray-900'
               : 'text-gray-700 hover:bg-gray-200 hover:text-gray-900',
             !Icon && 'pl-3',
             'group flex items-center rounded-md px-2 py-2 text-sm font-medium pr-3'

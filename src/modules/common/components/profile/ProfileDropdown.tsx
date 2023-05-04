@@ -3,6 +3,8 @@ import { Fragment } from 'react';
 
 import { WrapperTypeEnum } from '@common/types';
 import { truthyString } from '@common/utils';
+import ProfileLink from '@common/components/profile/ProfileLink';
+import { HeartIcon, BugAntIcon, CodeBracketIcon } from '@heroicons/react/20/solid';
 
 interface ProfileDropdownProps {
   wrapperType: keyof typeof WrapperTypeEnum;
@@ -31,89 +33,29 @@ const ProfileDropdown = ({ wrapperType }: ProfileDropdownProps) => (
         wrapperType && styles.menu[wrapperType]
       )}
     >
-      <div className="py-1">
-        <Menu.Item>
-          {({ active }) => (
-            <a
-              href="#"
-              className={truthyString(
-                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                'block px-4 py-2 text-sm'
-              )}
-            >
-              View profile
-            </a>
-          )}
-        </Menu.Item>
-        <Menu.Item>
-          {({ active }) => (
-            <a
-              href="#"
-              className={truthyString(
-                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                'block px-4 py-2 text-sm'
-              )}
-            >
-              Settings
-            </a>
-          )}
-        </Menu.Item>
-        <Menu.Item>
-          {({ active }) => (
-            <a
-              href="#"
-              className={truthyString(
-                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                'block px-4 py-2 text-sm'
-              )}
-            >
-              Notifications
-            </a>
-          )}
-        </Menu.Item>
+      <div className="py-1 hover:bg-gray-200">
+        <ProfileLink link="#" text="View Profile" />
       </div>
-      <div className="py-1">
-        <Menu.Item>
-          {({ active }) => (
-            <a
-              href="#"
-              className={truthyString(
-                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                'block px-4 py-2 text-sm'
-              )}
-            >
-              Get desktop app
-            </a>
-          )}
-        </Menu.Item>
-        <Menu.Item>
-          {({ active }) => (
-            <a
-              href="#"
-              className={truthyString(
-                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                'block px-4 py-2 text-sm'
-              )}
-            >
-              Support
-            </a>
-          )}
-        </Menu.Item>
-      </div>
-      <div className="py-1">
-        <Menu.Item>
-          {({ active }) => (
-            <a
-              href="#"
-              className={truthyString(
-                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                'block px-4 py-2 text-sm'
-              )}
-            >
-              Logout
-            </a>
-          )}
-        </Menu.Item>
+      <div>
+        <ProfileLink
+          link="https://www.buymeacoffee.com/mariya.diminsky"
+          text="Buy me Ramen"
+          icon={HeartIcon}
+          iconClassName="text-rose-500"
+          isExternalLink
+        />
+        <ProfileLink
+          link="https://github.com/maariyadiminsky/pilot-buddy/issues"
+          text="Support"
+          icon={BugAntIcon}
+          isExternalLink
+        />
+        <ProfileLink
+          link="https://github.com/maariyadiminsky/pilot-buddy"
+          text="Github"
+          icon={CodeBracketIcon}
+          isExternalLink
+        />
       </div>
     </Menu.Items>
   </Transition>
