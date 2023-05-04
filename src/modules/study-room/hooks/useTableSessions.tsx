@@ -133,7 +133,13 @@ export const useTableSessions = (
     }
   };
 
-  const handleRemoveSessionConfirm = (id: string) => {
+  const handleRemoveSessionConfirm = (id: string, questions: number) => {
+    // no need to confirm removal if there are no questions
+    if (questions === 0) {
+      handleRemoveSession(id);
+      return;
+    }
+
     // before removing a session set confirm with user modal data
     handleSetModalData({
       ...REMOVE_SESSION_CONFIRMATION_STATIC_MODAL_DATA,

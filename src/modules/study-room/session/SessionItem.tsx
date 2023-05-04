@@ -16,7 +16,7 @@ interface SessionItemProps extends SessionsTableDataType {
   handlePinSession: (session: SessionsTableDataType) => void;
   handleUnpinSession: (id: string) => void;
   handleEditSession: (id: string) => void;
-  handleRemoveSession: (id: string) => void;
+  handleRemoveSession: (id: string, questionsCount: number) => void;
 }
 
 const SessionItem = ({
@@ -95,6 +95,11 @@ const SessionItem = ({
         )}
       >
         <SessionItemIconButton
+          icon={ArrowTopRightOnSquareIcon}
+          srText="Open Session"
+          link={`/sessions/${id}`}
+        />
+        <SessionItemIconButton
           icon={PlayCircleIcon}
           srText="Start Session"
           link={`/sessions/${id}/start`}
@@ -109,12 +114,7 @@ const SessionItem = ({
         <SessionItemIconButton
           icon={TrashIcon}
           srText="Delete Session"
-          handleOnClick={() => handleRemoveSession(id)}
-        />
-        <SessionItemIconButton
-          icon={ArrowTopRightOnSquareIcon}
-          srText="Open Session"
-          link={`/sessions/${id}`}
+          handleOnClick={() => handleRemoveSession(id, questions)}
         />
         {index !== 0 ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
       </td>

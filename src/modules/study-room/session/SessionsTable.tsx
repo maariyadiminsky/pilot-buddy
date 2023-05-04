@@ -8,7 +8,7 @@ interface SessionsTableProps {
   handlePinSession: (session: SessionsTableDataType) => void;
   handleUnpinSession: (id: string) => void;
   handleEditSession: (id: string) => void;
-  handleRemoveSession: (id: string) => void;
+  handleRemoveSession: (id: string, questionsCount: number) => void;
 }
 
 const SessionsTable = ({
