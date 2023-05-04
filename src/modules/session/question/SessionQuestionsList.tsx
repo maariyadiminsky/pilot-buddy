@@ -97,7 +97,7 @@ const SessionQuestionsList = ({
                   </div>
                 </div>
 
-                <div className="flex flex-row justify-end items-end space-y-2">
+                <div className="flex flex-col justify-end items-end space-y-2">
                   <div className="flex-shrink-0 flex-row justify-end items-end md:flex">
                     <button
                       type="button"
