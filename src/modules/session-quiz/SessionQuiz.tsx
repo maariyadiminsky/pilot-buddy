@@ -120,24 +120,13 @@ const SessionQuiz = () => {
     [questionsOrdered]
   );
 
-  useEffect(() => {
-    // read once on load
-    // and not last question item(edge case where page re-renders when they are in results page.)
-    if (
-      currentQuestion &&
-      session?.settings.shouldReadOutLoud &&
-      previousQuestion?.id === currentQuestion.id &&
-      currentQuestion.id !== lastQuestionId &&
-      voiceOptions.length
-    ) {
-      handleVoicePlay(currentQuestion.question);
-    }
-  }, [
-    previousQuestion?.id,
-    currentQuestion?.id,
-    session?.settings.shouldReadOutLoud,
-    voiceOptions.length,
-  ]);
+  const currentTime = useMemo(
+    () =>
+      currentQuestion?.time && session?.settings.isTimed ? getTimeData(currentQuestion.time) : null,
+    [currentQuestion?.time, currentQuestion?.id]
+  );
+
+  const [timeLeft, setTimeLeft] = useState(currentTime?.timeUI);
 
   // quiz
   const handleAddQuizAnswer = (event?: SyntheticEvent<Element>) => {
@@ -160,19 +149,14 @@ const SessionQuiz = () => {
     const current = questionsOrdered[questionsOrdered.length - questionsLeftCount];
     setCurrentQuestion({ ...current });
 
-    if (session?.settings.shouldReadOutLoud && current) {
+    if (
+      session?.settings.shouldReadOutLoud &&
+      current &&
+      (!session?.settings.isTimed || (session?.settings.isTimed && timeLeft !== 0))
+    ) {
       handleVoicePlay(current?.question);
     }
   };
-
-  // time
-  const currentTime = useMemo(
-    () =>
-      currentQuestion?.time && session?.settings.isTimed ? getTimeData(currentQuestion.time) : null,
-    [currentQuestion?.time, currentQuestion?.id]
-  );
-
-  const [timeLeft, setTimeLeft] = useState(currentTime?.timeUI);
 
   useEffect(() => {
     if (!session?.settings.isTimed || !questionsLeft) return undefined;
@@ -198,6 +182,25 @@ const SessionQuiz = () => {
     currentQuestion?.id,
     timeLeft,
     questionsLeft,
+  ]);
+
+  useEffect(() => {
+    // read once on load
+    // and not last question item(edge case where page re-renders when they are in results page.)
+    if (
+      currentQuestion &&
+      session?.settings.shouldReadOutLoud &&
+      previousQuestion?.id === currentQuestion.id &&
+      currentQuestion.id !== lastQuestionId &&
+      voiceOptions.length
+    ) {
+      handleVoicePlay(currentQuestion.question);
+    }
+  }, [
+    previousQuestion?.id,
+    currentQuestion?.id,
+    session?.settings.shouldReadOutLoud,
+    voiceOptions.length,
   ]);
 
   if (!questionsOrdered) {
