@@ -145,6 +145,14 @@ const SessionQuiz = () => {
 
     const current = questionsOrdered[questionsOrdered.length - questionsLeftCount];
     setCurrentQuestion({ ...current });
+
+    if (
+      session?.settings.shouldReadOutLoud &&
+      current &&
+      (!session?.settings.isTimed || (session?.settings.isTimed && timeLeft !== 0))
+    ) {
+      handleVoicePlay(current?.question);
+    }
   };
 
   useEffect(() => {
