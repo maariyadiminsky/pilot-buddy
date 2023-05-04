@@ -4,7 +4,7 @@ import SearchHeader from '@common/components/header/SearchHeader';
 import HeaderWithActions from '@common/components/header/HeaderWithActions';
 import Breadcrumbs from '@modules/common/components/page/Breadcrumbs';
 import { type BrandButtonType } from '@common/components/button/BrandButton';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useParams, useLocation } from 'react-router-dom';
 
 interface PageContextProps {
   pageTitle: string;
@@ -28,6 +28,9 @@ const PageProvider = () => {
   const [pageHeaderActions, setPageHeaderActions] = useState<BrandButtonType[]>();
   const [shouldUpdatePinnedSessions, setShouldUpdatePinnedSessions] = useState(true);
 
+  const { id: sessionId } = useParams();
+  const { pathname } = useLocation();
+
   const contextValues = useMemo(
     () => ({
       pageTitle,
@@ -45,23 +48,32 @@ const PageProvider = () => {
     ]
   );
 
+  // will need to improve this if app grows
+  const shouldHideMainElements = (!sessionId && pathname !== '/') || pathname.includes('start');
+
   return (
     <div className="relative isolate overflow-hidden bg-white h-full">
-      <Sidebar
-        {...{
-          shouldUpdatePinnedSessions,
-          setShouldUpdatePinnedSessions,
-          isSidebarOpen,
-          setIsSidebarOpen,
-        }}
-      />
-      <div className="flex flex-col lg:pl-64">
+      {!shouldHideMainElements && (
+        <Sidebar
+          {...{
+            shouldUpdatePinnedSessions,
+            setShouldUpdatePinnedSessions,
+            isSidebarOpen,
+            setIsSidebarOpen,
+          }}
+        />
+      )}
+      <div className={`flex flex-col ${shouldHideMainElements ? '' : 'lg:pl-64'}`}>
         <SearchHeader {...{ setIsSidebarOpen }} shouldShowSearch={false} />
         <main className="flex-1">
           <>
-            <Breadcrumbs>
-              <HeaderWithActions title={pageTitle} actions={pageHeaderActions} />
-            </Breadcrumbs>
+            {!shouldHideMainElements && (
+              <>
+                <HeaderWithActions title={pageTitle} actions={pageHeaderActions} />
+                <Breadcrumbs pathname={pathname} sessionId={sessionId} />
+              </>
+            )}
+
             <PageContext.Provider value={contextValues}>
               <Outlet />
             </PageContext.Provider>

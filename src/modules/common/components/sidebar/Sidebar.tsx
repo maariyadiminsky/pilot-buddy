@@ -31,7 +31,7 @@ const Sidebar = ({
   const { handleLogout } = useContext(AuthContext);
   const [navigation, setNavigation] = useState<NavigationItem[]>(NAVIGATION_INITIAL);
   const [pinnedNavigation, setPinnedNavigation] = useState<NavigationItem[]>([]);
-  console.log('NAV:', navigation);
+
   const { getAllDBSessionTableItems } = useDatabase();
   const { id: sessionId } = useParams();
   const { pathname } = useLocation();

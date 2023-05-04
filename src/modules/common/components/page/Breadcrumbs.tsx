@@ -1,7 +1,7 @@
 import { HomeIcon } from '@heroicons/react/20/solid';
 import { ROUTES } from '@modules/app/constants';
-import { ReactNode, useMemo } from 'react';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 
 interface PageType {
   name: string;
@@ -10,35 +10,32 @@ interface PageType {
 }
 
 interface BreadcrumbsProps {
-  children: ReactNode;
+  pathname: string;
+  sessionId?: string;
 }
 
-const Breadcrumbs = ({ children }: BreadcrumbsProps) => {
-  const { id } = useParams();
-  const { pathname } = useLocation();
-
+const Breadcrumbs = ({ pathname, sessionId }: BreadcrumbsProps) => {
   const pages = useMemo(
     () =>
       [
         pathname === '/'
-          ? { name: 'Study Room', route: ROUTES.HOMEPAGE_ROUTE, current: Boolean(!id) }
+          ? { name: 'Study Room', route: ROUTES.HOMEPAGE_ROUTE, current: Boolean(!sessionId) }
           : undefined,
-        id
+        sessionId
           ? {
               name: 'Session',
-              route: `/sessions/${id}`,
-              current: Boolean(id),
+              route: `/sessions/${sessionId}`,
+              current: Boolean(sessionId),
             }
           : undefined,
       ].filter((page) => page) as PageType[],
-    [id, pathname]
+    [sessionId, pathname]
   );
 
   if (!pages?.length) return null;
 
   return (
     <>
-      {children}
       <nav className="flex border-b border-gray-200 bg-sky-600" aria-label="Breadcrumb">
         <ol className="mx-left flex w-full max-w-screen-xl space-x-4 px-4 sm:px-6 lg:px-8">
           <li className="flex">

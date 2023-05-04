@@ -80,9 +80,7 @@ export const useInitializeSpeechToText = () => {
         hasError = error;
       } finally {
         if (!hasError && !modalData) {
-          console.log('in micro finally');
           if (shouldUseSpeechlyPolyfill && appId) {
-            console.log('applying polyfill');
             SpeechRecognition.applyPolyfill(createSpeechlySpeechRecognition(appId));
           }
 
