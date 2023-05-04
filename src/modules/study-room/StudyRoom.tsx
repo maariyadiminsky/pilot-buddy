@@ -1,8 +1,8 @@
 import { PlusIcon, BookmarkSlashIcon } from '@heroicons/react/20/solid';
-import PageWrapper from '@modules/common/components/page/PageWrapper';
 import PinnedSessions from '@modules/study-room/session/PinnedSessions';
 import SessionsTable from '@modules/study-room/session/SessionsTable';
-import { useMemo, useState, useRef } from 'react';
+import { useMemo, useEffect, useState, useRef, useContext } from 'react';
+import { PageContext } from '@common/components/page/PageProvider';
 import { type BrandButtonType } from '@common/components/button/BrandButton';
 import SessionAction from '@modules/study-room/session/SessionAction';
 import { useNavigate } from 'react-router-dom';
@@ -89,6 +89,13 @@ const StudyRoom = () => {
     [shouldShowSessionAction]
   );
 
+  const { setPageTitle, setPageHeaderActions } = useContext(PageContext);
+
+  useEffect(() => {
+    setPageTitle('StudyRoom');
+    setPageHeaderActions(headerActions);
+  }, []);
+
   if (!sessions) {
     return (
       <div className="flex justify-center items-center xl:h-screen">
@@ -98,7 +105,7 @@ const StudyRoom = () => {
   }
 
   return (
-    <PageWrapper title="Study Room" headerActions={headerActions}>
+    <>
       <div className="h-full min-w-full bg-inherit">
         {pinnedSessions?.length ? (
           <PinnedSessions
@@ -139,7 +146,7 @@ const StudyRoom = () => {
         </div>
       </div>
       <Modal ref={modalRef} {...modalData} />
-    </PageWrapper>
+    </>
   );
 };
 

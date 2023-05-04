@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
-import { ROUTES } from '@modules/common/api/constants';
+import { ROUTES } from '@modules/app/constants';
 
 interface PrivateRoutesProps {
   isLoggedIn: boolean;

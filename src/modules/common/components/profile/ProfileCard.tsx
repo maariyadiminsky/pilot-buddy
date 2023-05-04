@@ -7,7 +7,6 @@ import { WrapperTypeEnum } from '@common/types';
 
 interface ProfileCardProps {
   wrapperType: keyof typeof WrapperTypeEnum;
-  isMobile: false;
 }
 
 const ProfileCard = ({ wrapperType }: ProfileCardProps) => (

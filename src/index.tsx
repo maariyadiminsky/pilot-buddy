@@ -7,6 +7,7 @@ import { persistor, store } from '@redux/store/reducers/store';
 import AuthProvider from '@modules/auth/AuthProvider';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
+import PageProvider from '@common/components/page/PageProvider';
 
 import './index.css';
 
@@ -14,17 +15,19 @@ const container = document.getElementById('root');
 const root = createRoot(container!);
 
 root.render(
-  // <React.StrictMode>
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <Router>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </Router>
-    </PersistGate>
-  </Provider>
-  // </React.StrictMode>
+  <React.StrictMode>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <Router>
+          <AuthProvider>
+            <PageProvider>
+              <App />
+            </PageProvider>
+          </AuthProvider>
+        </Router>
+      </PersistGate>
+    </Provider>
+  </React.StrictMode>
 );
 
 // If you want your app to work offline and load faster, you can change

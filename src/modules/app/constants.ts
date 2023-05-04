@@ -9,3 +9,5 @@ export const ROUTES = {
   SESSION_ROUTE: '/sessions/:id',
   SESSION_START_ROUTE: '/sessions/:id/start',
 };
+
+export const ROUTE_PATHS = Object.values(ROUTES);

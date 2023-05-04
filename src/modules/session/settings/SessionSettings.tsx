@@ -1,7 +1,7 @@
 import SettingToggle from '@modules/session/settings/SettingToggle';
 import SpeechSynthesis from '@modules/speech-synthesis/SpeechSynthesis';
-import TimeSelectMenu from './settings/TimeSelectMenu';
-import OrderSelectMenu from './settings/OrderSelectMenu';
+import TimeSelectMenu from './TimeSelectMenu';
+import OrderSelectMenu from './OrderSelectMenu';
 import { useState, useEffect } from 'react';
 import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
 import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';

@@ -1,11 +1,11 @@
 import { PlayCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
-import PageWrapper from '@modules/common/components/page/PageWrapper';
-import SessionNotes from '@modules/session/SessionNotes';
-import SessionQuestions from '@modules/session/SessionQuestions';
-import SessionSettings from '@modules/session/SessionSettings';
+import SessionNotes from '@modules/session/notes/SessionNotes';
+import SessionQuestions from '@modules/session/question/SessionQuestions';
+import SessionSettings from '@modules/session/settings/SessionSettings';
 import { type BrandButtonType } from '@common/components/button/BrandButton';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useContext } from 'react';
+import { PageContext } from '@common/components/page/PageProvider';
 import { DATABASE_ERROR, useDatabase } from '@common/hooks';
 import { type SessionDataType } from '@modules/session/types';
 import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
@@ -80,10 +80,17 @@ const Session = () => {
     [shouldShowQuestionAction, questionsCount]
   );
 
+  const { setPageTitle, setPageHeaderActions } = useContext(PageContext);
+
+  useEffect(() => {
+    setPageTitle(sessionName);
+    setPageHeaderActions(headerActions);
+  }, [sessionName]);
+
   if (!id) return null;
 
   return (
-    <PageWrapper title={sessionName} headerActions={headerActions}>
+    <>
       <div className="relative flex h-full min-w-full flex-col bg-inherit">
         <div className="w-full flex-grow xl:flex">
           <div className="min-w-0 flex-1 bg-inherit xl:flex">
@@ -108,7 +115,7 @@ const Session = () => {
           />
         </div>
       </div>
-    </PageWrapper>
+    </>
   );
 };
 

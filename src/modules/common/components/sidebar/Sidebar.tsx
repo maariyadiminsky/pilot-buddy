@@ -1,32 +1,47 @@
-// todo add typescript
-// @ts-nocheck
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useContext } from 'react';
-import {
-  XMarkIcon,
-  MagnifyingGlassIcon,
-  ArrowRightOnRectangleIcon,
-} from '@heroicons/react/24/outline';
+import { Fragment, useContext, useState } from 'react';
+import { BookOpenIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { AuthContext } from '@modules/auth/AuthProvider';
-import { truthyString } from '@common/utils';
-import ProfileCard from '@modules/common/components/profile/ProfileCard';
-
+import ProfileCard from '@common/components/profile/ProfileCard';
+import NavigationItems from '@common/components/sidebar/NavigationItems';
+import LogoutButton from '@common/components/sidebar/LogoutButton';
 import Logo from '@common/components/sidebar/images/airplane.png';
 
-const Sidebar = ({
-  navigation,
-  secondaryNavigation,
-  sidebarOpen,
-  setSidebarOpen,
-  shouldShowSearch = false,
-}) => {
+const NAVIGATION_INITIAL = [
+  { id: 0, name: 'Study Room', route: '/', icon: BookOpenIcon, current: true },
+  { id: 1, name: 'Session', route: '/sdfsd', icon: BookOpenIcon, current: false },
+];
+
+interface SidebarProps {
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: (value: boolean) => void;
+}
+
+const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) => {
   const { handleLogout } = useContext(AuthContext);
+  const [navigation, setNavigation] = useState(NAVIGATION_INITIAL);
+
+  const handleSetCurrent = (id: number) => {
+    const updatedData = navigation.map((item) => {
+      if (item.current) {
+        return { ...item, current: false };
+      }
+
+      if (item.id === id) {
+        return { ...item, current: true };
+      }
+
+      return item;
+    });
+
+    setNavigation(updatedData);
+  };
 
   return (
     <>
       {/* mobile sidebar with transition effect */}
-      <Transition.Root show={sidebarOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-40 lg:hidden" onClose={setSidebarOpen}>
+      <Transition.Root show={isSidebarOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-40 lg:hidden" onClose={setIsSidebarOpen}>
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-linear duration-300"
@@ -63,7 +78,7 @@ const Sidebar = ({
                     <button
                       type="button"
                       className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                      onClick={() => setSidebarOpen(false)}
+                      onClick={() => setIsSidebarOpen(false)}
                     >
                       <span className="sr-only">Close sidebar</span>
                       <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
@@ -75,70 +90,16 @@ const Sidebar = ({
                 </div>
                 <div className="mt-5 h-0 flex-1 overflow-y-auto">
                   <nav className="divide-y divide-gray-200">
-                    <div className="px-2 space-y-1">
-                      {navigation.map((item) => (
-                        <a
-                          key={item.name}
-                          href={item.href}
-                          className={truthyString(
-                            item.current
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                            'group flex items-center rounded-md px-2 py-2 text-base font-medium leading-5'
-                          )}
-                          aria-current={item.current ? 'page' : undefined}
-                        >
-                          <item.icon
-                            className={truthyString(
-                              item.current
-                                ? 'text-gray-500'
-                                : 'text-gray-400 group-hover:text-gray-500',
-                              'mr-3 h-6 w-6 flex-shrink-0'
-                            )}
-                            aria-hidden="true"
-                          />
-                          {item.name}
-                        </a>
-                      ))}
-                    </div>
-                    <div className="mt-6 pt-6">
+                    <NavigationItems navigation={navigation} handleSetCurrent={handleSetCurrent} />
+                    {/* <div className="mt-6 pt-6">
                       <div className="space-y-1 px-2">
-                        {secondaryNavigation.map((item) => (
-                          <a
-                            key={item.name}
-                            href={item.href}
-                            className={truthyString(
-                              item.current
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                              'group flex items-center rounded-md px-2 py-2 text-base font-medium leading-5'
-                            )}
-                          >
-                            <item.icon
-                              className={truthyString(
-                                item.current
-                                  ? 'text-gray-500'
-                                  : 'text-gray-400 group-hover:text-gray-500',
-                                'mr-3 h-6 w-6 flex-shrink-0'
-                              )}
-                              aria-hidden="true"
-                            />
-                            {item.name}
-                          </a>
-                        ))}
+                        <SecondaryNavigationItems secondaryNavigation={secondaryNavigation} />
                       </div>
-                    </div>
+                    </div> */}
                   </nav>
-                </div>
-                <div className="flex flex-col justify-end items-start ml-4 flex-1 text-gray-500 text-sm font-medium">
-                  <button
-                    type="button"
-                    onClick={handleLogout}
-                    className="flex flex-row space-x-2 rounded-lg border border-gray-300 py-2 px-12 hover:bg-gray-300 hover:text-gray-900"
-                  >
-                    <ArrowRightOnRectangleIcon className="h-5 w-5" />
-                    <span>Logout</span>
-                  </button>
+                  <div className="flex flex-col justify-end items-start ml-4 flex-1 text-gray-500 text-sm font-medium">
+                    <LogoutButton handleLogout={handleLogout} />
+                  </div>
                 </div>
               </Dialog.Panel>
             </Transition.Child>
@@ -157,56 +118,12 @@ const Sidebar = ({
         <div className="mt-5 flex h-0 flex-1 flex-col overflow-y-auto pt-1">
           {/* User account dropdown */}
           <ProfileCard wrapperType="sidebar" />
-          {/* Sidebar Search */}
-          {shouldShowSearch && (
-            <div className="mt-5 px-3">
-              <label htmlFor="search" className="sr-only">
-                Search
-              </label>
-              <div className="relative mt-1 rounded-md shadow-sm">
-                <div
-                  className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                  aria-hidden="true"
-                >
-                  <MagnifyingGlassIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
-                </div>
-                <input
-                  type="text"
-                  name="search"
-                  id="search"
-                  className="block w-full rounded-md border-0 py-1.5 pl-9 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  placeholder="Search"
-                />
-              </div>
-            </div>
-          )}
           {/* Navigation */}
           <nav className="divide-y divide-gray-200 mt-6">
             <div className="px-3 space-y-1">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className={truthyString(
-                    item.current
-                      ? 'bg-gray-200 text-gray-900'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900',
-                    'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
-                  )}
-                  aria-current={item.current ? 'page' : undefined}
-                >
-                  <item.icon
-                    className={truthyString(
-                      item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
-                      'mr-3 h-6 w-6 flex-shrink-0'
-                    )}
-                    aria-hidden="true"
-                  />
-                  {item.name}
-                </a>
-              ))}
+              <NavigationItems navigation={navigation} handleSetCurrent={handleSetCurrent} />
             </div>
-            <div className="mt-6 pt-6">
+            {/* <div className="mt-6 pt-6">
               <div className="space-y-1 px-2">
                 {secondaryNavigation.map((item) => (
                   <a
@@ -230,17 +147,10 @@ const Sidebar = ({
                   </a>
                 ))}
               </div>
-            </div>
+            </div> */}
           </nav>
           <div className="flex flex-col justify-end items-start ml-4 flex-1 text-gray-500 text-sm font-medium">
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="flex flex-row space-x-2 rounded-lg border border-gray-300 py-2 px-12 hover:bg-gray-300 hover:text-gray-900"
-            >
-              <ArrowRightOnRectangleIcon className="h-5 w-5" />
-              <span>Logout</span>
-            </button>
+            <LogoutButton handleLogout={handleLogout} />
           </div>
         </div>
       </div>

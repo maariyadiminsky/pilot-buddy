@@ -1,4 +1,4 @@
-import { ROUTES } from '@common/api/constants';
+import { ROUTES } from '@modules/app/constants';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 

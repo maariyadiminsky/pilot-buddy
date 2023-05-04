@@ -1,4 +1,4 @@
-import { ROUTES } from '@modules/common/api/constants';
+import { ROUTES } from '@modules/app/constants';
 import NotFoundPage from '@modules/common/components/page/page-status/NotFoundPage';
 import Session from '@modules/session/Session';
 import SessionQuiz from '@modules/session-quiz/SessionQuiz';
