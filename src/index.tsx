@@ -14,17 +14,17 @@ const container = document.getElementById('root');
 const root = createRoot(container!);
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Router>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </Router>
-      </PersistGate>
-    </Provider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <Router>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </Router>
+    </PersistGate>
+  </Provider>
+  // </React.StrictMode>
 );
 
 // If you want your app to work offline and load faster, you can change

@@ -2,6 +2,7 @@ import { Draggable, type DroppableProvidedProps } from 'react-beautiful-dnd';
 import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
 import { type ReactNode } from 'react';
 import { SessionQuestionType } from '@modules/session/types';
+import { truthyString } from '@common/utils';
 
 import {
   PencilSquareIcon,
@@ -22,8 +23,8 @@ interface SessionQuestionsListProps extends DroppableProvidedProps {
 }
 
 const DragStyles = {
-  isDragging: 'bg-slate-50 rounded-md border-1 border-gray-900',
-  isNotDragging: 'bg-white hover:bg-slate-50',
+  isDragging: 'bg-sky-50 rounded-md border-r border-l border-t border-b border-1 border-gray-300',
+  isNotDragging: 'bg-white hover:bg-sky-50',
 };
 
 const SessionQuestionsList = ({
@@ -34,9 +35,10 @@ const SessionQuestionsList = ({
   handleRemoveQuestion,
   handleEditQuestion,
 }: SessionQuestionsListProps) => (
-  <ul className="divide-y divide-gray-200 border-b border-gray-200 border-t h-full xl:overscroll-contain overflow-y-auto smooth-scroll pb-4">
+  <ul className="border-b border-gray-200 border-t h-full xl:overscroll-contain overflow-y-auto smooth-scroll pb-4">
     {questions.map(({ id, question, answer, time }, index) => {
       const correctTime = time || settingsTime;
+      const isLastItem = index === questions.length - 1;
 
       return (
         <Draggable key={id} draggableId={id} index={index}>
@@ -46,9 +48,11 @@ const SessionQuestionsList = ({
               /* fix: https://github.com/atlassian/react-beautiful-dnd/issues/1541 */
               {...draggableProps}
               {...dragHandleProps}
-              className={`relative py-5 ${
+              className={truthyString(
+                'relative py-5',
+                isLastItem && 'border-b border-t border-gray-200',
                 isDragging ? DragStyles.isDragging : DragStyles.isNotDragging
-              }`}
+              )}
             >
               <div className="flex flex-row items-center justify-between px-4 space-x-4">
                 <div className="flex flex-row items-center space-x-6">

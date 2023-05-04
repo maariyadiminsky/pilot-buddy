@@ -6,7 +6,7 @@ import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu'
 import { DragDropContext, Droppable, type DropResult } from 'react-beautiful-dnd';
 import SessionQuestionsList from '@modules/session/question/SessionQuestionsList';
 import { SessionQuestionType } from '@modules/session/types';
-import { useDatabase } from '@common/hooks';
+import { useDatabase, useDragAndDropWithStrictMode } from '@common/hooks';
 import Loader from '@common/components/loader/Loader';
 
 interface SessionQuestionsProps {
@@ -20,7 +20,7 @@ interface SessionQuestionsProps {
 }
 
 const DropStyles = {
-  isDragging: 'bg-slate-100',
+  isDragging: 'bg-gray-100',
   isNotDragging: 'bg-white',
 };
 
@@ -37,6 +37,7 @@ const SessionQuestions = ({
   const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>();
 
   const { updateDBPartialDataOfSession, updateDBPartialDataOfSessionTableItem } = useDatabase();
+  const { isDragAndDropEnabled } = useDragAndDropWithStrictMode();
 
   const handleSetQuestions = (updatedQuestions: SessionQuestionType[]) => {
     setQuestions(updatedQuestions);
@@ -49,13 +50,6 @@ const SessionQuestions = ({
       handleSetQuestions(questionsData);
     }
   }, [questionsData?.length]);
-
-  // Issue: https://medium.com/@wbern/getting-react-18s-strict-mode-to-work-with-react-beautiful-dnd-47bc909348e4
-  // Cleanest fix: https://github.com/atlassian/react-beautiful-dnd/issues/2399#issuecomment-1503025577
-  const [isComponentMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const handleAddQuestion = (question: SessionQuestionType) => [
     ...(questions || []),
@@ -191,7 +185,7 @@ const SessionQuestions = ({
 
     return (
       <DragDropContext onDragEnd={handleDragEnd}>
-        {isComponentMounted ? (
+        {isDragAndDropEnabled ? (
           <Droppable droppableId="session-questions" direction="vertical">
             {({ innerRef, droppableProps, placeholder }, { isDraggingOver }) => (
               <div
