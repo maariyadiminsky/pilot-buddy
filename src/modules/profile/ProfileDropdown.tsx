@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 
 import { WrapperTypeEnum } from '@common/types';
 import { truthyString } from '@common/utils';
-import ProfileLink from '@common/components/profile/ProfileLink';
+import ProfileLink from '@modules/profile/ProfileLink';
 import { HeartIcon, BugAntIcon, CodeBracketIcon } from '@heroicons/react/20/solid';
 
 interface ProfileDropdownProps {

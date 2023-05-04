@@ -1,7 +1,7 @@
 import { Menu } from '@headlessui/react';
 import { Bars3CenterLeftIcon } from '@heroicons/react/24/outline';
-import ProfileDropdown from '@common/components/profile/ProfileDropdown';
-import ProfilePicture from '@common/components/profile/ProfilePicture';
+import ProfileDropdown from '@modules/profile/ProfileDropdown';
+import ProfilePicture from '@modules/profile/ProfilePicture';
 
 interface SearchHeaderProps {
   setIsSidebarOpen: (value: boolean) => void;

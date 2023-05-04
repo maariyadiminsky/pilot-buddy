@@ -1,8 +1,8 @@
 import { Menu } from '@headlessui/react';
 import { ChevronUpDownIcon } from '@heroicons/react/24/outline';
 
-import ProfileDropdown from '@modules/common/components/profile/ProfileDropdown';
-import ProfilePicture from '@common/components/profile/ProfilePicture';
+import ProfileDropdown from '@modules/profile/ProfileDropdown';
+import ProfilePicture from '@modules/profile/ProfilePicture';
 import { WrapperTypeEnum } from '@common/types';
 
 interface ProfileCardProps {

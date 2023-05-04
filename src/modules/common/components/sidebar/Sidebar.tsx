@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useContext, useState, useEffect, useCallback } from 'react';
 import { BookOpenIcon, XMarkIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import { AuthContext } from '@modules/auth/AuthProvider';
-import ProfileCard from '@common/components/profile/ProfileCard';
+import ProfileCard from '@modules/profile/ProfileCard';
 import NavigationItems from '@common/components/sidebar/NavigationItems';
 import LogoutButton from '@common/components/sidebar/LogoutButton';
 import Logo from '@common/components/sidebar/images/airplane.png';
