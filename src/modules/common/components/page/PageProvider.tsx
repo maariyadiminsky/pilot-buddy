@@ -15,28 +15,50 @@ interface PageContextProps {
   setPageTitle: (value: string) => void;
   pageHeaderActions?: BrandButtonType[];
   setPageHeaderActions: (value: BrandButtonType[]) => void;
+  setShouldUpdatePinnedSessions: (value: boolean) => void;
 }
 
 export const PageContext = createContext<PageContextProps>({
   pageTitle: '',
-  setPageTitle: () => {},
   pageHeaderActions: undefined,
+  setPageTitle: () => {},
   setPageHeaderActions: () => {},
+  setShouldUpdatePinnedSessions: () => {},
 });
 
 const PageProvider = ({ children }: PageProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [pageTitle, setPageTitle] = useState('');
   const [pageHeaderActions, setPageHeaderActions] = useState<BrandButtonType[]>();
+  const [shouldUpdatePinnedSessions, setShouldUpdatePinnedSessions] = useState(true);
 
   const contextValues = useMemo(
-    () => ({ pageTitle, setPageTitle, pageHeaderActions, setPageHeaderActions }),
-    [pageTitle, setPageTitle, pageHeaderActions, setPageHeaderActions]
+    () => ({
+      pageTitle,
+      setPageTitle,
+      pageHeaderActions,
+      setPageHeaderActions,
+      setShouldUpdatePinnedSessions,
+    }),
+    [
+      pageTitle,
+      setPageTitle,
+      pageHeaderActions,
+      setPageHeaderActions,
+      setShouldUpdatePinnedSessions,
+    ]
   );
 
   return (
     <div className="relative isolate overflow-hidden bg-white h-full">
-      <Sidebar {...{ isSidebarOpen, setIsSidebarOpen }} />
+      <Sidebar
+        {...{
+          shouldUpdatePinnedSessions,
+          setShouldUpdatePinnedSessions,
+          isSidebarOpen,
+          setIsSidebarOpen,
+        }}
+      />
       <div className="flex flex-col lg:pl-64">
         <SearchHeader {...{ setIsSidebarOpen }} shouldShowSearch={false} />
         <main className="flex-1">

@@ -1,8 +1,9 @@
 import { type SessionsTableDataType, type PinnedSessionType } from '@modules/study-room/types';
-import { useCallback, useState, useMemo } from 'react';
+import { useCallback, useState, useMemo, useContext } from 'react';
 import { getPinnedSessionsIds, isSessionPinned } from '@modules/study-room/utils';
 import { removeObjectFromArray, getUniqId } from '@common/utils';
 import { type ModalDataType } from '@common/components/modal/Modal';
+import { PageContext } from '@common/components/page/PageProvider';
 import { useDatabase } from '@common/hooks';
 
 const createPin = ({ id, questions, name, color }: SessionsTableDataType) => ({
@@ -29,6 +30,7 @@ export const usePinnedSessions = (
   const [isEditingPinnedSession, setIsEditingPinnedSession] = useState(false);
 
   const { addOrUpdateDBSessionTableItem, updateDBPartialDataOfSessionTableItem } = useDatabase();
+  const { setShouldUpdatePinnedSessions } = useContext(PageContext);
 
   const pinnedSessionIds = useMemo(
     () => (pinnedSessions?.length ? getPinnedSessionsIds(pinnedSessions) : []),
@@ -41,12 +43,12 @@ export const usePinnedSessions = (
     setPinnedSessions(pinnedTableSessions.map((session) => createPin(session)));
   }, []);
 
-  const handlePinSession = (session: SessionsTableDataType) => {
+  const handlePinSession = async (session: SessionsTableDataType) => {
     if (!pinnedSessions || pinnedSessions.length < 4) {
       // update storage
       let hasError = null;
       try {
-        addOrUpdateDBSessionTableItem(session);
+        await addOrUpdateDBSessionTableItem(session);
       } catch (error) {
         hasError = error;
         if (error instanceof Error) {
@@ -56,6 +58,7 @@ export const usePinnedSessions = (
       } finally {
         if (!hasError) {
           setPinnedSessions([createPin(session), ...(pinnedSessions || [])]);
+          setShouldUpdatePinnedSessions(true);
         }
       }
     } else {
@@ -64,10 +67,10 @@ export const usePinnedSessions = (
     }
   };
 
-  const handleUnpinSession = (id: string) => {
+  const handleUnpinSession = async (id: string) => {
     let hasError = null;
     try {
-      updateDBPartialDataOfSessionTableItem({ isPinned: false }, id);
+      await updateDBPartialDataOfSessionTableItem({ isPinned: false }, id);
     } catch (error) {
       hasError = error;
       if (error instanceof Error) {
@@ -77,6 +80,7 @@ export const usePinnedSessions = (
     } finally {
       if (!hasError) {
         setPinnedSessions(removeObjectFromArray(pinnedSessions, id, 'sessionId'));
+        setShouldUpdatePinnedSessions(true);
       }
     }
   };

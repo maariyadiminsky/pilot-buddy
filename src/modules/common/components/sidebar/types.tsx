@@ -4,6 +4,6 @@ export interface NavigationItem {
   id: number;
   name: string;
   route: string;
-  icon: HeroIconType;
+  icon?: HeroIconType;
   current: boolean;
 }

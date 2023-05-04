@@ -1,28 +1,72 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useContext, useState } from 'react';
-import { BookOpenIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Fragment, useContext, useState, useEffect, useCallback } from 'react';
+import { BookOpenIcon, XMarkIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import { AuthContext } from '@modules/auth/AuthProvider';
 import ProfileCard from '@common/components/profile/ProfileCard';
 import NavigationItems from '@common/components/sidebar/NavigationItems';
 import LogoutButton from '@common/components/sidebar/LogoutButton';
 import Logo from '@common/components/sidebar/images/airplane.png';
+import { type NavigationItem } from '@common/components/sidebar/types';
+import { useDatabase } from '@common/hooks';
 
 const NAVIGATION_INITIAL = [
   { id: 0, name: 'Study Room', route: '/', icon: BookOpenIcon, current: true },
-  { id: 1, name: 'Session', route: '/sdfsd', icon: BookOpenIcon, current: false },
 ];
 
 interface SidebarProps {
   isSidebarOpen: boolean;
   setIsSidebarOpen: (value: boolean) => void;
+  shouldUpdatePinnedSessions: boolean;
+  setShouldUpdatePinnedSessions: (value: boolean) => void;
 }
 
-const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) => {
+const Sidebar = ({
+  isSidebarOpen,
+  setIsSidebarOpen,
+  shouldUpdatePinnedSessions,
+  setShouldUpdatePinnedSessions,
+}: SidebarProps) => {
   const { handleLogout } = useContext(AuthContext);
-  const [navigation, setNavigation] = useState(NAVIGATION_INITIAL);
+  const [navigation, setNavigation] = useState<NavigationItem[]>(NAVIGATION_INITIAL);
+  const [pinnedNavigation, setPinnedNavigation] = useState<NavigationItem[]>([]);
 
-  const handleSetCurrent = (id: number) => {
-    const updatedData = navigation.map((item) => {
+  const { getAllDBSessionTableItems } = useDatabase();
+
+  useEffect(() => {
+    const getTableSessions = async () => {
+      try {
+        const sessionTableItems = await getAllDBSessionTableItems();
+
+        if (sessionTableItems) {
+          const pinnedSessions = sessionTableItems.filter(({ isPinned }) => isPinned);
+
+          setPinnedNavigation(
+            pinnedSessions.map(({ id, name }, index) => ({
+              id: index,
+              name,
+              icon: ArrowTopRightOnSquareIcon,
+              route: `sessions/${id}`,
+              current: false,
+            }))
+          );
+
+          setShouldUpdatePinnedSessions(false);
+        }
+      } catch (error) {
+        if (error instanceof Error && error.message) {
+          // todo: add error monitoring
+          console.log(error);
+        }
+      }
+    };
+
+    if (shouldUpdatePinnedSessions) {
+      getTableSessions();
+    }
+  }, [shouldUpdatePinnedSessions]);
+
+  const handleSetCurrent = useCallback((id?: number | null, isPinnedNav?: boolean) => {
+    const updatedData = (isPinnedNav ? pinnedNavigation : navigation).map((item) => {
       if (item.current) {
         return { ...item, current: false };
       }
@@ -34,8 +78,23 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) => {
       return item;
     });
 
-    setNavigation(updatedData);
-  };
+    if (isPinnedNav) {
+      // check to make sure main nav doesn't have something selected
+      const mainNav = navigation.find(({ current }) => current);
+      if (mainNav) {
+        handleSetCurrent(null);
+      }
+
+      setPinnedNavigation(updatedData);
+    } else {
+      // check to make sure pinned nav doesn't have something selected
+      const pinnednNav = pinnedNavigation.find(({ current }) => current);
+      if (pinnednNav) {
+        handleSetCurrent(null, true);
+      }
+      setNavigation(updatedData);
+    }
+  }, []);
 
   return (
     <>
@@ -90,7 +149,10 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) => {
                 </div>
                 <div className="mt-5 h-0 flex-1 overflow-y-auto">
                   <nav className="divide-y divide-gray-200">
-                    <NavigationItems navigation={navigation} handleSetCurrent={handleSetCurrent} />
+                    <NavigationItems
+                      navigation={navigation}
+                      handleSetCurrent={(id) => handleSetCurrent(id)}
+                    />
                     {/* <div className="mt-6 pt-6">
                       <div className="space-y-1 px-2">
                         <SecondaryNavigationItems secondaryNavigation={secondaryNavigation} />
@@ -119,35 +181,28 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) => {
           {/* User account dropdown */}
           <ProfileCard wrapperType="sidebar" />
           {/* Navigation */}
-          <nav className="divide-y divide-gray-200 mt-6">
+          <nav className="mt-6">
             <div className="px-3 space-y-1">
-              <NavigationItems navigation={navigation} handleSetCurrent={handleSetCurrent} />
+              <NavigationItems
+                navigation={navigation}
+                handleSetCurrent={(id) => handleSetCurrent(id)}
+              />
             </div>
-            {/* <div className="mt-6 pt-6">
-              <div className="space-y-1 px-2">
-                {secondaryNavigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className={truthyString(
-                      item.current
-                        ? 'bg-gray-200 text-gray-900'
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900',
-                      'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
-                    )}
-                  >
-                    <item.icon
-                      className={truthyString(
-                        item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
-                        'mr-3 h-6 w-6 flex-shrink-0'
-                      )}
-                      aria-hidden="true"
+            {pinnedNavigation?.length ? (
+              <div className="px-4">
+                <div className="flex justify-start items-end mt-6 pb-1 text-xs font-semibold">
+                  Pinned
+                </div>
+                <div className="pt-4 border-t border-gray-200">
+                  <div className="space-y-1 px-2">
+                    <NavigationItems
+                      navigation={pinnedNavigation}
+                      handleSetCurrent={(id) => handleSetCurrent(id, true)}
                     />
-                    {item.name}
-                  </a>
-                ))}
+                  </div>
+                </div>
               </div>
-            </div> */}
+            ) : null}
           </nav>
           <div className="flex flex-col justify-end items-start ml-4 flex-1 text-gray-500 text-sm font-medium">
             <LogoutButton handleLogout={handleLogout} />

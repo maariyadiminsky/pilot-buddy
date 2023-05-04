@@ -19,19 +19,22 @@ const NavigationItems = ({ navigation, handleSetCurrent }: NavigationItemsProps)
           onClick={() => handleSetCurrent(id)}
           className={truthyString(
             current
-              ? 'bg-gray-200 text-gray-900'
-              : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900',
+              ? 'bg-gray-300 text-gray-900'
+              : 'text-gray-700 hover:bg-gray-200 hover:text-gray-900',
+            !Icon && 'pl-3',
             'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
           )}
           aria-current={current ? 'page' : undefined}
         >
-          <Icon
-            className={truthyString(
-              current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
-              'mr-3 h-6 w-6 flex-shrink-0'
-            )}
-            aria-hidden="true"
-          />
+          {Icon && (
+            <Icon
+              className={truthyString(
+                current ? 'text-gray-600' : 'text-gray-400 group-hover:text-gray-500',
+                'mr-3 h-6 w-6 flex-shrink-0'
+              )}
+              aria-hidden="true"
+            />
+          )}
           {name}
         </Link>
       );
