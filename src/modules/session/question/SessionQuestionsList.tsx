@@ -23,8 +23,8 @@ interface SessionQuestionsListProps extends DroppableProvidedProps {
 }
 
 const DragStyles = {
-  isDragging: 'bg-sky-50 rounded-md border-r border-l border-t border-b border-1 border-gray-300',
-  isNotDragging: 'bg-white hover:bg-sky-50',
+  isDragging: 'bg-sky-50 rounded-md border border-gray-300',
+  isNotDragging: 'bg-white hover:bg-sky-50 border-t border-gray-200',
 };
 
 const SessionQuestionsList = ({
@@ -35,7 +35,7 @@ const SessionQuestionsList = ({
   handleRemoveQuestion,
   handleEditQuestion,
 }: SessionQuestionsListProps) => (
-  <ul className="border-b border-gray-200 border-t h-full xl:overscroll-contain overflow-y-auto smooth-scroll pb-4">
+  <ul className="h-full xl:overscroll-contain overflow-y-auto smooth-scroll pb-4">
     {questions.map(({ id, question, answer, time }, index) => {
       const correctTime = time || settingsTime;
       const isLastItem = index === questions.length - 1;
@@ -50,7 +50,7 @@ const SessionQuestionsList = ({
               {...dragHandleProps}
               className={truthyString(
                 'relative py-5',
-                isLastItem && 'border-b border-t border-gray-200',
+                isLastItem && 'border-b border-gray-200',
                 isDragging ? DragStyles.isDragging : DragStyles.isNotDragging
               )}
             >

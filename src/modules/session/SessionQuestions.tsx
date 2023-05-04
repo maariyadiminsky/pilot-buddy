@@ -20,7 +20,7 @@ interface SessionQuestionsProps {
 }
 
 const DropStyles = {
-  isDragging: 'bg-gray-100',
+  isDragging: 'bg-gray-50',
   isNotDragging: 'bg-white',
 };
 
