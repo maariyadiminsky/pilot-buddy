@@ -7,6 +7,7 @@ import NavigationItems from '@common/components/sidebar/NavigationItems';
 import LogoutButton from '@common/components/sidebar/LogoutButton';
 import Logo from '@common/components/sidebar/images/airplane.png';
 import { type NavigationItem } from '@common/components/sidebar/types';
+import PinnedNavigation from '@common/components/sidebar/PinnedNavigation';
 import { useDatabase } from '@common/hooks';
 
 const NAVIGATION_INITIAL = [
@@ -65,36 +66,39 @@ const Sidebar = ({
     }
   }, [shouldUpdatePinnedSessions]);
 
-  const handleSetCurrent = useCallback((id?: number | null, isPinnedNav?: boolean) => {
-    const updatedData = (isPinnedNav ? pinnedNavigation : navigation).map((item) => {
-      if (item.current) {
-        return { ...item, current: false };
-      }
+  const handleSetCurrent = useCallback(
+    (id?: number | null, isPinnedNav?: boolean) => {
+      const updatedData = (isPinnedNav ? pinnedNavigation : navigation).map((item) => {
+        if (item.current) {
+          return { ...item, current: false };
+        }
 
-      if (item.id === id) {
-        return { ...item, current: true };
-      }
+        if (item.id === id) {
+          return { ...item, current: true };
+        }
 
-      return item;
-    });
+        return item;
+      });
 
-    if (isPinnedNav) {
-      // check to make sure main nav doesn't have something selected
-      const mainNav = navigation.find(({ current }) => current);
-      if (mainNav) {
-        handleSetCurrent(null);
-      }
+      if (isPinnedNav) {
+        // check to make sure main nav doesn't have something selected
+        const mainNav = navigation.find(({ current }) => current);
+        if (mainNav) {
+          handleSetCurrent(null);
+        }
 
-      setPinnedNavigation(updatedData);
-    } else {
-      // check to make sure pinned nav doesn't have something selected
-      const pinnednNav = pinnedNavigation.find(({ current }) => current);
-      if (pinnednNav) {
-        handleSetCurrent(null, true);
+        setPinnedNavigation(updatedData);
+      } else {
+        // check to make sure pinned nav doesn't have something selected
+        const pinnedNav = pinnedNavigation.find(({ current }) => current);
+        if (pinnedNav) {
+          handleSetCurrent(null, true);
+        }
+        setNavigation(updatedData);
       }
-      setNavigation(updatedData);
-    }
-  }, []);
+    },
+    [navigation, pinnedNavigation]
+  );
 
   return (
     <>
@@ -147,19 +151,18 @@ const Sidebar = ({
                 <div className="flex flex-shrink-0 items-center px-4">
                   <img className="h-8 w-auto text-sky-600" src={Logo} alt="Pilot Buddy" />
                 </div>
-                <div className="mt-5 h-0 flex-1 overflow-y-auto">
-                  <nav className="divide-y divide-gray-200">
+                <div className="mt-5 h-0 flex-1 flex flex-col justify-between">
+                  <nav>
                     <NavigationItems
                       navigation={navigation}
                       handleSetCurrent={(id) => handleSetCurrent(id)}
                     />
-                    {/* <div className="mt-6 pt-6">
-                      <div className="space-y-1 px-2">
-                        <SecondaryNavigationItems secondaryNavigation={secondaryNavigation} />
-                      </div>
-                    </div> */}
+                    <PinnedNavigation
+                      navigation={pinnedNavigation}
+                      handleSetCurrent={handleSetCurrent}
+                    />
                   </nav>
-                  <div className="flex flex-col justify-end items-start ml-4 flex-1 text-gray-500 text-sm font-medium">
+                  <div className="flex flex-col justify-end items-start ml-4 text-gray-500 text-sm font-medium">
                     <LogoutButton handleLogout={handleLogout} />
                   </div>
                 </div>
@@ -188,21 +191,7 @@ const Sidebar = ({
                 handleSetCurrent={(id) => handleSetCurrent(id)}
               />
             </div>
-            {pinnedNavigation?.length ? (
-              <div className="px-4">
-                <div className="flex justify-start items-end mt-6 pb-1 text-xs font-semibold">
-                  Pinned
-                </div>
-                <div className="pt-4 border-t border-gray-200">
-                  <div className="space-y-1 px-2">
-                    <NavigationItems
-                      navigation={pinnedNavigation}
-                      handleSetCurrent={(id) => handleSetCurrent(id, true)}
-                    />
-                  </div>
-                </div>
-              </div>
-            ) : null}
+            <PinnedNavigation navigation={pinnedNavigation} handleSetCurrent={handleSetCurrent} />
           </nav>
           <div className="flex flex-col justify-end items-start ml-4 flex-1 text-gray-500 text-sm font-medium">
             <LogoutButton handleLogout={handleLogout} />
