@@ -5,7 +5,8 @@ import { setCookie, encryptData, decryptData, getSessionToken } from '@modules/a
 import { AuthContext } from '@modules/auth/AuthProvider';
 import { DATABASE_ERROR, useDatabase } from '@common/hooks';
 import { useNavigate } from 'react-router-dom';
-import { logError } from '@common/error-monitoring';
+import { logRocketIdentifyUser, logError } from '@common/error-monitoring';
+import { getUniqId } from '@common/utils';
 
 const limiter = new RateLimiterMemory({
   points: 3, // 3 login attempts per minute
@@ -86,10 +87,13 @@ const Login = () => {
           decryptedPassword && (await bcrypt.compare(password, decryptedPassword));
 
         if (isPasswordCorrect) {
+          // set for logged in status
           setCookie('sessionToken', getSessionToken(), {
             path: '/',
             secure: true,
           });
+          // identify for error handling
+          logRocketIdentifyUser(user.id, { email });
         } else {
           const incorrectPasswordError = 'Incorrect password';
           hasError = incorrectPasswordError;
@@ -107,8 +111,12 @@ const Login = () => {
         }
 
         // create new user
-        await setDBUser({ encryptedEmail, encryptedPassword });
+        const userId = getUniqId();
+        await setDBUser({ id: userId, encryptedEmail, encryptedPassword });
+        // set for logged in status
         setCookie('sessionToken', getSessionToken(), { path: '/', secure: true });
+        // identify for error handling
+        logRocketIdentifyUser(userId, { email });
       }
     } catch (catchError) {
       hasError = catchError;

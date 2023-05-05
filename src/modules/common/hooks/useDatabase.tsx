@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { logError, captureException } from '@modules/common/error-monitoring';
 
 export interface UserType {
+  id: string;
   encryptedEmail: string;
   encryptedPassword: string;
   name?: string;

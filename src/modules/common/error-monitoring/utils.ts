@@ -8,6 +8,15 @@ if (shouldUseLogRocket) {
   LogRocket.init(process.env.REACT_APP_LOG_ROCKET_APP_ID || '');
 }
 
+// Identify the user in LogRocket
+export const logRocketIdentifyUser = (userId: string, userData: { [key: string]: any }) => {
+  if (shouldUseLogRocket) {
+    LogRocket.identify(userId, userData);
+  } else {
+    console.log('LogRocket User Identified as(WHEN_IN_PROD):', userId, userData);
+  }
+};
+
 // Log a specific error message
 export const logError = (message: string, extraData?: any) => {
   if (shouldUseLogRocket) {
@@ -31,6 +40,6 @@ export const logEvent = (eventName: string, extraData?: any) => {
   if (shouldUseLogRocket) {
     LogRocket.track(eventName, extraData);
   } else {
-    console.log(`LOGGED_EVENT(PROD): ${eventName}`, extraData);
+    console.log(`LOGGED_EVENT(WHEN_IN_PROD): ${eventName}`, extraData);
   }
 };
