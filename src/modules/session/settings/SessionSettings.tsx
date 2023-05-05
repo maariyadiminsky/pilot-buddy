@@ -8,6 +8,7 @@ import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
 import { type SettingsType, type SettingsVoiceType } from '@modules/session/types';
 import { useDatabase } from '@common/hooks';
 import Loader from '@common/loader/Loader';
+import { captureException } from '@common/error-monitoring';
 
 interface SessionSettingProps {
   settings?: SettingsType;
@@ -59,8 +60,7 @@ const SessionSettings = ({
     } catch (error) {
       hasError = error;
       if (error instanceof Error) {
-        console.log(error);
-        // todo: add error monitoring
+        captureException(error);
       }
     } finally {
       if (!hasError) {
@@ -91,8 +91,7 @@ const SessionSettings = ({
     } catch (error) {
       hasError = error;
       if (error instanceof Error) {
-        console.log(error);
-        // todo: add error monitoring
+        captureException(error);
       }
     } finally {
       if (!hasError) {

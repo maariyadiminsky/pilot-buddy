@@ -12,6 +12,7 @@ import { SessionQuestionWithAnswerType } from '@modules/session-quiz/types';
 import { useSpeechSynthesis } from '@modules/speech-synthesis/hooks';
 import Loader from '@common/loader/Loader';
 import { ROUTES } from '@modules/app/constants';
+import { captureException } from '@common/error-monitoring';
 
 const SessionQuiz = () => {
   const modalRef = useRef<ModalRef>(null);
@@ -35,8 +36,7 @@ const SessionQuiz = () => {
       } catch (error) {
         hasError = error;
         if (error instanceof Error && error.message) {
-          console.log(error);
-          // todo: add error monitoring
+          captureException(error);
           if (error.message === DATABASE_ERROR.SESSION_NOT_FOUND) {
             navigate(ROUTES.NOT_FOUND_ROUTE);
           }

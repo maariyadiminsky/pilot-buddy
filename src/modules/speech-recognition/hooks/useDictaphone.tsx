@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { DictaphoneModalErrorType } from '@modules/speech-recognition/hooks/useInitializeSpeechToText';
 import { type SpeechRecognitionType } from '@modules/speech-recognition/types';
+import { captureException } from '@common/error-monitoring';
 
 export const useDictaphone = (
   SpeechRecognition: SpeechRecognitionType,
@@ -30,6 +31,9 @@ export const useDictaphone = (
       stopListening();
     } catch (error) {
       hasError = error;
+      if (error instanceof Error) {
+        captureException(error);
+      }
     } finally {
       if (hasError instanceof Error) {
         handleError(hasError);
@@ -51,6 +55,9 @@ export const useDictaphone = (
       startListening({ continuous: false });
     } catch (error) {
       hasError = error;
+      if (error instanceof Error) {
+        captureException(error);
+      }
     } finally {
       if (hasError instanceof Error) {
         handleError(hasError);

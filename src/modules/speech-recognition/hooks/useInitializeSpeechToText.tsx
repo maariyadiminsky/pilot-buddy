@@ -2,6 +2,7 @@ import { type ModalDataType } from '@common/modal/Modal';
 import { createSpeechlySpeechRecognition } from '@speechly/speech-recognition-polyfill';
 import { useState, useEffect } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { captureException } from '@common/error-monitoring';
 
 export enum DictaphoneModalErrorType {
   permission = 'permission',
@@ -78,6 +79,9 @@ export const useInitializeSpeechToText = () => {
         await navigator.mediaDevices.getUserMedia({ audio: true });
       } catch (error) {
         hasError = error;
+        if (error instanceof Error) {
+          captureException(error);
+        }
       } finally {
         if (!hasError && !modalData) {
           if (shouldUseSpeechlyPolyfill && appId) {

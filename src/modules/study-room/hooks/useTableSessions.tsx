@@ -6,6 +6,7 @@ import { removeObjectFromArray } from '@common/utils';
 import { type ModalDataType } from '@common/modal/Modal';
 import { useDatabase } from '@common/hooks';
 import { PageContext } from '@common/page/PageProvider';
+import { captureException } from '@common/error-monitoring';
 
 const REMOVE_SESSION_CONFIRMATION_STATIC_MODAL_DATA = {
   title: 'Are you sure?',
@@ -52,8 +53,7 @@ export const useTableSessions = (
         }
       } catch (error) {
         if (error instanceof Error && error.message) {
-          // todo: add error monitoring
-          console.log(error);
+          captureException(error);
         }
       }
     };
@@ -79,8 +79,7 @@ export const useTableSessions = (
     } catch (error) {
       hasError = error;
       if (error instanceof Error) {
-        console.log(error);
-        // todo: add error monitoring
+        captureException(error);
       }
     } finally {
       if (!hasError && sessions) {
@@ -125,8 +124,7 @@ export const useTableSessions = (
     } catch (error) {
       hasError = error;
       if (error instanceof Error) {
-        console.log(error);
-        // todo: add error monitoring
+        captureException(error);
       }
     } finally {
       if (!hasError) {

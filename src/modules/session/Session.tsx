@@ -11,6 +11,7 @@ import { type SessionDataType } from '@modules/session/types';
 import { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
 import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
 import { ROUTES } from '@modules/app/constants';
+import { captureException } from '@common/error-monitoring';
 
 const Session = () => {
   const { id } = useParams();
@@ -40,8 +41,7 @@ const Session = () => {
       } catch (error) {
         hasError = error;
         if (error instanceof Error && error.message) {
-          console.log(error);
-          // todo: add error monitoring
+          captureException(error);
           if (error.message === DATABASE_ERROR.SESSION_NOT_FOUND) {
             navigate(ROUTES.NOT_FOUND_ROUTE);
           }

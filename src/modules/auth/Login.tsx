@@ -5,6 +5,7 @@ import { setCookie, encryptData, decryptData, getSessionToken } from '@modules/a
 import { AuthContext } from '@modules/auth/AuthProvider';
 import { DATABASE_ERROR, useDatabase } from '@common/hooks';
 import { useNavigate } from 'react-router-dom';
+import { logError } from '@common/error-monitoring';
 
 const limiter = new RateLimiterMemory({
   points: 3, // 3 login attempts per minute
@@ -55,7 +56,7 @@ const Login = () => {
         const encryptedEmail = encryptData(email);
 
         if (!encryptedEmail) {
-          // todo: add to error monitoring
+          logError('Encrypted Email not encrypting.');
           throw new Error('Encrypted Email not encrypting.');
         }
 
@@ -112,8 +113,9 @@ const Login = () => {
     } catch (catchError) {
       hasError = catchError;
 
-      // todo: add to error monitoring
-      getDBErrorHandling(catchError);
+      if (catchError instanceof Error) {
+        getDBErrorHandling(catchError);
+      }
     } finally {
       setEmail('');
       setPassword('');

@@ -7,6 +7,7 @@ import { removeObjectFromArray } from '@common/utils';
 import { EyeSlashIcon } from '@heroicons/react/20/solid';
 import { useDatabase } from '@common/hooks';
 import Loader from '@common/loader/Loader';
+import { captureException } from '@common/error-monitoring';
 
 interface SessionNotesProps {
   notesData?: NoteDataType[];
@@ -38,8 +39,7 @@ const SessionNotes = ({ notesData, sessionId }: SessionNotesProps) => {
     } catch (error) {
       hasError = error;
       if (error instanceof Error) {
-        console.log(error);
-        // todo: add error monitoring
+        captureException(error);
       }
     } finally {
       if (!hasError && updatedNotes) {
@@ -58,8 +58,7 @@ const SessionNotes = ({ notesData, sessionId }: SessionNotesProps) => {
     } catch (error) {
       hasError = error;
       if (error instanceof Error) {
-        console.log(error);
-        // todo: add error monitoring
+        captureException(error);
       }
     } finally {
       if (!hasError && updatedNotes) {

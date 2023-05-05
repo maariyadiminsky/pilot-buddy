@@ -5,6 +5,7 @@ import { removeObjectFromArray, getUniqId } from '@common/utils';
 import { type ModalDataType } from '@common/modal/Modal';
 import { PageContext } from '@common/page/PageProvider';
 import { useDatabase } from '@common/hooks';
+import { captureException } from '@common/error-monitoring';
 
 const createPin = ({ id, questions, name, color }: SessionsTableDataType) => ({
   id: getUniqId(),
@@ -52,8 +53,7 @@ export const usePinnedSessions = (
       } catch (error) {
         hasError = error;
         if (error instanceof Error) {
-          console.log(error);
-          // todo: add error monitoring
+          captureException(error);
         }
       } finally {
         if (!hasError) {
@@ -74,8 +74,7 @@ export const usePinnedSessions = (
     } catch (error) {
       hasError = error;
       if (error instanceof Error) {
-        console.log(error);
-        // todo: add error monitoring
+        captureException(error);
       }
     } finally {
       if (!hasError) {

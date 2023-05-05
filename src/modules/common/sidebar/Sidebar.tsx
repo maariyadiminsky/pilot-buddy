@@ -5,11 +5,11 @@ import { AuthContext } from '@modules/auth/AuthProvider';
 import ProfileCard from '@modules/profile/ProfileCard';
 import NavigationItems from '@common/sidebar/NavigationItems';
 import LogoutButton from '@common/sidebar/LogoutButton';
-
 import { type NavigationItem } from '@common/sidebar/types';
 import PinnedNavigation from '@common/sidebar/PinnedNavigation';
 import { useDatabase, type UserType } from '@common/hooks';
 import { useParams, useLocation } from 'react-router-dom';
+import { captureException } from '@modules/common/error-monitoring';
 
 const NAVIGATION_INITIAL = [
   { id: 0, name: 'Study Room', route: '/', icon: BookOpenIcon, current: true },
@@ -70,8 +70,7 @@ const Sidebar = ({
         }
       } catch (error) {
         if (error instanceof Error && error.message) {
-          // todo: add error monitoring
-          console.log(error);
+          captureException(error);
         }
       }
     };

@@ -8,6 +8,7 @@ import SessionQuestionsList from '@modules/session/question/SessionQuestionsList
 import { SessionQuestionType } from '@modules/session/types';
 import { useDatabase, useDragAndDropWithStrictMode } from '@common/hooks';
 import Loader from '@common/loader/Loader';
+import { captureException } from '@common/error-monitoring';
 
 interface SessionQuestionsProps {
   questionsData?: SessionQuestionType[];
@@ -66,8 +67,7 @@ const SessionQuestions = ({
     } catch (error) {
       hasError = error;
       if (error instanceof Error) {
-        console.log(error);
-        // todo: add error monitoring
+        captureException(error);
       }
     } finally {
       if (!hasError && updatedQuestions) {
@@ -92,8 +92,7 @@ const SessionQuestions = ({
     } catch (error) {
       hasError = error;
       if (error instanceof Error) {
-        console.log(error);
-        // todo: add error monitoring
+        captureException(error);
       }
     } finally {
       if (!hasError && updatedQuestions) {
@@ -163,8 +162,7 @@ const SessionQuestions = ({
     } catch (error) {
       hasError = error;
       if (error instanceof Error) {
-        console.log(error);
-        // todo: add error monitoring
+        captureException(error);
       }
     } finally {
       if (!hasError && updatedQuestions) {

@@ -1,1 +1,1 @@
-export { logError, captureException, logEvent } from '@modules/common/error-monitoring/utils';
+export { logError, captureException, logEvent } from '@common/error-monitoring/utils';

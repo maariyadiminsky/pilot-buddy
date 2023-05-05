@@ -3,6 +3,7 @@ import { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
 import { APPROVED_VOICES } from '@modules/speech-synthesis/constants';
 import { type SettingsVoiceType } from '@modules/session/types';
 import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
+import { captureException } from '@common/error-monitoring';
 
 // todo: issues on mobile - https://talkrapp.com/speechSynthesis.html
 export const useSpeechSynthesis = (
@@ -50,7 +51,9 @@ export const useSpeechSynthesis = (
         } catch (error) {
           // illegal invocation error when component unmounts during development changes
           // because cancel loses original window.speechSynthesis context.
-          console.log(error);
+          if (error instanceof Error) {
+            captureException(error);
+          }
         }
       }
     };

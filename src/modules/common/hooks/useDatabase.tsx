@@ -5,6 +5,7 @@ import { useState, useCallback, useContext } from 'react';
 import { getInitialSessionData } from '@modules/session/constants';
 import { AuthContext } from '@modules/auth/AuthProvider';
 import { useNavigate } from 'react-router-dom';
+import { logError, captureException } from '@modules/common/error-monitoring';
 
 export interface UserType {
   encryptedEmail: string;
@@ -212,7 +213,7 @@ export const useDatabase = () => {
         isExistInTable = await getDBSessionTableItem(sessionId);
       } catch (error) {
         if (error instanceof Error) {
-          console.log(error.message);
+          logError(error.message);
           throw new Error(error.message);
         }
       }
@@ -258,8 +259,7 @@ export const useDatabase = () => {
   };
 
   // error handling
-  // handleError should either be an error monitoring tool.
-  // setter for rendering error on ui, or etc.
+  // handleError can be a setter for handling errors on the frontend
   const getDBErrorHandling = (error: unknown, handleError?: (error: string) => void) => {
     if (error instanceof DOMException) {
       switch (error.name) {
@@ -284,7 +284,7 @@ export const useDatabase = () => {
           break;
       }
 
-      console.error(error);
+      captureException(error);
     }
   };
 

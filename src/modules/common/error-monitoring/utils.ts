@@ -13,7 +13,7 @@ export const logError = (message: string, extraData?: any) => {
   if (shouldUseLogRocket) {
     LogRocket.log(message, extraData);
   } else {
-    console.error(message, extraData);
+    console.error('ERROR_LOG:', message, extraData);
   }
 };
 
@@ -22,7 +22,7 @@ export const captureException = (error: Error, extraData?: any) => {
   if (shouldUseLogRocket) {
     LogRocket.captureException(error, { extra: extraData });
   } else {
-    console.error('Captured Exception:', error, extraData);
+    console.error('ERROR_EXCEPTION_MESSAGE:', error.message, 'FULL_ERROR:', error, extraData);
   }
 };
 
@@ -31,6 +31,6 @@ export const logEvent = (eventName: string, extraData?: any) => {
   if (shouldUseLogRocket) {
     LogRocket.track(eventName, extraData);
   } else {
-    console.log(`Logged Event: ${eventName}`, extraData);
+    console.log(`LOGGED_EVENT(PROD): ${eventName}`, extraData);
   }
 };

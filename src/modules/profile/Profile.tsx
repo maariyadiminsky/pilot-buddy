@@ -5,6 +5,7 @@ import { useDatabase, useImageUpload, type UserType } from '@common/hooks';
 import { PageContext } from '@common/page/PageProvider';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@modules/app/constants';
+import { captureException } from '@modules/common/error-monitoring';
 
 const Profile = () => {
   const [userProfile, setUserProfile] = useState<UserType>();
@@ -45,8 +46,9 @@ const Profile = () => {
         }
       } catch (error) {
         hasError = error;
-        console.log(error);
-        // todo: add error monitoring
+        if (error instanceof Error) {
+          captureException(error);
+        }
       } finally {
         if (!hasError && user) {
           setUserProfile(user);
