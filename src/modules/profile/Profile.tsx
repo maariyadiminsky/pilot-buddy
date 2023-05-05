@@ -4,6 +4,7 @@ import { SyntheticEvent, useState, useEffect, useContext } from 'react';
 import { useDatabase, useImageUpload, type UserType } from '@common/hooks';
 import { PageContext } from '@common/components/page/PageProvider';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@modules/app/constants';
 
 const Profile = () => {
   const [userProfile, setUserProfile] = useState<UserType>();
@@ -40,7 +41,7 @@ const Profile = () => {
         user = await getUserProfileData();
 
         if (!user) {
-          navigate('/');
+          navigate(ROUTES.NOT_FOUND_ROUTE);
         }
       } catch (error) {
         hasError = error;

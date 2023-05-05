@@ -11,6 +11,7 @@ import { getQuestionOrder, getTimeData } from '@modules/session-quiz/utils';
 import { SessionQuestionWithAnswerType } from '@modules/session-quiz/types';
 import { useSpeechSynthesis } from '@modules/speech-synthesis/hooks';
 import Loader from '@common/components/loader/Loader';
+import { ROUTES } from '@modules/app/constants';
 
 const SessionQuiz = () => {
   const modalRef = useRef<ModalRef>(null);
@@ -29,7 +30,7 @@ const SessionQuiz = () => {
 
         sessionData = await getDBSession(id);
         if (!sessionData?.questions || !sessionData.questions.length) {
-          navigate('/');
+          navigate(ROUTES.NOT_FOUND_ROUTE);
         }
       } catch (error) {
         hasError = error;
@@ -37,7 +38,7 @@ const SessionQuiz = () => {
           console.log(error);
           // todo: add error monitoring
           if (error.message === DATABASE_ERROR.SESSION_NOT_FOUND) {
-            navigate('/');
+            navigate(ROUTES.NOT_FOUND_ROUTE);
           }
         }
       } finally {

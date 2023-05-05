@@ -10,6 +10,7 @@ import { DATABASE_ERROR, useDatabase } from '@common/hooks';
 import { type SessionDataType } from '@modules/session/types';
 import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
 import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
+import { ROUTES } from '@modules/app/constants';
 
 const Session = () => {
   const { id } = useParams();
@@ -42,7 +43,7 @@ const Session = () => {
           console.log(error);
           // todo: add error monitoring
           if (error.message === DATABASE_ERROR.SESSION_NOT_FOUND) {
-            navigate('/');
+            navigate(ROUTES.NOT_FOUND_ROUTE);
           }
         }
       } finally {

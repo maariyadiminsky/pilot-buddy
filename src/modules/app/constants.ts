@@ -4,6 +4,7 @@ export const getData = (userId: number): string => `${baseUrl}/data/${userId}`;
 
 export const ROUTES = {
   HOMEPAGE_ROUTE: '/',
+  NOT_FOUND_ROUTE: '/404',
   PROFILE_ROUTE: '/profile',
   LOGIN_ROUTE: '/auth',
   STUDY_ROOM_ROUTE: '/study-room',

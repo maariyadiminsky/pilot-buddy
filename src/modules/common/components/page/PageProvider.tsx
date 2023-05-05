@@ -54,7 +54,8 @@ const PageProvider = () => {
   if (!isLoggedIn) return <Outlet />;
 
   // will need to improve this if app grows
-  const shouldShowMainElements = sessionId || ROUTE_PATHS.includes(pathname);
+  const shouldShowMainElements =
+    sessionId || (!pathname.includes('404') && ROUTE_PATHS.includes(pathname));
   return (
     <div className="relative isolate overflow-hidden bg-white h-full">
       {shouldShowMainElements && (
