@@ -5,7 +5,7 @@ import { AuthContext } from '@modules/auth/AuthProvider';
 import ProfileCard from '@modules/profile/ProfileCard';
 import NavigationItems from '@common/components/sidebar/NavigationItems';
 import LogoutButton from '@common/components/sidebar/LogoutButton';
-import Logo from '@common/components/sidebar/images/airplane.png';
+
 import { type NavigationItem } from '@common/components/sidebar/types';
 import PinnedNavigation from '@common/components/sidebar/PinnedNavigation';
 import { useDatabase, type UserType } from '@common/hooks';
@@ -192,9 +192,6 @@ const Sidebar = ({
                     </button>
                   </div>
                 </Transition.Child>
-                <div className="flex flex-shrink-0 items-center px-4">
-                  <img className="h-8 w-auto text-sky-600" src={Logo} alt="Pilot Buddy" />
-                </div>
                 <div className="mt-5 h-0 flex-1 flex flex-col justify-between">
                   <nav>
                     <NavigationItems
@@ -220,11 +217,8 @@ const Sidebar = ({
       </Transition.Root>
 
       {/* desktop static sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col lg:border-r lg:border-gray-200 lg:bg-gray-100 lg:pb-4 lg:pt-5">
-        <div className="flex flex-shrink-0 items-center px-6">
-          <img className="h-8 w-auto text-sky-600" src={Logo} alt="Pilot Buddy" />
-        </div>
-        <div className="mt-5 flex h-0 flex-1 flex-col overflow-y-auto pt-1">
+      <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col lg:border-r lg:border-gray-200 lg:bg-gray-100 lg:pb-4">
+        <div className="mt-5 flex h-0 flex-1 flex-col overflow-y-auto pt-6">
           {/* User account dropdown */}
           <ProfileCard wrapperType="sidebar" user={user} />
           {/* Navigation */}
