@@ -2,11 +2,8 @@ import App from 'modules/app/App';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import * as serviceWorker from './serviceWorker';
-import { Provider } from 'react-redux';
-import { persistor, store } from '@redux/store/reducers/store';
 import AuthProvider from '@modules/auth/AuthProvider';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { PersistGate } from 'redux-persist/integration/react';
 
 import './index.css';
 
@@ -15,15 +12,11 @@ const root = createRoot(container!);
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Router>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </Router>
-      </PersistGate>
-    </Provider>
+    <Router>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </Router>
   </React.StrictMode>
 );
 
