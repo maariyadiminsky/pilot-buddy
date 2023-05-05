@@ -6,11 +6,11 @@ import { useDatabase, type UserType } from '@common/hooks';
 import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
-interface SearchHeaderProps {
+interface MobileHeaderProps {
   setIsSidebarOpen: (value: boolean) => void;
 }
 
-const MobileHeader = ({ setIsSidebarOpen }: SearchHeaderProps) => {
+const MobileHeader = ({ setIsSidebarOpen }: MobileHeaderProps) => {
   const [user, setUser] = useState<UserType>();
 
   const { pathname } = useLocation();
