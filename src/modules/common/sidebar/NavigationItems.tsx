@@ -1,6 +1,6 @@
 import { truthyString } from '@common/utils';
 import { Link } from 'react-router-dom';
-import { type NavigationItem } from '@common/components/sidebar/types';
+import { type NavigationItem } from '@common/sidebar/types';
 
 interface NavigationItemsProps {
   navigation: NavigationItem[];

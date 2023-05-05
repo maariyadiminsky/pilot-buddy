@@ -1,5 +1,5 @@
 import { Draggable, type DroppableProvidedProps } from 'react-beautiful-dnd';
-import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
+import { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
 import { type ReactNode } from 'react';
 import { SessionQuestionType } from '@modules/session/types';
 import { truthyString } from '@common/utils';

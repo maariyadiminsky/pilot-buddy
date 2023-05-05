@@ -1,11 +1,11 @@
 import { useState, useMemo, createContext, useContext } from 'react';
 import { AuthContext } from '@modules/auth/AuthProvider';
 import { ROUTES, ROUTE_PATHS } from '@modules/app/constants';
-import Sidebar from '@modules/common/components/sidebar/Sidebar';
-import MobileHeader from '@common/components/header/MobileHeader';
-import HeaderWithActions from '@common/components/header/HeaderWithActions';
-import Breadcrumbs from '@modules/common/components/page/Breadcrumbs';
-import { type BrandButtonType } from '@common/components/button/BrandButton';
+import Sidebar from '@modules/common/sidebar/Sidebar';
+import MobileHeader from '@common/header/MobileHeader';
+import HeaderWithActions from '@common/header/HeaderWithActions';
+import Breadcrumbs from '@modules/common/page/Breadcrumbs';
+import { type BrandButtonType } from '@modules/common/button/BrandButton';
 import { Outlet, useParams, useLocation } from 'react-router-dom';
 
 interface PageContextProps {

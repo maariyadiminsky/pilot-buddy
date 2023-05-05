@@ -1,4 +1,4 @@
-import BrandButton from '@common/components/button/BrandButton';
+import BrandButton from '@modules/common/button/BrandButton';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import { SessionsTableDataType } from '@modules/study-room/types';
 import { useSessionAction } from '@modules/study-room/hooks';

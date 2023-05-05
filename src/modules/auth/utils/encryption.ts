@@ -1,4 +1,5 @@
 import CryptoJS from 'crypto-js';
+import { logError } from '@modules/common/error-monitoring';
 
 const getEncryptionKey = () => {
   if (!process.env.REACT_APP_DB_ENCRYPTION_KEY) {
@@ -18,7 +19,7 @@ export const encryptData = (data: string): string | null => {
       iv: ENCRYPTION_KEY,
     }).toString();
   } catch (error) {
-    console.error('Error encrypting data:', error);
+    logError('Error encrypting data:', error);
     return null;
   }
 };
@@ -31,7 +32,7 @@ export const decryptData = (data: string): string | null => {
       iv: ENCRYPTION_KEY,
     }).toString(CryptoJS.enc.Utf8);
   } catch (error) {
-    console.error('Error decrypting data:', error);
+    logError('Error decrypting data:', error);
     return null;
   }
 };

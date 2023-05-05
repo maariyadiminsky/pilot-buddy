@@ -1,12 +1,12 @@
-import BrandButton from '@common/components/button/BrandButton';
+import BrandButton from '@modules/common/button/BrandButton';
 import { getUniqId } from '@common/utils';
 import { PencilSquareIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import { type SessionQuestionType } from '@modules/session/types';
 import Dictaphone from '@modules/speech-recognition/Dictaphone';
 import { SyntheticEvent, useState, useRef, useEffect } from 'react';
-import Modal, { type ModalRef } from '@common/components/modal/Modal';
+import Modal, { type ModalRef } from '@common/modal/Modal';
 import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks';
-import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
+import { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
 import TimeSelectMenu from '../settings/TimeSelectMenu';
 import { TIME_OPTIONS } from '../constants';
 

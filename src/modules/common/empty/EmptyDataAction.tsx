@@ -1,5 +1,5 @@
 import { PlusIcon } from '@heroicons/react/20/solid';
-import BrandButton from '@common/components/button/BrandButton';
+import BrandButton from '@modules/common/button/BrandButton';
 
 interface EmptyDataActionsProps {
   title: string;

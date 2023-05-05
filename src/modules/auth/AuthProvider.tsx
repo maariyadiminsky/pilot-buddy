@@ -36,6 +36,7 @@ const AuthProvider = ({ children }: AuthContextProps) => {
     localStorage.setItem('encryptedEmail', encryptedEmail);
     setAuthEmail(encryptedEmail);
   };
+
   useEffect(() => {
     const email = localStorage.getItem('encryptedEmail');
 

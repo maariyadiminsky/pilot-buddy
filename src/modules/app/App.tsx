@@ -1,5 +1,5 @@
 import { ROUTES } from '@modules/app/constants';
-import NotFoundPage from '@modules/common/components/page/page-status/NotFoundPage';
+import NotFoundPage from '@modules/common/page/page-status/NotFoundPage';
 import Session from '@modules/session/Session';
 import SessionQuiz from '@modules/session-quiz/SessionQuiz';
 import StudyRoom from '@modules/study-room/StudyRoom';
@@ -9,8 +9,8 @@ import { FC, useContext } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { AuthContext } from '@modules/auth/AuthProvider';
 import PrivateRoutes from '@modules/auth/PrivateRoutes';
-import Loader from '@common/components/loader/Loader';
-import PageProvider from '@common/components/page/PageProvider';
+import Loader from '@common/loader/Loader';
+import PageProvider from '@common/page/PageProvider';
 import Profile from '@modules/profile/Profile';
 
 const App: FC = () => {

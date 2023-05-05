@@ -3,11 +3,11 @@ import SpeechSynthesis from '@modules/speech-synthesis/SpeechSynthesis';
 import TimeSelectMenu from './TimeSelectMenu';
 import OrderSelectMenu from './OrderSelectMenu';
 import { useState, useEffect } from 'react';
-import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
+import { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
 import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
 import { type SettingsType, type SettingsVoiceType } from '@modules/session/types';
 import { useDatabase } from '@common/hooks';
-import Loader from '@common/components/loader/Loader';
+import Loader from '@common/loader/Loader';
 
 interface SessionSettingProps {
   settings?: SettingsType;

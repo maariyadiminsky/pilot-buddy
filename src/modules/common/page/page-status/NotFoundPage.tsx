@@ -1,7 +1,7 @@
 import { ROUTES } from '@modules/app/constants';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import LostImage from '@common/components/page/image/Lost.png';
+import LostImage from '@common/page/image/Lost.png';
 
 const NotFoundPage: React.FC = () => {
   const navigate = useNavigate();

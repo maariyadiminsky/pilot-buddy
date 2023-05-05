@@ -1,4 +1,4 @@
-import ActionMenu, { type MenuOptionType } from '@common/components/dropdown/ActionMenu';
+import ActionMenu, { type MenuOptionType } from '@common/dropdown/ActionMenu';
 
 import { truthyString } from '@common/utils';
 import { getInitials, getTextBasedOnAmount } from '@modules/study-room/utils';

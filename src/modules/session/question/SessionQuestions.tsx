@@ -1,13 +1,13 @@
 import { removeObjectFromArray, jumpPageToTop } from '@common/utils';
-import EmptyDataAction from '@common/components/empty/EmptyDataAction';
+import EmptyDataAction from '@common/empty/EmptyDataAction';
 import QuestionAction from '@modules/session/question/SessionQuestionAction';
 import { useState, useEffect } from 'react';
-import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
+import { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
 import { DragDropContext, Droppable, type DropResult } from 'react-beautiful-dnd';
 import SessionQuestionsList from '@modules/session/question/SessionQuestionsList';
 import { SessionQuestionType } from '@modules/session/types';
 import { useDatabase, useDragAndDropWithStrictMode } from '@common/hooks';
-import Loader from '@common/components/loader/Loader';
+import Loader from '@common/loader/Loader';
 
 interface SessionQuestionsProps {
   questionsData?: SessionQuestionType[];

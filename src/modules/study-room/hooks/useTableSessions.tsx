@@ -3,9 +3,9 @@ import { useState, useEffect, useContext } from 'react';
 import { type SessionsTableDataType } from '@modules/study-room/types';
 import { sessionsWithNewSessionInOrder, sessionsOrderedByTopic } from '@modules/study-room/utils';
 import { removeObjectFromArray } from '@common/utils';
-import { type ModalDataType } from '@common/components/modal/Modal';
+import { type ModalDataType } from '@common/modal/Modal';
 import { useDatabase } from '@common/hooks';
-import { PageContext } from '@common/components/page/PageProvider';
+import { PageContext } from '@common/page/PageProvider';
 
 const REMOVE_SESSION_CONFIRMATION_STATIC_MODAL_DATA = {
   title: 'Are you sure?',

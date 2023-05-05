@@ -1,4 +1,4 @@
-import BrandButton, { type BrandButtonType } from '@common/components/button/BrandButton';
+import BrandButton, { type BrandButtonType } from '@modules/common/button/BrandButton';
 
 interface HeaderWithActionsProps {
   title?: string;

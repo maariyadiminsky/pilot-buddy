@@ -2,8 +2,8 @@ import { type SessionsTableDataType, type PinnedSessionType } from '@modules/stu
 import { useCallback, useState, useMemo, useContext } from 'react';
 import { getPinnedSessionsIds, isSessionPinned } from '@modules/study-room/utils';
 import { removeObjectFromArray, getUniqId } from '@common/utils';
-import { type ModalDataType } from '@common/components/modal/Modal';
-import { PageContext } from '@common/components/page/PageProvider';
+import { type ModalDataType } from '@common/modal/Modal';
+import { PageContext } from '@common/page/PageProvider';
 import { useDatabase } from '@common/hooks';
 
 const createPin = ({ id, questions, name, color }: SessionsTableDataType) => ({

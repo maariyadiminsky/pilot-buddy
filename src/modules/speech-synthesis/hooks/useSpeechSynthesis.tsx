@@ -1,5 +1,5 @@
 import { SyntheticEvent, useState, useEffect } from 'react';
-import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
+import { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
 import { APPROVED_VOICES } from '@modules/speech-synthesis/constants';
 import { type SettingsVoiceType } from '@modules/session/types';
 import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';

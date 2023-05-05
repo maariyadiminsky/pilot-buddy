@@ -1,5 +1,5 @@
-import { type NavigationItem } from '@common/components/sidebar/types';
-import NavigationItems from '@common/components/sidebar/NavigationItems';
+import { type NavigationItem } from '@common/sidebar/types';
+import NavigationItems from '@common/sidebar/NavigationItems';
 
 interface PinnedNavigationProps {
   navigation: NavigationItem[];

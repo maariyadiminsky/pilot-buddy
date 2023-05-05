@@ -1,4 +1,4 @@
-import { type ModalDataType } from '@common/components/modal/Modal';
+import { type ModalDataType } from '@common/modal/Modal';
 import { createSpeechlySpeechRecognition } from '@speechly/speech-recognition-polyfill';
 import { useState, useEffect } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';

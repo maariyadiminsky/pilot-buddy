@@ -6,7 +6,7 @@ import { type NoteDataType } from '@modules/session/types';
 import { removeObjectFromArray } from '@common/utils';
 import { EyeSlashIcon } from '@heroicons/react/20/solid';
 import { useDatabase } from '@common/hooks';
-import Loader from '@common/components/loader/Loader';
+import Loader from '@common/loader/Loader';
 
 interface SessionNotesProps {
   notesData?: NoteDataType[];

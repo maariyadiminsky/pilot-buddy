@@ -2,15 +2,15 @@ import { PlusIcon, BookmarkSlashIcon } from '@heroicons/react/20/solid';
 import PinnedSessions from '@modules/study-room/session/PinnedSessions';
 import SessionsTable from '@modules/study-room/session/SessionsTable';
 import { useMemo, useEffect, useState, useRef, useContext } from 'react';
-import { PageContext } from '@common/components/page/PageProvider';
-import { type BrandButtonType } from '@common/components/button/BrandButton';
+import { PageContext } from '@common/page/PageProvider';
+import { type BrandButtonType } from '@modules/common/button/BrandButton';
 import SessionAction from '@modules/study-room/session/SessionAction';
 import { useNavigate } from 'react-router-dom';
-import Modal, { type ModalRef, type ModalDataType } from '@common/components/modal/Modal';
-import EmptyDataAction from '@common/components/empty/EmptyDataAction';
-import { type MenuOptionType } from '@common/components/dropdown/ActionMenu';
+import Modal, { type ModalRef, type ModalDataType } from '@common/modal/Modal';
+import EmptyDataAction from '@common/empty/EmptyDataAction';
+import { type MenuOptionType } from '@common/dropdown/ActionMenu';
 import { usePinnedSessions, useTableSessions } from '@modules/study-room/hooks';
-import Loader from '@common/components/loader/Loader';
+import Loader from '@common/loader/Loader';
 
 const StudyRoom = () => {
   const modalRef = useRef<ModalRef>(null);

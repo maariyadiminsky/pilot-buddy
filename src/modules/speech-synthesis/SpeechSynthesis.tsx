@@ -1,7 +1,7 @@
-import Range from '@common/components/range/Range';
+import Range from '@common/range/Range';
 import { useSpeechSynthesis } from '@modules/speech-synthesis/hooks';
 import VoiceSelectMenu from '@modules/speech-synthesis/VoiceSelectMenu';
-import BrandButton, { type BrandButtonType } from '@common/components/button/BrandButton';
+import BrandButton, { type BrandButtonType } from '@modules/common/button/BrandButton';
 import { type SettingsVoiceType } from '@modules/session/types';
 import { useMemo } from 'react';
 

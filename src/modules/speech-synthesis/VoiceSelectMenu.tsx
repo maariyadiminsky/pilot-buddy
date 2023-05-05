@@ -1,5 +1,5 @@
 import { MegaphoneIcon } from '@heroicons/react/20/solid';
-import SelectMenu, { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
+import SelectMenu, { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
 import { VOICE_OPTIONS } from '@modules/speech-synthesis/constants';
 
 interface VoiceSelectProps {

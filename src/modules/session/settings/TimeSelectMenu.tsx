@@ -1,5 +1,5 @@
 import { ClockIcon } from '@heroicons/react/20/solid';
-import SelectMenu, { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
+import SelectMenu, { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
 import { TIME_OPTIONS } from '../constants';
 
 interface TimeSelectProps {

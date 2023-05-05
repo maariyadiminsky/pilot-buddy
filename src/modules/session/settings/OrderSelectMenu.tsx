@@ -1,4 +1,4 @@
-import SelectMenu, { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
+import SelectMenu, { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
 import { ORDER_OPTIONS } from '../constants';
 
 interface OrderSelectProps {

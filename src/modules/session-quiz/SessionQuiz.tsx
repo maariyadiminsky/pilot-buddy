@@ -2,7 +2,7 @@ import { ArrowUturnLeftIcon } from '@heroicons/react/20/solid';
 import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks';
 import Dictaphone from '@modules/speech-recognition/Dictaphone';
 import { SyntheticEvent, useState, useEffect, useMemo, useRef } from 'react';
-import Modal, { type ModalRef } from '@common/components/modal/Modal';
+import Modal, { type ModalRef } from '@common/modal/Modal';
 import { useParams, useNavigate } from 'react-router-dom';
 import { type SessionDataType, type SessionQuestionType } from '@modules/session/types';
 import SessionQuizResults from '@modules/session-quiz/SessionQuizResults';
@@ -10,7 +10,7 @@ import { DATABASE_ERROR, useDatabase, usePrevious } from '@common/hooks';
 import { getQuestionOrder, getTimeData } from '@modules/session-quiz/utils';
 import { SessionQuestionWithAnswerType } from '@modules/session-quiz/types';
 import { useSpeechSynthesis } from '@modules/speech-synthesis/hooks';
-import Loader from '@common/components/loader/Loader';
+import Loader from '@common/loader/Loader';
 import { ROUTES } from '@modules/app/constants';
 
 const SessionQuiz = () => {

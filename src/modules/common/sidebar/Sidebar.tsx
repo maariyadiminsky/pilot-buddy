@@ -3,11 +3,11 @@ import { Fragment, useContext, useState, useEffect, useCallback } from 'react';
 import { BookOpenIcon, XMarkIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import { AuthContext } from '@modules/auth/AuthProvider';
 import ProfileCard from '@modules/profile/ProfileCard';
-import NavigationItems from '@common/components/sidebar/NavigationItems';
-import LogoutButton from '@common/components/sidebar/LogoutButton';
+import NavigationItems from '@common/sidebar/NavigationItems';
+import LogoutButton from '@common/sidebar/LogoutButton';
 
-import { type NavigationItem } from '@common/components/sidebar/types';
-import PinnedNavigation from '@common/components/sidebar/PinnedNavigation';
+import { type NavigationItem } from '@common/sidebar/types';
+import PinnedNavigation from '@common/sidebar/PinnedNavigation';
 import { useDatabase, type UserType } from '@common/hooks';
 import { useParams, useLocation } from 'react-router-dom';
 
