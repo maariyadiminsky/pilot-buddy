@@ -12,7 +12,7 @@ const limiter = new RateLimiterMemory({
 });
 
 const Login = () => {
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, setIsLoggedIn, handleSetAuthEmail } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSignIn, setIsSignIn] = useState(true);
@@ -59,6 +59,8 @@ const Login = () => {
           throw new Error('Encrypted Email not encrypting.');
         }
 
+        handleSetAuthEmail(encryptedEmail);
+
         // find the user
         let user;
 
@@ -103,6 +105,7 @@ const Login = () => {
           throw new Error('Could not encrypt email or password');
         }
 
+        // create new user
         await setDBUser({ encryptedEmail, encryptedPassword });
         setCookie('sessionToken', getSessionToken(), { path: '/', secure: true });
       }

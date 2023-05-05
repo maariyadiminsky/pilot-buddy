@@ -14,7 +14,7 @@ const SessionAction = ({ currentSession, handleSubmit, handleCancel }: SessionAc
 
   return (
     <>
-      <form onSubmit={handleFormSubmit} className="pt-6 px-8 lg:px-28 xl:px-52">
+      <form onSubmit={handleFormSubmit} className="pt-6 px-8 lg:px-28 xl:px-72">
         <div className="flex flex-row justify-between items-center">
           <h2 className="flex flex-row items-center py-4 text-gray-900 font-medium">
             <PlusIcon

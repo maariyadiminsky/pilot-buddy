@@ -8,7 +8,7 @@ import LogoutButton from '@common/components/sidebar/LogoutButton';
 import Logo from '@common/components/sidebar/images/airplane.png';
 import { type NavigationItem } from '@common/components/sidebar/types';
 import PinnedNavigation from '@common/components/sidebar/PinnedNavigation';
-import { useDatabase } from '@common/hooks';
+import { useDatabase, type UserType } from '@common/hooks';
 import { useParams, useLocation } from 'react-router-dom';
 
 const NAVIGATION_INITIAL = [
@@ -29,20 +29,29 @@ const Sidebar = ({
   setShouldUpdatePinnedSessions,
 }: SidebarProps) => {
   const { handleLogout } = useContext(AuthContext);
+  const [user, setUser] = useState<UserType>();
   const [navigation, setNavigation] = useState<NavigationItem[]>(NAVIGATION_INITIAL);
   const [pinnedNavigation, setPinnedNavigation] = useState<NavigationItem[]>([]);
 
-  const { getAllDBSessionTableItems } = useDatabase();
+  const { getAllDBSessionTableItems, getUserProfileData } = useDatabase();
   const { id: sessionId } = useParams();
   const { pathname } = useLocation();
 
   useEffect(() => setShouldUpdatePinnedSessions(true), []);
 
+  const getUser = useCallback(async () => {
+    const userProfile = await getUserProfileData();
+    setUser(userProfile);
+  }, []);
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   useEffect(() => {
     const getTableSessions = async () => {
       try {
         const sessionTableItems = await getAllDBSessionTableItems();
-
         if (sessionTableItems) {
           const pinnedSessions = sessionTableItems.filter(({ isPinned }) => isPinned);
 
@@ -126,6 +135,7 @@ const Sidebar = ({
     if (pathname === '/') {
       setNavigation(NAVIGATION_INITIAL);
       handleSetCurrent(null, true, true);
+      getUser();
     } else if (sessionId) {
       const navItemToBeSelected = pinnedNavigation.find(({ routeId }) => routeId === sessionId);
       // pass in id or null to unselect current in the
@@ -216,7 +226,7 @@ const Sidebar = ({
         </div>
         <div className="mt-5 flex h-0 flex-1 flex-col overflow-y-auto pt-1">
           {/* User account dropdown */}
-          <ProfileCard wrapperType="sidebar" />
+          <ProfileCard wrapperType="sidebar" user={user} />
           {/* Navigation */}
           <nav className="mt-6">
             <div className="px-3 space-y-1">

@@ -1,4 +1,6 @@
-import { useState, useMemo, createContext } from 'react';
+import { useState, useMemo, createContext, useContext } from 'react';
+import { AuthContext } from '@modules/auth/AuthProvider';
+import { ROUTE_PATHS } from '@modules/app/constants';
 import Sidebar from '@modules/common/components/sidebar/Sidebar';
 import MobileHeader from '@common/components/header/MobileHeader';
 import HeaderWithActions from '@common/components/header/HeaderWithActions';
@@ -27,6 +29,7 @@ const PageProvider = () => {
   const [pageTitle, setPageTitle] = useState('');
   const [pageHeaderActions, setPageHeaderActions] = useState<BrandButtonType[]>();
   const [shouldUpdatePinnedSessions, setShouldUpdatePinnedSessions] = useState(false);
+  const { isLoggedIn } = useContext(AuthContext);
 
   const { id: sessionId } = useParams();
   const { pathname } = useLocation();
@@ -48,11 +51,13 @@ const PageProvider = () => {
     ]
   );
 
+  if (!isLoggedIn) return <Outlet />;
+
   // will need to improve this if app grows
-  const shouldHideMainElements = (!sessionId && pathname !== '/') || pathname.includes('start');
+  const shouldShowMainElements = sessionId || ROUTE_PATHS.includes(pathname);
   return (
     <div className="relative isolate overflow-hidden bg-white h-full">
-      {!shouldHideMainElements && (
+      {shouldShowMainElements && (
         <Sidebar
           {...{
             shouldUpdatePinnedSessions,
@@ -62,11 +67,11 @@ const PageProvider = () => {
           }}
         />
       )}
-      <div className={`flex flex-col ${shouldHideMainElements ? '' : 'lg:pl-64'}`}>
+      <div className={`flex flex-col ${shouldShowMainElements ? 'lg:pl-64' : ''}`}>
         <MobileHeader {...{ setIsSidebarOpen }} />
         <main className="flex-1">
           <>
-            {!shouldHideMainElements && (
+            {shouldShowMainElements && (
               <>
                 <HeaderWithActions title={pageTitle} actions={pageHeaderActions} />
                 <Breadcrumbs pathname={pathname} sessionId={sessionId} />

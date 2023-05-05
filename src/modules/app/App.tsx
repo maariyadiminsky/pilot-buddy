@@ -11,6 +11,7 @@ import { AuthContext } from '@modules/auth/AuthProvider';
 import PrivateRoutes from '@modules/auth/PrivateRoutes';
 import Loader from '@common/components/loader/Loader';
 import PageProvider from '@common/components/page/PageProvider';
+import Profile from '@modules/profile/Profile';
 
 const App: FC = () => {
   const { isLoggedIn, isAuthLoading } = useContext(AuthContext);
@@ -24,6 +25,7 @@ const App: FC = () => {
         <Route path="/" element={isLoggedIn ? <StudyRoom /> : <Homepage />} />
         <Route path={ROUTES.LOGIN_ROUTE} element={<Login />} />
         <Route element={<PrivateRoutes isLoggedIn={isLoggedIn} />}>
+          <Route path={ROUTES.PROFILE_ROUTE} element={<Profile />} />
           <Route path={ROUTES.SESSION_ROUTE} element={<Session />} />
           <Route path={ROUTES.SESSION_START_ROUTE} element={<SessionQuiz />} />
         </Route>

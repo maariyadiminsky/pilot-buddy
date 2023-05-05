@@ -1,6 +1,6 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-
+import { ROUTES } from '@modules/app/constants';
 import { WrapperTypeEnum } from '@common/types';
 import { truthyString } from '@common/utils';
 import ProfileLink from '@modules/profile/ProfileLink';
@@ -34,16 +34,9 @@ const ProfileDropdown = ({ wrapperType }: ProfileDropdownProps) => (
       )}
     >
       <div className="py-1 hover:bg-gray-200">
-        <ProfileLink link="#" text="View Profile" />
+        <ProfileLink link={ROUTES.PROFILE_ROUTE} text="View Profile" />
       </div>
       <div>
-        <ProfileLink
-          link="https://www.buymeacoffee.com/mariya.diminsky"
-          text="Buy me Ramen"
-          icon={HeartIcon}
-          iconClassName="text-rose-500"
-          isExternalLink
-        />
         <ProfileLink
           link="https://github.com/maariyadiminsky/pilot-buddy/issues"
           text="Support"
@@ -54,6 +47,13 @@ const ProfileDropdown = ({ wrapperType }: ProfileDropdownProps) => (
           link="https://github.com/maariyadiminsky/pilot-buddy"
           text="Github"
           icon={CodeBracketIcon}
+          isExternalLink
+        />
+        <ProfileLink
+          link="https://www.buymeacoffee.com/mariya.diminsky"
+          text="Buy me Ramen"
+          icon={HeartIcon}
+          iconClassName="text-rose-500"
           isExternalLink
         />
       </div>

@@ -18,8 +18,11 @@ const Breadcrumbs = ({ pathname, sessionId }: BreadcrumbsProps) => {
   const pages = useMemo(
     () =>
       [
-        pathname === '/'
+        pathname === ROUTES.HOMEPAGE_ROUTE || sessionId
           ? { name: 'Study Room', route: ROUTES.HOMEPAGE_ROUTE, current: Boolean(!sessionId) }
+          : undefined,
+        pathname === ROUTES.PROFILE_ROUTE
+          ? { name: 'Profile', route: ROUTES.PROFILE_ROUTE, current: true }
           : undefined,
         sessionId
           ? {

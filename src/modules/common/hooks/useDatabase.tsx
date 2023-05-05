@@ -1,12 +1,16 @@
 import { openDB, IDBPDatabase, IDBPObjectStore } from 'idb';
 import { type SessionsTableDataType } from '@modules/study-room/types';
 import { type SessionDataType } from '@modules/session/types';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useContext } from 'react';
 import { getInitialSessionData } from '@modules/session/constants';
+import { AuthContext } from '@modules/auth/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
-interface UserType {
+export interface UserType {
   encryptedEmail: string;
   encryptedPassword: string;
+  name?: string;
+  image?: string;
 }
 
 export interface DatabaseType extends IDBPDatabase<DatabaseType> {
@@ -34,6 +38,8 @@ export const DATABASE_ERROR = {
 // ---> important: parent component should wrap each method in a try/catch
 export const useDatabase = () => {
   const [database, setDatabase] = useState<IDBPDatabase<DatabaseType>>();
+  const navigate = useNavigate();
+  const { authEmail } = useContext(AuthContext);
 
   const createDatabaseTry = useCallback(async () => {
     // Create the database if it doesn't exist
@@ -243,6 +249,14 @@ export const useDatabase = () => {
   const setDBUser = async (data: UserType) =>
     await addOrUpdateStoreItem(DATABASE_STORE.USERS, data);
 
+  const getUserProfileData = async () => (authEmail ? await getDBUser(authEmail) : null);
+
+  const setUserProfileData = async (userProfile?: UserType) => {
+    if (!userProfile || !authEmail) return;
+    await setDBUser(userProfile);
+    navigate('/');
+  };
+
   // error handling
   // handleError should either be an error monitoring tool.
   // setter for rendering error on ui, or etc.
@@ -280,6 +294,8 @@ export const useDatabase = () => {
     // user
     getDBUser,
     setDBUser,
+    getUserProfileData,
+    setUserProfileData,
     // sessions
     getAllDBSessions,
     getDBSession,
