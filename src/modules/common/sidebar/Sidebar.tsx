@@ -7,7 +7,8 @@ import NavigationItems from '@common/sidebar/NavigationItems';
 import LogoutButton from '@common/sidebar/LogoutButton';
 import { type NavigationItem } from '@common/sidebar/types';
 import PinnedNavigation from '@common/sidebar/PinnedNavigation';
-import { useDatabase, type UserType } from '@common/hooks';
+import { useDatabase } from '@common/hooks';
+import { type UserType } from '@common/types';
 import { useParams, useLocation } from 'react-router-dom';
 import { captureException } from '@modules/common/error-monitoring';
 

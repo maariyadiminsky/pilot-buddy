@@ -5,15 +5,8 @@ import { useState, useCallback, useContext } from 'react';
 import { getInitialSessionData } from '@modules/session/constants';
 import { AuthContext } from '@modules/auth/AuthProvider';
 import { useNavigate } from 'react-router-dom';
-import { logError, captureException } from '@modules/common/error-monitoring';
-
-export interface UserType {
-  id: string;
-  encryptedEmail: string;
-  encryptedPassword: string;
-  name?: string;
-  image?: string;
-}
+import { logError, captureException } from '@common/error-monitoring';
+import { type UserType } from '@common/types';
 
 export interface DatabaseType extends IDBPDatabase<DatabaseType> {
   users: IDBPObjectStore<UserType, string>;

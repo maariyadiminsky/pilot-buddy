@@ -2,7 +2,8 @@ import { Menu } from '@headlessui/react';
 import { Bars3CenterLeftIcon } from '@heroicons/react/24/outline';
 import ProfileDropdown from '@modules/profile/ProfileDropdown';
 import ProfilePicture from '@modules/profile/ProfilePicture';
-import { useDatabase, type UserType } from '@common/hooks';
+import { useDatabase } from '@common/hooks';
+import { type UserType } from '@common/types';
 import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 

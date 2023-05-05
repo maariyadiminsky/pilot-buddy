@@ -20,3 +20,12 @@ export type HeroIconType = ForwardRefExoticComponent<
     titleId?: string;
   } & RefAttributes<SVGSVGElement>
 >;
+
+// database
+export interface UserType {
+  id: string;
+  encryptedEmail: string;
+  encryptedPassword: string;
+  name?: string;
+  image?: string;
+}

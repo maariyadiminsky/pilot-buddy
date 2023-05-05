@@ -1,7 +1,8 @@
 import BrandButton from '@modules/common/button/BrandButton';
 import { UserCircleIcon } from '@heroicons/react/20/solid';
 import { SyntheticEvent, useState, useEffect, useContext } from 'react';
-import { useDatabase, useImageUpload, type UserType } from '@common/hooks';
+import { useDatabase, useImageUpload } from '@common/hooks';
+import { type UserType } from '@common/types';
 import { PageContext } from '@common/page/PageProvider';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@modules/app/constants';

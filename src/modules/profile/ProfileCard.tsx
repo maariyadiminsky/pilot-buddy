@@ -3,8 +3,7 @@ import { ChevronUpDownIcon } from '@heroicons/react/24/outline';
 
 import ProfileDropdown from '@modules/profile/ProfileDropdown';
 import ProfilePicture from '@modules/profile/ProfilePicture';
-import { WrapperTypeEnum } from '@common/types';
-import { type UserType } from '@common/hooks';
+import { WrapperTypeEnum, type UserType } from '@common/types';
 
 interface ProfileCardProps {
   wrapperType: keyof typeof WrapperTypeEnum;
