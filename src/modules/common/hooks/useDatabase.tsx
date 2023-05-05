@@ -14,7 +14,7 @@ export interface DatabaseType extends IDBPDatabase<DatabaseType> {
   sessionData: IDBPObjectStore<SessionDataType, string>;
 }
 
-const DATABASE_NAME = 'my-db'; // temp
+const DATABASE_NAME = 'PILOT_BUDDY_DB';
 const DATABASE_STORE = {
   USERS: 'users',
   SESSIONS_TABLE: 'sessionsTable',
@@ -34,7 +34,7 @@ export const DATABASE_ERROR = {
 export const useDatabase = () => {
   const [database, setDatabase] = useState<IDBPDatabase<DatabaseType>>();
   const navigate = useNavigate();
-  const { authEmail } = useContext(AuthContext);
+  const { userId } = useContext(AuthContext);
 
   const createDatabaseTry = useCallback(async () => {
     // Create the database if it doesn't exist
@@ -42,7 +42,7 @@ export const useDatabase = () => {
       // make sure all required stores exist
       upgrade(theDb) {
         if (!theDb.objectStoreNames.contains(DATABASE_STORE.USERS)) {
-          theDb.createObjectStore(DATABASE_STORE.USERS, { keyPath: 'encryptedEmail' });
+          theDb.createObjectStore(DATABASE_STORE.USERS, { keyPath: 'id' });
         }
 
         if (!theDb.objectStoreNames.contains(DATABASE_STORE.SESSIONS_TABLE)) {
@@ -244,10 +244,17 @@ export const useDatabase = () => {
   const setDBUser = async (data: UserType) =>
     await addOrUpdateStoreItem(DATABASE_STORE.USERS, data);
 
-  const getUserProfileData = async () => (authEmail ? await getDBUser(authEmail) : null);
+  const getUserProfileData = async () => {
+    console.log('userId:', userId);
+    const user = userId ? await getDBUser(userId) : null;
+
+    // for the purpose of showing a loader if null
+    // and icon if really no image is saved
+    return user ? { ...user, image: user?.image || '' } : null;
+  };
 
   const setUserProfileData = async (userProfile?: UserType) => {
-    if (!userProfile || !authEmail) return;
+    if (!userProfile || !userId) return;
     await setDBUser(userProfile);
     navigate('/');
   };

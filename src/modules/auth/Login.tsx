@@ -14,7 +14,7 @@ const limiter = new RateLimiterMemory({
 });
 
 const Login = () => {
-  const { isLoggedIn, setIsLoggedIn, handleSetAuthEmail } = useContext(AuthContext);
+  const { isLoggedIn, setIsLoggedIn, handleSetUserId } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSignIn, setIsSignIn] = useState(true);
@@ -61,8 +61,6 @@ const Login = () => {
           throw new Error('Encrypted Email not encrypting.');
         }
 
-        handleSetAuthEmail(encryptedEmail);
-
         // find the user
         let user;
 
@@ -88,6 +86,7 @@ const Login = () => {
 
         if (isPasswordCorrect) {
           // set for logged in status
+          handleSetUserId(user.id);
           setCookie('sessionToken', getSessionToken(), {
             path: '/',
             secure: true,
@@ -114,6 +113,7 @@ const Login = () => {
         const userId = getUniqId();
         await setDBUser({ id: userId, encryptedEmail, encryptedPassword });
         // set for logged in status
+        handleSetUserId(userId);
         setCookie('sessionToken', getSessionToken(), { path: '/', secure: true });
         // identify for error handling
         logRocketIdentifyUser(userId, { email });

@@ -3,12 +3,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { getCookie, removeCookie } from '@modules/auth/utils';
 
 interface AuthContextType {
+  userId?: string;
   isLoggedIn: boolean;
   isAuthLoading: boolean;
-  authEmail: string;
   setIsLoggedIn: (value: boolean) => void;
   handleLogout: () => void;
-  handleSetAuthEmail: (value: string) => void;
+  handleSetUserId: (value: string) => void;
 }
 
 interface AuthContextProps {
@@ -16,37 +16,39 @@ interface AuthContextProps {
 }
 
 export const AuthContext = createContext<AuthContextType>({
+  userId: undefined,
   isLoggedIn: false,
   isAuthLoading: true,
-  authEmail: '',
   setIsLoggedIn: () => {},
   handleLogout: () => {},
-  handleSetAuthEmail: () => {},
+  handleSetUserId: () => {},
 });
 
+const USER_ID = 'userId';
+const COOKIE = 'sessionToken';
 const AuthProvider = ({ children }: AuthContextProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
-  const [authEmail, setAuthEmail] = useState('');
+  const [userId, setUserId] = useState('');
 
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleSetAuthEmail = (encryptedEmail: string) => {
-    localStorage.setItem('encryptedEmail', encryptedEmail);
-    setAuthEmail(encryptedEmail);
+  const handleSetUserId = (user: string) => {
+    localStorage.setItem(USER_ID, user);
+    setUserId(user);
   };
 
   useEffect(() => {
-    const email = localStorage.getItem('encryptedEmail');
+    const user = localStorage.getItem(USER_ID);
 
-    if (email) {
-      handleSetAuthEmail(email);
+    if (user) {
+      setUserId(user);
     }
   }, []);
 
   const clearData = () => {
-    localStorage.removeItem('encryptedEmail');
+    localStorage.removeItem(USER_ID);
   };
 
   // I am aware this isnt the safest solution in the world,
@@ -54,8 +56,8 @@ const AuthProvider = ({ children }: AuthContextProps) => {
   // production use you should really create a backend
   // and store in a server db for added security.
   useEffect(() => {
-    const sessionToken = getCookie('sessionToken');
-    const isSignedIn = Boolean(sessionToken && sessionToken !== '');
+    const sessionToken = getCookie(COOKIE);
+    const isSignedIn = Boolean(userId && sessionToken);
 
     if (!isSignedIn) {
       clearData();
@@ -67,7 +69,7 @@ const AuthProvider = ({ children }: AuthContextProps) => {
 
   const handleLogout = () => {
     clearData();
-    removeCookie('sessionToken');
+    removeCookie(COOKIE);
     setIsLoggedIn(false);
     navigate('/');
   };
@@ -76,12 +78,12 @@ const AuthProvider = ({ children }: AuthContextProps) => {
     () => ({
       isLoggedIn,
       isAuthLoading,
-      authEmail,
+      userId,
       setIsLoggedIn,
       handleLogout,
-      handleSetAuthEmail,
+      handleSetUserId,
     }),
-    [isLoggedIn, isAuthLoading, authEmail]
+    [isLoggedIn, isAuthLoading, userId]
   );
 
   return <AuthContext.Provider value={contextValues}>{children}</AuthContext.Provider>;

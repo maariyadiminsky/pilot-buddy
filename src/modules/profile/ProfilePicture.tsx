@@ -14,6 +14,7 @@ const styles = {
 const ProfilePicture = ({ wrapperType, src }: ProfilePictureProps) => {
   const styleVariant = styles[wrapperType];
 
+  console.log('src:', src);
   return src ? (
     <img
       src={src}
