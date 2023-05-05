@@ -1,6 +1,6 @@
 import { useState, useMemo, createContext, useContext } from 'react';
 import { AuthContext } from '@modules/auth/AuthProvider';
-import { ROUTE_PATHS } from '@modules/app/constants';
+import { ROUTES, ROUTE_PATHS } from '@modules/app/constants';
 import Sidebar from '@modules/common/components/sidebar/Sidebar';
 import MobileHeader from '@common/components/header/MobileHeader';
 import HeaderWithActions from '@common/components/header/HeaderWithActions';
@@ -55,7 +55,7 @@ const PageProvider = () => {
 
   // will need to improve this if app grows
   const shouldShowMainElements =
-    sessionId || (!pathname.includes('404') && ROUTE_PATHS.includes(pathname));
+    sessionId || (pathname !== ROUTES.NOT_FOUND_ROUTE && ROUTE_PATHS.includes(pathname));
   return (
     <div className="relative isolate overflow-hidden bg-white h-full">
       {shouldShowMainElements && (
