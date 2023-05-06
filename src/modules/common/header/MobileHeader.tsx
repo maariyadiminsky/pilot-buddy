@@ -48,7 +48,7 @@ const MobileHeader = ({ setIsSidebarOpen }: MobileHeaderProps) => {
             <div>
               <Menu.Button className="flex max-w-xs rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2">
                 <span className="sr-only">Open user menu</span>
-                <ProfilePicture wrapperType="header" src={user?.image} />
+                <ProfilePicture wrapperType="header" src={user ? user?.image || '' : undefined} />
               </Menu.Button>
             </div>
             <ProfileDropdown wrapperType="header" />

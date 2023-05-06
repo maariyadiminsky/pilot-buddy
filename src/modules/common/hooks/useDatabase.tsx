@@ -157,6 +157,7 @@ export const useDatabase = () => {
     const store = tx.objectStore(storeName);
 
     const item = await store.get(keyToFindItem);
+
     if (!item) return null;
 
     store.delete(keyToFindItem);
@@ -184,16 +185,13 @@ export const useDatabase = () => {
   };
 
   const addOrUpdateDBSessionTableItem = async (tableSessionData: SessionsTableDataType) => {
-    if (!userId) return;
+    if (!userId) return null;
 
-    let tableSessionDataWithId = tableSessionData;
     if (tableSessionData?.userId && tableSessionData.userId !== userId) {
       throw new Error(DATABASE_ERROR.SESSION_NOT_FOUND);
-    } else {
-      tableSessionDataWithId = { ...tableSessionData, userId };
     }
 
-    return await addOrUpdateStoreItem(DATABASE_STORE.SESSIONS_TABLE, tableSessionDataWithId);
+    return await addOrUpdateStoreItem(DATABASE_STORE.SESSIONS_TABLE, tableSessionData);
   };
 
   const updateDBPartialDataOfSessionTableItem = async (data: any, sessionId: string) => {
@@ -207,8 +205,15 @@ export const useDatabase = () => {
     await updateDbPartialDataOfItem(DATABASE_STORE.SESSIONS_TABLE, data, sessionId);
   };
 
-  const deleteDBSessionTableItem = async (sessionId: string) =>
+  const deleteDBSessionTableItem = async (sessionId: string) => {
+    const sessionTable = await getDBSessionTableItem(sessionId);
+
+    if (sessionTable?.userId && sessionTable.userId !== userId) {
+      throw new Error(DATABASE_ERROR.SESSION_NOT_FOUND);
+    }
+
     await deleteDBItem(DATABASE_STORE.SESSIONS_TABLE, sessionId);
+  };
 
   // sessions
   const getAllDBSessions = async () => {
@@ -221,33 +226,11 @@ export const useDatabase = () => {
   const addOrUpdateDBSessionItem = async (sessionData: SessionDataType) => {
     if (!userId) return null;
 
-    if (!userId) return;
-
-    let sessionDataWithId = sessionData;
     if (sessionData?.userId && sessionData.userId !== userId) {
       throw new Error(DATABASE_ERROR.SESSION_NOT_FOUND);
-    } else {
-      sessionDataWithId = { ...sessionData, userId };
     }
 
-    return await addOrUpdateStoreItem(DATABASE_STORE.SESSIONS, sessionDataWithId);
-  };
-
-  // if keyToReplace is added it will replace the entire value of the key
-  // if not provided, it will add to existing data
-  const updateDBPartialDataOfSession = async (
-    data: any,
-    sessionId: string,
-    isSettings?: boolean
-  ) => {
-    const session = await getDBSession(sessionId);
-
-    // Ensure the session belongs to the current user
-    if (session.userId !== userId) {
-      throw new Error(DATABASE_ERROR.SESSION_NOT_FOUND);
-    }
-
-    return await updateDbPartialDataOfItem(DATABASE_STORE.SESSIONS, data, sessionId, isSettings);
+    return await addOrUpdateStoreItem(DATABASE_STORE.SESSIONS, sessionData);
   };
 
   const getDBSession = async (sessionId: string) => {
@@ -282,17 +265,43 @@ export const useDatabase = () => {
     // Ensure the session belongs to the current user
     if (session && session.userId === userId) {
       return session;
-    } else {
-      throw new Error(DATABASE_ERROR.SESSION_NOT_FOUND);
     }
+
+    throw new Error(DATABASE_ERROR.SESSION_NOT_FOUND);
   };
 
-  const deleteDBSessionItem = async (sessionId: string) =>
+  // if keyToReplace is added it will replace the entire value of the key
+  // if not provided, it will add to existing data
+  const updateDBPartialDataOfSession = async (
+    data: any,
+    sessionId: string,
+    isSettings?: boolean
+  ) => {
+    const session = await getDBSession(sessionId);
+
+    // Ensure the session belongs to the current user
+    if (session?.userId !== userId) {
+      throw new Error(DATABASE_ERROR.SESSION_NOT_FOUND);
+    }
+
+    return await updateDbPartialDataOfItem(DATABASE_STORE.SESSIONS, data, sessionId, isSettings);
+  };
+
+  const deleteDBSessionItem = async (sessionId: string) => {
+    const session = await getDBSession(sessionId);
+
+    if (session?.userId && session.userId !== userId) {
+      throw new Error(DATABASE_ERROR.SESSION_NOT_FOUND);
+    }
+
     await deleteDBItem(DATABASE_STORE.SESSIONS, sessionId);
+  };
 
   // user
-  const getDBUser = async (id: string) => {
-    const user = await getDBStoreItem(DATABASE_STORE.USERS, id);
+  const getDBUser = async () => {
+    if (!userId) return null;
+
+    const user = await getDBStoreItem(DATABASE_STORE.USERS, userId);
 
     if (!user) {
       throw new Error(DATABASE_ERROR.USER_NOT_FOUND);
@@ -323,7 +332,7 @@ export const useDatabase = () => {
   const setDBUser = async (data: UserType) =>
     await addOrUpdateStoreItem(DATABASE_STORE.USERS, data);
 
-  const getUserProfileData = async () => (userId ? await getDBUser(userId) : null);
+  const getUserProfileData = async () => await getDBUser();
 
   const setUserProfileData = async (userProfile?: UserType) => {
     if (!userProfile || !userId) return;
@@ -374,7 +383,6 @@ export const useDatabase = () => {
     // sessions
     getAllDBSessions,
     getDBSession,
-    addOrUpdateDBSessionItem,
     updateDBPartialDataOfSession,
     deleteDBSessionItem,
     // table sessions

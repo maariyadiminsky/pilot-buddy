@@ -22,13 +22,13 @@ interface SessionItemProps extends SessionsTableDataType {
 
 const SessionItem = ({
   id,
+  userId,
   name,
   topic,
   questions,
   textColor,
   color,
   index,
-
   isSessionPinned,
   isEditingCurrentSession,
   handlePinSession,
@@ -42,7 +42,7 @@ const SessionItem = ({
     if (isSessionPinned) {
       handleUnpinSession(id);
     } else {
-      handlePinSession({ id, name, topic, questions, color, textColor, isPinned: true });
+      handlePinSession({ id, userId, name, topic, questions, color, textColor, isPinned: true });
     }
   };
 

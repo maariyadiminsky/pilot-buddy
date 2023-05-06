@@ -1,4 +1,5 @@
 import { type PinnedSessionType, type SessionsTableDataType } from '@modules/study-room/types';
+import { sortItems } from '@common/utils';
 
 interface COLOR_TYPE {
   background: string;
@@ -48,23 +49,7 @@ export const getTextBasedOnAmount = (type: string, total: number) =>
   `${total} ${type.charAt(0).toUpperCase()}${type.slice(1)}${total > 1 ? 's' : ''}`;
 
 export const sessionsOrderedByTopic = (sessions: SessionsTableDataType[]) =>
-  sessions.sort((s1, s2) => {
-    if (s1.topic > s2.topic) {
-      return 1;
-    }
-
-    if (s1.topic < s2.topic) {
-      return -1;
-    }
-
-    return 0;
-  });
-
-// export const reorderQuestionsBasedOnUserDragChoice = (
-//   question: SessionQuestionType,
-//   questions: SessionQuestionType[],
-//   draggedToIndex: number
-// ) => [...questions.slice(0, draggedToIndex), question, ...questions.slice(draggedToIndex)];
+  sortItems(sessions, 'topic');
 
 export const sessionsWithNewSessionInOrder = (
   newSession: SessionsTableDataType,

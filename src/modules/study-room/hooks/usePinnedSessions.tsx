@@ -28,7 +28,6 @@ export const usePinnedSessions = (
   handleModalOpen?: (value: boolean) => void
 ) => {
   const [pinnedSessions, setPinnedSessions] = useState<PinnedSessionType[]>([]);
-  const [isEditingPinnedSession, setIsEditingPinnedSession] = useState(false);
 
   const { addOrUpdateDBSessionTableItem, updateDBPartialDataOfSessionTableItem } = useDatabase();
   const { setShouldUpdatePinnedSessions } = useContext(PageContext);
@@ -40,12 +39,23 @@ export const usePinnedSessions = (
 
   const handleSetInitialPins = useCallback((sessionsTableData: SessionsTableDataType[]) => {
     const pinnedTableSessions = sessionsTableData.filter(({ isPinned }) => isPinned);
-
     setPinnedSessions(pinnedTableSessions.map((session) => createPin(session)));
   }, []);
 
+  const handleRemoveSessionPinTry = (id: string) => {
+    if (isSessionPinned(id, pinnedSessionIds)) {
+      setPinnedSessions(removeObjectFromArray(pinnedSessions, id, 'sessionId'));
+    }
+  };
+
   const handlePinSession = async (session: SessionsTableDataType) => {
-    if (!pinnedSessions || pinnedSessions.length < 4) {
+    const existingPin = pinnedSessions.find(({ sessionId }) => sessionId === session.id);
+
+    if (existingPin || !pinnedSessions || (!existingPin && pinnedSessions.length < 4)) {
+      // since the name is the only thing that can change on a pin
+      // if it's the same there is no need to update the pin
+      if (existingPin && existingPin.text === session.name) return;
+
       // update storage
       let hasError = null;
       try {
@@ -57,7 +67,21 @@ export const usePinnedSessions = (
         }
       } finally {
         if (!hasError) {
-          setPinnedSessions([createPin(session), ...(pinnedSessions || [])]);
+          // either find existing pin or create a new one
+          const pin = existingPin || createPin(session);
+          // remove the pin from pinned session data
+          const pinnedSessionsWithoutPin = removeObjectFromArray(
+            pinnedSessions,
+            session.id,
+            'sessionId'
+          );
+          // set pin as new pin with updated name
+          const pins = [
+            ...(pinnedSessionsWithoutPin || []),
+            { ...pin, text: session?.name || pin.text },
+          ];
+
+          setPinnedSessions(pins);
           setShouldUpdatePinnedSessions(true);
         }
       }
@@ -78,35 +102,9 @@ export const usePinnedSessions = (
       }
     } finally {
       if (!hasError) {
-        setPinnedSessions(removeObjectFromArray(pinnedSessions, id, 'sessionId'));
+        handleRemoveSessionPinTry(id);
         setShouldUpdatePinnedSessions(true);
       }
-    }
-  };
-
-  const handleSubmitSessionPinTry = (session: SessionsTableDataType) => {
-    if (isEditingPinnedSession) {
-      handlePinSession(session);
-      setIsEditingPinnedSession(false);
-    } else {
-      // update pin if not adding it back in in case name has changed
-      const pinnedSession = pinnedSessions.find(({ sessionId }) => sessionId === session.id);
-      if (pinnedSession) {
-        const updatedPin = { ...pinnedSession, ...{ text: session.name } };
-        const pinnedSessionsWithoutPin = removeObjectFromArray(
-          pinnedSessions,
-          session.id,
-          'sessionId'
-        );
-
-        setPinnedSessions([updatedPin, ...(pinnedSessionsWithoutPin || [])]);
-      }
-    }
-  };
-
-  const handleRemoveSessionPinTry = (id: string) => {
-    if (isSessionPinned(id, pinnedSessionIds)) {
-      setPinnedSessions(removeObjectFromArray(pinnedSessions, id, 'sessionId'));
     }
   };
 
@@ -117,8 +115,6 @@ export const usePinnedSessions = (
     setPinnedSessions,
     handlePinSession,
     handleUnpinSession,
-    setIsEditingPinnedSession,
-    handleSubmitSessionPinTry,
     handleRemoveSessionPinTry,
   };
 };

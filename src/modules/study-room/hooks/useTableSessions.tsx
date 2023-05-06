@@ -1,11 +1,13 @@
-import { useState, useEffect, useContext } from 'react';
-
+import { useState, useEffect, useMemo } from 'react';
 import { type SessionsTableDataType } from '@modules/study-room/types';
-import { sessionsWithNewSessionInOrder, sessionsOrderedByTopic } from '@modules/study-room/utils';
+import {
+  sessionsWithNewSessionInOrder,
+  sessionsOrderedByTopic,
+  isSessionPinned,
+} from '@modules/study-room/utils';
 import { removeObjectFromArray } from '@common/utils';
 import { type ModalDataType } from '@common/modal/Modal';
 import { useDatabase } from '@common/hooks';
-import { PageContext } from '@common/page/PageProvider';
 import { captureException } from '@common/error-monitoring';
 
 const REMOVE_SESSION_CONFIRMATION_STATIC_MODAL_DATA = {
@@ -21,9 +23,9 @@ const REMOVE_SESSION_CONFIRMATION_STATIC_MODAL_DATA = {
 
 export const useTableSessions = (
   handleSetInitialPins: (value: SessionsTableDataType[]) => void,
-  handleSubmitSessionPinTry: (value: SessionsTableDataType) => void,
+  pinnedSessionIds: string[],
+  handlePinSession: (value: SessionsTableDataType) => void,
   handleRemoveSessionPinTry: (value: string) => void,
-  handleIsEditingPinnedSession: (value: boolean) => void,
   handleSetModalData: (value?: ModalDataType) => void,
   handleModalOpen?: (value: boolean) => void
 ) => {
@@ -31,7 +33,13 @@ export const useTableSessions = (
   const [currentSession, setCurrentSession] = useState<SessionsTableDataType>();
   const [shouldShowSessionAction, setShouldShowSessionAction] = useState(false);
 
-  const { setShouldUpdatePinnedSessions } = useContext(PageContext);
+  // while I could update all sessions with getTableSessions method
+  // when a session is pinned/unpinned, in this case it is not
+  // performant considering a user could have many sessions in table
+  const isCurrentSessionPinned = useMemo(
+    () => (currentSession ? isSessionPinned(currentSession.id, pinnedSessionIds) : false),
+    [currentSession, pinnedSessionIds]
+  );
 
   const {
     getAllDBSessionTableItems,
@@ -49,7 +57,11 @@ export const useTableSessions = (
           // set pinned sessions
           handleSetInitialPins(sessionsTableItems);
           // set table session data ordered by topic for easier find
-          setSessions([...sessionsOrderedByTopic(sessionsTableItems)]);
+          setSessions([
+            ...(sessionsTableItems?.length
+              ? sessionsOrderedByTopic(sessionsTableItems)
+              : sessionsTableItems),
+          ]);
         }
       } catch (error) {
         if (error instanceof Error && error.message) {
@@ -63,7 +75,6 @@ export const useTableSessions = (
 
   const handleAddSession = (session: SessionsTableDataType) => {
     if (!sessions) return null;
-
     // add session in correct order based on topic
     const SessionsWithNewSession = sessionsWithNewSessionInOrder(session, sessions);
     setSessions(SessionsWithNewSession);
@@ -71,11 +82,14 @@ export const useTableSessions = (
     return SessionsWithNewSession;
   };
 
-  const handleSubmitSession = (session: SessionsTableDataType) => {
+  const handleSubmitSession = async (session: SessionsTableDataType) => {
     // save in storage
     let hasError = null;
     try {
-      addOrUpdateDBSessionTableItem(session);
+      await addOrUpdateDBSessionTableItem({
+        ...session,
+        isPinned: isCurrentSessionPinned,
+      });
     } catch (error) {
       hasError = error;
       if (error instanceof Error) {
@@ -91,10 +105,11 @@ export const useTableSessions = (
         setShouldShowSessionAction(false);
         // reset modal data if it had data previously
         handleSetModalData(undefined);
-        // update in sidebar in case name changed:
-        setShouldUpdatePinnedSessions(true);
-        // check if this was a pin edit if so, update the pin
-        handleSubmitSessionPinTry(session);
+
+        if (isCurrentSessionPinned) {
+          // check if this was a pin edit if so, update the pin
+          handlePinSession(session);
+        }
       }
     }
   };
@@ -112,6 +127,7 @@ export const useTableSessions = (
 
   const handleRemoveSessionFromUIOnly = (id: string, customSessions?: SessionsTableDataType[]) => {
     if (!sessions) return;
+
     setSessions(removeObjectFromArray(customSessions || sessions, id, 'id'));
   };
 
@@ -152,11 +168,12 @@ export const useTableSessions = (
     handleModalOpen?.(true);
   };
 
-  const handleEditSession = (id: string, isPin?: boolean) => {
+  const handleEditSession = (id: string) => {
     if (!sessions) return;
     // Acts as a cancel of the last edit.
     if (currentSession) {
       const currentSessions = handleAddSession(currentSession);
+      console.log('CURRENT_SESSION:', currentSessions);
       if (!currentSessions) return;
 
       handleRemoveSessionFromUIOnly(id, currentSessions);
@@ -165,10 +182,7 @@ export const useTableSessions = (
     }
     // set the session we are editing as the current session
     setCurrentSession(sessions.find((session) => session.id === id));
-
-    // if this session also is a pin, when submitting
-    // it will be added back to the pins as well
-    handleIsEditingPinnedSession(Boolean(isPin));
+    // handleRemoveSessionPinTry(id);
     // hide session add/edit form
     setShouldShowSessionAction(true);
   };

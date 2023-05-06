@@ -1,7 +1,8 @@
 import { getUniqId, capitalize } from '@common/utils';
 import { getRandomBrandColorData } from '@modules/study-room/utils';
-import { SyntheticEvent, useState, useMemo, useEffect } from 'react';
+import { SyntheticEvent, useState, useMemo, useEffect, useContext } from 'react';
 import { SessionsTableDataType, SessionFormDetailsType } from '@modules/study-room/types';
+import { AuthContext } from '@modules/auth/AuthProvider';
 
 export const useSessionAction = (
   handleSubmit: (value: SessionsTableDataType) => void,
@@ -11,6 +12,8 @@ export const useSessionAction = (
   const [topic, setTopic] = useState('');
   const [shouldShowEmptyNameWarning, setShouldShowEmptyNameWarning] = useState(false);
   const [shouldShowEmptyTopicWarning, setShouldShowEmptyTopicWarning] = useState(false);
+
+  const { userId } = useContext(AuthContext);
 
   useEffect(() => {
     if (currentSession) {
@@ -53,12 +56,14 @@ export const useSessionAction = (
 
     setShouldShowEmptyNameWarning(!name);
     setShouldShowEmptyTopicWarning(!topic);
-    if (!name || !topic) return;
+    if (!userId || !name || !topic) return;
 
     const randomBrandColor = getRandomBrandColorData();
 
+    console.log('FORM_ACTION_SUBMIT:', currentSession?.isPinned, currentSession);
     handleSubmit({
       id: currentSession?.id || getUniqId(),
+      userId,
       questions: currentSession?.questions || 0,
       color: currentSession?.color || randomBrandColor.background,
       textColor: currentSession?.textColor || randomBrandColor.text,

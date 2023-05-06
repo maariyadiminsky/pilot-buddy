@@ -24,8 +24,6 @@ const StudyRoom = () => {
     pinnedSessionIds,
     handlePinSession,
     handleUnpinSession,
-    setIsEditingPinnedSession,
-    handleSubmitSessionPinTry,
     handleRemoveSessionPinTry,
   } = usePinnedSessions(setModalData, modalRef?.current?.setModalOpen);
 
@@ -40,9 +38,9 @@ const StudyRoom = () => {
     handleRemoveSessionConfirm,
   } = useTableSessions(
     handleSetInitialPins,
-    handleSubmitSessionPinTry,
+    pinnedSessionIds,
+    handlePinSession,
     handleRemoveSessionPinTry,
-    setIsEditingPinnedSession,
     setModalData,
     modalRef?.current?.setModalOpen
   );
@@ -65,7 +63,7 @@ const StudyRoom = () => {
       {
         text: 'Edit',
         srText: 'Edit session',
-        handleOnClick: () => !currentSession && handleEditSession(id, true),
+        handleOnClick: () => !currentSession && handleEditSession(id),
       },
       {
         text: 'View',

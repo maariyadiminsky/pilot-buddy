@@ -17,7 +17,10 @@ const ProfileCard = ({ wrapperType, user }: ProfileCardProps) => (
         <div className="flex w-full items-center justify-between">
           <div className="flex min-w-0 h-16 items-center justify-between space-x-3">
             <div className="w-12">
-              <ProfilePicture wrapperType={wrapperType} src={user?.image} />
+              <ProfilePicture
+                wrapperType={wrapperType}
+                src={user ? user?.image || '' : undefined}
+              />
             </div>
             <div className="flex min-w-0 flex-1 flex-col">
               <div className="truncate text-sm font-medium text-gray-900">

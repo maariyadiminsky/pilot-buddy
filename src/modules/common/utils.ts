@@ -33,6 +33,19 @@ export const removeObjectFromArray = (
 
 export const removeLineBreaksFromText = (text: string) => text.replace(/(\r\n|\n|\r)/gm, ' ');
 
+export const sortItems = (items: any[], keyToSortBy: string) =>
+  items.sort((s1, s2) => {
+    if (s1[keyToSortBy] > s2[keyToSortBy]) {
+      return 1;
+    }
+
+    if (s1[keyToSortBy] < s2[keyToSortBy]) {
+      return -1;
+    }
+
+    return 0;
+  });
+
 export const jumpPageToTop = () => window.scrollTo(0, 0);
 
 // note: not full proof but helps with most common cases
