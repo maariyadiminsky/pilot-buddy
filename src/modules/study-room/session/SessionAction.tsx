@@ -1,7 +1,8 @@
-import BrandButton from '@modules/common/button/BrandButton';
+import { BrandButton } from '@common/button';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/20/solid';
-import { SessionsTableDataType } from '@modules/study-room/types';
 import { useSessionAction } from '@modules/study-room/hooks';
+import { SessionsTableDataType } from '@modules/study-room/types';
+import { FC } from 'react';
 
 interface SessionActionProps {
   currentSession?: SessionsTableDataType;
@@ -9,7 +10,11 @@ interface SessionActionProps {
   handleCancel: () => void;
 }
 
-const SessionAction = ({ currentSession, handleSubmit, handleCancel }: SessionActionProps) => {
+export const SessionAction: FC<SessionActionProps> = ({
+  currentSession,
+  handleSubmit,
+  handleCancel,
+}) => {
   const { formDetails, handleFormSubmit } = useSessionAction(handleSubmit, currentSession);
 
   return (
@@ -21,7 +26,7 @@ const SessionAction = ({ currentSession, handleSubmit, handleCancel }: SessionAc
               className="h-6 w-6 xl:h-5 xl:h5 flex-shrink-0 text-gray-900 hover:text-sky-600"
               aria-hidden="true"
             />
-            {currentSession ? 'Edit' : 'Add'} Session
+            {currentSession ? 'Edit' : 'Create a'} Session
           </h2>
           <div className="flex flex-row justify-end items-center space-x-3">
             <button type="button" onClick={() => handleCancel()}>
@@ -76,5 +81,3 @@ const SessionAction = ({ currentSession, handleSubmit, handleCancel }: SessionAc
     </>
   );
 };
-
-export default SessionAction;

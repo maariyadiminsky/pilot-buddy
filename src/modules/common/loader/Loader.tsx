@@ -1,3 +1,5 @@
+import { FC } from 'react';
+
 export enum LoaderSizeEnum {
   'small' = 'small',
   'medium' = 'medium',
@@ -20,7 +22,7 @@ interface LoaderProps {
   size?: keyof typeof LoaderSizeEnum;
 }
 
-const Loader = ({ size = LoaderSizeEnum.medium }: LoaderProps) => (
+export const Loader: FC<LoaderProps> = ({ size = LoaderSizeEnum.medium }) => (
   <div className="flex justify-center items-center h-full" role="status">
     <svg
       aria-hidden="true"
@@ -43,5 +45,3 @@ const Loader = ({ size = LoaderSizeEnum.medium }: LoaderProps) => (
     <span className="sr-only">Loading...</span>
   </div>
 );
-
-export default Loader;

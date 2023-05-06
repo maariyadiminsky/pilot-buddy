@@ -1,6 +1,6 @@
 import { HomeIcon } from '@heroicons/react/20/solid';
-import { ROUTES } from '@modules/app/constants';
-import { useMemo } from 'react';
+import { ROUTES } from '@modules/app';
+import { FC, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 interface PageType {
@@ -14,7 +14,7 @@ interface BreadcrumbsProps {
   sessionId?: string;
 }
 
-const Breadcrumbs = ({ pathname, sessionId }: BreadcrumbsProps) => {
+export const Breadcrumbs: FC<BreadcrumbsProps> = ({ pathname, sessionId }) => {
   const pages = useMemo(
     () =>
       [
@@ -76,5 +76,3 @@ const Breadcrumbs = ({ pathname, sessionId }: BreadcrumbsProps) => {
     </>
   );
 };
-
-export default Breadcrumbs;

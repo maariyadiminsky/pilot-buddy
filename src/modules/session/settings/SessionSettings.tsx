@@ -1,14 +1,12 @@
-import SettingToggle from '@modules/session/settings/SettingToggle';
-import SpeechSynthesis from '@modules/speech-synthesis/SpeechSynthesis';
-import TimeSelectMenu from './TimeSelectMenu';
-import OrderSelectMenu from './OrderSelectMenu';
-import { useState, useEffect } from 'react';
-import { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
-import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
-import { type SettingsType, type SettingsVoiceType } from '@modules/session/types';
-import { useDatabase } from '@common/hooks';
-import Loader from '@common/loader/Loader';
 import { captureException } from '@common/error-monitoring';
+import { SpeechSynthesis } from '@common/speech-synthesis';
+import { useDatabase } from '@common/hooks';
+import { Loader } from '@common/loader';
+import { type SelectMenuItemType } from '@common/types';
+import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
+import { OrderSelectMenu, TimeSelectMenu, SettingToggle } from '@modules/session/settings';
+import { type SettingsType, type SettingsVoiceType } from '@modules/session/types';
+import { FC, useState, useEffect } from 'react';
 
 interface SessionSettingProps {
   settings?: SettingsType;
@@ -19,14 +17,14 @@ interface SessionSettingProps {
   setSettingsTime: (value: SelectMenuItemType) => void;
 }
 
-const SessionSettings = ({
+export const SessionSettings: FC<SessionSettingProps> = ({
   settings,
   sessionId,
   isTimed,
   setIsTimed,
   settingsTime,
   setSettingsTime,
-}: SessionSettingProps) => {
+}) => {
   const [shouldReadOutLoud, setShouldReadOutLoud] = useState(false);
   const [shouldHaveOrder, setShouldHaveOrder] = useState(false);
   // time and order selected in settings
@@ -176,5 +174,3 @@ const SessionSettings = ({
     </div>
   );
 };
-
-export default SessionSettings;

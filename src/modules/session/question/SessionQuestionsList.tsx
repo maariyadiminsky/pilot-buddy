@@ -1,8 +1,8 @@
-import { Draggable, type DroppableProvidedProps } from 'react-beautiful-dnd';
-import { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
-import { type ReactNode } from 'react';
-import { SessionQuestionType } from '@modules/session/types';
+import { type SelectMenuItemType } from '@common/types';
 import { truthyString } from '@common/utils';
+import { SessionQuestionType } from '@modules/session/types';
+import { FC, type ReactNode } from 'react';
+import { Draggable, type DroppableProvidedProps } from 'react-beautiful-dnd';
 
 import {
   PencilSquareIcon,
@@ -27,14 +27,14 @@ const DragStyles = {
   isNotDragging: 'bg-white hover:bg-sky-50 border-t border-gray-200',
 };
 
-const SessionQuestionsList = ({
+export const SessionQuestionsList: FC<SessionQuestionsListProps> = ({
   placeholder,
   questions,
   settingsTime,
   isTimed,
   handleRemoveQuestion,
   handleEditQuestion,
-}: SessionQuestionsListProps) => (
+}) => (
   <ul className="h-full xl:overscroll-contain overflow-y-auto smooth-scroll pb-4">
     {questions.map(({ id, question, answer, time }, index) => {
       const correctTime = time || settingsTime;
@@ -144,5 +144,3 @@ const SessionQuestionsList = ({
     {placeholder}
   </ul>
 );
-
-export default SessionQuestionsList;

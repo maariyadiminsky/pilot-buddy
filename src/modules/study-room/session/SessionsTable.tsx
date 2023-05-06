@@ -1,6 +1,7 @@
-import SessionItem from '@modules/study-room/session/SessionItem';
+import { SessionItem } from '@modules/study-room/session';
 import { type SessionsTableDataType } from '@modules/study-room/types';
 import { isSessionPinned } from '@modules/study-room/utils';
+import { FC } from 'react';
 
 interface SessionsTableProps {
   currentSessionId?: string;
@@ -12,7 +13,7 @@ interface SessionsTableProps {
   handleRemoveSession: (id: string, questionsCount: number) => void;
 }
 
-const SessionsTable = ({
+export const SessionsTable: FC<SessionsTableProps> = ({
   currentSessionId,
   pinnedSessions,
   sessions,
@@ -20,7 +21,7 @@ const SessionsTable = ({
   handleUnpinSession,
   handleEditSession,
   handleRemoveSession,
-}: SessionsTableProps) => (
+}) => (
   <div className="px-4 sm:px-6 lg:px-8 h-full ">
     <div className="-mx-4 mt-10 sm:mx-0 rounded-t-md border border-slate-50 px-1 py-3 rounded-lg overflow-y-auto smooth-scroll h-[calc(100vh-100px)]">
       <table className="min-w-full divide-y divide-sky-600">
@@ -70,4 +71,3 @@ const SessionsTable = ({
     </div>
   </div>
 );
-export default SessionsTable;

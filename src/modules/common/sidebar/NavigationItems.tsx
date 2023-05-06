@@ -1,13 +1,14 @@
-import { truthyString } from '@common/utils';
-import { Link } from 'react-router-dom';
 import { type NavigationItem } from '@common/sidebar/types';
+import { truthyString } from '@common/utils';
+import { FC } from 'react';
+import { Link } from 'react-router-dom';
 
 interface NavigationItemsProps {
   navigation: NavigationItem[];
   handleSetCurrent: (value: number) => void;
 }
 
-const NavigationItems = ({ navigation, handleSetCurrent }: NavigationItemsProps) => (
+export const NavigationItems: FC<NavigationItemsProps> = ({ navigation, handleSetCurrent }) => (
   <>
     {navigation.map(({ id, route, current, name, icon }) => {
       const Icon = icon;
@@ -41,5 +42,3 @@ const NavigationItems = ({ navigation, handleSetCurrent }: NavigationItemsProps)
     })}
   </>
 );
-
-export default NavigationItems;

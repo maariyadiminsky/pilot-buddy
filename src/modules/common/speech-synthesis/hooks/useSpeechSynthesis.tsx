@@ -1,9 +1,9 @@
-import { SyntheticEvent, useState, useEffect } from 'react';
-import { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
-import { APPROVED_VOICES } from '@modules/speech-synthesis/constants';
-import { type SettingsVoiceType } from '@modules/session/types';
-import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
 import { captureException } from '@common/error-monitoring';
+import { APPROVED_VOICES } from '@common/speech-synthesis/constants';
+import { type SelectMenuItemType } from '@common/types';
+import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
+import { type SettingsVoiceType } from '@modules/session/types';
+import { SyntheticEvent, useState, useEffect } from 'react';
 
 // todo: issues on mobile - https://talkrapp.com/speechSynthesis.html
 export const useSpeechSynthesis = (

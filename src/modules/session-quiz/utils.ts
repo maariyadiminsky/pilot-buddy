@@ -1,4 +1,4 @@
-import { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
+import { type SelectMenuItemType } from '@common/types';
 import { SessionOrderEnum, type SessionQuestionType } from '@modules/session/types';
 import shuffle from 'lodash/shuffle';
 

@@ -1,4 +1,4 @@
-import { SyntheticEvent } from 'react';
+import { FC, SyntheticEvent } from 'react';
 
 interface RangeProps {
   title: string;
@@ -10,7 +10,7 @@ interface RangeProps {
   handleOnChange: (event: SyntheticEvent) => void;
 }
 
-const Range = ({ title, srText, value, min, max, step, handleOnChange }: RangeProps) => (
+export const Range: FC<RangeProps> = ({ title, srText, value, min, max, step, handleOnChange }) => (
   <div className="flex flex-row space-x-3 items-center pr-0.5">
     <label htmlFor={title} className="flex text-sm font-medium text-gray-700 w-12">
       {title}
@@ -25,5 +25,3 @@ const Range = ({ title, srText, value, min, max, step, handleOnChange }: RangePr
     />
   </div>
 );
-
-export default Range;

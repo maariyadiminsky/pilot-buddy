@@ -1,14 +1,14 @@
-import { useState, useEffect, useMemo } from 'react';
+import { captureException } from '@common/error-monitoring';
+import { useDatabase } from '@common/hooks';
+import { type ModalDataType } from '@common/types';
+import { removeObjectFromArray } from '@common/utils';
 import { type SessionsTableDataType } from '@modules/study-room/types';
 import {
   sessionsWithNewSessionInOrder,
   sessionsOrderedByTopic,
   isSessionPinned,
 } from '@modules/study-room/utils';
-import { removeObjectFromArray } from '@common/utils';
-import { type ModalDataType } from '@common/modal/Modal';
-import { useDatabase } from '@common/hooks';
-import { captureException } from '@common/error-monitoring';
+import { useState, useEffect, useMemo } from 'react';
 
 const REMOVE_SESSION_CONFIRMATION_STATIC_MODAL_DATA = {
   title: 'Are you sure?',

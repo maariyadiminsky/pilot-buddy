@@ -1,11 +1,12 @@
 import { ChatBubbleLeftEllipsisIcon, CheckBadgeIcon } from '@heroicons/react/20/solid';
 import { SessionQuestionWithAnswerType } from '@modules/session-quiz/types';
+import { FC } from 'react';
 
 interface SessionQuizResultsProps {
   questionsWithAnswers?: SessionQuestionWithAnswerType[];
 }
 
-const SessionQuizResults = ({ questionsWithAnswers }: SessionQuizResultsProps) => (
+export const SessionQuizResults: FC<SessionQuizResultsProps> = ({ questionsWithAnswers }) => (
   <div className="flex flex-col justify-center space-y-6 h-[calc(100vh-250px)] w-full px-12">
     <div className="flex text-xl font-bold text-gray-900 justify-center ">Results</div>
     <div className="overflow-y-auto smooth-scroll space-y-4">
@@ -37,5 +38,3 @@ const SessionQuizResults = ({ questionsWithAnswers }: SessionQuizResultsProps) =
     </div>
   </div>
 );
-
-export default SessionQuizResults;

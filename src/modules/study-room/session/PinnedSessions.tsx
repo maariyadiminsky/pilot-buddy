@@ -1,16 +1,21 @@
-import ActionMenu, { type MenuOptionType } from '@common/dropdown/ActionMenu';
-
+import { ActionMenu } from '@common/dropdown';
+import { type MenuOptionType } from '@common/types';
 import { truthyString } from '@common/utils';
-import { getInitials, getTextBasedOnAmount } from '@modules/study-room/utils';
 import { type PinnedSessionType } from '@modules/study-room/types';
+import { getInitials, getTextBasedOnAmount } from '@modules/study-room/utils';
+import { FC } from 'react';
 
-interface PinnedSessionProps {
+interface PinnedSessionsProps {
   title: string;
   sessions: PinnedSessionType[];
   getDropdownActions: (id: string, questionsCount: number) => MenuOptionType[];
 }
 
-const PinnedSession = ({ title, sessions, getDropdownActions }: PinnedSessionProps) => (
+export const PinnedSessions: FC<PinnedSessionsProps> = ({
+  title,
+  sessions,
+  getDropdownActions,
+}) => (
   <div className="mt-6 px-4 sm:px-6 lg:px-8">
     <h2 className="text-sm font-medium text-gray-900">{title}</h2>
     <ul className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-4">
@@ -40,5 +45,3 @@ const PinnedSession = ({ title, sessions, getDropdownActions }: PinnedSessionPro
     </ul>
   </div>
 );
-
-export default PinnedSession;

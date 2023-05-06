@@ -1,28 +1,9 @@
-import {
-  ReactNode,
-  Fragment,
-  ForwardedRef,
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
+import { type ModalRef, type ModalDataType } from '@common/types';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { Fragment, ForwardedRef, forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
-export interface ModalRef {
-  setModalOpen: (value: boolean) => void;
-}
-
-export interface ModalDataType {
-  title?: ReactNode;
-  children?: ReactNode;
-  confirmChildren?: ReactNode;
-  cancelChildren?: ReactNode;
-  handleConfirm?: () => void;
-}
-
-const Modal = (
+const ModalBase = (
   { title, children, confirmChildren, cancelChildren, handleConfirm }: ModalDataType,
   ref: ForwardedRef<ModalRef>
 ) => {
@@ -117,4 +98,4 @@ const Modal = (
   );
 };
 
-export default forwardRef(Modal);
+export const Modal = forwardRef(ModalBase);

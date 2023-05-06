@@ -1,5 +1,5 @@
-import { type PinnedSessionType, type SessionsTableDataType } from '@modules/study-room/types';
 import { sortItems } from '@common/utils';
+import { type PinnedSessionType, type SessionsTableDataType } from '@modules/study-room/types';
 
 interface COLOR_TYPE {
   background: string;

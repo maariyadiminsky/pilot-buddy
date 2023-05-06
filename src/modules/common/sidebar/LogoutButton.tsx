@@ -1,10 +1,11 @@
 import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
+import { FC } from 'react';
 
 interface LogoutButtonProps {
   handleLogout: () => void;
 }
 
-const LogoutButton = ({ handleLogout }: LogoutButtonProps) => (
+export const LogoutButton: FC<LogoutButtonProps> = ({ handleLogout }) => (
   <button
     type="button"
     onClick={handleLogout}
@@ -14,5 +15,3 @@ const LogoutButton = ({ handleLogout }: LogoutButtonProps) => (
     <span>Logout</span>
   </button>
 );
-
-export default LogoutButton;

@@ -1,7 +1,7 @@
-import App from 'modules/app/App';
+import { App } from '@modules/app';
+import { AuthProvider } from '@modules/auth';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import AuthProvider from '@modules/auth/AuthProvider';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import './index.css';

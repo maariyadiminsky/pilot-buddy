@@ -1,16 +1,16 @@
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useContext, useState, useEffect, useCallback } from 'react';
-import { BookOpenIcon, XMarkIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
-import { AuthContext } from '@modules/auth/AuthProvider';
-import ProfileCard from '@modules/profile/ProfileCard';
-import NavigationItems from '@common/sidebar/NavigationItems';
-import LogoutButton from '@common/sidebar/LogoutButton';
+import { captureException } from '@common/error-monitoring';
+import { LogoutButton } from '@common/sidebar/LogoutButton';
+import { NavigationItems } from '@common/sidebar/NavigationItems';
 import { type NavigationItem } from '@common/sidebar/types';
-import PinnedNavigation from '@common/sidebar/PinnedNavigation';
+import { PinnedNavigation } from '@common/sidebar/PinnedNavigation';
 import { useDatabase } from '@common/hooks';
 import { type UserType } from '@common/types';
+import { Dialog, Transition } from '@headlessui/react';
+import { BookOpenIcon, XMarkIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import { AuthContext } from '@modules/auth';
+import { ProfileCard } from '@modules/profile';
+import { FC, Fragment, useContext, useState, useEffect, useCallback } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { captureException } from '@modules/common/error-monitoring';
 
 const NAVIGATION_INITIAL = [
   { id: 0, name: 'Study Room', route: '/', icon: BookOpenIcon, current: true },
@@ -23,12 +23,12 @@ interface SidebarProps {
   setShouldUpdatePinnedSessions: (value: boolean) => void;
 }
 
-const Sidebar = ({
+export const Sidebar: FC<SidebarProps> = ({
   isSidebarOpen,
   setIsSidebarOpen,
   shouldUpdatePinnedSessions,
   setShouldUpdatePinnedSessions,
-}: SidebarProps) => {
+}) => {
   const { handleLogout } = useContext(AuthContext);
   const [user, setUser] = useState<UserType>();
   const [navigation, setNavigation] = useState<NavigationItem[]>(NAVIGATION_INITIAL);

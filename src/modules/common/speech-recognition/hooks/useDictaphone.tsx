@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { DictaphoneModalErrorType } from '@modules/speech-recognition/hooks/useInitializeSpeechToText';
-import { type SpeechRecognitionType } from '@modules/speech-recognition/types';
 import { captureException } from '@common/error-monitoring';
+import { DictaphoneModalErrorType } from '@common/speech-recognition/hooks/useInitializeSpeechToText';
+import { type SpeechRecognitionType } from '@common/speech-recognition/types';
+import { useEffect } from 'react';
 
 export const useDictaphone = (
   SpeechRecognition: SpeechRecognitionType,

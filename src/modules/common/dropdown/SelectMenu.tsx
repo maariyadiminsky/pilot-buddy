@@ -1,15 +1,9 @@
-import { type HeroIconType } from '@common/types';
+import { useMenuAdjustment } from '@common/hooks';
+import { type HeroIconType, type SelectMenuItemType } from '@common/types';
 import { truthyString } from '@common/utils';
 import { Listbox, Transition } from '@headlessui/react';
 import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
-import { Fragment, useState } from 'react';
-import { useMenuAdjustment } from '@common/hooks';
-
-export interface SelectMenuItemType {
-  id: number;
-  name: string;
-  description?: string;
-}
+import { FC, Fragment, useState } from 'react';
 
 interface SelectMenuProps {
   title?: string;
@@ -19,7 +13,13 @@ interface SelectMenuProps {
   options: SelectMenuItemType[];
 }
 
-const SelectMenu = ({ title, icon, options, currentlySelected, handleSelect }: SelectMenuProps) => {
+export const SelectMenu: FC<SelectMenuProps> = ({
+  title,
+  icon,
+  options,
+  currentlySelected,
+  handleSelect,
+}) => {
   // when user is opening, check if menu outside window bounds
   // if so, render at the top rather than default bottom
   const { menuRef, menuAdjustment, adjustMenuToWindowHeight } = useMenuAdjustment();
@@ -126,5 +126,3 @@ const SelectMenu = ({ title, icon, options, currentlySelected, handleSelect }: S
     </Listbox>
   );
 };
-
-export default SelectMenu;

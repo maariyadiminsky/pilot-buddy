@@ -1,12 +1,13 @@
+import { NavigationItems } from '@common/sidebar/NavigationItems';
 import { type NavigationItem } from '@common/sidebar/types';
-import NavigationItems from '@common/sidebar/NavigationItems';
+import { FC } from 'react';
 
 interface PinnedNavigationProps {
   navigation: NavigationItem[];
   handleSetCurrent: (value: number, isPinnedNav: true) => void;
 }
 
-const PinnedNavigation = ({ navigation, handleSetCurrent }: PinnedNavigationProps) =>
+export const PinnedNavigation: FC<PinnedNavigationProps> = ({ navigation, handleSetCurrent }) =>
   navigation?.length ? (
     <div className="px-4">
       <div className="flex justify-start items-end mt-6 pb-1 text-xs font-semibold">Pinned</div>
@@ -20,5 +21,3 @@ const PinnedNavigation = ({ navigation, handleSetCurrent }: PinnedNavigationProp
       </div>
     </div>
   ) : null;
-
-export default PinnedNavigation;

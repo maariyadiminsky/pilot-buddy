@@ -1,14 +1,13 @@
-import { removeObjectFromArray, jumpPageToTop } from '@common/utils';
-import EmptyDataAction from '@common/empty/EmptyDataAction';
-import QuestionAction from '@modules/session/question/SessionQuestionAction';
-import { useState, useEffect } from 'react';
-import { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
-import { DragDropContext, Droppable, type DropResult } from 'react-beautiful-dnd';
-import SessionQuestionsList from '@modules/session/question/SessionQuestionsList';
-import { SessionQuestionType } from '@modules/session/types';
-import { useDatabase, useDragAndDropWithStrictMode } from '@common/hooks';
-import Loader from '@common/loader/Loader';
+import { EmptyDataAction } from '@common/empty';
 import { captureException } from '@common/error-monitoring';
+import { useDatabase, useDragAndDropWithStrictMode } from '@common/hooks';
+import { Loader } from '@common/loader';
+import { type SelectMenuItemType } from '@common/types';
+import { removeObjectFromArray, jumpPageToTop } from '@common/utils';
+import { SessionQuestionAction, SessionQuestionsList } from '@modules/session/question';
+import { SessionQuestionType } from '@modules/session/types';
+import { FC, useState, useEffect } from 'react';
+import { DragDropContext, Droppable, type DropResult } from 'react-beautiful-dnd';
 
 interface SessionQuestionsProps {
   questionsData?: SessionQuestionType[];
@@ -25,7 +24,7 @@ const DropStyles = {
   isNotDragging: 'bg-white',
 };
 
-const SessionQuestions = ({
+export const SessionQuestions: FC<SessionQuestionsProps> = ({
   questionsData,
   sessionId,
   isTimed,
@@ -33,7 +32,7 @@ const SessionQuestions = ({
   shouldShowQuestionAction,
   setQuestionsCount,
   setShouldShowQuestionAction,
-}: SessionQuestionsProps) => {
+}) => {
   const [questions, setQuestions] = useState<SessionQuestionType[]>();
   const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>();
 
@@ -228,7 +227,7 @@ const SessionQuestions = ({
     <div className="bg-white xl:min-w-0 xl:flex-1 flex flex-col xl:h-[calc(100vh-75px)]">
       <div className="flex flex-col justify-start">
         {shouldShowQuestionAction && (
-          <QuestionAction
+          <SessionQuestionAction
             isTimed={isTimed}
             settingsTime={settingsTime}
             currentQuestion={currentQuestion}
@@ -241,5 +240,3 @@ const SessionQuestions = ({
     </div>
   );
 };
-
-export default SessionQuestions;

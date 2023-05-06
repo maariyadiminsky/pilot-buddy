@@ -1,5 +1,5 @@
 import { type HeroIconType } from '@common/types';
-import { type ReactNode } from 'react';
+import { FC, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
 interface SessionButtonProps {
@@ -19,7 +19,7 @@ interface SessionButtonWrapperProps {
   children: ReactNode;
 }
 
-const Button = ({ icon, srText, color, isDisabled, handleOnClick }: SessionButtonProps) => {
+const Button: FC<SessionButtonProps> = ({ icon, srText, color, isDisabled, handleOnClick }) => {
   const Icon = icon;
 
   return (
@@ -44,7 +44,7 @@ const Wrapper = ({ link, children }: SessionButtonWrapperProps) => (
   <Link to={link}>{children}</Link>
 );
 
-const SessionItemIconButton = (props: SessionItemButtonWithPossibleWrapperProps) => {
+export const SessionItemIconButton = (props: SessionItemButtonWithPossibleWrapperProps) => {
   const { link, isDisabled } = props;
 
   return link && !isDisabled ? (

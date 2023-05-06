@@ -1,17 +1,16 @@
-import { Menu } from '@headlessui/react';
-import { Bars3CenterLeftIcon } from '@heroicons/react/24/outline';
-import ProfileDropdown from '@modules/profile/ProfileDropdown';
-import ProfilePicture from '@modules/profile/ProfilePicture';
 import { useDatabase } from '@common/hooks';
 import { type UserType } from '@common/types';
-import { useState, useEffect, useCallback } from 'react';
+import { Menu } from '@headlessui/react';
+import { Bars3CenterLeftIcon } from '@heroicons/react/24/outline';
+import { ProfileDropdown, ProfilePicture } from '@modules/profile';
+import { FC, useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
 interface MobileHeaderProps {
   setIsSidebarOpen: (value: boolean) => void;
 }
 
-const MobileHeader = ({ setIsSidebarOpen }: MobileHeaderProps) => {
+export const MobileHeader: FC<MobileHeaderProps> = ({ setIsSidebarOpen }) => {
   const [user, setUser] = useState<UserType>();
 
   const { pathname } = useLocation();
@@ -58,5 +57,3 @@ const MobileHeader = ({ setIsSidebarOpen }: MobileHeaderProps) => {
     </div>
   );
 };
-
-export default MobileHeader;

@@ -1,20 +1,21 @@
-import { ArrowUturnLeftIcon } from '@heroicons/react/20/solid';
-import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks';
-import Dictaphone from '@modules/speech-recognition/Dictaphone';
-import { SyntheticEvent, useState, useEffect, useMemo, useRef } from 'react';
-import Modal, { type ModalRef } from '@common/modal/Modal';
-import { useParams, useNavigate } from 'react-router-dom';
-import { type SessionDataType, type SessionQuestionType } from '@modules/session/types';
-import SessionQuizResults from '@modules/session-quiz/SessionQuizResults';
-import { DATABASE_ERROR, useDatabase, usePrevious } from '@common/hooks';
-import { getQuestionOrder, getTimeData } from '@modules/session-quiz/utils';
-import { SessionQuestionWithAnswerType } from '@modules/session-quiz/types';
-import { useSpeechSynthesis } from '@modules/speech-synthesis/hooks';
-import Loader from '@common/loader/Loader';
-import { ROUTES } from '@modules/app/constants';
 import { captureException } from '@common/error-monitoring';
+import { DATABASE_ERROR, useDatabase, usePrevious } from '@common/hooks';
+import { Loader } from '@common/loader';
+import { Modal } from '@common/modal';
+import { Dictaphone } from '@common/speech-recognition';
+import { useInitializeSpeechToText } from '@common/speech-recognition/hooks';
+import { useSpeechSynthesis } from '@common/speech-synthesis/hooks';
+import { type ModalRef } from '@common/types';
+import { ArrowUturnLeftIcon } from '@heroicons/react/20/solid';
+import { ROUTES } from '@modules/app';
+import { type SessionDataType, type SessionQuestionType } from '@modules/session/types';
+import { SessionQuizResults } from '@modules/session-quiz/SessionQuizResults';
+import { SessionQuestionWithAnswerType } from '@modules/session-quiz/types';
+import { getQuestionOrder, getTimeData } from '@modules/session-quiz/utils';
+import { FC, SyntheticEvent, useState, useEffect, useMemo, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
-const SessionQuiz = () => {
+export const SessionQuiz: FC = () => {
   const modalRef = useRef<ModalRef>(null);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -302,5 +303,3 @@ const SessionQuiz = () => {
     </div>
   );
 };
-
-export default SessionQuiz;

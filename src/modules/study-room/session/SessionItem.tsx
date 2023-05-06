@@ -1,5 +1,4 @@
 import { truthyString } from '@common/utils';
-import { type SessionsTableDataType } from '@modules/study-room/types';
 import {
   PlayCircleIcon,
   PencilSquareIcon,
@@ -9,6 +8,8 @@ import {
   BookmarkSlashIcon,
 } from '@heroicons/react/20/solid';
 import SessionItemIconButton from '@modules/study-room/session/SessionItemIconButton';
+import { type SessionsTableDataType } from '@modules/study-room/types';
+import { FC } from 'react';
 
 interface SessionItemProps extends SessionsTableDataType {
   index: number;
@@ -20,7 +21,7 @@ interface SessionItemProps extends SessionsTableDataType {
   handleRemoveSession: (id: string, questionsCount: number) => void;
 }
 
-const SessionItem = ({
+export const SessionItem: FC<SessionItemProps> = ({
   id,
   userId,
   name,
@@ -35,7 +36,7 @@ const SessionItem = ({
   handleUnpinSession,
   handleEditSession,
   handleRemoveSession,
-}: SessionItemProps) => {
+}) => {
   const Icon = isSessionPinned ? BookmarkSlashIcon : BookmarkIcon;
 
   const handlePinMethod = () => {
@@ -125,4 +126,3 @@ const SessionItem = ({
     </tr>
   );
 };
-export default SessionItem;

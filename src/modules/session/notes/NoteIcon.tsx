@@ -1,5 +1,6 @@
 import { truthyString } from '@common/utils';
 import { getNoteIconFromName } from '@modules/session/constants';
+import { FC } from 'react';
 
 interface NoteIconProps {
   bgColor: string;
@@ -9,13 +10,13 @@ interface NoteIconProps {
   shouldIncludeName?: boolean;
 }
 
-const NoteIcon = ({
+export const NoteIcon: FC<NoteIconProps> = ({
   bgColor,
   iconColor,
   name,
   className,
   shouldIncludeName = false,
-}: NoteIconProps) => {
+}) => {
   const Icon = getNoteIconFromName(name);
 
   return (
@@ -39,5 +40,3 @@ const NoteIcon = ({
     </div>
   );
 };
-
-export default NoteIcon;

@@ -1,18 +1,20 @@
+import { EmptyDataAction } from '@common/empty';
+import { Loader } from '@common/loader';
+import { Modal } from '@common/modal';
+import { PageContext } from '@common/page';
+import {
+  type BrandButtonType,
+  type MenuOptionType,
+  type ModalRef,
+  type ModalDataType,
+} from '@common/types';
 import { PlusIcon, BookmarkSlashIcon } from '@heroicons/react/20/solid';
-import PinnedSessions from '@modules/study-room/session/PinnedSessions';
-import SessionsTable from '@modules/study-room/session/SessionsTable';
-import { useMemo, useEffect, useState, useRef, useContext } from 'react';
-import { PageContext } from '@common/page/PageProvider';
-import { type BrandButtonType } from '@modules/common/button/BrandButton';
-import SessionAction from '@modules/study-room/session/SessionAction';
-import { useNavigate } from 'react-router-dom';
-import Modal, { type ModalRef, type ModalDataType } from '@common/modal/Modal';
-import EmptyDataAction from '@common/empty/EmptyDataAction';
-import { type MenuOptionType } from '@common/dropdown/ActionMenu';
 import { usePinnedSessions, useTableSessions } from '@modules/study-room/hooks';
-import Loader from '@common/loader/Loader';
+import { PinnedSessions, SessionsTable, SessionAction } from '@modules/study-room/session';
+import { FC, useMemo, useEffect, useState, useRef, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const StudyRoom = () => {
+export const StudyRoom: FC = () => {
   const modalRef = useRef<ModalRef>(null);
   const [modalData, setModalData] = useState<ModalDataType>();
 
@@ -135,9 +137,9 @@ const StudyRoom = () => {
           ) : null}
           {!sessions?.length && !shouldShowSessionAction && (
             <EmptyDataAction
-              title="Add your first session"
+              title="Create your first session"
               description="Let's create your first study session!"
-              buttonText="Add Session"
+              buttonText="Create Session"
               handleOnClick={() => setShouldShowSessionAction(true)}
             />
           )}
@@ -147,5 +149,3 @@ const StudyRoom = () => {
     </>
   );
 };
-
-export default StudyRoom;

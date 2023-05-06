@@ -1,4 +1,4 @@
-import { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
+import { type SelectMenuItemType } from '@common/types';
 
 export enum SessionTimeEnum {
   '5 Seconds' = '5 Seconds',

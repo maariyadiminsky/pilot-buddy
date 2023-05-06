@@ -1,19 +1,12 @@
-import { type HeroIconType } from '@common/types';
+import { useMenuAdjustment } from '@common/hooks';
+import { type MenuOptionType } from '@common/types';
 import { truthyString } from '@common/utils';
 import { Menu, Transition } from '@headlessui/react';
 import { EllipsisVerticalIcon, BarsArrowUpIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
-import { useMenuAdjustment } from '@common/hooks';
-import { Fragment } from 'react';
+import { FC, Fragment } from 'react';
 
-export enum DropdownTypeEnum {
+enum DropdownTypeEnum {
   sort = 'sort',
-}
-
-export interface MenuOptionType {
-  text: string;
-  srText: string;
-  icon?: HeroIconType;
-  handleOnClick?: () => void;
 }
 
 interface ActionMenuProps {
@@ -24,7 +17,13 @@ interface ActionMenuProps {
   type?: keyof typeof DropdownTypeEnum;
 }
 
-const ActionMenu = ({ name, actions, className, type, useCustomPosition }: ActionMenuProps) => {
+export const ActionMenu: FC<ActionMenuProps> = ({
+  name,
+  actions,
+  className,
+  type,
+  useCustomPosition,
+}) => {
   const { menuRef, menuAdjustment, adjustMenuToWindowWidth } = useMenuAdjustment();
 
   const renderButton = () => {
@@ -122,4 +121,3 @@ const ActionMenu = ({ name, actions, className, type, useCustomPosition }: Actio
     </Menu>
   );
 };
-export default ActionMenu;

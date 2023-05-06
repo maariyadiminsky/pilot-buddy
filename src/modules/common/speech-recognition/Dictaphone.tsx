@@ -1,8 +1,9 @@
+import { useDictaphone } from '@common/speech-recognition/hooks';
+import { type DictaphoneModalErrorType } from '@common/speech-recognition/hooks/useInitializeSpeechToText';
+import { type SpeechRecognitionType, MicrophoneSize } from '@common/speech-recognition/types';
 import { truthyString } from '@common/utils';
 import { MicrophoneIcon } from '@heroicons/react/20/solid';
-import { DictaphoneModalErrorType } from '@modules/speech-recognition/hooks/useInitializeSpeechToText';
-import { useDictaphone } from '@modules/speech-recognition/hooks';
-import { type SpeechRecognitionType, MicrophoneSize } from '@modules/speech-recognition/types';
+import { FC } from 'react';
 
 interface DictaphoneProps {
   SpeechRecognition: SpeechRecognitionType;
@@ -26,7 +27,7 @@ const getMicrophoneSize = (size: string = MicrophoneSize.sm) => {
   }
 };
 
-const Dictaphone = ({
+export const Dictaphone: FC<DictaphoneProps> = ({
   SpeechRecognition,
   isOn,
   isDisabled,
@@ -36,7 +37,7 @@ const Dictaphone = ({
   setModalOpen,
   microphoneSize,
   time,
-}: DictaphoneProps) => {
+}) => {
   const { startListeningToAudio, stopListeningToAudio } = useDictaphone(
     SpeechRecognition,
     isOn,
@@ -68,4 +69,3 @@ const Dictaphone = ({
     </>
   );
 };
-export default Dictaphone;

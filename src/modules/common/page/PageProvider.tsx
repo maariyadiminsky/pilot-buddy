@@ -1,11 +1,10 @@
-import { useState, useMemo, createContext, useContext } from 'react';
-import { AuthContext } from '@modules/auth/AuthProvider';
-import { ROUTES, ROUTE_PATHS } from '@modules/app/constants';
-import Sidebar from '@modules/common/sidebar/Sidebar';
-import MobileHeader from '@common/header/MobileHeader';
-import HeaderWithActions from '@common/header/HeaderWithActions';
-import Breadcrumbs from '@modules/common/page/Breadcrumbs';
-import { type BrandButtonType } from '@modules/common/button/BrandButton';
+import { MobileHeader, HeaderWithActions } from '@common/header';
+import { Sidebar } from '@common/sidebar';
+import { type BrandButtonType } from '@common/types';
+import { Breadcrumbs } from '@common/page';
+import { ROUTES, ROUTE_PATHS } from '@modules/app';
+import { AuthContext } from '@modules/auth';
+import { FC, useState, useMemo, createContext, useContext } from 'react';
 import { Outlet, useParams, useLocation } from 'react-router-dom';
 
 interface PageContextProps {
@@ -24,7 +23,7 @@ export const PageContext = createContext<PageContextProps>({
   setShouldUpdatePinnedSessions: () => {},
 });
 
-const PageProvider = () => {
+export const PageProvider: FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [pageTitle, setPageTitle] = useState('');
   const [pageHeaderActions, setPageHeaderActions] = useState<BrandButtonType[]>();
@@ -88,5 +87,3 @@ const PageProvider = () => {
     </div>
   );
 };
-
-export default PageProvider;

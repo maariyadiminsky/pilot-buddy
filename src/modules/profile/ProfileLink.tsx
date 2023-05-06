@@ -1,8 +1,8 @@
-import { Menu } from '@headlessui/react';
-import { truthyString } from '@common/utils';
-import { Link } from 'react-router-dom';
 import { type HeroIconType } from '@common/types';
-import { ReactNode } from 'react';
+import { truthyString } from '@common/utils';
+import { Menu } from '@headlessui/react';
+import { FC, ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 
 interface ProfileLinkProps {
   text: string;
@@ -30,7 +30,13 @@ const InternalLinkWrapper = ({ link, children, className }: LinkWrapperProps) =>
   </Link>
 );
 
-const ProfileLink = ({ isExternalLink, text, link, icon, iconClassName }: ProfileLinkProps) => {
+export const ProfileLink: FC<ProfileLinkProps> = ({
+  isExternalLink,
+  text,
+  link,
+  icon,
+  iconClassName,
+}) => {
   const Icon = icon;
   const LinkComponent = isExternalLink ? ExternalLinkWrapper : InternalLinkWrapper;
 
@@ -53,5 +59,3 @@ const ProfileLink = ({ isExternalLink, text, link, icon, iconClassName }: Profil
     </Menu.Item>
   );
 };
-
-export default ProfileLink;

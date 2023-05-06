@@ -1,7 +1,8 @@
-import { ReactNode, useState, useEffect, useMemo, createContext } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { getSessionToken, getCookie, setCookie, removeCookie } from '@modules/auth/utils';
 import { logRocketIdentifyUser } from '@common/error-monitoring';
+import { getUniqId } from '@common/utils';
+import { getCookie, setCookie, removeCookie } from '@modules/auth/utils';
+import { ReactNode, FC, useState, useEffect, useMemo, createContext } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
   userId?: string;
@@ -27,7 +28,7 @@ export const AuthContext = createContext<AuthContextType>({
 
 const USER_ID = 'userId';
 const SESSION_COOKIE = 'pilot_buddy';
-const AuthProvider = ({ children }: AuthContextProps) => {
+export const AuthProvider: FC<AuthContextProps> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [userId, setUserId] = useState('');
@@ -37,11 +38,11 @@ const AuthProvider = ({ children }: AuthContextProps) => {
 
   const handleLogin = (user: string, email: string) => {
     // set for logged in status
-    setCookie(SESSION_COOKIE, getSessionToken(), { path: '/', secure: true });
+    setCookie(SESSION_COOKIE, getUniqId(), { path: '/', secure: true });
     localStorage.setItem(USER_ID, user);
     setUserId(user);
     // identify for error handling
-    logRocketIdentifyUser(userId, { email });
+    logRocketIdentifyUser(user, { email });
     // route to homepage
     navigate('/');
   };
@@ -107,5 +108,3 @@ const AuthProvider = ({ children }: AuthContextProps) => {
 
   return <AuthContext.Provider value={contextValues}>{children}</AuthContext.Provider>;
 };
-
-export default AuthProvider;

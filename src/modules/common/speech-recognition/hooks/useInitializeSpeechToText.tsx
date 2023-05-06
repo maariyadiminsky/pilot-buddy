@@ -1,8 +1,8 @@
-import { type ModalDataType } from '@common/modal/Modal';
+import { captureException } from '@common/error-monitoring';
+import { type ModalDataType } from '@common/types';
 import { createSpeechlySpeechRecognition } from '@speechly/speech-recognition-polyfill';
 import { useState, useEffect } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-import { captureException } from '@common/error-monitoring';
 
 export enum DictaphoneModalErrorType {
   permission = 'permission',

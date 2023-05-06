@@ -1,16 +1,15 @@
+import { WrapperTypeEnum, type UserType } from '@common/types';
 import { Menu } from '@headlessui/react';
 import { ChevronUpDownIcon } from '@heroicons/react/24/outline';
-
-import ProfileDropdown from '@modules/profile/ProfileDropdown';
-import ProfilePicture from '@modules/profile/ProfilePicture';
-import { WrapperTypeEnum, type UserType } from '@common/types';
+import { ProfileDropdown, ProfilePicture } from '@modules/profile';
+import { FC } from 'react';
 
 interface ProfileCardProps {
   wrapperType: keyof typeof WrapperTypeEnum;
   user?: UserType;
 }
 
-const ProfileCard = ({ wrapperType, user }: ProfileCardProps) => (
+export const ProfileCard: FC<ProfileCardProps> = ({ wrapperType, user }) => (
   <Menu as="div" className="relative inline-block px-3 text-left">
     <div>
       <Menu.Button className="group w-full rounded-md bg-gray-100 px-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none border border-gray-200 focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 focus:ring-offset-gray-200">
@@ -40,5 +39,3 @@ const ProfileCard = ({ wrapperType, user }: ProfileCardProps) => (
     <ProfileDropdown {...{ wrapperType }} />
   </Menu>
 );
-
-export default ProfileCard;

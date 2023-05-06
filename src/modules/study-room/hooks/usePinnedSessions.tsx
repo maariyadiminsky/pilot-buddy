@@ -1,11 +1,11 @@
-import { type SessionsTableDataType, type PinnedSessionType } from '@modules/study-room/types';
-import { useCallback, useState, useMemo, useContext } from 'react';
-import { getPinnedSessionsIds, isSessionPinned } from '@modules/study-room/utils';
-import { removeObjectFromArray, getUniqId } from '@common/utils';
-import { type ModalDataType } from '@common/modal/Modal';
-import { PageContext } from '@common/page/PageProvider';
-import { useDatabase } from '@common/hooks';
 import { captureException } from '@common/error-monitoring';
+import { useDatabase } from '@common/hooks';
+import { PageContext } from '@common/page';
+import { type ModalDataType } from '@common/types';
+import { removeObjectFromArray, getUniqId } from '@common/utils';
+import { type SessionsTableDataType, type PinnedSessionType } from '@modules/study-room/types';
+import { getPinnedSessionsIds, isSessionPinned } from '@modules/study-room/utils';
+import { useCallback, useState, useMemo, useContext } from 'react';
 
 const createPin = ({ id, questions, name, color }: SessionsTableDataType) => ({
   id: getUniqId(),

@@ -1,7 +1,8 @@
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Link } from 'react-router-dom';
+import { FC } from 'react';
 
-const Homepage = () => (
+export const Homepage: FC = () => (
   <div className="relative isolate overflow-hidden bg-white h-screen">
     <svg
       className="absolute inset-0 -z-10 h-full w-full stroke-gray-300 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
@@ -68,5 +69,3 @@ const Homepage = () => (
     </div>
   </div>
 );
-
-export default Homepage;

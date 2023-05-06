@@ -1,12 +1,12 @@
-import { openDB, IDBPDatabase, IDBPObjectStore } from 'idb';
-import { type SessionsTableDataType } from '@modules/study-room/types';
-import { type SessionDataType } from '@modules/session/types';
-import { useState, useCallback, useContext } from 'react';
-import { getInitialSessionData } from '@modules/session/constants';
-import { AuthContext } from '@modules/auth/AuthProvider';
-import { useNavigate } from 'react-router-dom';
 import { logError, captureException } from '@common/error-monitoring';
 import { type UserType } from '@common/types';
+import { AuthContext } from '@modules/auth';
+import { getInitialSessionData } from '@modules/session/constants';
+import { type SessionDataType } from '@modules/session/types';
+import { type SessionsTableDataType } from '@modules/study-room/types';
+import { openDB, IDBPDatabase, IDBPObjectStore } from 'idb';
+import { useState, useCallback, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export interface DatabaseType extends IDBPDatabase<DatabaseType> {
   users: IDBPObjectStore<UserType, string>;

@@ -1,5 +1,6 @@
+import { BrandButton } from '@common/button';
 import { PlusIcon } from '@heroicons/react/20/solid';
-import BrandButton from '@modules/common/button/BrandButton';
+import { FC } from 'react';
 
 interface EmptyDataActionsProps {
   title: string;
@@ -8,12 +9,12 @@ interface EmptyDataActionsProps {
   handleOnClick: (value: boolean) => void;
 }
 
-const EmptyDataAction = ({
+export const EmptyDataAction: FC<EmptyDataActionsProps> = ({
   title,
   description,
   buttonText,
   handleOnClick,
-}: EmptyDataActionsProps) => (
+}) => (
   <div className="flex flex-col justify-start items-center text-center my-12 h-full bg-inherit">
     <svg
       fill="none"
@@ -43,5 +44,3 @@ const EmptyDataAction = ({
     </div>
   </div>
 );
-
-export default EmptyDataAction;

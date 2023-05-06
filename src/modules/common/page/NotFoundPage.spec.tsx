@@ -1,5 +1,5 @@
 import { render, screen } from '@modules/test/setup';
-import NotFoundPage from './NotFoundPage';
+import { NotFoundPage } from '@common/page';
 
 it('renders error message', () => {
   render(<NotFoundPage />);

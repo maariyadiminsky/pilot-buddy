@@ -1,19 +1,16 @@
-import { ROUTES } from '@modules/app/constants';
-import NotFoundPage from '@modules/common/page/page-status/NotFoundPage';
-import Session from '@modules/session/Session';
-import SessionQuiz from '@modules/session-quiz/SessionQuiz';
-import StudyRoom from '@modules/study-room/StudyRoom';
-import Homepage from '@modules/home/Homepage';
-import Login from '@modules/auth/Login';
+import { Loader } from '@common/loader';
+import { PageProvider, NotFoundPage } from '@common/page';
+import { ROUTES } from '@modules/app';
+import { AuthContext, PrivateRoutes, Login } from '@modules/auth';
+import { Homepage } from '@modules/home';
+import { Profile } from '@modules/profile';
+import { Session } from '@modules/session';
+import { SessionQuiz } from '@modules/session-quiz';
+import { StudyRoom } from '@modules/study-room';
 import { FC, useContext } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { AuthContext } from '@modules/auth/AuthProvider';
-import PrivateRoutes from '@modules/auth/PrivateRoutes';
-import Loader from '@common/loader/Loader';
-import PageProvider from '@common/page/PageProvider';
-import Profile from '@modules/profile/Profile';
 
-const App: FC = () => {
+export const App: FC = () => {
   const { isLoggedIn, isAuthLoading } = useContext(AuthContext);
 
   return isAuthLoading ? (
@@ -33,5 +30,3 @@ const App: FC = () => {
     </Routes>
   );
 };
-
-export default App;

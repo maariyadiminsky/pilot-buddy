@@ -1,9 +1,10 @@
-import Range from '@common/range/Range';
-import { useSpeechSynthesis } from '@modules/speech-synthesis/hooks';
-import VoiceSelectMenu from '@modules/speech-synthesis/VoiceSelectMenu';
-import BrandButton, { type BrandButtonType } from '@modules/common/button/BrandButton';
+import { BrandButton } from '@common/button';
+import { Range } from '@common/range';
+import { VoiceSelectMenu } from '@common/speech-synthesis';
+import { useSpeechSynthesis } from '@common/speech-synthesis/hooks';
 import { type SettingsVoiceType } from '@modules/session/types';
-import { useMemo } from 'react';
+import { type BrandButtonType } from '@common/types';
+import { FC, useMemo } from 'react';
 
 interface SpeechSynthesisProps {
   text: string;
@@ -11,7 +12,11 @@ interface SpeechSynthesisProps {
   setSettingsVoice: (value: SettingsVoiceType) => void;
 }
 
-const SpeechSynthesis = ({ text, settingsVoice, setSettingsVoice }: SpeechSynthesisProps) => {
+export const SpeechSynthesis: FC<SpeechSynthesisProps> = ({
+  text,
+  settingsVoice,
+  setSettingsVoice,
+}) => {
   const {
     voice,
     isPaused,
@@ -95,5 +100,3 @@ const SpeechSynthesis = ({ text, settingsVoice, setSettingsVoice }: SpeechSynthe
     </div>
   );
 };
-
-export default SpeechSynthesis;

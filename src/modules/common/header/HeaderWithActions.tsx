@@ -1,11 +1,13 @@
-import BrandButton, { type BrandButtonType } from '@modules/common/button/BrandButton';
+import { BrandButton } from '@common/button';
+import { type BrandButtonType } from '@common/types';
+import { FC } from 'react';
 
 interface HeaderWithActionsProps {
   title?: string;
   actions?: BrandButtonType[];
 }
 
-const HeaderWithActions = ({ title, actions }: HeaderWithActionsProps) => (
+export const HeaderWithActions: FC<HeaderWithActionsProps> = ({ title, actions }) => (
   <div
     className={`border-b border-gray-200 px-4 py-4 md:py-0 md:h-16 ${
       actions && actions?.length >= 2 ? 'sm:flex' : 'flex'
@@ -23,5 +25,3 @@ const HeaderWithActions = ({ title, actions }: HeaderWithActionsProps) => (
     </div>
   </div>
 );
-
-export default HeaderWithActions;

@@ -1,11 +1,4 @@
 import {
-  SessionTimeEnum,
-  SessionOrderEnum,
-  NoteEnum,
-  type SessionDataType,
-} from '@modules/session/types';
-
-import {
   ExclamationTriangleIcon,
   InformationCircleIcon,
   QuestionMarkCircleIcon,
@@ -13,6 +6,12 @@ import {
   LightBulbIcon,
   MapPinIcon,
 } from '@heroicons/react/20/solid';
+import {
+  SessionTimeEnum,
+  SessionOrderEnum,
+  NoteEnum,
+  type SessionDataType,
+} from '@modules/session/types';
 
 export const TIME_OPTIONS = [
   { id: 0, name: SessionTimeEnum['5 Seconds'] },

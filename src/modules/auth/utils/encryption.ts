@@ -1,5 +1,5 @@
+import { logError } from '@common/error-monitoring';
 import CryptoJS from 'crypto-js';
-import { logError } from '@modules/common/error-monitoring';
 
 const getEncryptionKey = () => {
   if (!process.env.REACT_APP_DB_ENCRYPTION_KEY) {

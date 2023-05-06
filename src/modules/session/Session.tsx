@@ -1,19 +1,18 @@
-import { PlayCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
-import SessionNotes from '@modules/session/notes/SessionNotes';
-import SessionQuestions from '@modules/session/question/SessionQuestions';
-import SessionSettings from '@modules/session/settings/SessionSettings';
-import { type BrandButtonType } from '@modules/common/button/BrandButton';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useMemo, useEffect, useContext } from 'react';
-import { PageContext } from '@common/page/PageProvider';
-import { DATABASE_ERROR, useDatabase } from '@common/hooks';
-import { type SessionDataType } from '@modules/session/types';
-import { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
-import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
-import { ROUTES } from '@modules/app/constants';
 import { captureException } from '@common/error-monitoring';
+import { DATABASE_ERROR, useDatabase } from '@common/hooks';
+import { type SelectMenuItemType, type BrandButtonType } from '@common/types';
+import { PageContext } from '@common/page';
+import { PlayCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
+import { ROUTES } from '@modules/app';
+import { SessionQuestions } from '@modules/session/question';
+import { SessionNotes } from '@modules/session/notes';
+import { SessionSettings } from '@modules/session/settings';
+import { type SessionDataType } from '@modules/session/types';
+import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
+import { FC, useState, useMemo, useEffect, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
-const Session = () => {
+export const Session: FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -119,5 +118,3 @@ const Session = () => {
     </>
   );
 };
-
-export default Session;

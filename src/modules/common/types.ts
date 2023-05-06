@@ -1,3 +1,4 @@
+import { type BrandButtonProps } from '@common/button';
 import {
   PropsWithChildren,
   ForwardRefExoticComponent,
@@ -20,6 +21,33 @@ export type HeroIconType = ForwardRefExoticComponent<
     titleId?: string;
   } & RefAttributes<SVGSVGElement>
 >;
+
+export type BrandButtonType = BrandButtonProps;
+
+export interface MenuOptionType {
+  text: string;
+  srText: string;
+  icon?: HeroIconType;
+  handleOnClick?: () => void;
+}
+
+export interface SelectMenuItemType {
+  id: number;
+  name: string;
+  description?: string;
+}
+
+export interface ModalRef {
+  setModalOpen: (value: boolean) => void;
+}
+
+export interface ModalDataType {
+  title?: ReactNode;
+  children?: ReactNode;
+  confirmChildren?: ReactNode;
+  cancelChildren?: ReactNode;
+  handleConfirm?: () => void;
+}
 
 // database
 export interface UserType {

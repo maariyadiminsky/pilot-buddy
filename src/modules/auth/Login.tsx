@@ -1,18 +1,18 @@
-import { SyntheticEvent, useState, useContext } from 'react';
+import { logError } from '@common/error-monitoring';
+import { DATABASE_ERROR, useDatabase } from '@common/hooks';
+import { getUniqId } from '@common/utils';
+import { AuthContext } from '@modules/auth';
+import { encryptData, decryptData } from '@modules/auth/utils';
 import bcrypt from 'bcryptjs';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
-import { encryptData, decryptData } from '@modules/auth/utils';
-import { AuthContext } from '@modules/auth/AuthProvider';
-import { DATABASE_ERROR, useDatabase } from '@common/hooks';
-import { logError } from '@common/error-monitoring';
-import { getUniqId } from '@common/utils';
+import { FC, SyntheticEvent, useState, useContext } from 'react';
 
 const limiter = new RateLimiterMemory({
   points: 3, // 3 login attempts per minute
   duration: 60, // Per minute
 });
 
-const Login = () => {
+export const Login: FC = () => {
   const { handleLogin } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -236,5 +236,3 @@ const Login = () => {
     </div>
   );
 };
-
-export default Login;

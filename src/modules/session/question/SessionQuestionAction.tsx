@@ -1,14 +1,14 @@
-import BrandButton from '@modules/common/button/BrandButton';
+import { BrandButton } from '@common/button';
+import { Modal } from '@common/modal';
+import { Dictaphone } from '@common/speech-recognition';
+import { useInitializeSpeechToText } from '@common/speech-recognition/hooks';
+import { type SelectMenuItemType, type ModalRef } from '@common/types';
 import { getUniqId } from '@common/utils';
 import { PencilSquareIcon, XMarkIcon } from '@heroicons/react/20/solid';
+import { TIME_OPTIONS } from '@modules/session/constants';
+import { TimeSelectMenu } from '@modules/session/settings';
 import { type SessionQuestionType } from '@modules/session/types';
-import Dictaphone from '@modules/speech-recognition/Dictaphone';
-import { SyntheticEvent, useState, useRef, useEffect } from 'react';
-import Modal, { type ModalRef } from '@common/modal/Modal';
-import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks';
-import { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
-import TimeSelectMenu from '../settings/TimeSelectMenu';
-import { TIME_OPTIONS } from '../constants';
+import { FC, SyntheticEvent, useState, useRef, useEffect } from 'react';
 
 interface SessionQuestionActionProps {
   isTimed: boolean;
@@ -18,13 +18,13 @@ interface SessionQuestionActionProps {
   handleCancelAction: () => void;
 }
 
-const SessionQuestionAction = ({
+export const SessionQuestionAction: FC<SessionQuestionActionProps> = ({
   isTimed,
   settingsTime,
   handleSubmit,
   handleCancelAction,
   currentQuestion,
-}: SessionQuestionActionProps) => {
+}) => {
   const modalRef = useRef<ModalRef>(null);
 
   const [question, setQuestion] = useState('');
@@ -191,5 +191,3 @@ const SessionQuestionAction = ({
     </>
   );
 };
-
-export default SessionQuestionAction;

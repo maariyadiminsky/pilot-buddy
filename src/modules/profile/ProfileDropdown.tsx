@@ -1,10 +1,10 @@
-import { Menu, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
-import { ROUTES } from '@modules/app/constants';
 import { WrapperTypeEnum } from '@common/types';
+import { ProfileLink } from '@modules/profile';
 import { truthyString } from '@common/utils';
-import ProfileLink from '@modules/profile/ProfileLink';
+import { Menu, Transition } from '@headlessui/react';
 import { HeartIcon, BugAntIcon, CodeBracketIcon } from '@heroicons/react/20/solid';
+import { ROUTES } from '@modules/app';
+import { FC, Fragment } from 'react';
 
 interface ProfileDropdownProps {
   wrapperType: keyof typeof WrapperTypeEnum;
@@ -17,7 +17,7 @@ const styles = {
   },
 };
 
-const ProfileDropdown = ({ wrapperType }: ProfileDropdownProps) => (
+export const ProfileDropdown: FC<ProfileDropdownProps> = ({ wrapperType }) => (
   <Transition
     as={Fragment}
     enter="transition ease-out duration-100"
@@ -60,5 +60,3 @@ const ProfileDropdown = ({ wrapperType }: ProfileDropdownProps) => (
     </Menu.Items>
   </Transition>
 );
-
-export default ProfileDropdown;

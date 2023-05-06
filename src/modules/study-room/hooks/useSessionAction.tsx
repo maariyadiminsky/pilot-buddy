@@ -1,8 +1,8 @@
 import { getUniqId, capitalize } from '@common/utils';
+import { AuthContext } from '@modules/auth';
+import { SessionsTableDataType, SessionFormDetailsType } from '@modules/study-room/types';
 import { getRandomBrandColorData } from '@modules/study-room/utils';
 import { SyntheticEvent, useState, useMemo, useEffect, useContext } from 'react';
-import { SessionsTableDataType, SessionFormDetailsType } from '@modules/study-room/types';
-import { AuthContext } from '@modules/auth/AuthProvider';
 
 export const useSessionAction = (
   handleSubmit: (value: SessionsTableDataType) => void,

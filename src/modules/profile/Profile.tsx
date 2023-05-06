@@ -1,14 +1,14 @@
-import BrandButton from '@modules/common/button/BrandButton';
-import { UserCircleIcon } from '@heroicons/react/20/solid';
-import { SyntheticEvent, useState, useEffect, useContext } from 'react';
+import { BrandButton } from '@common/button';
+import { captureException } from '@common/error-monitoring';
 import { useDatabase, useImageUpload } from '@common/hooks';
+import { PageContext } from '@common/page';
 import { type UserType } from '@common/types';
-import { PageContext } from '@common/page/PageProvider';
+import { UserCircleIcon } from '@heroicons/react/20/solid';
+import { ROUTES } from '@modules/app';
+import { FC, SyntheticEvent, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '@modules/app/constants';
-import { captureException } from '@modules/common/error-monitoring';
 
-const Profile = () => {
+export const Profile: FC = () => {
   const [userProfile, setUserProfile] = useState<UserType>();
 
   const { setPageTitle } = useContext(PageContext);
@@ -137,5 +137,3 @@ const Profile = () => {
     </>
   );
 };
-
-export default Profile;

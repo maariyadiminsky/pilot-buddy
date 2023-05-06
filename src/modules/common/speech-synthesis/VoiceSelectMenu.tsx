@@ -1,13 +1,15 @@
+import { SelectMenu } from '@common/dropdown';
+import { type SelectMenuItemType } from '@common/types';
+import { VOICE_OPTIONS } from '@common/speech-synthesis/constants';
 import { MegaphoneIcon } from '@heroicons/react/20/solid';
-import SelectMenu, { type SelectMenuItemType } from '@common/dropdown/SelectMenu';
-import { VOICE_OPTIONS } from '@modules/speech-synthesis/constants';
+import { FC } from 'react';
 
 interface VoiceSelectProps {
   voice: SelectMenuItemType;
   setVoice: (value: SelectMenuItemType) => void;
 }
 
-const VoiceSelectMenu = ({ voice, setVoice }: VoiceSelectProps) => (
+export const VoiceSelectMenu: FC<VoiceSelectProps> = ({ voice, setVoice }) => (
   <SelectMenu
     options={VOICE_OPTIONS}
     icon={MegaphoneIcon}
@@ -15,5 +17,3 @@ const VoiceSelectMenu = ({ voice, setVoice }: VoiceSelectProps) => (
     handleSelect={setVoice}
   />
 );
-
-export default VoiceSelectMenu;

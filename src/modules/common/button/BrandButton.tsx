@@ -1,5 +1,6 @@
 import { type HeroIconType } from '@common/types';
 import { truthyString } from '@common/utils';
+import { FC } from 'react';
 
 enum ButtonClassTypeEnum {
   clear = 'clear',
@@ -12,7 +13,7 @@ enum ButtonType {
   submit = 'submit',
 }
 
-interface BrandButtonProps {
+export interface BrandButtonProps {
   text: string;
   srText: string;
   buttonClassType: keyof typeof ButtonClassTypeEnum;
@@ -21,8 +22,6 @@ interface BrandButtonProps {
   icon?: HeroIconType;
   handleOnClick?: (value?: any) => void;
 }
-
-export type BrandButtonType = BrandButtonProps;
 
 const styles = {
   clear:
@@ -33,7 +32,7 @@ const styles = {
     'text-white bg-pink-600 enabled:hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800',
 };
 
-const BrandButton = ({
+export const BrandButton: FC<BrandButtonProps> = ({
   text,
   srText,
   buttonType,
@@ -41,7 +40,7 @@ const BrandButton = ({
   isDisabled,
   icon,
   handleOnClick,
-}: BrandButtonProps) => {
+}) => {
   const Icon = icon;
 
   return (
@@ -69,4 +68,3 @@ const BrandButton = ({
     </button>
   );
 };
-export default BrandButton;

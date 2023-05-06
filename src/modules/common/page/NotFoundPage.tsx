@@ -1,9 +1,9 @@
-import { ROUTES } from '@modules/app/constants';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import LostImage from '@common/page/image/Lost.png';
+import { ROUTES } from '@modules/app';
+import { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const NotFoundPage: React.FC = () => {
+export const NotFoundPage: FC = () => {
   const navigate = useNavigate();
 
   const redirectToHomePage = () => {
@@ -45,5 +45,3 @@ const NotFoundPage: React.FC = () => {
     </>
   );
 };
-
-export default NotFoundPage;

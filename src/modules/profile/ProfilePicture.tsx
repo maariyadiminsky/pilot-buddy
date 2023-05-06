@@ -1,6 +1,7 @@
+import { Loader } from '@common/loader';
 import { WrapperTypeEnum } from '@common/types';
 import { UserCircleIcon } from '@heroicons/react/20/solid';
-import Loader from '@common/loader/Loader';
+import { FC } from 'react';
 
 interface ProfilePictureProps {
   wrapperType: keyof typeof WrapperTypeEnum;
@@ -12,7 +13,7 @@ const styles = {
   header: 'h-8 w-8 rounded-full',
 };
 
-const ProfilePicture = ({ wrapperType, src }: ProfilePictureProps) => {
+export const ProfilePicture: FC<ProfilePictureProps> = ({ wrapperType, src }) => {
   const styleVariant = styles[wrapperType];
 
   if (src === undefined) {
@@ -23,7 +24,7 @@ const ProfilePicture = ({ wrapperType, src }: ProfilePictureProps) => {
     <img
       src={src}
       alt="User profile"
-      className={`${styleVariant} h-12 w-12 rounded-full object-cover`}
+      className={`${styleVariant} h-12 w-12 hover:opacity-90 rounded-full object-cover`}
     />
   ) : (
     <UserCircleIcon
@@ -32,5 +33,3 @@ const ProfilePicture = ({ wrapperType, src }: ProfilePictureProps) => {
     />
   );
 };
-
-export default ProfilePicture;

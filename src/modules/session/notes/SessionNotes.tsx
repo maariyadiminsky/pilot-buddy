@@ -1,20 +1,18 @@
-import { useState, useEffect } from 'react';
-
-import Notes from '@modules/session/notes/Notes';
-import NoteAction from '@modules/session/notes/NoteAction';
-import { type NoteDataType } from '@modules/session/types';
-import { removeObjectFromArray } from '@common/utils';
-import { EyeSlashIcon } from '@heroicons/react/20/solid';
-import { useDatabase } from '@common/hooks';
-import Loader from '@common/loader/Loader';
 import { captureException } from '@common/error-monitoring';
+import { useDatabase } from '@common/hooks';
+import { Loader } from '@common/loader';
+import { removeObjectFromArray } from '@common/utils';
+import { Notes, NoteAction } from '@modules/session/notes';
+import { type NoteDataType } from '@modules/session/types';
+import { EyeSlashIcon } from '@heroicons/react/20/solid';
+import { FC, useState, useEffect } from 'react';
 
 interface SessionNotesProps {
   notesData?: NoteDataType[];
   sessionId: string;
 }
 
-const SessionNotes = ({ notesData, sessionId }: SessionNotesProps) => {
+export const SessionNotes: FC<SessionNotesProps> = ({ notesData, sessionId }) => {
   const [notes, setNotes] = useState<NoteDataType[]>();
   const [currentNote, setCurrentNote] = useState<NoteDataType>();
   const [shouldHideNoteAction, setShouldHideNoteAction] = useState(false);
@@ -148,5 +146,3 @@ const SessionNotes = ({ notesData, sessionId }: SessionNotesProps) => {
     </div>
   );
 };
-
-export default SessionNotes;
