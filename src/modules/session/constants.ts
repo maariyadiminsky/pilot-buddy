@@ -52,8 +52,8 @@ export const SESSION_DATA_INITIAL_STATE = {
   },
 };
 
-export const getInitialSessionData = (sessionId: string) =>
-  ({ id: sessionId, ...SESSION_DATA_INITIAL_STATE } as SessionDataType);
+export const getInitialSessionData = (sessionId: string, userId: string) =>
+  ({ id: sessionId, userId, ...SESSION_DATA_INITIAL_STATE } as SessionDataType);
 
 export const getNoteIconFromName = (name: string) => {
   switch (name) {

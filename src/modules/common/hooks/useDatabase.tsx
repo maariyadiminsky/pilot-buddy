@@ -33,8 +33,8 @@ export const DATABASE_ERROR = {
 // ---> important: parent component should wrap each method in a try/catch
 export const useDatabase = () => {
   const [database, setDatabase] = useState<IDBPDatabase<DatabaseType>>();
-  const navigate = useNavigate();
   const { userId } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const createDatabaseTry = useCallback(async () => {
     // Create the database if it doesn't exist
@@ -166,8 +166,12 @@ export const useDatabase = () => {
   };
 
   // session table
-  const getAllDBSessionTableItems = async () =>
-    await getDBAllStoreItems(DATABASE_STORE.SESSIONS_TABLE);
+  const getAllDBSessionTableItems = async () => {
+    if (!userId) return null;
+
+    const tableSessions = await getDBAllStoreItems(DATABASE_STORE.SESSIONS_TABLE);
+    return tableSessions.filter((session) => session.userId === userId);
+  };
 
   const getDBSessionTableItem = async (sessionId: string) => {
     const session = await getDBStoreItem(DATABASE_STORE.SESSIONS_TABLE, sessionId);
@@ -179,32 +183,81 @@ export const useDatabase = () => {
     return session;
   };
 
-  const addOrUpdateDBSessionTableItem = async (tableSessionData: SessionsTableDataType) =>
-    await addOrUpdateStoreItem(DATABASE_STORE.SESSIONS_TABLE, tableSessionData);
+  const addOrUpdateDBSessionTableItem = async (tableSessionData: SessionsTableDataType) => {
+    if (!userId) return;
 
-  const updateDBPartialDataOfSessionTableItem = async (data: any, sessionId: string) =>
+    let tableSessionDataWithId = tableSessionData;
+    if (tableSessionData?.userId && tableSessionData.userId !== userId) {
+      throw new Error(DATABASE_ERROR.SESSION_NOT_FOUND);
+    } else {
+      tableSessionDataWithId = { ...tableSessionData, userId };
+    }
+
+    return await addOrUpdateStoreItem(DATABASE_STORE.SESSIONS_TABLE, tableSessionDataWithId);
+  };
+
+  const updateDBPartialDataOfSessionTableItem = async (data: any, sessionId: string) => {
+    const tableSession = await getDBSessionTableItem(sessionId);
+
+    // Ensure the session belongs to the current user
+    if (tableSession.userId !== userId) {
+      throw new Error(DATABASE_ERROR.SESSION_NOT_FOUND);
+    }
+
     await updateDbPartialDataOfItem(DATABASE_STORE.SESSIONS_TABLE, data, sessionId);
+  };
 
   const deleteDBSessionTableItem = async (sessionId: string) =>
     await deleteDBItem(DATABASE_STORE.SESSIONS_TABLE, sessionId);
 
   // sessions
-  const getAllDBSessions = async () => await getDBAllStoreItems(DATABASE_STORE.SESSIONS);
+  const getAllDBSessions = async () => {
+    if (!userId) return null;
 
-  const addOrUpdateDBSessionItem = async (sessionData: SessionDataType) =>
-    await addOrUpdateStoreItem(DATABASE_STORE.SESSIONS, sessionData);
+    const sessions = await getDBAllStoreItems(DATABASE_STORE.SESSIONS);
+    return sessions.filter((session) => session.userId === userId);
+  };
+
+  const addOrUpdateDBSessionItem = async (sessionData: SessionDataType) => {
+    if (!userId) return null;
+
+    if (!userId) return;
+
+    let sessionDataWithId = sessionData;
+    if (sessionData?.userId && sessionData.userId !== userId) {
+      throw new Error(DATABASE_ERROR.SESSION_NOT_FOUND);
+    } else {
+      sessionDataWithId = { ...sessionData, userId };
+    }
+
+    return await addOrUpdateStoreItem(DATABASE_STORE.SESSIONS, sessionDataWithId);
+  };
 
   // if keyToReplace is added it will replace the entire value of the key
   // if not provided, it will add to existing data
-  const updateDBPartialDataOfSession = async (data: any, sessionId: string, isSettings?: boolean) =>
-    await updateDbPartialDataOfItem(DATABASE_STORE.SESSIONS, data, sessionId, isSettings);
+  const updateDBPartialDataOfSession = async (
+    data: any,
+    sessionId: string,
+    isSettings?: boolean
+  ) => {
+    const session = await getDBSession(sessionId);
+
+    // Ensure the session belongs to the current user
+    if (session.userId !== userId) {
+      throw new Error(DATABASE_ERROR.SESSION_NOT_FOUND);
+    }
+
+    return await updateDbPartialDataOfItem(DATABASE_STORE.SESSIONS, data, sessionId, isSettings);
+  };
 
   const getDBSession = async (sessionId: string) => {
+    if (!userId) return null;
+
     let session = await getDBStoreItem(DATABASE_STORE.SESSIONS, sessionId);
     let isExistInTable = false;
-    // if session doesn't exist in database, create it first
+    // if session doesn't exist in database, create it
+    // but make sure it exists in table first!
     if (!session) {
-      // make sure it exists in table
       try {
         isExistInTable = await getDBSessionTableItem(sessionId);
       } catch (error) {
@@ -217,7 +270,7 @@ export const useDatabase = () => {
       // add to database and get the key confirming it was created
       // then search once more in database for it
       if (isExistInTable) {
-        const initialSessionData = getInitialSessionData(sessionId);
+        const initialSessionData = getInitialSessionData(sessionId, userId);
         const sessionKeyConfirmation = await addOrUpdateDBSessionItem(initialSessionData);
 
         if (sessionKeyConfirmation) {
@@ -226,7 +279,12 @@ export const useDatabase = () => {
       }
     }
 
-    return session;
+    // Ensure the session belongs to the current user
+    if (session && session.userId === userId) {
+      return session;
+    } else {
+      throw new Error(DATABASE_ERROR.SESSION_NOT_FOUND);
+    }
   };
 
   const deleteDBSessionItem = async (sessionId: string) =>
@@ -265,16 +323,11 @@ export const useDatabase = () => {
   const setDBUser = async (data: UserType) =>
     await addOrUpdateStoreItem(DATABASE_STORE.USERS, data);
 
-  const getUserProfileData = async () => {
-    const user = userId ? await getDBUser(userId) : null;
-
-    // for the purpose of showing a loader if null
-    // and icon if really no image is saved
-    return user ? { ...user, image: user?.image || '' } : null;
-  };
+  const getUserProfileData = async () => (userId ? await getDBUser(userId) : null);
 
   const setUserProfileData = async (userProfile?: UserType) => {
     if (!userProfile || !userId) return;
+
     await setDBUser(userProfile);
     navigate('/');
   };

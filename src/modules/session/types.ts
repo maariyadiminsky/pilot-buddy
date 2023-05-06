@@ -59,6 +59,7 @@ export interface SessionQuestionType {
 
 export interface SessionDataType {
   id: string;
+  userId: string;
   questions: SessionQuestionType[];
   settings: SettingsType;
   notes?: NoteDataType[];

@@ -1,5 +1,6 @@
 export interface SessionsTableDataType {
   id: string;
+  userId: string;
   name: string;
   topic: string;
   questions: number;
