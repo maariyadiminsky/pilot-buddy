@@ -43,7 +43,7 @@ export const useDatabase = () => {
       upgrade(theDb) {
         if (!theDb.objectStoreNames.contains(DATABASE_STORE.USERS)) {
           const userStore = theDb.createObjectStore(DATABASE_STORE.USERS, { keyPath: 'id' });
-          // allows to search by email
+          // allows to search user by email
           userStore.createIndex('email', 'email', { unique: true });
         }
 

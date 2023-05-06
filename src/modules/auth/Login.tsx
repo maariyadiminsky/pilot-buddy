@@ -94,10 +94,27 @@ const Login = () => {
           throw new Error('Could not encrypt email or password');
         }
 
-        // create new user
-        const userId = getUniqId();
-        await setDBUser({ id: userId, email: encryptedEmail, password: encryptedPassword });
-        handleLogin(userId, email);
+        // make sure user doesn't exist already
+        let user;
+        try {
+          user = await getDBUserByEmail(encryptedEmail);
+        } catch (userDBError) {
+          hasError = userDBError;
+          if (
+            userDBError instanceof Error &&
+            (userDBError.message.includes('One of the specified object stores was not found') ||
+              userDBError.message.includes(DATABASE_ERROR.USER_NOT_FOUND))
+          ) {
+            // create new user
+            const userId = getUniqId();
+            await setDBUser({ id: userId, email: encryptedEmail, password: encryptedPassword });
+            handleLogin(userId, email);
+          }
+        }
+
+        if (user) {
+          setError('User already exists, try signing in.');
+        }
       }
     } catch (catchError) {
       hasError = catchError;
