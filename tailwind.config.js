@@ -1,14 +1,14 @@
-// tailwind.config.ts
-
-import { Config } from 'tailwindcss';
+import forms from '@tailwindcss/forms';
 import colors from 'tailwindcss/colors';
 import defaultTheme from 'tailwindcss/defaultTheme';
 
-const config: Config = {
+const config = {
   content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   theme: {
     extend: {
-      ...colors,
+      colors: {
+        ...colors,
+      },
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
@@ -17,7 +17,7 @@ const config: Config = {
   variants: {
     extend: {},
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [forms],
 };
 
 export default config;
