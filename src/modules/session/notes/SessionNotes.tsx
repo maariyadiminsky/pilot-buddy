@@ -2,9 +2,9 @@ import { captureException } from '@common/error-monitoring';
 import { useDatabase } from '@common/hooks';
 import { Loader } from '@common/loader';
 import { removeObjectFromArray } from '@common/utils';
+import { EyeSlashIcon } from '@heroicons/react/20/solid';
 import { Notes, NoteAction } from '@modules/session/notes';
 import { type NoteDataType } from '@modules/session/types';
-import { EyeSlashIcon } from '@heroicons/react/20/solid';
 import { FC, useState, useEffect } from 'react';
 
 interface SessionNotesProps {

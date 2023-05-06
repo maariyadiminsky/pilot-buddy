@@ -13,6 +13,7 @@ export const logRocketIdentifyUser = (userId: string, userData: { [key: string]:
   if (shouldUseLogRocket) {
     LogRocket.identify(userId, userData);
   } else {
+    // eslint-disable-next-line no-console
     console.log('LogRocket User Identified as(WHEN_IN_PROD):', userId, userData);
   }
 };
@@ -40,6 +41,7 @@ export const logEvent = (eventName: string, extraData?: any) => {
   if (shouldUseLogRocket) {
     LogRocket.track(eventName, extraData);
   } else {
+    // eslint-disable-next-line no-console
     console.log(`LOGGED_EVENT(WHEN_IN_PROD): ${eventName}`, extraData);
   }
 };

@@ -14,6 +14,7 @@ export const NavigationItems: FC<NavigationItemsProps> = ({ navigation, handleSe
       const Icon = icon;
 
       return (
+        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <Link
           key={id}
           to={route}

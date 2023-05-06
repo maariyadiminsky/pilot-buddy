@@ -1,7 +1,7 @@
 import { captureException } from '@common/error-monitoring';
-import { SpeechSynthesis } from '@common/speech-synthesis';
 import { useDatabase } from '@common/hooks';
 import { Loader } from '@common/loader';
+import { SpeechSynthesis } from '@common/speech-synthesis';
 import { type SelectMenuItemType } from '@common/types';
 import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
 import { OrderSelectMenu, TimeSelectMenu, SettingToggle } from '@modules/session/settings';

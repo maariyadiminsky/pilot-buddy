@@ -1,9 +1,9 @@
 import { captureException } from '@common/error-monitoring';
+import { useDatabase } from '@common/hooks';
 import { LogoutButton } from '@common/sidebar/LogoutButton';
 import { NavigationItems } from '@common/sidebar/NavigationItems';
-import { type NavigationItem } from '@common/sidebar/types';
 import { PinnedNavigation } from '@common/sidebar/PinnedNavigation';
-import { useDatabase } from '@common/hooks';
+import { type NavigationItem } from '@common/sidebar/types';
 import { type UserType } from '@common/types';
 import { Dialog, Transition } from '@headlessui/react';
 import { BookOpenIcon, XMarkIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';

@@ -1,7 +1,7 @@
 import { MobileHeader, HeaderWithActions } from '@common/header';
+import { Breadcrumbs } from '@common/page';
 import { Sidebar } from '@common/sidebar';
 import { type BrandButtonType } from '@common/types';
-import { Breadcrumbs } from '@common/page';
 import { ROUTES, ROUTE_PATHS } from '@modules/app';
 import { AuthContext } from '@modules/auth';
 import { FC, useState, useMemo, createContext, useContext } from 'react';

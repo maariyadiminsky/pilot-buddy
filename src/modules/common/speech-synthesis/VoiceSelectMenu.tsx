@@ -1,6 +1,6 @@
 import { SelectMenu } from '@common/dropdown';
-import { type SelectMenuItemType } from '@common/types';
 import { VOICE_OPTIONS } from '@common/speech-synthesis/constants';
+import { type SelectMenuItemType } from '@common/types';
 import { MegaphoneIcon } from '@heroicons/react/20/solid';
 import { FC } from 'react';
 

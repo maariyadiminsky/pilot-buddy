@@ -1,6 +1,6 @@
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
-import { Link } from 'react-router-dom';
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 
 export const Homepage: FC = () => (
   <div className="relative isolate overflow-hidden bg-white h-screen">
@@ -38,6 +38,7 @@ export const Homepage: FC = () => (
           ease.
         </p>
         <div className="mt-10 flex justify-start">
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <Link to="/auth">
             <button
               type="button"

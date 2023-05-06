@@ -60,7 +60,6 @@ export const useSessionAction = (
 
     const randomBrandColor = getRandomBrandColorData();
 
-    console.log('FORM_ACTION_SUBMIT:', currentSession?.isPinned, currentSession);
     handleSubmit({
       id: currentSession?.id || getUniqId(),
       userId,

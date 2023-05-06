@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { renderHook } from '@testing-library/react-hooks';
+import userEvent from '@testing-library/user-event';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import '@testing-library/jest-dom';

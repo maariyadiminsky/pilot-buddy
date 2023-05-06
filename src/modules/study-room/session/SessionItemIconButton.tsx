@@ -40,7 +40,9 @@ const Button: FC<SessionButtonProps> = ({ icon, srText, color, isDisabled, handl
   );
 };
 
-const Wrapper = ({ link, children }: SessionButtonWrapperProps) => (
+const Wrapper = ({ link = '/', children }: SessionButtonWrapperProps) => (
+  // Link is accessible by default
+  // eslint-disable-next-line jsx-a11y/anchor-is-valid
   <Link to={link}>{children}</Link>
 );
 

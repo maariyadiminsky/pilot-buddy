@@ -1,9 +1,5 @@
 import { type SelectMenuItemType } from '@common/types';
 import { truthyString } from '@common/utils';
-import { SessionQuestionType } from '@modules/session/types';
-import { FC, type ReactNode } from 'react';
-import { Draggable, type DroppableProvidedProps } from 'react-beautiful-dnd';
-
 import {
   PencilSquareIcon,
   TrashIcon,
@@ -12,6 +8,9 @@ import {
   ClockIcon,
   Bars3Icon,
 } from '@heroicons/react/20/solid';
+import { SessionQuestionType } from '@modules/session/types';
+import { FC, type ReactNode } from 'react';
+import { Draggable, type DroppableProvidedProps } from 'react-beautiful-dnd';
 
 interface SessionQuestionsListProps extends DroppableProvidedProps {
   placeholder: ReactNode;

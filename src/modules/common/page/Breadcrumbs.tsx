@@ -43,6 +43,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({ pathname, sessionId }) => {
         <ol className="mx-left flex w-full max-w-screen-xl space-x-4 px-4 sm:px-6 lg:px-8">
           <li className="flex">
             <div className="flex items-center py-2">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <Link to="/" className="text-white hover:text-sky-100">
                 <HomeIcon className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
                 <span className="sr-only">Home</span>
@@ -61,6 +62,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({ pathname, sessionId }) => {
                 >
                   <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
                 </svg>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <Link
                   to={route}
                   className="ml-4 text-sm subpixel-antialiased lg:text-xs text-white hover:text-sky-100"

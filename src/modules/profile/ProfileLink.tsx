@@ -25,6 +25,8 @@ const ExternalLinkWrapper = ({ link, children, className }: LinkWrapperProps) =>
 );
 
 const InternalLinkWrapper = ({ link, children, className }: LinkWrapperProps) => (
+  // Link is accessible by default
+  // eslint-disable-next-line jsx-a11y/anchor-is-valid
   <Link to={link} className={className}>
     {children}
   </Link>

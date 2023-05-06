@@ -123,6 +123,7 @@ export const SessionQuestionAction: FC<SessionQuestionActionProps> = ({
           </label>
           <div className="relative flex w-full rounded-md shadow-sm">
             <input
+              aria-label="question input"
               type="text"
               name="question"
               id="question"
@@ -157,6 +158,7 @@ export const SessionQuestionAction: FC<SessionQuestionActionProps> = ({
           </div>
           <div className="relative flex w-full rounded-md shadow-sm">
             <input
+              aria-label="answer input"
               type="text"
               name="answer"
               id="answer"

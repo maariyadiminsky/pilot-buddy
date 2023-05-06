@@ -35,16 +35,13 @@ module.exports = {
   rules: {
     'no-control-regex': 0,
     'no-undef': 0,
-    'no-unused-vars': 'off',
     'linebreak-style': 0,
     'react/prop-types': 0,
     'comma-dangle': 'off',
     '@typescript-eslint/camelcase': 0,
-    '@typescript-eslint/no-unused-vars': 1,
     '@typescript-eslint/no-use-before-define': 0,
     '@typescript-eslint/ban-ts-comment': 0,
     '@typescript-eslint/ban-ts-ignore': 0,
-    '@typescript-eslint/explicit-member-accessibility': 0,
     '@typescript-eslint/member-delimiter-style': 0,
     '@typescript-eslint/no-explicit-any': 0,
     indent: 'off',
@@ -60,6 +57,7 @@ module.exports = {
     camelcase: 'off',
     'class-methods-use-this': 'off',
     'max-classes-per-file': 'off',
+    'import/no-extraneous-dependencies': 'off',
     'no-console': [
       process.env.NODE_ENV === 'development' ? 'warn' : 'error',
       { allow: ['info', 'warn', 'error'] },
@@ -77,17 +75,14 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/no-array-index-key': 'off',
     'react/jsx-no-useless-fragment': 'off',
-    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'import/extensions': 'off',
     'import/newline-after-import': 'warn',
     'import/no-unresolved': 'off',
     'react/function-component-definition': 'off',
-    'import/prefer-default-export': 'off',
     'no-param-reassign': ['error', { props: false }],
     'implicit-arrow-linebreak': 'off',
     'operator-linebreak': 'off',
     'object-curly-newline': 'off',
-    'import/no-extraneous-dependencies': 'off',
     'import/order': [
       'warn',
       {
@@ -133,11 +128,9 @@ module.exports = {
     'lodash/prop-shorthand': ['error', 'never'],
     'lodash/matches-prop-shorthand': ['error', 'never'],
     'lodash/matches-shorthand': ['error', 'never'],
-    '@typescript-eslint/camelcase': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-member-accessibility': ['warn', { accessibility: 'no-public' }],
     '@typescript-eslint/indent': 'off',
-    '@typescript-eslint/member-delimiter-style': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-redeclare.md
     'no-redeclare': 'off',
@@ -153,7 +146,6 @@ module.exports = {
 
     // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-use-before-define.md
     'no-use-before-define': 'off',
-    '@typescript-eslint/no-use-before-define': 'error',
 
     // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-duplicate-imports.md
     'no-duplicate-imports': 'off',

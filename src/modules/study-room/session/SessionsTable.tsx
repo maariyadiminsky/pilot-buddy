@@ -44,6 +44,7 @@ export const SessionsTable: FC<SessionsTableProps> = ({
             </th>
             {/* empty element created so blur applies on all "titles" */}
             <th
+              aria-label="empty line for table"
               scope="col"
               className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
             />

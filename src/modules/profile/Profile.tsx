@@ -94,6 +94,7 @@ export const Profile: FC = () => {
               )}
             </label>
             <input
+              aria-label="upload image"
               type="file"
               id="imageUpload"
               name="imageUpload"

@@ -2,8 +2,8 @@ import { BrandButton } from '@common/button';
 import { Range } from '@common/range';
 import { VoiceSelectMenu } from '@common/speech-synthesis';
 import { useSpeechSynthesis } from '@common/speech-synthesis/hooks';
-import { type SettingsVoiceType } from '@modules/session/types';
 import { type BrandButtonType } from '@common/types';
+import { type SettingsVoiceType } from '@modules/session/types';
 import { FC, useMemo } from 'react';
 
 interface SpeechSynthesisProps {
@@ -59,6 +59,7 @@ export const SpeechSynthesis: FC<SpeechSynthesisProps> = ({
     <div className="flex flex-col">
       {voice && (
         <>
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label className="sr-only">Choose a voice</label>
           <VoiceSelectMenu voice={voice?.voice} setVoice={handleVoiceChange} />
         </>

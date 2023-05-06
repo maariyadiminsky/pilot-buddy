@@ -173,7 +173,6 @@ export const useTableSessions = (
     // Acts as a cancel of the last edit.
     if (currentSession) {
       const currentSessions = handleAddSession(currentSession);
-      console.log('CURRENT_SESSION:', currentSessions);
       if (!currentSessions) return;
 
       handleRemoveSessionFromUIOnly(id, currentSessions);

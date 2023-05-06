@@ -1,9 +1,9 @@
 import { WrapperTypeEnum } from '@common/types';
-import { ProfileLink } from '@modules/profile';
 import { truthyString } from '@common/utils';
 import { Menu, Transition } from '@headlessui/react';
 import { HeartIcon, BugAntIcon, CodeBracketIcon } from '@heroicons/react/20/solid';
 import { ROUTES } from '@modules/app';
+import { ProfileLink } from '@modules/profile';
 import { FC, Fragment } from 'react';
 
 interface ProfileDropdownProps {
