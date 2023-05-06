@@ -24,8 +24,8 @@ export type HeroIconType = ForwardRefExoticComponent<
 // database
 export interface UserType {
   id: string;
-  encryptedEmail: string;
-  encryptedPassword: string;
+  email: string;
+  password: string;
   name?: string;
   image?: string;
 }

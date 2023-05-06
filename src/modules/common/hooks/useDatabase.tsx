@@ -14,7 +14,7 @@ export interface DatabaseType extends IDBPDatabase<DatabaseType> {
   sessionData: IDBPObjectStore<SessionDataType, string>;
 }
 
-const DATABASE_NAME = 'PILOT_BUDDY_DB';
+const DATABASE_NAME = 'pilot-buddy';
 const DATABASE_STORE = {
   USERS: 'users',
   SESSIONS_TABLE: 'sessionsTable',
@@ -42,7 +42,9 @@ export const useDatabase = () => {
       // make sure all required stores exist
       upgrade(theDb) {
         if (!theDb.objectStoreNames.contains(DATABASE_STORE.USERS)) {
-          theDb.createObjectStore(DATABASE_STORE.USERS, { keyPath: 'id' });
+          const userStore = theDb.createObjectStore(DATABASE_STORE.USERS, { keyPath: 'id' });
+          // allows to search by email
+          userStore.createIndex('email', 'email', { unique: true });
         }
 
         if (!theDb.objectStoreNames.contains(DATABASE_STORE.SESSIONS_TABLE)) {
@@ -231,8 +233,27 @@ export const useDatabase = () => {
     await deleteDBItem(DATABASE_STORE.SESSIONS, sessionId);
 
   // user
-  const getDBUser = async (encryptedEmail: string) => {
-    const user = await getDBStoreItem(DATABASE_STORE.USERS, encryptedEmail);
+  const getDBUser = async (id: string) => {
+    const user = await getDBStoreItem(DATABASE_STORE.USERS, id);
+
+    if (!user) {
+      throw new Error(DATABASE_ERROR.USER_NOT_FOUND);
+    }
+
+    return user;
+  };
+
+  const getDBUserByEmail = async (email: string) => {
+    const db = await getDatabase();
+    if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
+
+    const tx = db.transaction(DATABASE_STORE.USERS, 'readonly');
+    const store = tx.objectStore(DATABASE_STORE.USERS);
+
+    const emailIndex = store.index('email');
+    const user = await emailIndex.get(email);
+
+    await tx.done;
 
     if (!user) {
       throw new Error(DATABASE_ERROR.USER_NOT_FOUND);
@@ -245,7 +266,6 @@ export const useDatabase = () => {
     await addOrUpdateStoreItem(DATABASE_STORE.USERS, data);
 
   const getUserProfileData = async () => {
-    console.log('userId:', userId);
     const user = userId ? await getDBUser(userId) : null;
 
     // for the purpose of showing a loader if null
@@ -294,6 +314,7 @@ export const useDatabase = () => {
     getDBErrorHandling,
     // user
     getDBUser,
+    getDBUserByEmail,
     setDBUser,
     getUserProfileData,
     setUserProfileData,

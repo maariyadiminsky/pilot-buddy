@@ -1,5 +1,6 @@
 import { WrapperTypeEnum } from '@common/types';
 import { UserCircleIcon } from '@heroicons/react/20/solid';
+import Loader from '@common/loader/Loader';
 
 interface ProfilePictureProps {
   wrapperType: keyof typeof WrapperTypeEnum;
@@ -14,7 +15,10 @@ const styles = {
 const ProfilePicture = ({ wrapperType, src }: ProfilePictureProps) => {
   const styleVariant = styles[wrapperType];
 
-  console.log('src:', src);
+  if (src === undefined) {
+    return <Loader size="small" />;
+  }
+
   return src ? (
     <img
       src={src}

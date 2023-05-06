@@ -25,7 +25,7 @@ const MobileHeader = ({ setIsSidebarOpen }: MobileHeaderProps) => {
   useEffect(() => {
     getUser();
   }, []);
-  console.log('user:', user);
+
   useEffect(() => {
     if (pathname === '/') {
       getUser();

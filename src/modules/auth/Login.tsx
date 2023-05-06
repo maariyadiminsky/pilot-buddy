@@ -1,11 +1,10 @@
-import { SyntheticEvent, useState, useEffect, useContext } from 'react';
+import { SyntheticEvent, useState, useContext } from 'react';
 import bcrypt from 'bcryptjs';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
-import { setCookie, encryptData, decryptData, getSessionToken } from '@modules/auth/utils';
+import { encryptData, decryptData } from '@modules/auth/utils';
 import { AuthContext } from '@modules/auth/AuthProvider';
 import { DATABASE_ERROR, useDatabase } from '@common/hooks';
-import { useNavigate } from 'react-router-dom';
-import { logRocketIdentifyUser, logError } from '@common/error-monitoring';
+import { logError } from '@common/error-monitoring';
 import { getUniqId } from '@common/utils';
 
 const limiter = new RateLimiterMemory({
@@ -14,20 +13,13 @@ const limiter = new RateLimiterMemory({
 });
 
 const Login = () => {
-  const { isLoggedIn, setIsLoggedIn, handleSetUserId } = useContext(AuthContext);
+  const { handleLogin } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSignIn, setIsSignIn] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const navigate = useNavigate();
-
-  const { openDatabase, getDBUser, setDBUser, getDBErrorHandling } = useDatabase();
-
-  // in the case the user manually navigates to /auth.
-  useEffect(() => {
-    if (isLoggedIn) navigate('/');
-  }, [isLoggedIn]);
+  const { openDatabase, getDBUserByEmail, setDBUser, getDBErrorHandling } = useDatabase();
 
   const setHandler = (handler: (value: any) => void, value: any) => {
     handler(value);
@@ -65,7 +57,7 @@ const Login = () => {
         let user;
 
         try {
-          user = await getDBUser(encryptedEmail);
+          user = await getDBUserByEmail(encryptedEmail);
         } catch (userDBError) {
           hasError = userDBError;
           if (
@@ -85,14 +77,7 @@ const Login = () => {
           decryptedPassword && (await bcrypt.compare(password, decryptedPassword));
 
         if (isPasswordCorrect) {
-          // set for logged in status
-          handleSetUserId(user.id);
-          setCookie('sessionToken', getSessionToken(), {
-            path: '/',
-            secure: true,
-          });
-          // identify for error handling
-          logRocketIdentifyUser(user.id, { email });
+          handleLogin(user.id, email);
         } else {
           const incorrectPasswordError = 'Incorrect password';
           hasError = incorrectPasswordError;
@@ -111,12 +96,8 @@ const Login = () => {
 
         // create new user
         const userId = getUniqId();
-        await setDBUser({ id: userId, encryptedEmail, encryptedPassword });
-        // set for logged in status
-        handleSetUserId(userId);
-        setCookie('sessionToken', getSessionToken(), { path: '/', secure: true });
-        // identify for error handling
-        logRocketIdentifyUser(userId, { email });
+        await setDBUser({ id: userId, email: encryptedEmail, password: encryptedPassword });
+        handleLogin(userId, email);
       }
     } catch (catchError) {
       hasError = catchError;
@@ -125,9 +106,10 @@ const Login = () => {
         getDBErrorHandling(catchError);
       }
     } finally {
-      setEmail('');
-      setPassword('');
-      setIsLoggedIn(Boolean(!hasError));
+      if (!hasError) {
+        setEmail('');
+        setPassword('');
+      }
     }
   };
 

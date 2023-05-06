@@ -1,6 +1,7 @@
 import { ReactNode, useState, useEffect, useMemo, createContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getCookie, removeCookie } from '@modules/auth/utils';
+import { getSessionToken, getCookie, setCookie, removeCookie } from '@modules/auth/utils';
+import { logRocketIdentifyUser } from '@common/error-monitoring';
 
 interface AuthContextType {
   userId?: string;
@@ -8,7 +9,7 @@ interface AuthContextType {
   isAuthLoading: boolean;
   setIsLoggedIn: (value: boolean) => void;
   handleLogout: () => void;
-  handleSetUserId: (value: string) => void;
+  handleLogin: (userId: string, email: string) => void;
 }
 
 interface AuthContextProps {
@@ -21,11 +22,11 @@ export const AuthContext = createContext<AuthContextType>({
   isAuthLoading: true,
   setIsLoggedIn: () => {},
   handleLogout: () => {},
-  handleSetUserId: () => {},
+  handleLogin: () => {},
 });
 
 const USER_ID = 'userId';
-const COOKIE = 'sessionToken';
+const SESSION_COOKIE = 'pilot_buddy';
 const AuthProvider = ({ children }: AuthContextProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
@@ -34,21 +35,35 @@ const AuthProvider = ({ children }: AuthContextProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleSetUserId = (user: string) => {
+  const handleLogin = (user: string, email: string) => {
+    // set for logged in status
+    setCookie(SESSION_COOKIE, getSessionToken(), { path: '/', secure: true });
     localStorage.setItem(USER_ID, user);
     setUserId(user);
+    // identify for error handling
+    logRocketIdentifyUser(userId, { email });
+    // route to homepage
+    navigate('/');
   };
 
-  useEffect(() => {
+  const getExistingUserId = () => {
     const user = localStorage.getItem(USER_ID);
 
     if (user) {
       setUserId(user);
+      return user;
     }
+
+    return null;
+  };
+
+  useEffect(() => {
+    getExistingUserId();
   }, []);
 
   const clearData = () => {
     localStorage.removeItem(USER_ID);
+    removeCookie(SESSION_COOKIE);
   };
 
   // I am aware this isnt the safest solution in the world,
@@ -56,8 +71,13 @@ const AuthProvider = ({ children }: AuthContextProps) => {
   // production use you should really create a backend
   // and store in a server db for added security.
   useEffect(() => {
-    const sessionToken = getCookie(COOKIE);
-    const isSignedIn = Boolean(userId && sessionToken);
+    const sessionToken = getCookie(SESSION_COOKIE);
+
+    const user = userId || getExistingUserId();
+
+    // honestly can just use one, double check in
+    // two different places simply for added security
+    const isSignedIn = Boolean(user && sessionToken);
 
     if (!isSignedIn) {
       clearData();
@@ -69,19 +89,18 @@ const AuthProvider = ({ children }: AuthContextProps) => {
 
   const handleLogout = () => {
     clearData();
-    removeCookie(COOKIE);
     setIsLoggedIn(false);
     navigate('/');
   };
 
   const contextValues = useMemo(
     () => ({
+      userId,
       isLoggedIn,
       isAuthLoading,
-      userId,
       setIsLoggedIn,
       handleLogout,
-      handleSetUserId,
+      handleLogin,
     }),
     [isLoggedIn, isAuthLoading, userId]
   );
