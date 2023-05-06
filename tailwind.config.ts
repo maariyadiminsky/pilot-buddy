@@ -1,14 +1,14 @@
-/** @type {import('tailwindcss').Config} */
+// tailwind.config.ts
 
-const colors = require('tailwindcss/colors');
-const defaultTheme = require('tailwindcss/defaultTheme');
+import { Config } from 'tailwindcss';
+import colors from 'tailwindcss/colors';
+import defaultTheme from 'tailwindcss/defaultTheme';
 
-module.exports = {
+const config: Config = {
   content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
-  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      colors,
+      ...colors,
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
@@ -19,3 +19,5 @@ module.exports = {
   },
   plugins: [require('@tailwindcss/forms')],
 };
+
+export default config;
