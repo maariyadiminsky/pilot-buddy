@@ -70,7 +70,7 @@ export const useDatabase = () => {
     return db;
   };
 
-  const getDatabase = async () => {
+  const getDatabase = useCallback(async () => {
     let db = database;
 
     if (!database) {
@@ -80,7 +80,7 @@ export const useDatabase = () => {
     if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_AVAILABLE);
 
     return db;
-  };
+  }, [database]);
 
   const updateDbPartialDataOfItem = async (
     storeName: string,
@@ -122,12 +122,15 @@ export const useDatabase = () => {
     return items || [];
   };
 
-  const getDBStoreItem = async (storeName: string, keytoFindItem: string) => {
-    const db = await getDatabase();
-    if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
+  const getDBStoreItem = useCallback(
+    async (storeName: string, keytoFindItem: string) => {
+      const db = await getDatabase();
+      if (!db) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
 
-    return await db.get(storeName, keytoFindItem);
-  };
+      return await db.get(storeName, keytoFindItem);
+    },
+    [getDatabase]
+  );
 
   const addOrUpdateStoreItem = async (
     storeName: string,
@@ -298,7 +301,7 @@ export const useDatabase = () => {
   };
 
   // user
-  const getDBUser = async () => {
+  const getDBUser = useCallback(async () => {
     if (!userId) return null;
 
     const user = await getDBStoreItem(DATABASE_STORE.USERS, userId);
@@ -308,7 +311,7 @@ export const useDatabase = () => {
     }
 
     return user;
-  };
+  }, [userId, getDBStoreItem]);
 
   const getDBUserByEmail = async (email: string) => {
     const db = await getDatabase();
@@ -332,7 +335,7 @@ export const useDatabase = () => {
   const setDBUser = async (data: UserType) =>
     await addOrUpdateStoreItem(DATABASE_STORE.USERS, data);
 
-  const getUserProfileData = async () => await getDBUser();
+  const getUserProfileData = useCallback(async () => await getDBUser(), []);
 
   const setUserProfileData = async (userProfile?: UserType) => {
     if (!userProfile || !userId) return;
