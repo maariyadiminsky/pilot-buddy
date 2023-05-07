@@ -136,12 +136,13 @@ export const Sidebar: FC<SidebarProps> = ({
       handleSetCurrent(null, true, true);
       getUser();
     } else if (sessionId) {
-      const navItemToBeSelected = pinnedNavigation.find(({ routeId }) => routeId === sessionId);
+      const navItemToBeSelected = pinnedNavigation?.find(({ routeId }) => routeId === sessionId);
       // pass in id or null to unselect current in the
       // case the user clicks on an unpinned session
       handleSetCurrent(navItemToBeSelected?.id, true);
     }
-  }, [getUser, handleSetCurrent, pinnedNavigation, sessionId, pathname]);
+    /* eslint-disable-next-line */
+  }, [getUser, sessionId, pathname]);
 
   return (
     <>

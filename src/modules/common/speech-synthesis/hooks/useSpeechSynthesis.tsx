@@ -16,7 +16,7 @@ export const useSpeechSynthesis = (
   const [voice, setVoice] = useState<SettingsVoiceType>(SESSION_DATA_INITIAL_STATE.settings.voice);
   const [voiceOptions, setVoiceOptions] = useState<SpeechSynthesisVoice[]>([]);
 
-  const loadVoices = () => {
+  const loadVoices = useCallback(() => {
     const voices = window.speechSynthesis.getVoices();
 
     if (voices?.length) {
@@ -24,7 +24,7 @@ export const useSpeechSynthesis = (
 
       setVoiceOptions(approvedVoices);
     }
-  };
+  }, []);
 
   // window.speechSynthesis.getVoices() has a loading delay
   useEffect(() => {
@@ -42,7 +42,7 @@ export const useSpeechSynthesis = (
         clearTimeout(timer);
       }, 300);
     };
-
+    console.log('IN SETUP');
     setup();
 
     return () => {
@@ -62,7 +62,7 @@ export const useSpeechSynthesis = (
         }
       }
     };
-  }, [text, initialVoice, speech?.voice]);
+  }, [text, initialVoice, speech?.voice, loadVoices]);
 
   const handleVoicePlay = useCallback(
     (customText?: string) => {
