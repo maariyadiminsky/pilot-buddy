@@ -1,7 +1,7 @@
 import { captureException } from '@common/error-monitoring';
 import { type ModalDataType } from '@common/types';
 import { createSpeechlySpeechRecognition } from '@speechly/speech-recognition-polyfill';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 export enum DictaphoneModalErrorType {
@@ -17,43 +17,46 @@ export const useInitializeSpeechToText = () => {
   const [isMicrophoneAvailable, setIsMicrophoneAvailable] = useState(false);
   const [modalData, setModalData] = useState<ModalDataType>();
 
-  const setModalError = (errorType: keyof typeof DictaphoneModalErrorType) => {
-    switch (errorType) {
-      case DictaphoneModalErrorType.permission:
-        setModalData({
-          title: 'Permissions Issue',
-          children: (
-            <div className="flex justify-center items-center">
-              To access Speech-to-Text, grant the app microphone permission.
-            </div>
-          ),
-          confirmChildren: 'Ok',
-        });
-        break;
-      case DictaphoneModalErrorType.browser:
-        setModalData({
-          title: 'Browser Issue',
-          children: (
-            <div className="flex justify-center items-center">
-              Browser lacks speech recognition; upgrade to latest Chrome version.
-            </div>
-          ),
-          confirmChildren: 'Ok',
-        });
-        break;
-      default:
-        setModalData({
-          title: 'Unknown Error',
-          children: (
-            <div className="flex">
-              Speech-to-Text is currently unavailable. Kindly contact support for assistance.
-            </div>
-          ),
-          confirmChildren: 'Ok',
-        });
-        break;
-    }
-  };
+  const setModalError = useCallback(
+    (errorType: keyof typeof DictaphoneModalErrorType) => {
+      switch (errorType) {
+        case DictaphoneModalErrorType.permission:
+          setModalData({
+            title: 'Permissions Issue',
+            children: (
+              <div className="flex justify-center items-center">
+                To access Speech-to-Text, grant the app microphone permission.
+              </div>
+            ),
+            confirmChildren: 'Ok',
+          });
+          break;
+        case DictaphoneModalErrorType.browser:
+          setModalData({
+            title: 'Browser Issue',
+            children: (
+              <div className="flex justify-center items-center">
+                Browser lacks speech recognition; upgrade to latest Chrome version.
+              </div>
+            ),
+            confirmChildren: 'Ok',
+          });
+          break;
+        default:
+          setModalData({
+            title: 'Unknown Error',
+            children: (
+              <div className="flex">
+                Speech-to-Text is currently unavailable. Kindly contact support for assistance.
+              </div>
+            ),
+            confirmChildren: 'Ok',
+          });
+          break;
+      }
+    },
+    [setModalData]
+  );
 
   useEffect(() => {
     const initialize = async () => {
@@ -103,7 +106,7 @@ export const useInitializeSpeechToText = () => {
     if (!isInitialized) {
       initialize();
     }
-  }, [isInitialized, browserSupportsSpeechRecognition, modalData]);
+  }, [isInitialized, browserSupportsSpeechRecognition, modalData, setModalError]);
 
   return {
     SpeechRecognition,

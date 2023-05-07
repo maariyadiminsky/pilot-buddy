@@ -1,7 +1,7 @@
 import { captureException } from '@common/error-monitoring';
 import { DictaphoneModalErrorType } from '@common/speech-recognition/hooks/useInitializeSpeechToText';
 import { type SpeechRecognitionType } from '@common/speech-recognition/types';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 
 export const useDictaphone = (
   SpeechRecognition: SpeechRecognitionType,
@@ -15,17 +15,20 @@ export const useDictaphone = (
 ) => {
   const { startListening, stopListening } = SpeechRecognition;
 
-  const handleError = (error: Error) => {
-    if (error?.message.includes('Permission denied')) {
-      setModalError(DictaphoneModalErrorType.permission);
-    } else {
-      setModalError(DictaphoneModalErrorType.default);
-    }
+  const handleError = useCallback(
+    (error: Error) => {
+      if (error?.message.includes('Permission denied')) {
+        setModalError(DictaphoneModalErrorType.permission);
+      } else {
+        setModalError(DictaphoneModalErrorType.default);
+      }
 
-    setModalOpen?.(true);
-  };
+      setModalOpen?.(true);
+    },
+    [setModalError, setModalOpen]
+  );
 
-  const stopListeningToAudio = async () => {
+  const stopListeningToAudio = useCallback(async () => {
     let hasError = null;
     try {
       stopListening();
@@ -40,7 +43,7 @@ export const useDictaphone = (
       }
       setIsOn(false);
     }
-  };
+  }, [handleError, setIsOn, stopListening]);
 
   const startListeningToAudio = () => {
     if (isDisabled) return;
@@ -80,7 +83,7 @@ export const useDictaphone = (
     }, timeToWaitUntilTurnOffMic);
 
     return () => clearTimeout(timer);
-  }, [isOn, isDisabled, isMicrophoneAvailable, time]);
+  }, [isOn, isDisabled, isMicrophoneAvailable, time, stopListeningToAudio]);
 
   return { startListeningToAudio, stopListeningToAudio };
 };
