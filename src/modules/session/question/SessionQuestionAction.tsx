@@ -128,7 +128,11 @@ export const SessionQuestionAction: FC<SessionQuestionActionProps> = ({
               name="question"
               id="question"
               className="flex w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
-              placeholder="Write your question or use Voice Recognition --->"
+              placeholder={
+                isQuestionMicrophoneOn
+                  ? 'Please wait a moment...'
+                  : 'Write your question or use Voice Recognition --->'
+              }
               value={question}
               onChange={(event) => handleSetQuestion(event.target.value)}
             />
@@ -163,7 +167,11 @@ export const SessionQuestionAction: FC<SessionQuestionActionProps> = ({
               name="answer"
               id="answer"
               className="flex w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
-              placeholder="Write your answer or use Voice Recognition --->"
+              placeholder={
+                isAnswerMicrophoneOn
+                  ? 'Please wait a moment...'
+                  : 'Write your question or use Voice Recognition --->'
+              }
               value={answer || ''}
               onChange={(event) => setAnswer(event.target.value)}
             />
