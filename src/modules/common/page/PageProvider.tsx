@@ -50,7 +50,7 @@ export const PageProvider: FC = () => {
     ]
   );
 
-  const getShowMainElements = () => {
+  const getShouldShowMainElements = () => {
     const pathsToIgnore = [ROUTES.SESSION_START_ROUTE, ROUTES.NOT_FOUND_ROUTE];
     const pathToIgnore = pathsToIgnore.find((path) => matchPath(path, pathname));
     if (pathToIgnore) {
@@ -64,7 +64,7 @@ export const PageProvider: FC = () => {
     return false;
   };
 
-  const shouldShowMainElements = useMemo(() => getShowMainElements(), [pathname, sessionId]);
+  const shouldShowMainElements = useMemo(() => getShouldShowMainElements(), [pathname, sessionId]);
 
   if (!isLoggedIn) return <Outlet />;
 
