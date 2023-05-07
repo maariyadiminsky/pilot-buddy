@@ -1,4 +1,5 @@
 import LogRocket from 'logrocket';
+import setupLogRocketReact from 'logrocket-react';
 
 const shouldUseLogRocket =
   process.env.NODE_ENV === 'production' && process.env.REACT_APP_LOG_ROCKET_APP_ID;
@@ -6,6 +7,7 @@ const shouldUseLogRocket =
 // initialize LogRocket
 if (shouldUseLogRocket) {
   LogRocket.init(process.env.REACT_APP_LOG_ROCKET_APP_ID || '');
+  setupLogRocketReact(LogRocket);
 }
 
 // Identify the user in LogRocket
