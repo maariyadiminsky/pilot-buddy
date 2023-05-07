@@ -3,7 +3,7 @@ import { type UserType } from '@common/types';
 import { Menu } from '@headlessui/react';
 import { Bars3CenterLeftIcon } from '@heroicons/react/24/outline';
 import { ProfileDropdown, ProfilePicture } from '@modules/profile';
-import { FC, useState, useEffect, useCallback } from 'react';
+import { FC, useState, useRef, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
 interface MobileHeaderProps {
@@ -16,20 +16,21 @@ export const MobileHeader: FC<MobileHeaderProps> = ({ setIsSidebarOpen }) => {
   const { pathname } = useLocation();
   const { getUserProfileData } = useDatabase();
 
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  const handleMenuItemClick = () => menuButtonRef.current?.blur();
+
   const getUser = useCallback(async () => {
     const userProfile = await getUserProfileData();
     setUser(userProfile);
-  }, []);
+  }, [getUserProfileData]);
 
   useEffect(() => {
-    getUser();
-  }, []);
-
-  useEffect(() => {
-    if (pathname === '/') {
+    if (pathname === '/' && !user) {
+      console.log('IN USE EFCT');
       getUser();
     }
-  }, [pathname]);
+  }, [pathname, user, getUser]);
 
   return (
     <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 border-b border-gray-200 bg-white lg:hidden">
@@ -45,12 +46,15 @@ export const MobileHeader: FC<MobileHeaderProps> = ({ setIsSidebarOpen }) => {
         <div className="flex items-center">
           <Menu as="div" className="relative ml-3">
             <div>
-              <Menu.Button className="flex max-w-xs rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2">
+              <Menu.Button
+                ref={menuButtonRef}
+                className="flex max-w-xs rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2"
+              >
                 <span className="sr-only">Open user menu</span>
                 <ProfilePicture wrapperType="header" src={user ? user?.image || '' : undefined} />
               </Menu.Button>
             </div>
-            <ProfileDropdown wrapperType="header" />
+            <ProfileDropdown wrapperType="header" handleMenuItemClick={handleMenuItemClick} />
           </Menu>
         </div>
       </div>

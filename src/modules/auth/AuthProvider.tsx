@@ -1,7 +1,7 @@
 import { logRocketIdentifyUser } from '@common/error-monitoring';
 import { getUniqId } from '@common/utils';
 import { getCookie, setCookie, removeCookie } from '@modules/auth/utils';
-import { ReactNode, FC, useState, useEffect, useMemo, createContext } from 'react';
+import { ReactNode, FC, useState, useEffect, useMemo, useCallback, createContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
@@ -35,17 +35,6 @@ export const AuthProvider: FC<AuthContextProps> = ({ children }) => {
 
   const location = useLocation();
   const navigate = useNavigate();
-
-  const handleLogin = (user: string, email: string) => {
-    // set for logged in status
-    setCookie(SESSION_COOKIE, getUniqId(), { path: '/', secure: true });
-    localStorage.setItem(USER_ID, user);
-    setUserId(user);
-    // identify for error handling
-    logRocketIdentifyUser(user, { email });
-    // route to homepage
-    navigate('/');
-  };
 
   const getExistingUserId = () => {
     const user = localStorage.getItem(USER_ID);
@@ -86,13 +75,27 @@ export const AuthProvider: FC<AuthContextProps> = ({ children }) => {
 
     setIsLoggedIn(isSignedIn);
     setIsAuthLoading(false);
-  }, [location]);
+  }, [location, userId]);
 
-  const handleLogout = () => {
+  const handleLogin = useCallback(
+    (user: string, email: string) => {
+      // set for logged in status
+      setCookie(SESSION_COOKIE, getUniqId(), { path: '/', secure: true });
+      localStorage.setItem(USER_ID, user);
+      setUserId(user);
+      // identify for error handling
+      logRocketIdentifyUser(user, { email });
+      // route to homepage
+      navigate('/');
+    },
+    [navigate]
+  );
+
+  const handleLogout = useCallback(() => {
     clearData();
     setIsLoggedIn(false);
     navigate('/');
-  };
+  }, [navigate]);
 
   const contextValues = useMemo(
     () => ({
@@ -103,7 +106,7 @@ export const AuthProvider: FC<AuthContextProps> = ({ children }) => {
       handleLogout,
       handleLogin,
     }),
-    [isLoggedIn, isAuthLoading, userId]
+    [isLoggedIn, isAuthLoading, userId, handleLogin, handleLogout]
   );
 
   return <AuthContext.Provider value={contextValues}>{children}</AuthContext.Provider>;

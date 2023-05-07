@@ -8,6 +8,7 @@ import { FC, Fragment } from 'react';
 
 interface ProfileDropdownProps {
   wrapperType: keyof typeof WrapperTypeEnum;
+  handleMenuItemClick: () => void;
 }
 
 const styles = {
@@ -17,7 +18,7 @@ const styles = {
   },
 };
 
-export const ProfileDropdown: FC<ProfileDropdownProps> = ({ wrapperType }) => (
+export const ProfileDropdown: FC<ProfileDropdownProps> = ({ wrapperType, handleMenuItemClick }) => (
   <Transition
     as={Fragment}
     enter="transition ease-out duration-100"
@@ -34,19 +35,25 @@ export const ProfileDropdown: FC<ProfileDropdownProps> = ({ wrapperType }) => (
       )}
     >
       <div className="py-1 hover:bg-gray-200">
-        <ProfileLink link={ROUTES.PROFILE_ROUTE} text="View Profile" />
+        <ProfileLink
+          link={ROUTES.PROFILE_ROUTE}
+          text="View Profile"
+          handleMenuItemClick={handleMenuItemClick}
+        />
       </div>
       <div>
         <ProfileLink
           link="https://github.com/maariyadiminsky/pilot-buddy/issues"
           text="Support"
           icon={BugAntIcon}
+          handleMenuItemClick={handleMenuItemClick}
           isExternalLink
         />
         <ProfileLink
           link="https://github.com/maariyadiminsky/pilot-buddy"
           text="Github"
           icon={CodeBracketIcon}
+          handleMenuItemClick={handleMenuItemClick}
           isExternalLink
         />
         <ProfileLink
@@ -54,6 +61,7 @@ export const ProfileDropdown: FC<ProfileDropdownProps> = ({ wrapperType }) => (
           text="Buy me Ramen"
           icon={HeartIcon}
           iconClassName="text-rose-500"
+          handleMenuItemClick={handleMenuItemClick}
           isExternalLink
         />
       </div>
