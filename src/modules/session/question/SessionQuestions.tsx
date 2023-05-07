@@ -7,6 +7,7 @@ import { type SelectMenuItemType } from '@common/types';
 import { removeObjectFromArray, jumpPageToTop } from '@common/utils';
 import { SessionQuestionAction, SessionQuestionsList } from '@modules/session/question';
 import { SessionQuestionType } from '@modules/session/types';
+import { getArrWithDataBackInOrder } from '@modules/session/utils';
 import { FC, useState, useEffect, useCallback } from 'react';
 import { DragDropContext, Droppable, type DropResult } from 'react-beautiful-dnd';
 
@@ -36,6 +37,7 @@ export const SessionQuestions: FC<SessionQuestionsProps> = ({
 }) => {
   const [questions, setQuestions] = useState<SessionQuestionType[]>();
   const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>();
+  const [currentQuestionOrderIndex, setCurrentQuestionOrderIndex] = useState<number>();
 
   const { updateDBPartialDataOfSession, updateDBPartialDataOfSessionTableItem } = useDatabase();
   const { isDragAndDropEnabled } = useDragAndDropWithStrictMode();
@@ -55,15 +57,14 @@ export const SessionQuestions: FC<SessionQuestionsProps> = ({
     }
   }, [questionsData, handleSetQuestions]);
 
-  const handleAddQuestion = (question: SessionQuestionType) => [
-    ...(questions || []),
-    { ...question },
-  ];
+  const handleAddQuestion = (question: SessionQuestionType, index: number) =>
+    getArrWithDataBackInOrder(index, question, questions);
 
   const handleSubmitQuestion = (question: SessionQuestionType) => {
     // save in storage
     let hasError = null;
-    const updatedQuestions = handleAddQuestion(question);
+    // new questions won't have index, so default to 0
+    const updatedQuestions = handleAddQuestion(question, currentQuestionOrderIndex || 0);
     try {
       updateDBPartialDataOfSession({ questions: updatedQuestions }, sessionId);
       updateDBPartialDataOfSessionTableItem({ questions: updatedQuestions.length }, sessionId);
@@ -110,21 +111,30 @@ export const SessionQuestions: FC<SessionQuestionsProps> = ({
     // add back the last item user was editing.
     // This also acts as a cancel of the last edit.
     if (currentQuestion) {
-      const questionsUpdated = handleAddQuestion(currentQuestion);
+      const currentQuestionIndex = questions?.findIndex((question) => question.id === id) || 0;
+      setCurrentQuestionOrderIndex(currentQuestionIndex);
+
+      const questionsUpdated = handleAddQuestion(currentQuestion, currentQuestionIndex);
+
       handleSetQuestions(questionsUpdated);
       handleRemoveQuestionFromUIOnly(id, questionsUpdated);
     } else {
+      const current = questions?.find((question) => question.id === id);
+      const currentQuestionIndex = questions?.findIndex((question) => question.id === id) || 0;
+      setCurrentQuestionOrderIndex(currentQuestionIndex);
+
       handleRemoveQuestionFromUIOnly(id);
+      setCurrentQuestion(current);
     }
 
-    setCurrentQuestion(questions?.find((question) => question.id === id));
     setShouldShowQuestionAction(true);
   };
 
   // when user opens to edit or create and clicks cancel button
   const handleCancelAction = () => {
     if (currentQuestion) {
-      const questionsUpdated = handleAddQuestion(currentQuestion);
+      const questionsUpdated = handleAddQuestion(currentQuestion, currentQuestionOrderIndex || 0);
+
       handleSetQuestions(questionsUpdated);
       setCurrentQuestion(undefined);
     }
@@ -155,11 +165,11 @@ export const SessionQuestions: FC<SessionQuestionsProps> = ({
 
     // save in storage
     let hasError = null;
-    const updatedQuestions = [
-      ...questionsWithoutMovedQuestion.slice(0, draggedTo),
+    const updatedQuestions = getArrWithDataBackInOrder(
+      draggedTo,
       question,
-      ...questionsWithoutMovedQuestion.slice(draggedTo),
-    ];
+      questionsWithoutMovedQuestion
+    );
     try {
       updateDBPartialDataOfSession({ questions: updatedQuestions }, sessionId);
     } catch (error) {
