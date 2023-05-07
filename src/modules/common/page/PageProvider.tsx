@@ -4,7 +4,7 @@ import { Sidebar } from '@common/sidebar';
 import { type BrandButtonType } from '@common/types';
 import { ROUTES, ROUTE_PATHS } from '@modules/app';
 import { AuthContext } from '@modules/auth';
-import { FC, useState, useMemo, createContext, useContext } from 'react';
+import { FC, useState, useMemo, useCallback, createContext, useContext } from 'react';
 import { Outlet, useParams, useLocation, matchPath } from 'react-router-dom';
 
 interface PageContextProps {
@@ -50,7 +50,7 @@ export const PageProvider: FC = () => {
     ]
   );
 
-  const getShouldShowMainElements = () => {
+  const getShouldShowMainElements = useCallback(() => {
     const pathsToIgnore = [ROUTES.SESSION_START_ROUTE, ROUTES.NOT_FOUND_ROUTE];
     const pathToIgnore = pathsToIgnore.find((path) => matchPath(path, pathname));
     if (pathToIgnore) {
@@ -62,9 +62,12 @@ export const PageProvider: FC = () => {
     }
 
     return false;
-  };
+  }, [pathname, sessionId]);
 
-  const shouldShowMainElements = useMemo(() => getShouldShowMainElements(), [pathname, sessionId]);
+  const shouldShowMainElements = useMemo(
+    () => getShouldShowMainElements(),
+    [getShouldShowMainElements]
+  );
 
   if (!isLoggedIn) return <Outlet />;
 

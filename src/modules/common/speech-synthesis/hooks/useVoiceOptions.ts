@@ -1,6 +1,7 @@
 import { APPROVED_VOICES } from '@common/speech-synthesis/constants';
 import { useState, useEffect, useCallback } from 'react';
 
+// window.speechSynthesis.getVoices() has a loading delay
 export const useVoiceOptions = () => {
   const [voiceOptions, setVoiceOptions] = useState<SpeechSynthesisVoice[]>([]);
 

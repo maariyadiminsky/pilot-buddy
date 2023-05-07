@@ -19,84 +19,6 @@ export const useSpeechSynthesis = (
 
   const { voiceOptions } = useVoiceOptions();
 
-  // window.speechSynthesis.getVoices() has a loading delay
-  useEffect(() => {
-    let cancelFn: () => void;
-
-    const setup = () => {
-      const { cancel } = window.speechSynthesis;
-      cancelFn = cancel;
-      const voiceToSet = initialVoice || voice || DEFAULT_VOICE;
-      const speechSynthesisUtterance = setupSpeechSynthesisUtterance(
-        voiceToSet,
-        voiceOptions,
-        text
-      );
-
-      setSpeech(speechSynthesisUtterance);
-
-      if (voiceToSet.voice.name !== voice?.voice.name) {
-        setVoice(voiceToSet);
-      }
-    };
-
-    if (voiceOptions?.length && !speech) {
-      setup();
-    }
-
-    return () => {
-      if (speech?.voice) {
-        try {
-          cancelFn?.();
-        } catch (error) {
-          // illegal invocation error when component unmounts during development changes
-          // because cancel loses original window.speechSynthesis context.
-          if (error instanceof Error) {
-            captureException(error);
-          }
-        }
-      }
-    };
-  }, [text, voice, initialVoice, speech, voiceOptions]);
-
-  const handleVoicePlay = useCallback(
-    (customText?: string) => {
-      if (isPaused) {
-        window.speechSynthesis.resume();
-      } else if (customText) {
-        // in the case window context is lost or want to pass custom text
-        const voiceToSet = initialVoice || voice;
-        const speechSynthesisUtterance = setupSpeechSynthesisUtterance(
-          voiceToSet,
-          voiceOptions,
-          customText
-        );
-
-        setSpeech(speechSynthesisUtterance);
-
-        window.speechSynthesis.speak(speechSynthesisUtterance);
-      } else if (speech?.voice && voice) {
-        const speechSynthesisUtterance = setupSpeechSynthesisUtterance(
-          voice,
-          voiceOptions,
-          undefined,
-          speech
-        );
-
-        window.speechSynthesis.speak(speechSynthesisUtterance);
-      }
-
-      setIsPaused(false);
-    },
-    /*
-      speech causing re-render issues.
-      I need to pass full speech to setupSpeechSynthesisUtterance,
-      although there is no need to re-render as a result.
-    */
-    /* eslint-disable-next-line react-hooks/exhaustive-deps */
-    [isPaused, initialVoice, voice, speech?.voice, text, voiceOptions]
-  );
-
   const handleVoicePause = () => {
     setIsPaused(true);
     window.speechSynthesis.pause();
@@ -130,6 +52,62 @@ export const useSpeechSynthesis = (
     setVoice(data);
     setSettingsVoice?.(data);
   };
+
+  const handleVoicePlay = useCallback(
+    (customText?: string) => {
+      if (isPaused) {
+        window.speechSynthesis.resume();
+      } else if (speech) {
+        if (customText) {
+          speech.text = customText;
+        }
+
+        window.speechSynthesis.speak(speech);
+      }
+
+      setIsPaused(false);
+    },
+    [isPaused, speech]
+  );
+
+  useEffect(() => {
+    const setup = () => {
+      const voiceToSet = initialVoice || voice || DEFAULT_VOICE;
+      const speechSynthesisUtterance = setupSpeechSynthesisUtterance(
+        voiceToSet,
+        voiceOptions,
+        text
+      );
+
+      setSpeech(speechSynthesisUtterance);
+      setVoice(voiceToSet);
+    };
+
+    const isInitialVoiceDifferentFromCurrentVoice =
+      initialVoice &&
+      (initialVoice.voice.name !== voice.voice.name ||
+        initialVoice.volume !== voice.volume ||
+        initialVoice.pitch !== voice.pitch ||
+        initialVoice.rate !== voice.rate);
+
+    if (voiceOptions?.length && (!speech || (voice && isInitialVoiceDifferentFromCurrentVoice))) {
+      setup();
+    }
+
+    return () => {
+      if (speech?.voice) {
+        try {
+          handleVoiceStop();
+        } catch (error) {
+          // illegal invocation error when component unmounts during development changes
+          // because cancel loses original window.speechSynthesis context.
+          if (error instanceof Error) {
+            captureException(error);
+          }
+        }
+      }
+    };
+  }, [text, voice, initialVoice, speech, voiceOptions, handleVoiceStop]);
 
   return {
     speech,

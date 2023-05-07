@@ -195,13 +195,10 @@ export const SessionQuiz: FC = () => {
   ]);
 
   useEffect(() => {
-    const shouldHaveVoiceReadQuestions = session?.settings.shouldReadOutLoud;
-    const voiceOptionsHaveLoaded = voiceOptions.length;
-
     if (
       currentQuestion &&
-      shouldHaveVoiceReadQuestions &&
-      voiceOptionsHaveLoaded &&
+      session?.settings.shouldReadOutLoud &&
+      voiceOptions.length &&
       speech?.voice &&
       questionsLeft !== 0
     ) {
