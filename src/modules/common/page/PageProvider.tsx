@@ -5,7 +5,7 @@ import { type BrandButtonType } from '@common/types';
 import { ROUTES, ROUTE_PATHS } from '@modules/app';
 import { AuthContext } from '@modules/auth';
 import { FC, useState, useMemo, createContext, useContext } from 'react';
-import { Outlet, useParams, useLocation } from 'react-router-dom';
+import { Outlet, useParams, useLocation, matchPath } from 'react-router-dom';
 
 interface PageContextProps {
   pageTitle: string;
@@ -50,11 +50,24 @@ export const PageProvider: FC = () => {
     ]
   );
 
+  const getShowMainElements = () => {
+    const pathsToIgnore = [ROUTES.SESSION_START_ROUTE, ROUTES.NOT_FOUND_ROUTE];
+    const pathToIgnore = pathsToIgnore.find((path) => matchPath(path, pathname));
+    if (pathToIgnore) {
+      return false;
+    }
+
+    if (sessionId || ROUTE_PATHS.includes(pathname)) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const shouldShowMainElements = useMemo(() => getShowMainElements(), [pathname, sessionId]);
+
   if (!isLoggedIn) return <Outlet />;
 
-  // will need to improve this if app grows
-  const shouldShowMainElements =
-    sessionId || (pathname !== ROUTES.NOT_FOUND_ROUTE && ROUTE_PATHS.includes(pathname));
   return (
     <div className="relative isolate overflow-hidden bg-white h-full">
       {shouldShowMainElements && (
