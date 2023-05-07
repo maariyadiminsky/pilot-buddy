@@ -106,7 +106,7 @@ export const SessionQuiz: FC = () => {
     handleSetMicrophoneOn(false);
   }, [resetTranscript, handleSetMicrophoneOn]);
 
-  const { handleVoicePlay, handleVoiceStop, voiceOptions } = useSpeechSynthesis(
+  const { handleVoicePlay, handleVoiceStop, voiceOptions, speech } = useSpeechSynthesis(
     undefined,
     session?.settings.voice
   );
@@ -202,15 +202,16 @@ export const SessionQuiz: FC = () => {
       currentQuestion &&
       shouldHaveVoiceReadQuestions &&
       voiceOptionsHaveLoaded &&
+      speech?.voice &&
       questionsLeft !== 0
     ) {
       handleVoicePlay(currentQuestion.question);
     }
   }, [
     currentQuestion,
-    currentQuestion?.id,
     session?.settings.shouldReadOutLoud,
     voiceOptions.length,
+    speech?.voice,
     questionsLeft,
     handleVoicePlay,
   ]);

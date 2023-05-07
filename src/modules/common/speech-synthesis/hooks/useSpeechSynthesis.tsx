@@ -1,11 +1,13 @@
 import { captureException } from '@common/error-monitoring';
-import { APPROVED_VOICES } from '@common/speech-synthesis/constants';
+import { useVoiceOptions } from '@common/speech-synthesis/hooks/useVoiceOptions';
+import { setupSpeechSynthesisUtterance } from '@common/speech-synthesis/utils';
 import { type SelectMenuItemType } from '@common/types';
 import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
 import { type SettingsVoiceType } from '@modules/session/types';
 import { SyntheticEvent, useState, useEffect, useCallback } from 'react';
 
 // todo: issues on mobile - https://talkrapp.com/speechSynthesis.html
+const DEFAULT_VOICE = SESSION_DATA_INITIAL_STATE.settings.voice;
 export const useSpeechSynthesis = (
   text?: string,
   initialVoice?: SettingsVoiceType,
@@ -13,46 +15,39 @@ export const useSpeechSynthesis = (
 ) => {
   const [isPaused, setIsPaused] = useState(false);
   const [speech, setSpeech] = useState<SpeechSynthesisUtterance>();
-  const [voice, setVoice] = useState<SettingsVoiceType>(SESSION_DATA_INITIAL_STATE.settings.voice);
-  const [voiceOptions, setVoiceOptions] = useState<SpeechSynthesisVoice[]>([]);
+  const [voice, setVoice] = useState<SettingsVoiceType>(DEFAULT_VOICE);
 
-  const loadVoices = useCallback(() => {
-    const voices = window.speechSynthesis.getVoices();
-
-    if (voices?.length) {
-      const approvedVoices = voices.filter(({ name }) => APPROVED_VOICES.includes(name));
-
-      setVoiceOptions(approvedVoices);
-    }
-  }, []);
+  const { voiceOptions } = useVoiceOptions();
 
   // window.speechSynthesis.getVoices() has a loading delay
   useEffect(() => {
-    const { cancel } = window.speechSynthesis;
+    let cancelFn: () => void;
 
-    let timer: ReturnType<typeof setTimeout>;
     const setup = () => {
-      const speechSynthesisUtterance = new SpeechSynthesisUtterance(text);
+      const { cancel } = window.speechSynthesis;
+      cancelFn = cancel;
+      const voiceToSet = initialVoice || voice || DEFAULT_VOICE;
+      const speechSynthesisUtterance = setupSpeechSynthesisUtterance(
+        voiceToSet,
+        voiceOptions,
+        text
+      );
 
       setSpeech(speechSynthesisUtterance);
-      setVoice(initialVoice || SESSION_DATA_INITIAL_STATE.settings.voice);
 
-      timer = setTimeout(() => {
-        loadVoices();
-        clearTimeout(timer);
-      }, 300);
+      if (voiceToSet.voice.name !== voice?.voice.name) {
+        setVoice(voiceToSet);
+      }
     };
-    console.log('IN SETUP');
-    setup();
+
+    if (voiceOptions?.length && !speech) {
+      setup();
+    }
 
     return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-
       if (speech?.voice) {
         try {
-          cancel?.();
+          cancelFn?.();
         } catch (error) {
           // illegal invocation error when component unmounts during development changes
           // because cancel loses original window.speechSynthesis context.
@@ -62,7 +57,7 @@ export const useSpeechSynthesis = (
         }
       }
     };
-  }, [text, initialVoice, speech?.voice, loadVoices]);
+  }, [text, voice, initialVoice, speech, voiceOptions]);
 
   const handleVoicePlay = useCallback(
     (customText?: string) => {
@@ -70,36 +65,36 @@ export const useSpeechSynthesis = (
         window.speechSynthesis.resume();
       } else if (customText) {
         // in the case window context is lost or want to pass custom text
-        const speechSynthesisUtterance = new SpeechSynthesisUtterance(text || customText);
-
-        const { voice: voiceData, pitch, rate, volume } = initialVoice || voice;
-
-        speechSynthesisUtterance.voice =
-          voiceOptions.find((voiceOption) => voiceOption.name === voiceData.name) || null;
-
-        speechSynthesisUtterance.pitch = pitch;
-        speechSynthesisUtterance.rate = rate;
-        speechSynthesisUtterance.volume = volume;
+        const voiceToSet = initialVoice || voice;
+        const speechSynthesisUtterance = setupSpeechSynthesisUtterance(
+          voiceToSet,
+          voiceOptions,
+          customText
+        );
 
         setSpeech(speechSynthesisUtterance);
 
         window.speechSynthesis.speak(speechSynthesisUtterance);
-      } else if (speech && voice) {
-        const { voice: voiceData, pitch, rate, volume } = voice;
+      } else if (speech?.voice && voice) {
+        const speechSynthesisUtterance = setupSpeechSynthesisUtterance(
+          voice,
+          voiceOptions,
+          undefined,
+          speech
+        );
 
-        // otherwise if context intact and have current speech set
-        speech.voice =
-          voiceOptions.find((voiceOption) => voiceOption.name === voiceData.name) || null;
-        speech.pitch = pitch;
-        speech.rate = rate;
-        speech.volume = volume;
-
-        window.speechSynthesis.speak(speech);
+        window.speechSynthesis.speak(speechSynthesisUtterance);
       }
 
       setIsPaused(false);
     },
-    [isPaused, initialVoice, voice, speech, text, voiceOptions]
+    /*
+      speech causing re-render issues.
+      I need to pass full speech to setupSpeechSynthesisUtterance,
+      although there is no need to re-render as a result.
+    */
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+    [isPaused, initialVoice, voice, speech?.voice, text, voiceOptions]
   );
 
   const handleVoicePause = () => {
