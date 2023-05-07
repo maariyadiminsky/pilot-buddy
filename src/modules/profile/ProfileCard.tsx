@@ -13,12 +13,6 @@ export const ProfileCard: FC<ProfileCardProps> = ({ wrapperType, user }) => {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleMenuItemClick = () => {
-    console.log(
-      'in handleMenu itemclick:',
-      menuButtonRef,
-      'menuButtonRef.current?.blur:',
-      menuButtonRef.current?.blur
-    );
     menuButtonRef.current?.blur();
   };
 

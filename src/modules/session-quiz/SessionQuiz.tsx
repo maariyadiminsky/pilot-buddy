@@ -1,5 +1,5 @@
-import { useDatabase } from '@common/database/hooks';
 import { DATABASE_ERROR } from '@common/database/constants';
+import { useDatabase } from '@common/database/hooks';
 import { captureException } from '@common/error-monitoring';
 import { usePrevious } from '@common/hooks';
 import { Loader } from '@common/loader';
@@ -14,7 +14,7 @@ import { type SessionDataType, type SessionQuestionType } from '@modules/session
 import { SessionQuizResults } from '@modules/session-quiz/SessionQuizResults';
 import { SessionQuestionWithAnswerType } from '@modules/session-quiz/types';
 import { getQuestionOrder, getTimeData } from '@modules/session-quiz/utils';
-import { FC, SyntheticEvent, useState, useEffect, useMemo, useRef } from 'react';
+import { FC, SyntheticEvent, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 export const SessionQuiz: FC = () => {
@@ -52,7 +52,7 @@ export const SessionQuiz: FC = () => {
     };
 
     getSession();
-  }, [id]);
+  }, [id, navigate, getDBSession]);
 
   // session data and voice if enabled
   const questionsOrdered = useMemo(
@@ -60,7 +60,7 @@ export const SessionQuiz: FC = () => {
       session?.settings.shouldHaveOrder && session?.settings.order && session?.questions
         ? getQuestionOrder(session?.settings.order.name, session?.questions)
         : session?.questions,
-    [session?.questions]
+    [session?.questions, session?.settings.order, session?.settings.shouldHaveOrder]
   );
 
   const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType | undefined>(
@@ -87,21 +87,24 @@ export const SessionQuiz: FC = () => {
     transcript,
     modalData,
     setModalError,
-    clearModalData,
+    setModalData,
     resetTranscript,
   } = useInitializeSpeechToText();
 
   const [isMicrophoneOn, setIsMicrophoneOn] = useState(false);
 
-  const handleSetMicrophoneOn = (value: boolean) => {
-    clearModalData();
-    setIsMicrophoneOn(value);
-  };
+  const handleSetMicrophoneOn = useCallback(
+    (value: boolean) => {
+      setModalData(undefined);
+      setIsMicrophoneOn(value);
+    },
+    [setModalData]
+  );
 
-  const resetAndTurnOffMicrophone = () => {
+  const resetAndTurnOffMicrophone = useCallback(() => {
     resetTranscript();
     handleSetMicrophoneOn(false);
-  };
+  }, [resetTranscript, handleSetMicrophoneOn]);
 
   const { handleVoicePlay, handleVoiceStop, voiceOptions } = useSpeechSynthesis(
     undefined,
@@ -117,39 +120,51 @@ export const SessionQuiz: FC = () => {
   useEffect(() => {
     // stop voice when user goes back to last page
     window.onpopstate = () => handleVoiceStop();
-  }, []);
+  }, [handleVoiceStop]);
 
   const currentTime = useMemo(
     () =>
-      session?.settings.isTimed
+      currentQuestion?.id && session?.settings.isTimed
         ? getTimeData(currentQuestion?.time || session?.settings.time)
         : null,
-    [currentQuestion?.time, currentQuestion?.id]
+    [session?.settings.isTimed, session?.settings.time, currentQuestion?.time, currentQuestion?.id]
   );
 
   const [timeLeft, setTimeLeft] = useState(currentTime?.timeUI);
 
   // quiz
-  const handleAddQuizAnswer = (event?: SyntheticEvent<Element>) => {
-    if (!currentQuestion || !questionsOrdered) return;
+  const handleAddQuizAnswer = useCallback(
+    (event?: SyntheticEvent<Element>) => {
+      if (!currentQuestion || !questionsOrdered) return;
 
-    if (event) event.preventDefault();
+      if (event) event.preventDefault();
 
-    if (session?.settings.shouldReadOutLoud) handleVoiceStop();
+      if (session?.settings.shouldReadOutLoud) handleVoiceStop();
 
-    const questionsLeftCount = questionsLeft - 1;
+      const questionsLeftCount = questionsLeft - 1;
 
-    setQuestionsLeft(questionsLeftCount);
-    setQuestionsWithAnswers([
-      ...(questionsWithAnswers || []),
-      { ...currentQuestion, quizAnswer: currentQuizAnswer },
-    ]);
-    setCurrentQuizAnswer('');
-    resetAndTurnOffMicrophone();
+      setQuestionsLeft(questionsLeftCount);
+      setQuestionsWithAnswers([
+        ...(questionsWithAnswers || []),
+        { ...currentQuestion, quizAnswer: currentQuizAnswer },
+      ]);
+      setCurrentQuizAnswer('');
+      resetAndTurnOffMicrophone();
 
-    const current = questionsOrdered[questionsOrdered.length - questionsLeftCount];
-    setCurrentQuestion({ ...current });
-  };
+      const current = questionsOrdered[questionsOrdered.length - questionsLeftCount];
+      setCurrentQuestion({ ...current });
+    },
+    [
+      questionsLeft,
+      currentQuestion,
+      questionsOrdered,
+      questionsWithAnswers,
+      currentQuizAnswer,
+      session?.settings.shouldReadOutLoud,
+      handleVoiceStop,
+      resetAndTurnOffMicrophone,
+    ]
+  );
 
   useEffect(() => {
     if (!session?.settings.isTimed || !questionsLeft) return undefined;
@@ -170,6 +185,8 @@ export const SessionQuiz: FC = () => {
 
     return () => clearInterval(timer);
   }, [
+    currentTime?.timeUI,
+    handleAddQuizAnswer,
     session?.settings.isTimed,
     previousQuestion?.id,
     currentQuestion?.id,
@@ -190,10 +207,12 @@ export const SessionQuiz: FC = () => {
       handleVoicePlay(currentQuestion.question);
     }
   }, [
+    currentQuestion,
     currentQuestion?.id,
     session?.settings.shouldReadOutLoud,
     voiceOptions.length,
     questionsLeft,
+    handleVoicePlay,
   ]);
 
   if (!questionsOrdered) {

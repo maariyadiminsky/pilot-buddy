@@ -1,5 +1,5 @@
-import { useDatabase } from '@common/database/hooks';
 import { DATABASE_ERROR } from '@common/database/constants';
+import { useDatabase } from '@common/database/hooks';
 import { captureException } from '@common/error-monitoring';
 import { PageContext } from '@common/page';
 import { type SelectMenuItemType, type BrandButtonType } from '@common/types';
@@ -56,7 +56,7 @@ export const Session: FC = () => {
     };
 
     getSession();
-  }, [id, getDBSession, getDBSessionTableItem]);
+  }, [id, getDBSession, getDBSessionTableItem, navigate]);
 
   const headerActions = useMemo(
     () =>
@@ -78,7 +78,7 @@ export const Session: FC = () => {
           handleOnClick: () => setShouldShowQuestionAction(true),
         },
       ] as BrandButtonType[],
-    [shouldShowQuestionAction, questionsCount]
+    [shouldShowQuestionAction, questionsCount, id, navigate]
   );
 
   const { setPageTitle, setPageHeaderActions } = useContext(PageContext);
@@ -86,7 +86,7 @@ export const Session: FC = () => {
   useEffect(() => {
     setPageTitle(sessionName);
     setPageHeaderActions(headerActions);
-  }, [sessionName]);
+  }, [sessionName, headerActions, setPageTitle, setPageHeaderActions]);
 
   if (!id) return null;
 

@@ -45,7 +45,7 @@ export const DatabaseProvider: FC<DatabaseContextProps> = ({ children }) => {
 
   useEffect(() => {
     setup();
-  }, []);
+  }, [setup]);
 
   const contextValues = useMemo(
     () => ({

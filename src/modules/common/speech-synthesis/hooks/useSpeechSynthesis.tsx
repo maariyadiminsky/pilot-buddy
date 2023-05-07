@@ -3,7 +3,7 @@ import { APPROVED_VOICES } from '@common/speech-synthesis/constants';
 import { type SelectMenuItemType } from '@common/types';
 import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
 import { type SettingsVoiceType } from '@modules/session/types';
-import { SyntheticEvent, useState, useEffect } from 'react';
+import { SyntheticEvent, useState, useEffect, useCallback } from 'react';
 
 // todo: issues on mobile - https://talkrapp.com/speechSynthesis.html
 export const useSpeechSynthesis = (
@@ -30,15 +30,20 @@ export const useSpeechSynthesis = (
   useEffect(() => {
     const { cancel } = window.speechSynthesis;
 
-    const speechSynthesisUtterance = new SpeechSynthesisUtterance(text);
+    let timer: ReturnType<typeof setTimeout>;
+    const setup = () => {
+      const speechSynthesisUtterance = new SpeechSynthesisUtterance(text);
 
-    setSpeech(speechSynthesisUtterance);
-    setVoice(initialVoice || SESSION_DATA_INITIAL_STATE.settings.voice);
+      setSpeech(speechSynthesisUtterance);
+      setVoice(initialVoice || SESSION_DATA_INITIAL_STATE.settings.voice);
 
-    const timer: ReturnType<typeof setTimeout> = setTimeout(() => {
-      loadVoices();
-      clearTimeout(timer);
-    }, 300);
+      timer = setTimeout(() => {
+        loadVoices();
+        clearTimeout(timer);
+      }, 300);
+    };
+
+    setup();
 
     return () => {
       if (timer) {
@@ -57,52 +62,55 @@ export const useSpeechSynthesis = (
         }
       }
     };
-  }, [text]);
+  }, [text, initialVoice, speech?.voice]);
 
-  const handleVoicePlay = (customText?: string) => {
-    if (isPaused) {
-      window.speechSynthesis.resume();
-    } else if (customText) {
-      // in the case window context is lost or want to pass custom text
-      const speechSynthesisUtterance = new SpeechSynthesisUtterance(text || customText);
+  const handleVoicePlay = useCallback(
+    (customText?: string) => {
+      if (isPaused) {
+        window.speechSynthesis.resume();
+      } else if (customText) {
+        // in the case window context is lost or want to pass custom text
+        const speechSynthesisUtterance = new SpeechSynthesisUtterance(text || customText);
 
-      const { voice: voiceData, pitch, rate, volume } = initialVoice || voice;
+        const { voice: voiceData, pitch, rate, volume } = initialVoice || voice;
 
-      speechSynthesisUtterance.voice =
-        voiceOptions.find((voiceOption) => voiceOption.name === voiceData.name) || null;
+        speechSynthesisUtterance.voice =
+          voiceOptions.find((voiceOption) => voiceOption.name === voiceData.name) || null;
 
-      speechSynthesisUtterance.pitch = pitch;
-      speechSynthesisUtterance.rate = rate;
-      speechSynthesisUtterance.volume = volume;
+        speechSynthesisUtterance.pitch = pitch;
+        speechSynthesisUtterance.rate = rate;
+        speechSynthesisUtterance.volume = volume;
 
-      setSpeech(speechSynthesisUtterance);
+        setSpeech(speechSynthesisUtterance);
 
-      window.speechSynthesis.speak(speechSynthesisUtterance);
-    } else if (speech && voice) {
-      const { voice: voiceData, pitch, rate, volume } = voice;
+        window.speechSynthesis.speak(speechSynthesisUtterance);
+      } else if (speech && voice) {
+        const { voice: voiceData, pitch, rate, volume } = voice;
 
-      // otherwise if context intact and have current speech set
-      speech.voice =
-        voiceOptions.find((voiceOption) => voiceOption.name === voiceData.name) || null;
-      speech.pitch = pitch;
-      speech.rate = rate;
-      speech.volume = volume;
+        // otherwise if context intact and have current speech set
+        speech.voice =
+          voiceOptions.find((voiceOption) => voiceOption.name === voiceData.name) || null;
+        speech.pitch = pitch;
+        speech.rate = rate;
+        speech.volume = volume;
 
-      window.speechSynthesis.speak(speech);
-    }
+        window.speechSynthesis.speak(speech);
+      }
 
-    setIsPaused(false);
-  };
+      setIsPaused(false);
+    },
+    [isPaused, initialVoice, voice, speech, text, voiceOptions]
+  );
 
   const handleVoicePause = () => {
     setIsPaused(true);
     window.speechSynthesis.pause();
   };
 
-  const handleVoiceStop = () => {
+  const handleVoiceStop = useCallback(() => {
     setIsPaused(false);
     window.speechSynthesis.cancel();
-  };
+  }, []);
 
   const handleVoiceChange = (voiceSelected: SelectMenuItemType) => {
     const data = { ...voice, voice: voiceSelected };

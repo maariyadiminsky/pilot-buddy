@@ -45,7 +45,7 @@ export const SessionQuestionAction: FC<SessionQuestionActionProps> = ({
     transcript,
     modalData,
     setModalError,
-    clearModalData,
+    setModalData,
   } = useInitializeSpeechToText();
 
   // when user edits a question
@@ -65,7 +65,7 @@ export const SessionQuestionAction: FC<SessionQuestionActionProps> = ({
   }, [isQuestionMicrophoneOn, isAnswerMicrophoneOn, transcript]);
 
   const handleSetIsOn = (handleMicrophoneOn: (value: boolean) => void, value: boolean) => {
-    clearModalData();
+    setModalData(undefined);
     handleMicrophoneOn(value);
   };
 

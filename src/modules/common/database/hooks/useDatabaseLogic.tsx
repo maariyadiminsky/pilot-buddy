@@ -2,18 +2,16 @@ import { DATABASE_STORE, DATABASE_ERROR } from '@common/database/constants';
 import { type DatabaseType } from '@common/database/types';
 import { logError, captureException } from '@common/error-monitoring';
 import { type UserType } from '@common/types';
-import { type IDBPDatabase } from 'idb';
 import { AuthContext } from '@modules/auth';
 import { getInitialSessionData } from '@modules/session/constants';
 import { type SessionDataType } from '@modules/session/types';
 import { type SessionsTableDataType } from '@modules/study-room/types';
+import { type IDBPDatabase } from 'idb';
 import { useCallback, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 // ---> important: parent component should wrap each method in a try/catch
 export const useDatabaseLogic = (database: IDBPDatabase<DatabaseType> | null) => {
   const { userId } = useContext(AuthContext);
-  const navigate = useNavigate();
 
   const updateDbPartialDataOfItem = async (
     storeName: string,
@@ -42,23 +40,28 @@ export const useDatabaseLogic = (database: IDBPDatabase<DatabaseType> | null) =>
     return null;
   };
 
-  const getDBAllStoreItems = useCallback(async (storeName: string) => {
-    if (!database) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
+  const getDBAllStoreItems = useCallback(
+    async (storeName: string) => {
+      if (!database) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
 
-    const tx = database.transaction(storeName, 'readonly');
-    const store = tx.objectStore(storeName);
-    const items = await store.getAll();
-    await tx.done;
+      const tx = database.transaction(storeName, 'readonly');
+      const store = tx.objectStore(storeName);
+      const items = await store.getAll();
+      await tx.done;
 
-    return items || [];
-    /* eslint-disable-next-line react-hooks/exhaustive-deps */
-  }, []);
+      return items || [];
+    },
+    [database]
+  );
 
-  const getDBStoreItem = useCallback(async (storeName: string, keytoFindItem: string) => {
-    if (!database) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
+  const getDBStoreItem = useCallback(
+    async (storeName: string, keytoFindItem: string) => {
+      if (!database) throw new Error(DATABASE_ERROR.DATABASE_NOT_FOUND);
 
-    return await database.get(storeName, keytoFindItem);
-  }, []);
+      return await database.get(storeName, keytoFindItem);
+    },
+    [database]
+  );
 
   const addOrUpdateStoreItem = useCallback(
     async (storeName: string, data: SessionsTableDataType | SessionDataType | UserType) => {
@@ -76,7 +79,7 @@ export const useDatabaseLogic = (database: IDBPDatabase<DatabaseType> | null) =>
 
       return itemKeyConfirmation;
     },
-    []
+    [database]
   );
 
   const deleteDBItem = async (storeName: string, keyToFindItem: string) => {
@@ -205,7 +208,7 @@ export const useDatabaseLogic = (database: IDBPDatabase<DatabaseType> | null) =>
 
       throw new Error(DATABASE_ERROR.SESSION_NOT_FOUND);
     },
-    [getInitialSessionData]
+    [userId, addOrUpdateDBSessionItem, getDBSessionTableItem, getDBStoreItem]
   );
 
   // if keyToReplace is added it will replace the entire value of the key
@@ -269,13 +272,12 @@ export const useDatabaseLogic = (database: IDBPDatabase<DatabaseType> | null) =>
   const setDBUser = async (data: UserType) =>
     await addOrUpdateStoreItem(DATABASE_STORE.USERS, data);
 
-  const getUserProfileData = useCallback(async () => await getDBUser(), []);
+  const getUserProfileData = useCallback(async () => await getDBUser(), [getDBUser]);
 
   const setUserProfileData = async (userProfile?: UserType) => {
     if (!userProfile || !userId) return;
 
     await setDBUser(userProfile);
-    navigate('/');
   };
 
   // error handling

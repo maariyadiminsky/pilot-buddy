@@ -1,5 +1,5 @@
-import { useDatabase } from '@common/database/hooks';
 import { DATABASE_ERROR } from '@common/database/constants';
+import { useDatabase } from '@common/database/hooks';
 import { logError } from '@common/error-monitoring';
 import { getUniqId } from '@common/utils';
 import { AuthContext } from '@modules/auth';

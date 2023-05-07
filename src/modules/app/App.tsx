@@ -1,5 +1,5 @@
-import { Loader } from '@common/loader';
 import { DatabaseContext } from '@common/database';
+import { Loader } from '@common/loader';
 import { PageProvider, NotFoundPage } from '@common/page';
 import { ROUTES } from '@modules/app';
 import { AuthContext, PrivateRoutes, Login } from '@modules/auth';

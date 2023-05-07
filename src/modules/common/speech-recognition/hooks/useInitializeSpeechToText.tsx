@@ -13,10 +13,9 @@ export enum DictaphoneModalErrorType {
 export const useInitializeSpeechToText = () => {
   const { browserSupportsSpeechRecognition, transcript, resetTranscript } = useSpeechRecognition();
 
+  const [isInitialized, setIsInitialized] = useState(false);
   const [isMicrophoneAvailable, setIsMicrophoneAvailable] = useState(false);
   const [modalData, setModalData] = useState<ModalDataType>();
-
-  const clearModalData = () => setModalData(undefined);
 
   const setModalError = (errorType: keyof typeof DictaphoneModalErrorType) => {
     switch (errorType) {
@@ -84,6 +83,8 @@ export const useInitializeSpeechToText = () => {
         }
       } finally {
         if (!hasError && !modalData) {
+          setIsInitialized(true);
+
           if (shouldUseSpeechlyPolyfill && appId) {
             SpeechRecognition.applyPolyfill(createSpeechlySpeechRecognition(appId));
           }
@@ -99,8 +100,10 @@ export const useInitializeSpeechToText = () => {
       }
     };
 
-    initialize();
-  }, []);
+    if (!isInitialized) {
+      initialize();
+    }
+  }, [isInitialized, browserSupportsSpeechRecognition, modalData]);
 
   return {
     SpeechRecognition,
@@ -109,6 +112,6 @@ export const useInitializeSpeechToText = () => {
     resetTranscript,
     modalData,
     setModalError,
-    clearModalData,
+    setModalData,
   };
 };

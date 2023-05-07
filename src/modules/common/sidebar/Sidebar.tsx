@@ -38,16 +38,15 @@ export const Sidebar: FC<SidebarProps> = ({
   const { id: sessionId } = useParams();
   const { pathname } = useLocation();
 
-  useEffect(() => setShouldUpdatePinnedSessions(true), []);
-
   const getUser = useCallback(async () => {
     const userProfile = await getUserProfileData();
     setUser(userProfile);
-  }, []);
+  }, [getUserProfileData]);
 
   useEffect(() => {
     getUser();
-  }, []);
+    setShouldUpdatePinnedSessions(true);
+  }, [getUser, setShouldUpdatePinnedSessions]);
 
   useEffect(() => {
     const getTableSessions = async () => {
@@ -79,7 +78,7 @@ export const Sidebar: FC<SidebarProps> = ({
     if (shouldUpdatePinnedSessions) {
       getTableSessions();
     }
-  }, [shouldUpdatePinnedSessions]);
+  }, [shouldUpdatePinnedSessions, getAllDBSessionTableItems, setShouldUpdatePinnedSessions]);
 
   const handleSetCurrent = useCallback(
     (id?: number | null, isPinnedNav?: boolean, ignoreUnSelectForOtherNav = false) => {
@@ -142,7 +141,7 @@ export const Sidebar: FC<SidebarProps> = ({
       // case the user clicks on an unpinned session
       handleSetCurrent(navItemToBeSelected?.id, true);
     }
-  }, [sessionId, pathname]);
+  }, [getUser, handleSetCurrent, pinnedNavigation, sessionId, pathname]);
 
   return (
     <>

@@ -19,7 +19,7 @@ export const Profile: FC = () => {
 
   useEffect(() => {
     setPageTitle('Profile');
-  }, []);
+  }, [setPageTitle]);
 
   const handleSetUserProfileData = (event: SyntheticEvent) => {
     event.preventDefault();
@@ -59,7 +59,7 @@ export const Profile: FC = () => {
     };
 
     getUser();
-  }, []);
+  }, [navigate, getUserProfileData]);
 
   const image = imageSrc || userProfile?.image;
 
