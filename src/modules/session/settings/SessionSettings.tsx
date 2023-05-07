@@ -1,5 +1,5 @@
+import { useDatabase } from '@common/database/hooks';
 import { captureException } from '@common/error-monitoring';
-import { useDatabase } from '@common/hooks';
 import { Loader } from '@common/loader';
 import { SpeechSynthesis } from '@common/speech-synthesis';
 import { type SelectMenuItemType } from '@common/types';
@@ -21,8 +21,8 @@ export const SessionSettings: FC<SessionSettingProps> = ({
   settings,
   sessionId,
   isTimed,
-  setIsTimed,
   settingsTime,
+  setIsTimed,
   setSettingsTime,
 }) => {
   const [shouldReadOutLoud, setShouldReadOutLoud] = useState(false);
@@ -46,7 +46,7 @@ export const SessionSettings: FC<SessionSettingProps> = ({
       setSettingsTime(settings.time || SESSION_DATA_INITIAL_STATE.settings.time);
       setSettingsVoice(settings.voice || SESSION_DATA_INITIAL_STATE.settings.voice);
     }
-  }, [settings]);
+  }, [settings, setIsTimed, setSettingsTime]);
 
   const handleSetSetting = async (settingType: string, updatedValue: any, key: string) => {
     if (!sessionId) return;

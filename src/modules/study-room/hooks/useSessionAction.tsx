@@ -20,7 +20,7 @@ export const useSessionAction = (
       setName(currentSession.name);
       setTopic(currentSession.topic);
     }
-  }, [currentSession?.name, currentSession?.topic]);
+  }, [currentSession]);
 
   const formDetails = useMemo(
     () =>

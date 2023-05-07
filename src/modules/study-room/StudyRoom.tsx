@@ -86,7 +86,7 @@ export const StudyRoom: FC = () => {
           handleOnClick: () => setShouldShowSessionAction(true),
         },
       ] as BrandButtonType[],
-    [shouldShowSessionAction]
+    [shouldShowSessionAction, setShouldShowSessionAction]
   );
 
   const { setPageTitle, setPageHeaderActions } = useContext(PageContext);
@@ -94,7 +94,7 @@ export const StudyRoom: FC = () => {
   useEffect(() => {
     setPageTitle('StudyRoom');
     setPageHeaderActions(headerActions);
-  }, []);
+  }, [headerActions, setPageTitle, setPageHeaderActions]);
 
   if (!sessions) {
     return (

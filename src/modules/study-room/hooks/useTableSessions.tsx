@@ -1,5 +1,5 @@
+import { useDatabase } from '@common/database/hooks';
 import { captureException } from '@common/error-monitoring';
-import { useDatabase } from '@common/hooks';
 import { type ModalDataType } from '@common/types';
 import { removeObjectFromArray } from '@common/utils';
 import { type SessionsTableDataType } from '@modules/study-room/types';
@@ -71,7 +71,7 @@ export const useTableSessions = (
     };
 
     getTableSessions();
-  }, []);
+  }, [handleSetInitialPins, getAllDBSessionTableItems]);
 
   const handleAddSession = (session: SessionsTableDataType) => {
     if (!sessions) return null;

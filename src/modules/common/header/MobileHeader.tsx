@@ -1,4 +1,4 @@
-import { useDatabase } from '@common/hooks';
+import { useDatabase } from '@common/database/hooks';
 import { type UserType } from '@common/types';
 import { Menu } from '@headlessui/react';
 import { Bars3CenterLeftIcon } from '@heroicons/react/24/outline';

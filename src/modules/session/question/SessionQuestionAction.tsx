@@ -54,7 +54,7 @@ export const SessionQuestionAction: FC<SessionQuestionActionProps> = ({
       setQuestion(currentQuestion.question);
       setAnswer(currentQuestion?.answer);
     }
-  }, [currentQuestion?.question, currentQuestion?.answer]);
+  }, [currentQuestion]);
 
   // when user uses microphone update correct one
   useEffect(() => {

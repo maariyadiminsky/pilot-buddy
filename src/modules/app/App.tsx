@@ -1,4 +1,5 @@
 import { Loader } from '@common/loader';
+import { DatabaseContext } from '@common/database';
 import { PageProvider, NotFoundPage } from '@common/page';
 import { ROUTES } from '@modules/app';
 import { AuthContext, PrivateRoutes, Login } from '@modules/auth';
@@ -11,10 +12,13 @@ import { FC, useContext } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 export const App: FC = () => {
+  const { database } = useContext(DatabaseContext);
   const { isLoggedIn, isAuthLoading } = useContext(AuthContext);
 
-  return isAuthLoading ? (
-    <Loader />
+  return isAuthLoading || !database ? (
+    <div className="h-screen pb-24 flex justify-center items-center">
+      <Loader />
+    </div>
   ) : (
     <Routes>
       <Route element={<PageProvider />}>

@@ -1,5 +1,6 @@
+import { useDatabase } from '@common/database/hooks';
+import { DATABASE_ERROR } from '@common/database/constants';
 import { captureException } from '@common/error-monitoring';
-import { DATABASE_ERROR, useDatabase } from '@common/hooks';
 import { PageContext } from '@common/page';
 import { type SelectMenuItemType, type BrandButtonType } from '@common/types';
 import { PlayCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
@@ -55,7 +56,7 @@ export const Session: FC = () => {
     };
 
     getSession();
-  }, [id]);
+  }, [id, getDBSession, getDBSessionTableItem]);
 
   const headerActions = useMemo(
     () =>

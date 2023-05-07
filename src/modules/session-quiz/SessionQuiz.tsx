@@ -1,5 +1,7 @@
+import { useDatabase } from '@common/database/hooks';
+import { DATABASE_ERROR } from '@common/database/constants';
 import { captureException } from '@common/error-monitoring';
-import { DATABASE_ERROR, useDatabase, usePrevious } from '@common/hooks';
+import { usePrevious } from '@common/hooks';
 import { Loader } from '@common/loader';
 import { Modal } from '@common/modal';
 import { Dictaphone } from '@common/speech-recognition';

@@ -1,5 +1,6 @@
+import { useDatabase } from '@common/database/hooks';
+import { DATABASE_ERROR } from '@common/database/constants';
 import { logError } from '@common/error-monitoring';
-import { DATABASE_ERROR, useDatabase } from '@common/hooks';
 import { getUniqId } from '@common/utils';
 import { AuthContext } from '@modules/auth';
 import { encryptData, decryptData } from '@modules/auth/utils';
@@ -19,7 +20,7 @@ export const Login: FC = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const { openDatabase, getDBUserByEmail, setDBUser, getDBErrorHandling } = useDatabase();
+  const { getDBUserByEmail, setDBUser, getDBErrorHandling } = useDatabase();
 
   const setHandler = (handler: (value: any) => void, value: any) => {
     handler(value);
@@ -32,9 +33,6 @@ export const Login: FC = () => {
     let hasError;
 
     try {
-      // Open the database
-      await openDatabase();
-
       // sign in or sign up
       if (isSignIn) {
         try {

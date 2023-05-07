@@ -1,5 +1,5 @@
+import { useDatabase } from '@common/database/hooks';
 import { captureException } from '@common/error-monitoring';
-import { useDatabase } from '@common/hooks';
 import { LogoutButton } from '@common/sidebar/LogoutButton';
 import { NavigationItems } from '@common/sidebar/NavigationItems';
 import { PinnedNavigation } from '@common/sidebar/PinnedNavigation';

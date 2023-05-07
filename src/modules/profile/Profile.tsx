@@ -1,6 +1,7 @@
 import { BrandButton } from '@common/button';
+import { useDatabase } from '@common/database/hooks';
 import { captureException } from '@common/error-monitoring';
-import { useDatabase, useImageUpload } from '@common/hooks';
+import { useImageUpload } from '@common/hooks';
 import { PageContext } from '@common/page';
 import { type UserType } from '@common/types';
 import { UserCircleIcon } from '@heroicons/react/20/solid';

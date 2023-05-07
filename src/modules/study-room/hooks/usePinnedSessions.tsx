@@ -1,5 +1,5 @@
+import { useDatabase } from '@common/database/hooks';
 import { captureException } from '@common/error-monitoring';
-import { useDatabase } from '@common/hooks';
 import { PageContext } from '@common/page';
 import { type ModalDataType } from '@common/types';
 import { removeObjectFromArray, getUniqId } from '@common/utils';
@@ -34,7 +34,7 @@ export const usePinnedSessions = (
 
   const pinnedSessionIds = useMemo(
     () => (pinnedSessions?.length ? getPinnedSessionsIds(pinnedSessions) : []),
-    [pinnedSessions?.length]
+    [pinnedSessions]
   ) as string[];
 
   const handleSetInitialPins = useCallback((sessionsTableData: SessionsTableDataType[]) => {

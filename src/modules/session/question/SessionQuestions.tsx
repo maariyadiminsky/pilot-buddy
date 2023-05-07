@@ -1,12 +1,13 @@
+import { useDatabase } from '@common/database/hooks';
 import { EmptyDataAction } from '@common/empty';
 import { captureException } from '@common/error-monitoring';
-import { useDatabase, useDragAndDropWithStrictMode } from '@common/hooks';
+import { useDragAndDropWithStrictMode } from '@common/hooks';
 import { Loader } from '@common/loader';
 import { type SelectMenuItemType } from '@common/types';
 import { removeObjectFromArray, jumpPageToTop } from '@common/utils';
 import { SessionQuestionAction, SessionQuestionsList } from '@modules/session/question';
 import { SessionQuestionType } from '@modules/session/types';
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useCallback } from 'react';
 import { DragDropContext, Droppable, type DropResult } from 'react-beautiful-dnd';
 
 interface SessionQuestionsProps {
@@ -39,17 +40,20 @@ export const SessionQuestions: FC<SessionQuestionsProps> = ({
   const { updateDBPartialDataOfSession, updateDBPartialDataOfSessionTableItem } = useDatabase();
   const { isDragAndDropEnabled } = useDragAndDropWithStrictMode();
 
-  const handleSetQuestions = (updatedQuestions: SessionQuestionType[]) => {
-    setQuestions(updatedQuestions);
-    // for start session button
-    setQuestionsCount(updatedQuestions?.length || 0);
-  };
+  const handleSetQuestions = useCallback(
+    (updatedQuestions: SessionQuestionType[]) => {
+      setQuestions(updatedQuestions);
+      // for start session button
+      setQuestionsCount(updatedQuestions?.length || 0);
+    },
+    [setQuestions, setQuestionsCount]
+  );
 
   useEffect(() => {
     if (questionsData) {
       handleSetQuestions(questionsData);
     }
-  }, [questionsData]);
+  }, [questionsData, handleSetQuestions]);
 
   const handleAddQuestion = (question: SessionQuestionType) => [
     ...(questions || []),

@@ -1,5 +1,5 @@
+import { useDatabase } from '@common/database/hooks';
 import { captureException } from '@common/error-monitoring';
-import { useDatabase } from '@common/hooks';
 import { Loader } from '@common/loader';
 import { removeObjectFromArray } from '@common/utils';
 import { EyeSlashIcon } from '@heroicons/react/20/solid';
