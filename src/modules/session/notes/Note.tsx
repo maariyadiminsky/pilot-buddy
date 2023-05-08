@@ -1,31 +1,19 @@
-import NoteIcon from '@modules/session/notes/NoteIcon';
-import { type HeroIconType } from '@common/types';
 import {
   truthyString,
   removeLineBreaksFromText,
   includeProtocolAndHostWithinLink,
 } from '@common/utils';
 import { XMarkIcon, PencilIcon } from '@heroicons/react/20/solid';
-interface NoteIconType {
-  name: string;
-  value: string | null;
-  icon: HeroIconType;
-  iconColor: string;
-  bgColor: string;
-}
-
-export interface NoteDataType {
-  id: string;
-  text: string;
-  icon: NoteIconType;
-}
+import { NoteIcon } from '@modules/session/notes';
+import { type NoteDataType } from '@modules/session/types';
+import { FC } from 'react';
 
 interface NoteDataProps extends NoteDataType {
   handleRemoveNote: (id: string) => void;
   handleEditNote: (id: string) => void;
 }
 
-const Note = ({ id, text, icon, handleRemoveNote, handleEditNote }: NoteDataProps) => {
+export const Note: FC<NoteDataProps> = ({ id, text, icon, handleRemoveNote, handleEditNote }) => {
   const isLink = icon.value === 'link';
   const textToRender = isLink ? includeProtocolAndHostWithinLink(text) : text;
 
@@ -77,5 +65,3 @@ const Note = ({ id, text, icon, handleRemoveNote, handleEditNote }: NoteDataProp
     </li>
   );
 };
-
-export default Note;

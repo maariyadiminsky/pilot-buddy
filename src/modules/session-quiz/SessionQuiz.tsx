@@ -1,124 +1,180 @@
-import {
-  ChatBubbleLeftEllipsisIcon,
-  CheckBadgeIcon,
-  ArrowUturnLeftIcon,
-} from '@heroicons/react/20/solid';
-import { questionData } from '@modules/session/SessionQuestions';
-import { type SessionQuestionType } from '@modules/session/question/SessionQuestionsList';
-import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks/useInitializeSpeechToText';
-import Dictaphone from '@modules/speech-recognition/Dictaphone';
-import { SyntheticEvent, useState, useEffect, useRef, useMemo } from 'react';
-import Modal, { type ModalRef } from '@common/components/modal/Modal';
+import { DATABASE_ERROR } from '@common/database/constants';
+import { useDatabase } from '@common/database/hooks';
+import { captureException } from '@common/error-monitoring';
 import { usePrevious } from '@common/hooks';
-import { getTimeData, getQuestionOrder } from '@modules/session-quiz/utils';
-import { useSpeechSynthesis } from '@modules/speech-synthesis/hooks';
+import { Loader } from '@common/loader';
+import { Modal } from '@common/modal';
+import { Dictaphone } from '@common/speech-recognition';
+import { useInitializeSpeechToText } from '@common/speech-recognition/hooks';
+import { useSpeechSynthesis } from '@common/speech-synthesis/hooks';
+import { type ModalRef } from '@common/types';
+import { ArrowUturnLeftIcon } from '@heroicons/react/20/solid';
+import { ROUTES } from '@modules/app';
+import { type SessionDataType, type SessionQuestionType } from '@modules/session/types';
+import { SessionQuizResults } from '@modules/session-quiz/SessionQuizResults';
+import { SessionQuestionWithAnswerType } from '@modules/session-quiz/types';
+import { getQuestionOrder, getTimeData } from '@modules/session-quiz/utils';
+import { FC, SyntheticEvent, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-interface SessionQuestionWithAnswerProps extends SessionQuestionType {
-  quizAnswer: string;
-}
-
-type SessionQuestionWithAnswerType = SessionQuestionWithAnswerProps;
-
-// todo: get this from storage
-const isTimed = false;
-const shouldHaveOrder = true;
-const settingsOrder = 'Sort'; // sort or random
-const shouldReadOutLoud = true;
-const speechSynthesisData = {
-  voice: { id: 0, name: 'Daniel' },
-  pitch: 1,
-  rate: 1,
-  volume: 1,
-};
-
-// todo: questions will come from an api endpoint within storage
-// temporarily using same data as in SessionQuestions
-const SessionQuiz = () => {
-  const { id: sessionId } = useParams();
-  const navigate = useNavigate();
-
+export const SessionQuiz: FC = () => {
   const modalRef = useRef<ModalRef>(null);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [session, setSession] = useState<SessionDataType | null>(null);
 
+  const { getDBSession } = useDatabase();
+
+  useEffect(() => {
+    const getSession = async () => {
+      let hasError = null;
+      let sessionData;
+      try {
+        if (!id) return;
+
+        sessionData = await getDBSession(id);
+        if (!sessionData?.questions || !sessionData.questions.length) {
+          navigate(ROUTES.NOT_FOUND_ROUTE);
+        }
+      } catch (error) {
+        hasError = error;
+        if (error instanceof Error && error.message) {
+          captureException(error);
+          if (error.message === DATABASE_ERROR.SESSION_NOT_FOUND) {
+            navigate(ROUTES.NOT_FOUND_ROUTE);
+          }
+        }
+      } finally {
+        if (!hasError && sessionData) {
+          setSession(sessionData);
+        }
+      }
+    };
+
+    getSession();
+  }, [id, navigate, getDBSession]);
+
+  // session data and voice if enabled
   const questionsOrdered = useMemo(
-    () => (shouldHaveOrder ? getQuestionOrder(settingsOrder, questionData) : questionData),
-    []
+    () =>
+      session?.settings.shouldHaveOrder && session?.settings.order && session?.questions
+        ? getQuestionOrder(session?.settings.order.name, session?.questions)
+        : session?.questions,
+    [session?.questions, session?.settings.order, session?.settings.shouldHaveOrder]
   );
 
-  const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType>(questionsOrdered[0]);
-  const [questionsLeft, setQuestionsLeft] = useState(questionsOrdered.length);
+  const [currentQuestion, setCurrentQuestion] = useState<SessionQuestionType | undefined>(
+    questionsOrdered?.[0]
+  );
+  const [questionsLeft, setQuestionsLeft] = useState(questionsOrdered?.length || 0);
   const [currentQuizAnswer, setCurrentQuizAnswer] = useState('');
   const [questionsWithAnswers, setQuestionsWithAnswers] =
     useState<SessionQuestionWithAnswerType[]>();
-  const [isMicrophoneOn, setIsMicrophoneOn] = useState(false);
 
   const previousQuestion = usePrevious(currentQuestion);
 
-  const { handleVoicePlay, handleVoiceStop } = useSpeechSynthesis(
+  useEffect(() => {
+    if (questionsOrdered?.length) {
+      setCurrentQuestion(questionsOrdered?.[0]);
+      setQuestionsLeft(questionsOrdered.length);
+    }
+  }, [questionsOrdered]);
+
+  // speech recognition and speech synthesis
+  const {
+    SpeechRecognition,
+    isMicrophoneAvailable,
+    transcript,
+    modalData,
+    setModalError,
+    setModalData,
+    resetTranscript,
+  } = useInitializeSpeechToText();
+
+  const [isMicrophoneOn, setIsMicrophoneOn] = useState(false);
+
+  const handleSetMicrophoneOn = useCallback(
+    (value: boolean) => {
+      setModalData(undefined);
+      setIsMicrophoneOn(value);
+    },
+    [setModalData]
+  );
+
+  const resetAndTurnOffMicrophone = useCallback(() => {
+    resetTranscript();
+    handleSetMicrophoneOn(false);
+  }, [resetTranscript, handleSetMicrophoneOn]);
+
+  const { handleVoicePlay, handleVoiceStop, voiceOptions, speech } = useSpeechSynthesis(
     undefined,
-    speechSynthesisData.voice,
-    speechSynthesisData.rate,
-    speechSynthesisData.pitch,
-    speechSynthesisData.volume
+    session?.settings.voice
   );
 
   useEffect(() => {
-    window.onpopstate = () => handleVoiceStop();
-  });
+    if (isMicrophoneOn) {
+      setCurrentQuizAnswer(transcript);
+    }
+  }, [isMicrophoneOn, transcript]);
 
   useEffect(() => {
-    // voice setting is on and page loaded and
-    // not last question item(edge case where page re-renders when they are in results page.)
-    if (
-      shouldReadOutLoud &&
-      previousQuestion?.id === currentQuestion?.id &&
-      currentQuestion.id !== questionsOrdered[questionsOrdered.length - 1].id
-    ) {
-      // todo - bug - plays default voice first
-      // I suspect because window.speechSynthesis.getVoices() hasn't completed loading.
-      handleVoicePlay(currentQuestion?.question);
-    }
-  }, [previousQuestion?.id, currentQuestion?.id]);
-
-  const handleSetQuizAnswer = (event?: SyntheticEvent<Element>) => {
-    if (event) event.preventDefault();
-
-    if (shouldReadOutLoud) handleVoiceStop();
-
-    const questionsLeftCount = questionsLeft - 1;
-
-    setQuestionsLeft(questionsLeftCount);
-    setQuestionsWithAnswers([
-      ...(questionsWithAnswers || []),
-      { ...currentQuestion, quizAnswer: currentQuizAnswer },
-    ]);
-    setCurrentQuizAnswer('');
-
-    const current = questionsOrdered[questionsOrdered.length - questionsLeftCount];
-    setCurrentQuestion({ ...current });
-
-    if (shouldReadOutLoud && current) {
-      handleVoicePlay(current?.question);
-    }
-  };
+    // stop voice when user goes back to last page
+    window.onpopstate = () => handleVoiceStop();
+  }, [handleVoiceStop]);
 
   const currentTime = useMemo(
-    () => (isTimed ? getTimeData(currentQuestion?.time) : null),
-    [currentQuestion?.time, currentQuestion?.id]
+    () =>
+      currentQuestion?.id && session?.settings.isTimed
+        ? getTimeData(currentQuestion?.time || session?.settings.time)
+        : null,
+    [session?.settings.isTimed, session?.settings.time, currentQuestion?.time, currentQuestion?.id]
   );
 
   const [timeLeft, setTimeLeft] = useState(currentTime?.timeUI);
 
-  // add time if user enabled Timed option
+  // quiz
+  const handleAddQuizAnswer = useCallback(
+    (event?: SyntheticEvent<Element>) => {
+      if (!currentQuestion || !questionsOrdered) return;
+
+      if (event) event.preventDefault();
+
+      if (session?.settings.shouldReadOutLoud) handleVoiceStop();
+
+      const questionsLeftCount = questionsLeft - 1;
+
+      setQuestionsLeft(questionsLeftCount);
+      setQuestionsWithAnswers([
+        ...(questionsWithAnswers || []),
+        { ...currentQuestion, quizAnswer: currentQuizAnswer },
+      ]);
+      setCurrentQuizAnswer('');
+      resetAndTurnOffMicrophone();
+
+      const current = questionsOrdered[questionsOrdered.length - questionsLeftCount];
+      setCurrentQuestion({ ...current });
+    },
+    [
+      questionsLeft,
+      currentQuestion,
+      questionsOrdered,
+      questionsWithAnswers,
+      currentQuizAnswer,
+      session?.settings.shouldReadOutLoud,
+      handleVoiceStop,
+      resetAndTurnOffMicrophone,
+    ]
+  );
+
   useEffect(() => {
-    if (!isTimed || !questionsLeft) return undefined;
+    if (!session?.settings.isTimed || !questionsLeft) return undefined;
 
     let timer: ReturnType<typeof setInterval>;
 
     if (previousQuestion?.id !== currentQuestion?.id) {
       setTimeLeft(currentTime?.timeUI);
     } else if (!timeLeft) {
-      handleSetQuizAnswer();
+      handleAddQuizAnswer();
     }
 
     if (timeLeft) {
@@ -128,27 +184,42 @@ const SessionQuiz = () => {
     }
 
     return () => clearInterval(timer);
-  }, [isTimed, currentQuestion?.id, timeLeft, questionsLeft]);
-
-  const {
-    SpeechRecognition,
-    isMicrophoneAvailable,
-    transcript,
-    modalData,
-    setModalError,
-    clearModalData,
-  } = useInitializeSpeechToText();
+  }, [
+    currentTime?.timeUI,
+    handleAddQuizAnswer,
+    session?.settings.isTimed,
+    previousQuestion?.id,
+    currentQuestion?.id,
+    timeLeft,
+    questionsLeft,
+  ]);
 
   useEffect(() => {
-    if (isMicrophoneOn) {
-      setCurrentQuizAnswer(transcript);
+    if (
+      currentQuestion &&
+      session?.settings.shouldReadOutLoud &&
+      voiceOptions.length &&
+      speech?.voice &&
+      questionsLeft !== 0
+    ) {
+      handleVoicePlay(currentQuestion.question);
     }
-  }, [isMicrophoneOn, transcript]);
+  }, [
+    currentQuestion,
+    session?.settings.shouldReadOutLoud,
+    voiceOptions.length,
+    speech?.voice,
+    questionsLeft,
+    handleVoicePlay,
+  ]);
 
-  const handleSetMicrophoneOn = (value: boolean) => {
-    clearModalData();
-    setIsMicrophoneOn(value);
-  };
+  if (!questionsOrdered) {
+    return (
+      <div className="flex justify-center items-center xl:h-screen">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white sm:bg-inherit">
@@ -156,7 +227,7 @@ const SessionQuiz = () => {
         type="button"
         onClick={() => {
           handleVoiceStop();
-          navigate(`/sessions/${sessionId}`);
+          navigate(`/sessions/${id}`);
         }}
         className="flex items-start h-20 group hover:cursor-pointer mx-10 pt-10 2xl:mx-72"
       >
@@ -167,10 +238,10 @@ const SessionQuiz = () => {
           {questionsLeft ? (
             <div
               className={`flex flex-row ${
-                isTimed ? 'justify-between' : 'justify-end'
+                session?.settings.isTimed ? 'justify-between' : 'justify-end'
               } items-center w-full py-3 text-sm font-light text-gray-600`}
             >
-              {isTimed && <div>Time: {timeLeft}</div>}
+              {session?.settings.isTimed && <div>Time: {timeLeft}</div>}
               <div>
                 {questionsLeft}/{questionsOrdered.length} question
                 {questionsOrdered.length > 1 ? 's' : ''}
@@ -181,10 +252,10 @@ const SessionQuiz = () => {
             {questionsLeft ? (
               <>
                 <div className="font-semibold text-center w-full text-2xl text-gray-900">
-                  {currentQuestion.question}
+                  {currentQuestion?.question}
                 </div>
                 <form
-                  onSubmit={handleSetQuizAnswer}
+                  onSubmit={handleAddQuizAnswer}
                   className="px-3 2xl:px-24 w-full flex flex-col space-y-10 justify-center items-center"
                 >
                   <div className="relative overflow-hidden flex w-full rounded-lg shadow-sm ring-1 p-1 pt-2 py-10 ring-inset bg-white ring-sky-600 focus-within:ring-2 focus-within:ring-sky-700">
@@ -210,7 +281,11 @@ const SessionQuiz = () => {
                         setModalError={setModalError}
                         setModalOpen={modalRef.current?.setModalOpen}
                         microphoneSize="md"
-                        time={isTimed ? currentQuestion.time?.name : undefined}
+                        time={
+                          session?.settings.isTimed && currentQuestion?.time?.name
+                            ? currentQuestion?.time?.name
+                            : undefined
+                        }
                       />
                     </div>
                   </div>
@@ -239,39 +314,7 @@ const SessionQuiz = () => {
                 <Modal ref={modalRef} {...modalData} />
               </>
             ) : (
-              <div className="flex flex-col justify-center space-y-6 h-[calc(100vh-250px)] w-full px-12">
-                <div className="flex text-xl font-bold text-gray-900 justify-center ">Results</div>
-                <div className="overflow-y-auto smooth-scroll space-y-4">
-                  {questionsWithAnswers?.map(({ id, question, answer, quizAnswer }, index) => (
-                    <div key={id} className="flex flex-col space-y-4">
-                      <div className="flex justify-start items-start bg-gray-100 text-gray-500 font-semibold text-md p-4 rounded-sm">
-                        {index + 1}. {question}
-                      </div>
-                      <div className="flex flex-col justify-start items-start space-y-3 ring-1 ring-inset ring-sky-200 bg-sky-50 text-gray-500 p-4 rounded-md">
-                        <div className="flex flex-row space-x-3 text-sm">
-                          <ChatBubbleLeftEllipsisIcon
-                            className="-mr-1 h-4 w-4 text-green-400 -scale-x-100"
-                            aria-hidden="true"
-                          />
-                          <div className="text-xs font-medium">Your answer</div>
-                        </div>
-                        <div className="font-light text-md">{quizAnswer}</div>
-                      </div>
-                      <div className="flex flex-col justify-start items-start space-y-3 ring-1 ring-inset ring-purple-300 bg-purple-200 text-gray-700 p-4 rounded-md">
-                        <div className="flex flex-row space-x-3 text-sm">
-                          <CheckBadgeIcon
-                            className="-mr-1 h-4 w-4 text-rose-400"
-                            aria-hidden="true"
-                          />
-                          <div className="text-xs font-medium">Actual answer</div>
-                        </div>
-                        <div className="font-light text-md">{answer}</div>
-                      </div>
-                      <div className="border border-gray-100 w-full flex justify-center" />
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <SessionQuizResults questionsWithAnswers={questionsWithAnswers} />
             )}
           </div>
         </div>
@@ -279,5 +322,3 @@ const SessionQuiz = () => {
     </div>
   );
 };
-
-export default SessionQuiz;

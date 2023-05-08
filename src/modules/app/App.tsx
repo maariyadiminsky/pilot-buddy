@@ -1,27 +1,36 @@
-import { ROUTES } from '@modules/common/api/constants';
-import NotFoundPage from '@modules/common/components/page/page-status/NotFoundPage';
-import Session from '@modules/session/Session';
-import SessionQuiz from '@modules/session-quiz/SessionQuiz';
-import StudyRoom from '@modules/study-room/StudyRoom';
-import { persistor, store } from '@redux/store/reducers/store';
-import React from 'react';
-import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { PersistGate } from 'redux-persist/integration/react';
+import { DatabaseContext } from '@common/database';
+import { Loader } from '@common/loader';
+import { PageProvider, NotFoundPage } from '@common/page';
+import { ROUTES } from '@modules/app';
+import { AuthContext, PrivateRoutes, Login } from '@modules/auth';
+import { Homepage } from '@modules/home';
+import { Profile } from '@modules/profile';
+import { Session } from '@modules/session';
+import { SessionQuiz } from '@modules/session-quiz';
+import { StudyRoom } from '@modules/study-room';
+import { FC, useContext } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-const App: React.FC = () => (
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <Router>
-        <Routes>
-          <Route path="*" element={<NotFoundPage />} />
-          <Route path="/" element={<StudyRoom />} />
+export const App: FC = () => {
+  const { database } = useContext(DatabaseContext);
+  const { isLoggedIn, isAuthLoading } = useContext(AuthContext);
+
+  return isAuthLoading || !database ? (
+    <div className="h-screen pb-24 flex justify-center items-center">
+      <Loader />
+    </div>
+  ) : (
+    <Routes>
+      <Route element={<PageProvider />}>
+        <Route path="*" element={<NotFoundPage />} />
+        <Route path="/" element={isLoggedIn ? <StudyRoom /> : <Homepage />} />
+        <Route path={ROUTES.LOGIN_ROUTE} element={<Login />} />
+        <Route element={<PrivateRoutes isLoggedIn={isLoggedIn} />}>
+          <Route path={ROUTES.PROFILE_ROUTE} element={<Profile />} />
           <Route path={ROUTES.SESSION_ROUTE} element={<Session />} />
           <Route path={ROUTES.SESSION_START_ROUTE} element={<SessionQuiz />} />
-        </Routes>
-      </Router>
-    </PersistGate>
-  </Provider>
-);
-
-export default App;
+        </Route>
+      </Route>
+    </Routes>
+  );
+};

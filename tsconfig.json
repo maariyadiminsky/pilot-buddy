@@ -4,7 +4,6 @@
     "paths": {
       "@modules/*": ["modules/*"],
       "@common/*": ["modules/common/*"],
-      "@redux/*": ["modules/redux/*"],
       "@styles/*": ["styles/*"]
     },
     "target": "es5",

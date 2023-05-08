@@ -1,14 +1,14 @@
-import BrandButton from '@common/components/button/BrandButton';
+import { BrandButton } from '@common/button';
+import { Modal } from '@common/modal';
+import { Dictaphone } from '@common/speech-recognition';
+import { useInitializeSpeechToText } from '@common/speech-recognition/hooks';
+import { type SelectMenuItemType, type ModalRef } from '@common/types';
 import { getUniqId } from '@common/utils';
 import { PencilSquareIcon, XMarkIcon } from '@heroicons/react/20/solid';
-import { type SessionQuestionType } from '@modules/session/question/SessionQuestionsList';
-import Dictaphone from '@modules/speech-recognition/Dictaphone';
-import { SyntheticEvent, useState, useRef, useEffect } from 'react';
-import Modal, { type ModalRef } from '@common/components/modal/Modal';
-import { useInitializeSpeechToText } from '@modules/speech-recognition/hooks/useInitializeSpeechToText';
-import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
-import TimeSelectMenu from '../settings/TimeSelectMenu';
-import { TIME_OPTIONS } from '../constants';
+import { TIME_OPTIONS } from '@modules/session/constants';
+import { TimeSelectMenu } from '@modules/session/settings';
+import { type SessionQuestionType } from '@modules/session/types';
+import { FC, SyntheticEvent, useState, useRef, useEffect } from 'react';
 
 interface SessionQuestionActionProps {
   isTimed: boolean;
@@ -18,17 +18,17 @@ interface SessionQuestionActionProps {
   handleCancelAction: () => void;
 }
 
-const SessionQuestionAction = ({
+export const SessionQuestionAction: FC<SessionQuestionActionProps> = ({
   isTimed,
   settingsTime,
   handleSubmit,
   handleCancelAction,
   currentQuestion,
-}: SessionQuestionActionProps) => {
+}) => {
   const modalRef = useRef<ModalRef>(null);
 
   const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState<string | null | undefined>('');
+  const [answer, setAnswer] = useState<string | undefined>('');
   const [shouldShowEmptyQuestionWarning, setShouldShowEmptyQuestionWarning] = useState(false);
 
   const [isQuestionMicrophoneOn, setIsQuestionMicrophoneOn] = useState(false);
@@ -45,7 +45,7 @@ const SessionQuestionAction = ({
     transcript,
     modalData,
     setModalError,
-    clearModalData,
+    setModalData,
   } = useInitializeSpeechToText();
 
   // when user edits a question
@@ -54,7 +54,7 @@ const SessionQuestionAction = ({
       setQuestion(currentQuestion.question);
       setAnswer(currentQuestion?.answer);
     }
-  }, [currentQuestion?.question, currentQuestion?.answer]);
+  }, [currentQuestion]);
 
   // when user uses microphone update correct one
   useEffect(() => {
@@ -65,7 +65,7 @@ const SessionQuestionAction = ({
   }, [isQuestionMicrophoneOn, isAnswerMicrophoneOn, transcript]);
 
   const handleSetIsOn = (handleMicrophoneOn: (value: boolean) => void, value: boolean) => {
-    clearModalData();
+    setModalData(undefined);
     handleMicrophoneOn(value);
   };
 
@@ -123,11 +123,16 @@ const SessionQuestionAction = ({
           </label>
           <div className="relative flex w-full rounded-md shadow-sm">
             <input
+              aria-label="question input"
               type="text"
               name="question"
               id="question"
               className="flex w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
-              placeholder="Write your question or use Voice Recognition --->"
+              placeholder={
+                isQuestionMicrophoneOn
+                  ? 'Please wait a moment...'
+                  : 'Write your question or use Voice Recognition --->'
+              }
               value={question}
               onChange={(event) => handleSetQuestion(event.target.value)}
             />
@@ -157,11 +162,16 @@ const SessionQuestionAction = ({
           </div>
           <div className="relative flex w-full rounded-md shadow-sm">
             <input
+              aria-label="answer input"
               type="text"
               name="answer"
               id="answer"
               className="flex w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
-              placeholder="Write your answer or use Voice Recognition --->"
+              placeholder={
+                isAnswerMicrophoneOn
+                  ? 'Please wait a moment...'
+                  : 'Write your question or use Voice Recognition --->'
+              }
               value={answer || ''}
               onChange={(event) => setAnswer(event.target.value)}
             />
@@ -191,5 +201,3 @@ const SessionQuestionAction = ({
     </>
   );
 };
-
-export default SessionQuestionAction;

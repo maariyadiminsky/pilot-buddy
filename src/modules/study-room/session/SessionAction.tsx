@@ -1,107 +1,32 @@
-import BrandButton from '@common/components/button/BrandButton';
-import { getUniqId } from '@common/utils';
+import { BrandButton } from '@common/button';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/20/solid';
-import { getRandomBrandColor } from '@modules/study-room/utils';
-import { SyntheticEvent, useState, useMemo, useEffect } from 'react';
-
-interface SessionFormDetailsType {
-  id: string;
-  title: string;
-  placeholder: string;
-  showEmpty: boolean;
-  getter: string;
-  setter: (value: string) => void;
-}
-
-export interface SessionType {
-  id: string;
-  name: string;
-  topic: string;
-  questions: number;
-  color: string;
-  textColor: string;
-}
+import { useSessionAction } from '@modules/study-room/hooks';
+import { SessionsTableDataType } from '@modules/study-room/types';
+import { FC } from 'react';
 
 interface SessionActionProps {
-  currentSession?: SessionType;
-  handleSubmit: (value: SessionType) => void;
+  currentSession?: SessionsTableDataType;
+  handleSubmit: (value: SessionsTableDataType) => void;
   handleCancel: () => void;
 }
 
-const SessionAction = ({ currentSession, handleSubmit, handleCancel }: SessionActionProps) => {
-  const [name, setName] = useState('');
-  const [topic, setTopic] = useState('');
-  const [shouldShowEmptyNameWarning, setShouldShowEmptyNameWarning] = useState(false);
-  const [shouldShowEmptyTopicWarning, setShouldShowEmptyTopicWarning] = useState(false);
-
-  useEffect(() => {
-    if (currentSession) {
-      setName(currentSession.name);
-      setTopic(currentSession.topic);
-    }
-  }, [currentSession?.name, currentSession?.topic]);
-
-  const formDetails = useMemo(
-    () =>
-      [
-        {
-          title: 'Name',
-          id: 'name',
-          getter: name,
-          placeholder: 'Give the session a name.',
-          showEmpty: shouldShowEmptyNameWarning,
-          setter: (value) => {
-            setName(value);
-            setShouldShowEmptyNameWarning(false);
-          },
-        },
-        {
-          title: 'Topic',
-          id: 'topic',
-          getter: topic,
-          placeholder: 'Same-topic sessions will be grouped.',
-          showEmpty: shouldShowEmptyTopicWarning,
-          setter: (value) => {
-            setTopic(value);
-            setShouldShowEmptyTopicWarning(false);
-          },
-        },
-      ] as SessionFormDetailsType[],
-    [name, topic, shouldShowEmptyNameWarning, shouldShowEmptyTopicWarning]
-  );
-
-  const handleFormSubmit = (event: SyntheticEvent<Element>) => {
-    event.preventDefault();
-
-    setShouldShowEmptyNameWarning(!name);
-    setShouldShowEmptyTopicWarning(!topic);
-    if (!name || !topic) return;
-
-    const randomBrandColor = getRandomBrandColor('background');
-
-    handleSubmit({
-      id: currentSession?.id || getUniqId(),
-      questions: currentSession?.questions || 0,
-      color: currentSession?.color || randomBrandColor,
-      textColor: currentSession?.textColor || `text-${randomBrandColor.slice(3)}`,
-      name,
-      topic,
-    });
-
-    setName('');
-    setTopic('');
-  };
+export const SessionAction: FC<SessionActionProps> = ({
+  currentSession,
+  handleSubmit,
+  handleCancel,
+}) => {
+  const { formDetails, handleFormSubmit } = useSessionAction(handleSubmit, currentSession);
 
   return (
     <>
-      <form onSubmit={handleFormSubmit} className="pt-6 px-8 lg:px-28 xl:px-52">
+      <form onSubmit={handleFormSubmit} className="pt-6 px-8 lg:px-28 xl:px-72">
         <div className="flex flex-row justify-between items-center">
           <h2 className="flex flex-row items-center py-4 text-gray-900 font-medium">
             <PlusIcon
               className="h-6 w-6 xl:h-5 xl:h5 flex-shrink-0 text-gray-900 hover:text-sky-600"
               aria-hidden="true"
             />
-            {currentSession ? 'Edit' : 'Add'} Session
+            {currentSession ? 'Edit' : 'Create a'} Session
           </h2>
           <div className="flex flex-row justify-end items-center space-x-3">
             <button type="button" onClick={() => handleCancel()}>
@@ -156,5 +81,3 @@ const SessionAction = ({ currentSession, handleSubmit, handleCancel }: SessionAc
     </>
   );
 };
-
-export default SessionAction;

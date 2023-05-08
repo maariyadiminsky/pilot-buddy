@@ -1,33 +1,62 @@
-// todo add typescript
-// @ts-nocheck
-import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
+import { DATABASE_ERROR } from '@common/database/constants';
+import { useDatabase } from '@common/database/hooks';
+import { captureException } from '@common/error-monitoring';
+import { PageContext } from '@common/page';
+import { type SelectMenuItemType, type BrandButtonType } from '@common/types';
 import { PlayCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
-import PageWrapper from '@modules/common/components/page/PageWrapper';
-import SessionNotes from '@modules/session/SessionNotes';
-import SessionQuestions from '@modules/session/SessionQuestions';
-import SessionSettings from '@modules/session/SessionSettings';
-import { type SettingsToggleTypeWithId } from '@modules/session/settings/SessionSetting';
-import SpeechSynthesis from '@modules/speech-synthesis/SpeechSynthesis';
-import TimeSelectMenu from './settings/TimeSelectMenu';
-import OrderSelectMenu from './settings/OrderSelectMenu';
-import { TIME_OPTIONS, ORDER_OPTIONS } from './constants';
+import { ROUTES } from '@modules/app';
+import { SESSION_DATA_INITIAL_STATE } from '@modules/session/constants';
+import { SessionNotes } from '@modules/session/notes';
+import { SessionQuestions } from '@modules/session/question';
+import { SessionSettings } from '@modules/session/settings';
+import { type SessionDataType } from '@modules/session/types';
+import { FC, useState, useMemo, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useMemo } from 'react';
 
-// todo: get session name and add to PageWrapper title
-const Session = () => {
+export const Session: FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [session, setSession] = useState<SessionDataType>();
+  const [sessionName, setSessionName] = useState('');
   const [shouldShowQuestionAction, setShouldShowQuestionAction] = useState(false);
   // if there are questions disable start session button
   const [questionsCount, setQuestionsCount] = useState(0);
-  const [shouldReadOutLoud, setShouldReadOutLoud] = useState(false);
-  const [shouldHaveOrder, setShouldHaveOrder] = useState(false);
   const [isTimed, setIsTimed] = useState(false);
-  // time and order selected in settings
-  const [settingsOrder, setSettingsOrder] = useState<SelectMenuItemType>(ORDER_OPTIONS[0]);
-  const [settingsTime, setSettingsTime] = useState<SelectMenuItemType>(TIME_OPTIONS[0]);
+  const [settingsTime, setSettingsTime] = useState<SelectMenuItemType>(
+    SESSION_DATA_INITIAL_STATE.settings.time
+  );
+
+  const { getDBSession, getDBSessionTableItem } = useDatabase();
+
+  useEffect(() => {
+    const getSession = async () => {
+      let hasError = null;
+      let sessionData;
+      let sessionInTable;
+      try {
+        if (!id) return;
+        sessionData = await getDBSession(id);
+        sessionInTable = await getDBSessionTableItem(id);
+      } catch (error) {
+        hasError = error;
+        if (error instanceof Error && error.message) {
+          captureException(error);
+          if (error.message === DATABASE_ERROR.SESSION_NOT_FOUND) {
+            navigate(ROUTES.NOT_FOUND_ROUTE);
+          }
+        }
+      } finally {
+        if (!hasError && sessionData && sessionInTable) {
+          setSessionName(sessionInTable.name);
+          setSession(sessionData);
+          setQuestionsCount(sessionData.questions.length);
+        }
+      }
+    };
+
+    getSession();
+  }, [id, getDBSession, getDBSessionTableItem, navigate]);
 
   const headerActions = useMemo(
     () =>
@@ -49,69 +78,44 @@ const Session = () => {
           handleOnClick: () => setShouldShowQuestionAction(true),
         },
       ] as BrandButtonType[],
-    [shouldShowQuestionAction, questionsCount]
+    [shouldShowQuestionAction, questionsCount, id, navigate]
   );
 
-  const settings = useMemo(
-    () =>
-      [
-        {
-          id: 0,
-          title: 'Voice',
-          description: 'During the session, your questions will be read aloud for you.',
-          getter: shouldReadOutLoud,
-          setter: setShouldReadOutLoud,
-          settingChildren: shouldReadOutLoud && (
-            <SpeechSynthesis text="This is how your question will sound." />
-          ),
-        },
-        {
-          id: 1,
-          title: 'Order',
-          description:
-            "Choose the order in which you'd like the session's questions to be presented to you.",
-          getter: shouldHaveOrder,
-          setter: setShouldHaveOrder,
-          settingChildren: shouldHaveOrder && (
-            <OrderSelectMenu order={settingsOrder} setOrder={setSettingsOrder} />
-          ),
-        },
-        {
-          id: 2,
-          title: 'Timed',
-          description:
-            "Every question has a timer and smoothly moves to the next (If the microphone is enabled during the quiz, it's duration aligns with the question's time).",
-          getter: isTimed,
-          setter: setIsTimed,
-          settingChildren: isTimed && (
-            <TimeSelectMenu time={settingsTime} setTime={setSettingsTime} />
-          ),
-        },
-      ] as SettingsToggleTypeWithId,
-    [shouldReadOutLoud, shouldHaveOrder, settingsOrder, isTimed, settingsTime]
-  );
+  const { setPageTitle, setPageHeaderActions } = useContext(PageContext);
+
+  useEffect(() => {
+    setPageTitle(sessionName);
+    setPageHeaderActions(headerActions);
+  }, [sessionName, headerActions, setPageTitle, setPageHeaderActions]);
+
+  if (!id) return null;
 
   return (
-    <PageWrapper title="Session Room" headerActions={headerActions}>
+    <>
       <div className="relative flex h-full min-w-full flex-col bg-inherit">
         <div className="w-full flex-grow xl:flex">
           <div className="min-w-0 flex-1 bg-inherit xl:flex">
-            <SessionNotes />
+            <SessionNotes notesData={session?.notes} sessionId={id} />
             <SessionQuestions
+              questionsData={session?.questions}
+              sessionId={id}
               isTimed={isTimed}
               setQuestionsCount={setQuestionsCount}
-              settingsTime={isTimed && settingsTime}
+              settingsTime={settingsTime}
               shouldShowQuestionAction={shouldShowQuestionAction}
               setShouldShowQuestionAction={setShouldShowQuestionAction}
             />
           </div>
-          <div className="flex flex-col items-start">
-            <SessionSettings settings={settings} />
-          </div>
+          <SessionSettings
+            settings={session?.settings}
+            isTimed={isTimed}
+            setIsTimed={setIsTimed}
+            settingsTime={settingsTime}
+            setSettingsTime={setSettingsTime}
+            sessionId={id}
+          />
         </div>
       </div>
-    </PageWrapper>
+    </>
   );
 };
-
-export default Session;

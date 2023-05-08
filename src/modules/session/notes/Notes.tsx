@@ -1,4 +1,6 @@
-import Note, { type NoteDataType } from '@modules/session/notes/Note';
+import { Note } from '@modules/session/notes';
+import { type NoteDataType } from '@modules/session/types';
+import { FC } from 'react';
 
 interface NotesProps {
   notes: NoteDataType[];
@@ -6,8 +8,8 @@ interface NotesProps {
   handleEditNote: (id: string) => void;
 }
 
-const Notes = ({ notes, handleRemoveNote, handleEditNote }: NotesProps) => (
-  <ul className="divide-y divide-solid overflow-y-auto xl:h-[calc(100vh-250px)] smooth-scroll relative">
+export const Notes: FC<NotesProps> = ({ notes, handleRemoveNote, handleEditNote }) => (
+  <ul className="divide-y divide-solid h-full overflow-y-auto smooth-scroll relative">
     {notes.map((note) => (
       <Note
         key={note.id}
@@ -18,5 +20,3 @@ const Notes = ({ notes, handleRemoveNote, handleEditNote }: NotesProps) => (
     ))}
   </ul>
 );
-
-export default Notes;

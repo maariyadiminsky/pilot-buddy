@@ -1,7 +1,5 @@
-import { Draggable, type DroppableProvidedProps } from 'react-beautiful-dnd';
-import { type SelectMenuItemType } from '@common/components/dropdown/SelectMenu';
-import { type ReactNode } from 'react';
-
+import { type SelectMenuItemType } from '@common/types';
+import { truthyString } from '@common/utils';
 import {
   PencilSquareIcon,
   TrashIcon,
@@ -10,15 +8,9 @@ import {
   ClockIcon,
   Bars3Icon,
 } from '@heroicons/react/20/solid';
-
-interface SessionQuestionBaseType {
-  id: string;
-  question: string;
-  answer?: string | null;
-  time?: SelectMenuItemType;
-}
-
-export type SessionQuestionType = SessionQuestionBaseType;
+import { SessionQuestionType } from '@modules/session/types';
+import { FC, type ReactNode } from 'react';
+import { Draggable, type DroppableProvidedProps } from 'react-beautiful-dnd';
 
 interface SessionQuestionsListProps extends DroppableProvidedProps {
   placeholder: ReactNode;
@@ -30,21 +22,22 @@ interface SessionQuestionsListProps extends DroppableProvidedProps {
 }
 
 const DragStyles = {
-  isDragging: 'bg-slate-50 rounded-md border-1 border-gray-900',
-  isNotDragging: 'bg-white hover:bg-slate-50',
+  isDragging: 'bg-sky-50 rounded-md border border-gray-300',
+  isNotDragging: 'bg-white hover:bg-sky-50 border-t border-gray-200',
 };
 
-const SessionQuestionsList = ({
+export const SessionQuestionsList: FC<SessionQuestionsListProps> = ({
   placeholder,
   questions,
   settingsTime,
   isTimed,
   handleRemoveQuestion,
   handleEditQuestion,
-}: SessionQuestionsListProps) => (
-  <ul className="divide-y divide-gray-200 border-b border-gray-200 border-t">
+}) => (
+  <ul className="h-full xl:overscroll-contain overflow-y-auto smooth-scroll pb-4">
     {questions.map(({ id, question, answer, time }, index) => {
       const correctTime = time || settingsTime;
+      const isLastItem = index === questions.length - 1;
 
       return (
         <Draggable key={id} draggableId={id} index={index}>
@@ -54,9 +47,11 @@ const SessionQuestionsList = ({
               /* fix: https://github.com/atlassian/react-beautiful-dnd/issues/1541 */
               {...draggableProps}
               {...dragHandleProps}
-              className={`relative py-5 ${
+              className={truthyString(
+                'relative py-5',
+                isLastItem && 'border-b border-gray-200',
                 isDragging ? DragStyles.isDragging : DragStyles.isNotDragging
-              }`}
+              )}
             >
               <div className="flex flex-row items-center justify-between px-4 space-x-4">
                 <div className="flex flex-row items-center space-x-6">
@@ -101,7 +96,7 @@ const SessionQuestionsList = ({
                   </div>
                 </div>
 
-                <div className="flex flex-row justify-end items-end space-y-2">
+                <div className="flex flex-col justify-end items-end space-y-2">
                   <div className="flex-shrink-0 flex-row justify-end items-end md:flex">
                     <button
                       type="button"
@@ -148,5 +143,3 @@ const SessionQuestionsList = ({
     {placeholder}
   </ul>
 );
-
-export default SessionQuestionsList;

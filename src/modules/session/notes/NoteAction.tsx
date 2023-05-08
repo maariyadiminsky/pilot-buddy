@@ -1,10 +1,10 @@
-import { SyntheticEvent, Fragment, useState, useEffect } from 'react';
-import { PlusCircleIcon, EyeIcon } from '@heroicons/react/20/solid';
-import { Listbox, Transition } from '@headlessui/react';
 import { truthyString, getUniqId } from '@common/utils';
+import { Listbox, Transition } from '@headlessui/react';
+import { PlusCircleIcon, EyeIcon } from '@heroicons/react/20/solid';
 import { NOTE_TYPES } from '@modules/session/constants';
-import NoteIcon from '@modules/session/notes/NoteIcon';
-import { type NoteDataType } from '@modules/session/notes/Note';
+import { NoteIcon } from '@modules/session/notes';
+import { type NoteDataType } from '@modules/session/types';
+import { FC, SyntheticEvent, Fragment, useState, useEffect } from 'react';
 
 const CHAR_LIMIT = 100;
 const getCharLeft = (text: string) => CHAR_LIMIT - text.length;
@@ -18,7 +18,12 @@ interface NoteActionProps {
 
 const DEFAULT_NOTE_ICON = NOTE_TYPES[3];
 
-const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: NoteActionProps) => {
+export const NoteAction: FC<NoteActionProps> = ({
+  currentNote,
+  handleSubmit,
+  shouldHide,
+  handleHideNote,
+}) => {
   const [text, setText] = useState(currentNote?.text || '');
   const [selectedIcon, setSelectedIcon] = useState(currentNote?.icon || DEFAULT_NOTE_ICON);
   const [shouldShowEmptyTextWarning, setShouldShowEmptyTextWarning] = useState(false);
@@ -45,10 +50,12 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
       return;
     }
 
+    const { name, value, iconColor, bgColor } = selectedIcon;
+
     handleSubmit({
       ...(currentNote || {}),
       id: currentNote?.id || getUniqId(),
-      icon: selectedIcon,
+      icon: { name, value, iconColor, bgColor },
       text,
     });
 
@@ -166,5 +173,3 @@ const NoteAction = ({ currentNote, handleSubmit, shouldHide, handleHideNote }: N
     </div>
   );
 };
-
-export default NoteAction;

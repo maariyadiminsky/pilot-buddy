@@ -1,28 +1,29 @@
-import SessionItem from '@modules/study-room/session/SessionItem';
-import { type SessionType } from '@modules/study-room/session/SessionAction';
+import { SessionItem } from '@modules/study-room/session';
+import { type SessionsTableDataType } from '@modules/study-room/types';
 import { isSessionPinned } from '@modules/study-room/utils';
+import { FC } from 'react';
 
 interface SessionsTableProps {
+  currentSessionId?: string;
   pinnedSessions: string[];
-  sessions: SessionType[];
-  handlePinSession: (session: SessionType) => void;
+  sessions: SessionsTableDataType[];
+  handlePinSession: (session: SessionsTableDataType) => void;
   handleUnpinSession: (id: string) => void;
-  handleStartSession: (id: string) => void;
   handleEditSession: (id: string) => void;
-  handleRemoveSession: (id: string) => void;
+  handleRemoveSession: (id: string, questionsCount: number) => void;
 }
 
-const SessionsTable = ({
+export const SessionsTable: FC<SessionsTableProps> = ({
+  currentSessionId,
   pinnedSessions,
   sessions,
   handlePinSession,
   handleUnpinSession,
-  handleStartSession,
   handleEditSession,
   handleRemoveSession,
-}: SessionsTableProps) => (
-  <div className="px-4 sm:px-6 lg:px-8 h-[calc(100vh-200px)] overflow-y-auto smooth-scroll">
-    <div className="-mx-4 mt-10 sm:mx-0 rounded-t-md">
+}) => (
+  <div className="px-4 sm:px-6 lg:px-8 h-full ">
+    <div className="-mx-4 mt-10 sm:mx-0 rounded-t-md border border-slate-50 px-1 py-3 rounded-lg overflow-y-auto smooth-scroll h-[calc(100vh-100px)]">
       <table className="min-w-full divide-y divide-sky-600">
         <thead className="sticky backdrop-blur backdrop-filter bg-white bg-opacity-75 top-0 z-10 min-w-full border-separate border-spacing-0">
           <tr>
@@ -43,6 +44,7 @@ const SessionsTable = ({
             </th>
             {/* empty element created so blur applies on all "titles" */}
             <th
+              aria-label="empty line for table"
               scope="col"
               className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
             />
@@ -53,14 +55,15 @@ const SessionsTable = ({
             <SessionItem
               key={session.id}
               isSessionPinned={isSessionPinned(session.id, pinnedSessions)}
+              isEditingCurrentSession={currentSessionId === session.id}
               {...{
                 ...session,
                 index,
                 handlePinSession,
                 handleUnpinSession,
-                handleStartSession,
                 handleEditSession,
                 handleRemoveSession,
+                currentSessionId,
               }}
             />
           ))}
@@ -69,4 +72,3 @@ const SessionsTable = ({
     </div>
   </div>
 );
-export default SessionsTable;

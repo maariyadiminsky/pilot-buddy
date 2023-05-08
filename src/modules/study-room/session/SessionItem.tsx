@@ -1,5 +1,4 @@
 import { truthyString } from '@common/utils';
-import { type SessionType } from './SessionAction';
 import {
   PlayCircleIcon,
   PencilSquareIcon,
@@ -8,20 +7,23 @@ import {
   BookmarkIcon,
   BookmarkSlashIcon,
 } from '@heroicons/react/20/solid';
-import { Link } from 'react-router-dom';
+import SessionItemIconButton from '@modules/study-room/session/SessionItemIconButton';
+import { type SessionsTableDataType } from '@modules/study-room/types';
+import { FC } from 'react';
 
-interface SessionItemProps extends SessionType {
+interface SessionItemProps extends SessionsTableDataType {
   index: number;
   isSessionPinned: boolean;
-  handlePinSession: (session: SessionType) => void;
+  isEditingCurrentSession: boolean;
+  handlePinSession: (session: SessionsTableDataType) => void;
   handleUnpinSession: (id: string) => void;
-  handleStartSession: (id: string) => void;
   handleEditSession: (id: string) => void;
-  handleRemoveSession: (id: string) => void;
+  handleRemoveSession: (id: string, questionsCount: number) => void;
 }
 
-const SessionItem = ({
+export const SessionItem: FC<SessionItemProps> = ({
   id,
+  userId,
   name,
   topic,
   questions,
@@ -29,19 +31,19 @@ const SessionItem = ({
   color,
   index,
   isSessionPinned,
+  isEditingCurrentSession,
   handlePinSession,
   handleUnpinSession,
-  handleStartSession,
   handleEditSession,
   handleRemoveSession,
-}: SessionItemProps) => {
+}) => {
   const Icon = isSessionPinned ? BookmarkSlashIcon : BookmarkIcon;
 
   const handlePinMethod = () => {
     if (isSessionPinned) {
       handleUnpinSession(id);
     } else {
-      handlePinSession({ id, name, topic, questions, color, textColor });
+      handlePinSession({ id, userId, name, topic, questions, color, textColor, isPinned: true });
     }
   };
 
@@ -49,7 +51,7 @@ const SessionItem = ({
     <tr key={id}>
       <td
         className={truthyString(
-          index === 0 ? '' : 'border-t border-gray-300',
+          index === 0 ? '' : 'border-t border-gray-200',
           'relative py-4 pl-4 pr-3 text-sm sm:pl-6'
         )}
       >
@@ -71,12 +73,12 @@ const SessionItem = ({
             {questions > 1 ? 's' : ''}
           </span>
         </div>
-        {index !== 0 ? <div className="absolute -top-px left-6 right-0 h-px bg-gray-300" /> : null}
+        {index !== 0 ? <div className="absolute -top-px left-6 right-0 h-px bg-gray-200" /> : null}
       </td>
       {/* desktop */}
       <td
         className={truthyString(
-          index === 0 ? '' : 'border-t border-gray-300',
+          index === 0 ? '' : 'border-t border-gray-200',
           'px-4 py-3.5 text-sm text-gray-500 sm:table-cell'
         )}
       >
@@ -84,7 +86,7 @@ const SessionItem = ({
       </td>
       <td
         className={truthyString(
-          index === 0 ? '' : 'border-t border-gray-300',
+          index === 0 ? '' : 'border-t border-gray-200',
           'hidden px-3 py-3.5 text-sm text-gray-700 sm:table-cell font-semibold'
         )}
       >
@@ -92,57 +94,35 @@ const SessionItem = ({
       </td>
       <td
         className={truthyString(
-          index === 0 ? '' : 'border-t border-gray-300',
+          index === 0 ? '' : 'border-t border-gray-200',
           'relative py-3.5 pl-3 pr-4 text-center text-sm font-medium sm:pr-6'
         )}
       >
-        <Link to={`/sessions/${id}/start`}>
-          <button
-            type="button"
-            onClick={() => handleStartSession(id)}
-            disabled={!questions}
-            className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-          >
-            <PlayCircleIcon
-              className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-pink-600 enabled:hover:text-sky-600"
-              aria-hidden="true"
-            />
-            <span className="sr-only">Start session</span>
-          </button>
-        </Link>
-        <button
-          type="button"
-          onClick={() => handleEditSession(id)}
-          className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-        >
-          <PencilSquareIcon
-            className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-600"
-            aria-hidden="true"
-          />
-          <span className="sr-only">Edit session</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => handleRemoveSession(id)}
-          className="inline-flex items-center bg-white mx-0 px-1 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-        >
-          <TrashIcon
-            className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-600"
-            aria-hidden="true"
-          />
-          <span className="sr-only">Delete session</span>
-        </button>
-        <Link to={`/sessions/${id}`}>
-          <button type="button">
-            <ArrowTopRightOnSquareIcon
-              className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0 text-gray-600 hover:text-sky-600"
-              aria-hidden="true"
-            />
-          </button>
-        </Link>
-        {index !== 0 ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-300" /> : null}
+        <SessionItemIconButton
+          icon={ArrowTopRightOnSquareIcon}
+          srText="Open Session"
+          link={`/sessions/${id}`}
+        />
+        <SessionItemIconButton
+          icon={PlayCircleIcon}
+          srText="Start Session"
+          link={`/sessions/${id}/start`}
+          isDisabled={!questions}
+          color="text-pink-600"
+        />
+        <SessionItemIconButton
+          icon={PencilSquareIcon}
+          srText="Edit Session"
+          isDisabled={isEditingCurrentSession}
+          handleOnClick={() => !isEditingCurrentSession && handleEditSession(id)}
+        />
+        <SessionItemIconButton
+          icon={TrashIcon}
+          srText="Delete Session"
+          handleOnClick={() => handleRemoveSession(id, questions)}
+        />
+        {index !== 0 ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
       </td>
     </tr>
   );
 };
-export default SessionItem;
