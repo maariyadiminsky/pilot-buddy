@@ -1,3 +1,5 @@
+import 'regenerator-runtime';
+
 import { captureException } from '@common/error-monitoring';
 import { type ModalDataType } from '@common/types';
 import { createSpeechlySpeechRecognition } from '@speechly/speech-recognition-polyfill';

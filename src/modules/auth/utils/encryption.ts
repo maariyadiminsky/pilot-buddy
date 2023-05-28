@@ -9,14 +9,14 @@ const getEncryptionKey = () => {
   return CryptoJS.enc.Hex.parse(process.env.REACT_APP_DB_ENCRYPTION_KEY);
 };
 
-export const ENCRYPTION_KEY = getEncryptionKey();
-
 export const encryptData = (data: string): string | null => {
+  const encryptionKey = getEncryptionKey();
+
   try {
-    return CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(data), ENCRYPTION_KEY, {
+    return CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(data), encryptionKey, {
       mode: CryptoJS.mode.CBC,
       padding: CryptoJS.pad.Pkcs7,
-      iv: ENCRYPTION_KEY,
+      iv: encryptionKey,
     }).toString();
   } catch (error) {
     logError('Error encrypting data:', error);
@@ -25,11 +25,13 @@ export const encryptData = (data: string): string | null => {
 };
 
 export const decryptData = (data: string): string | null => {
+  const encryptionKey = getEncryptionKey();
+
   try {
-    return CryptoJS.AES.decrypt(data, ENCRYPTION_KEY, {
+    return CryptoJS.AES.decrypt(data, encryptionKey, {
       mode: CryptoJS.mode.CBC,
       padding: CryptoJS.pad.Pkcs7,
-      iv: ENCRYPTION_KEY,
+      iv: encryptionKey,
     }).toString(CryptoJS.enc.Utf8);
   } catch (error) {
     logError('Error decrypting data:', error);
