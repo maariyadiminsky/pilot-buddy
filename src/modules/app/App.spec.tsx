@@ -37,20 +37,26 @@ describe('</App>', () => {
   });
 
   it('renders loading state', () => {
+    // given
     renderComponent();
 
+    // when
     const loadingText = screen.getByText(LOADING_TEXT);
 
+    // then
     expect(loadingText).toBeInTheDocument();
   });
 
   it('renders <Homepage /> elements when user is logged out', async () => {
+    // given
     renderComponent();
 
+    // when
     const headline = await screen.findByText(HOMEPAGE_TEXT.HEADLINE);
     const description = await screen.findByText(HOMEPAGE_TEXT.DESCRIPTION);
     const actionButton = await screen.findByRole('button');
 
+    // then
     expect(headline).toBeInTheDocument();
     expect(description).toBeInTheDocument();
     expect(actionButton).toBeInTheDocument();
@@ -58,10 +64,12 @@ describe('</App>', () => {
   });
 
   it('renders login page when user clicks action button', async () => {
+    // given
     renderComponent();
 
     const actionButton = await screen.findByRole('button');
 
+    // when
     userEvent.click(actionButton);
 
     const emailTitle = await screen.findByText('Email address');
@@ -70,6 +78,7 @@ describe('</App>', () => {
     const passwordInput = await screen.findByLabelText('password');
     const signInButton = await screen.findByRole('button', { name: 'Sign In' });
 
+    // then
     expect(emailTitle).toBeInTheDocument();
     expect(passwordTitle).toBeInTheDocument();
     expect(emailInput).toBeInTheDocument();
@@ -78,8 +87,10 @@ describe('</App>', () => {
   });
 
   it('renders <StudyRoom /> elements when user is logged in', async () => {
+    // given
     renderComponent();
 
+    // when
     // navigate to login page
     const actionButton = await screen.findByRole('button');
     userEvent.click(actionButton);
@@ -99,12 +110,13 @@ describe('</App>', () => {
     const passwordInput = await screen.findByLabelText('password');
     userEvent.type(passwordInput, password);
     await waitFor(() => expect(passwordInput).toHaveValue(password));
-    //   // sign up
+    // sign up
     const signUpButton = await screen.findByLabelText('Sign Up');
     expect(signUpButton).toBeInTheDocument();
 
     userEvent.click(signUpButton);
 
+    // then
     // user should see StudyRoom elements once logged in
     const studyRoomPageTitles = await screen.findAllByText('Study Room');
     const welcomeText = await screen.findByText(/welcome/i);
@@ -113,12 +125,15 @@ describe('</App>', () => {
   });
 
   it('renders 404 page when user routes to an incorrect route', async () => {
+    // given
     renderComponent('/somerandomroute');
 
+    // when
     const headline = await screen.findByText(NOT_FOUND_PAGE_TEXT.HEADLINE);
     const description = await screen.findByText(NOT_FOUND_PAGE_TEXT.DESCRIPTION);
     const button = await screen.findByRole('button', { name: NOT_FOUND_PAGE_TEXT.ACTION });
 
+    // then
     expect(headline).toBeInTheDocument();
     expect(description).toBeInTheDocument();
     expect(button).toBeInTheDocument();
