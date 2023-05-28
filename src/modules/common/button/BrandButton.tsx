@@ -2,7 +2,7 @@ import { type HeroIconType } from '@common/types';
 import { truthyString } from '@common/utils';
 import { FC } from 'react';
 
-enum ButtonClassTypeEnum {
+export enum ButtonClassTypeEnum {
   clear = 'clear',
   solid = 'solid',
   solidPink = 'solidPink',
@@ -23,7 +23,7 @@ export interface BrandButtonProps {
   handleOnClick?: (value?: any) => void;
 }
 
-const styles = {
+export const BUTTON_STYLES = {
   clear:
     'bg-gray-100 text-gray-700 ring-1 ring-inset ring-gray-300 enabled:hover:bg-sky-600 enabled:hover:text-white',
   solid:
@@ -50,7 +50,7 @@ export const BrandButton: FC<BrandButtonProps> = ({
       disabled={isDisabled}
       className={truthyString(
         'group subpixel-antialiased inline-flex justify-center items-center rounded-md w-44 h-9 text-sm shadow-sm disabled:group:text-gray-400 disabled:cursor-not-allowed disabled:opacity-30',
-        styles[buttonClassType]
+        BUTTON_STYLES[buttonClassType]
       )}
       onClick={() => handleOnClick?.()}
     >

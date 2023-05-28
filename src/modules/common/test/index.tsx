@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom';
 
 import { DatabaseProvider } from '@common/database';
+import { AuthProvider } from '@modules/auth';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import userEvent from '@testing-library/user-event';
@@ -36,21 +37,38 @@ const mockIndexedDB = () => {
 };
 
 // provider wrappers
+// provider with default auth set as logged in
 const Providers = ({ children }: { children: ReactNode }) => (
+  <DatabaseProvider>
+    <Router>
+      <AuthProvider initialLoginState={true}>{children}</AuthProvider>
+    </Router>
+  </DatabaseProvider>
+);
+
+// provider with no auth
+const ProvidersWithoutAuth = ({ children }: { children: ReactNode }) => (
   <DatabaseProvider>
     <Router>{children}</Router>
   </DatabaseProvider>
 );
 
 // render setup
-const customRender = (ui: any, options: { route: string }) => {
-  if (options) {
-    if (options.route) {
-      window.history.pushState({}, '', options.route);
-    }
+const customRender = (
+  ui: any,
+  options?: { route?: string; shouldManageAuth?: boolean; shouldHaveNoWrapper?: boolean }
+) => {
+  let providers = Providers;
+
+  if (options?.route) {
+    window.history.pushState({}, '', options.route);
   }
 
-  return render(ui, { wrapper: Providers, ...options });
+  if (options?.shouldManageAuth) {
+    providers = ProvidersWithoutAuth;
+  }
+
+  return options?.shouldHaveNoWrapper ? render(ui) : render(ui, { wrapper: providers });
 };
 
 // export what is necessary for access in one place
