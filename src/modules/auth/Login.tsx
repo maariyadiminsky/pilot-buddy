@@ -175,7 +175,7 @@ export const Login: FC = () => {
                   <input
                     value={email}
                     onChange={(event) => setHandler(setEmail, event.target.value)}
-                    aria-label={email}
+                    aria-label="email"
                     id="email"
                     name="email"
                     type="email"
@@ -197,7 +197,7 @@ export const Login: FC = () => {
                   <input
                     value={password}
                     onChange={(event) => setHandler(setPassword, event.target.value)}
-                    aria-label={password}
+                    aria-label="password"
                     id="password"
                     name="password"
                     type="password"
@@ -211,6 +211,7 @@ export const Login: FC = () => {
               <div>
                 <button
                   type="submit"
+                  aria-label={`Sign ${isSignIn ? 'In' : 'Up'}`}
                   className="flex w-full justify-center rounded-md bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
                 >
                   Sign {isSignIn ? 'In' : 'Up'}
@@ -226,7 +227,7 @@ export const Login: FC = () => {
               onClick={() => setHandler(setIsSignIn, !isSignIn)}
               className="font-semibold leading-6 text-sky-600 hover:text-sky-500"
             >
-              Sign {isSignIn ? 'up.' : 'in.'}
+              Sign {isSignIn ? 'up' : 'in'}.
             </button>
           </p>
         </div>

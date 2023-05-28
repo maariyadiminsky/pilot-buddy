@@ -3,6 +3,12 @@ import { ROUTES } from '@modules/app';
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+export const NOT_FOUND_PAGE_TEXT = {
+  HEADLINE: 'Page not found',
+  DESCRIPTION: 'Sorry, we couldn’t find the page you’re looking for.',
+  ACTION: "Let's head back, my friend.",
+};
+
 export const NotFoundPage: FC = () => {
   const navigate = useNavigate();
 
@@ -17,10 +23,10 @@ export const NotFoundPage: FC = () => {
           <div className="max-w-lg">
             <p className="text-base font-semibold leading-8 text-sky-600">404</p>
             <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-              Page not found
+              {NOT_FOUND_PAGE_TEXT.HEADLINE}
             </h1>
             <p className="mt-6 text-base leading-7 text-gray-600">
-              Sorry, we couldn’t find the page you’re looking for.
+              {NOT_FOUND_PAGE_TEXT.DESCRIPTION}
             </p>
             <div className="mt-10">
               <button
@@ -29,7 +35,7 @@ export const NotFoundPage: FC = () => {
                 onClick={() => redirectToHomePage()}
                 onKeyDown={() => redirectToHomePage()}
               >
-                <span aria-hidden="true">&larr;</span> Let&apos;s head back, my friend.
+                <span aria-hidden="true">&larr;</span> {NOT_FOUND_PAGE_TEXT.ACTION}
               </button>
             </div>
           </div>

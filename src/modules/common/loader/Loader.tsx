@@ -22,6 +22,8 @@ interface LoaderProps {
   size?: keyof typeof LoaderSizeEnum;
 }
 
+export const LOADING_TEXT = 'Loading...';
+
 export const Loader: FC<LoaderProps> = ({ size = LoaderSizeEnum.medium }) => (
   <div className="flex justify-center items-center h-full" role="status">
     <svg
@@ -42,6 +44,6 @@ export const Loader: FC<LoaderProps> = ({ size = LoaderSizeEnum.medium }) => (
         fill="currentFill"
       />
     </svg>
-    <span className="sr-only">Loading...</span>
+    <span className="sr-only">{LOADING_TEXT}</span>
   </div>
 );

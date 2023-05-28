@@ -1,10 +1,9 @@
 import '@testing-library/jest-dom';
 
 import { DatabaseProvider } from '@common/database';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import userEvent from '@testing-library/user-event';
-import { AuthProvider } from '@modules/auth';
 import {
   IDBFactory,
   IDBRequest,
@@ -18,8 +17,10 @@ import {
   IDBKeyRange,
   IDBVersionChangeEvent,
 } from 'fake-indexeddb';
+import { ReactNode } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+// mocks
 const mockIndexedDB = () => {
   window.indexedDB = new IDBFactory();
   window.IDBRequest = IDBRequest;
@@ -34,15 +35,15 @@ const mockIndexedDB = () => {
   window.IDBVersionChangeEvent = IDBVersionChangeEvent;
 };
 
-const Providers = ({ children }) => (
+// provider wrappers
+const Providers = ({ children }: { children: ReactNode }) => (
   <DatabaseProvider>
-    <Router>
-      <AuthProvider>{children}</AuthProvider>
-    </Router>
+    <Router>{children}</Router>
   </DatabaseProvider>
 );
 
-const customRender = (ui, options) => {
+// render setup
+const customRender = (ui: any, options: { route: string }) => {
   if (options) {
     if (options.route) {
       window.history.pushState({}, '', options.route);
@@ -53,4 +54,4 @@ const customRender = (ui, options) => {
 };
 
 // export what is necessary for access in one place
-export { customRender as render, screen, userEvent, fireEvent, renderHook, mockIndexedDB };
+export { customRender as render, screen, userEvent, fireEvent, waitFor, renderHook, mockIndexedDB };

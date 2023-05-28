@@ -28,8 +28,11 @@ export const AuthContext = createContext<AuthContextType>({
 
 const USER_ID = 'userId';
 const SESSION_COOKIE = 'pilot_buddy';
-export const AuthProvider: FC<AuthContextProps> = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+export const AuthProvider: FC<AuthContextProps & { initialLoginState?: boolean }> = ({
+  children,
+  initialLoginState,
+}) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(initialLoginState || false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [userId, setUserId] = useState('');
 
