@@ -93,6 +93,7 @@ export const Session: FC = () => {
   return (
     <>
       <div className="relative flex h-full min-w-full flex-col bg-inherit">
+        <div className="sr-only">session number {id}</div>
         <div className="w-full flex-grow xl:flex">
           <div className="min-w-0 flex-1 bg-inherit xl:flex">
             <SessionNotes notesData={session?.notes} sessionId={id} />
