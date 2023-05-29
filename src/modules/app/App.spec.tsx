@@ -115,7 +115,7 @@ describe('</App>', () => {
     expect(welcomeText).toBeInTheDocument();
   });
 
-  it('renders 404 page when user routes to an incorrect route', async () => {
+  it('renders 404 page when user routes to a non existing route', async () => {
     // given
     renderComponent('/somerandomroute');
     // when

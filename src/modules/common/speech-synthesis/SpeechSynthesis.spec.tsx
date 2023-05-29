@@ -46,31 +46,41 @@ const renderComponent = (props = {}) => {
 
 describe('<SpeechSynthesis />', () => {
   it('renders without crashing', () => {
+    // given
     renderComponent();
+    // when
     const volumeSlider = screen.getByLabelText('change volume');
+    // then
     expect(volumeSlider).toBeInTheDocument();
   });
 
   it('handles play button click', async () => {
+    // given
     renderComponent();
     const playButton = screen.getByRole('button', { name: /play voice/i });
+    // when
     userEvent.click(playButton);
-
+    // then
     await waitFor(() => expect(handleVoicePlayMock).toHaveBeenCalledTimes(1));
   });
 
   it('handles pause button click', async () => {
+    // given
     renderComponent();
     const pauseButton = screen.getByRole('button', { name: /pause voice/i });
+    // when
     userEvent.click(pauseButton);
+    // then
     await waitFor(() => expect(handleVoicePauseMock).toHaveBeenCalledTimes(1));
   });
 
   it('handles stop button click', async () => {
+    // given
     renderComponent();
     const stopButton = screen.getByRole('button', { name: /stop voice/i });
+    // when
     userEvent.click(stopButton);
-
+    // then
     await waitFor(() => expect(handleVoiceStopMock).toHaveBeenCalledTimes(1));
   });
 });

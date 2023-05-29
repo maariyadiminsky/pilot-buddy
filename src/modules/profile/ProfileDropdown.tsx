@@ -18,6 +18,12 @@ const styles = {
   },
 };
 
+export const PROFILE_DROPDOWN_LINKS = {
+  SUPPORT: 'https://github.com/maariyadiminsky/pilot-buddy/issues',
+  GITHUB: 'https://github.com/maariyadiminsky/pilot-buddy',
+  COFFEE: 'https://www.buymeacoffee.com/mariya.diminsky',
+};
+
 export const ProfileDropdown: FC<ProfileDropdownProps> = ({ wrapperType, handleMenuItemClick }) => (
   <Transition
     as={Fragment}
@@ -43,22 +49,22 @@ export const ProfileDropdown: FC<ProfileDropdownProps> = ({ wrapperType, handleM
       </div>
       <div>
         <ProfileLink
-          link="https://github.com/maariyadiminsky/pilot-buddy/issues"
+          link={PROFILE_DROPDOWN_LINKS.SUPPORT}
           text="Support"
           icon={BugAntIcon}
           handleMenuItemClick={handleMenuItemClick}
           isExternalLink
         />
         <ProfileLink
-          link="https://github.com/maariyadiminsky/pilot-buddy"
+          link={PROFILE_DROPDOWN_LINKS.GITHUB}
           text="Github"
           icon={CodeBracketIcon}
           handleMenuItemClick={handleMenuItemClick}
           isExternalLink
         />
         <ProfileLink
-          link="https://www.buymeacoffee.com/mariya.diminsky"
-          text="Buy me Ramen"
+          link={PROFILE_DROPDOWN_LINKS.COFFEE}
+          text="Buy me Coffee"
           icon={HeartIcon}
           iconClassName="text-rose-500"
           handleMenuItemClick={handleMenuItemClick}
