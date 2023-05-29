@@ -34,7 +34,7 @@ describe('<NoteAction />', () => {
     expect(iconButton).toBeInTheDocument();
   });
 
-  it('properly updates the text field', async () => {
+  it('updates the text field', async () => {
     // given
     renderComponent();
     const textElement = screen.getByLabelText('note');
@@ -44,7 +44,7 @@ describe('<NoteAction />', () => {
     await waitFor(() => expect(textElement).toHaveValue('test'));
   });
 
-  it('properly handles the form submission', async () => {
+  it('handles the form submission', async () => {
     // given
     renderComponent();
     const textElement = screen.getByLabelText('note');
