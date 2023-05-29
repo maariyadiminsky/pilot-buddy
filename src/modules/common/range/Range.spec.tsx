@@ -18,13 +18,16 @@ const renderComponent = (value = 50, handleOnChange = jest.fn()) =>
 
 describe('<Range />', () => {
   it('renders without crashing', () => {
+    //given
     renderComponent();
+    //when
     const input = screen.getByRole('slider') as HTMLInputElement;
-
+    // then
     expect(input).toBeInTheDocument();
   });
 
   it('handles onChange event', () => {
+    // given
     const handleChange = jest.fn();
     const TestWrapper = () => {
       const [value, setValue] = useState(50);
@@ -45,14 +48,19 @@ describe('<Range />', () => {
     };
     render(<TestWrapper />, { shouldHaveNoWrapper: true });
     const input = screen.getByRole('slider') as HTMLInputElement;
+    // when
     fireEvent.change(input, { target: { value: 75 } });
+    // then
     expect(handleChange).toHaveBeenCalledTimes(1);
     expect(input.value).toBe('75');
   });
 
   it('displays the given title', () => {
+    // given
     renderComponent();
+    // when
     const label = screen.getByText('Test Range');
+    // then
     expect(label).toBeInTheDocument();
   });
 });
