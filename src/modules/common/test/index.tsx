@@ -56,8 +56,16 @@ const ProvidersWithoutAuth = ({ children }: { children: ReactNode }) => (
 // render setup
 const customRender = (
   ui: any,
-  options?: { route?: string; shouldManageAuth?: boolean; shouldHaveNoWrapper?: boolean }
+  options?: {
+    route?: string;
+    shouldManageAuth?: boolean;
+    shouldHaveNoWrapper?: boolean;
+  }
 ) => {
+  if (options?.shouldHaveNoWrapper) {
+    return render(ui);
+  }
+
   let providers = Providers;
 
   if (options?.route) {
@@ -68,7 +76,7 @@ const customRender = (
     providers = ProvidersWithoutAuth;
   }
 
-  return options?.shouldHaveNoWrapper ? render(ui) : render(ui, { wrapper: providers });
+  return render(ui, { wrapper: providers });
 };
 
 // export what is necessary for access in one place

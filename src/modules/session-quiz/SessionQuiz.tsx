@@ -33,6 +33,7 @@ export const SessionQuiz: FC = () => {
         if (!id) return;
 
         sessionData = await getDBSession(id);
+        console.log('sessionData??:', sessionData);
         if (!sessionData?.questions || !sessionData.questions.length) {
           navigate(ROUTES.NOT_FOUND_ROUTE);
         }
