@@ -1,1 +1,1 @@
-export { Homepage } from '@modules/home/Homepage';
+export { Homepage, HOMEPAGE_TEXT } from '@modules/home/Homepage';

@@ -92,7 +92,7 @@ export const StudyRoom: FC = () => {
   const { setPageTitle, setPageHeaderActions } = useContext(PageContext);
 
   useEffect(() => {
-    setPageTitle('StudyRoom');
+    setPageTitle('Study Room');
     setPageHeaderActions(headerActions);
   }, [headerActions, setPageTitle, setPageHeaderActions]);
 

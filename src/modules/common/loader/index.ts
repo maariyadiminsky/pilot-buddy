@@ -1,1 +1,1 @@
-export { Loader } from '@common/loader/Loader';
+export { Loader, LOADING_TEXT, LoaderSizeEnum } from '@common/loader/Loader';

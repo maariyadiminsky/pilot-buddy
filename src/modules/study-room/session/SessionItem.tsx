@@ -56,7 +56,7 @@ export const SessionItem: FC<SessionItemProps> = ({
         )}
       >
         <div className="group flex items-center rounded-md px-3 py-2 text-sm font-medium text-gray-700 space-x-2">
-          <button type="button" onClick={handlePinMethod}>
+          <button type="button" aria-label="pin button" onClick={handlePinMethod}>
             <Icon
               className={truthyString('h-6 w-6 cursor-pointer hover:text-sky-600', textColor)}
               aria-hidden="true"

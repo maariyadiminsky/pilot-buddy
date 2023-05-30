@@ -1,1 +1,6 @@
-export { BrandButton, type BrandButtonProps } from '@common/button/BrandButton';
+export {
+  BrandButton,
+  type BrandButtonProps,
+  ButtonClassTypeEnum,
+  BUTTON_STYLES,
+} from '@common/button/BrandButton';

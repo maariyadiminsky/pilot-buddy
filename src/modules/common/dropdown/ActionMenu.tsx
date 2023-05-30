@@ -5,11 +5,11 @@ import { Menu, Transition } from '@headlessui/react';
 import { EllipsisVerticalIcon, BarsArrowUpIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { FC, Fragment } from 'react';
 
-enum DropdownTypeEnum {
+export enum DropdownTypeEnum {
   sort = 'sort',
 }
 
-interface ActionMenuProps {
+export interface ActionMenuProps {
   name: string;
   actions: MenuOptionType[];
   className?: string;

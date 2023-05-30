@@ -2,6 +2,13 @@ import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
 
+export const HOMEPAGE_TEXT = {
+  HEADLINE: 'Ace Pilot Exams with Confidence',
+  DESCRIPTION:
+    'PilotBuddy is your all-in-one study companion, designed to help you master essential aviation concepts and prepare for private, commercial, and instrument pilot exams with ease.',
+  ACTION: 'Get Started',
+};
+
 export const Homepage: FC = () => (
   <div className="relative isolate overflow-hidden bg-white h-screen">
     <svg
@@ -30,23 +37,19 @@ export const Homepage: FC = () => (
     <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40">
       <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0 lg:pt-8">
         <h1 className="mt-24 sm:mt-32 lg:mt-16 text-4xl font-bold tracking-tight text-gray-700 sm:text-6xl">
-          Ace Pilot Exams with Confidence
+          {HOMEPAGE_TEXT.HEADLINE}
         </h1>
-        <p className="mt-6 text-lg leading-8 text-gray-600">
-          PilotBuddy is your all-in-one study companion, designed to help you master essential
-          aviation concepts and prepare for private, commercial, and instrument pilot exams with
-          ease.
-        </p>
+        <p className="mt-6 text-lg leading-8 text-gray-600">{HOMEPAGE_TEXT.DESCRIPTION}</p>
         <div className="mt-10 flex justify-start">
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <Link to="/auth">
             <button
               type="button"
-              className="flex justify-center items-center group space-x-3 bg-sky-600 hover:bg-sky-500 px-6 py-3 rounded-md"
+              className="flex justify-center items-center group space-x-3 bg-sky-600 hover:bg-sky-500 px-6 py-3 rounded-md text-white"
             >
-              <span className="text-white">Get Started</span>
+              {HOMEPAGE_TEXT.ACTION}
               <ArrowRightIcon
-                className="h-5 w-5 opacity-90 flex-shrink-0 text-white"
+                className="h-5 w-5 ml-3 opacity-90 flex-shrink-0 text-white"
                 aria-hidden="true"
               />
               <span className="sr-only">Login</span>

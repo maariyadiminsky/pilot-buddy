@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 const DEFAULT_MAX_FILE_SIZE = 1024 * 1024;
 
@@ -27,7 +27,7 @@ export const useImageUpload = (maxFileSize?: number) => {
       fileReader.readAsDataURL(file);
     });
 
-  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
     if (file && file.size > (maxFileSize || DEFAULT_MAX_FILE_SIZE)) {
