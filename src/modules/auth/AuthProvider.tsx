@@ -28,6 +28,12 @@ export const AuthContext = createContext<AuthContextType>({
 
 const USER_ID = 'userId';
 const SESSION_COOKIE = 'pilot_buddy';
+
+const clearData = () => {
+  localStorage.removeItem(USER_ID);
+  removeCookie(SESSION_COOKIE);
+};
+
 export const AuthProvider: FC<AuthContextProps & { initialLoginState?: boolean }> = ({
   children,
   initialLoginState,
@@ -53,11 +59,6 @@ export const AuthProvider: FC<AuthContextProps & { initialLoginState?: boolean }
   useEffect(() => {
     getExistingUserId();
   }, []);
-
-  const clearData = () => {
-    localStorage.removeItem(USER_ID);
-    removeCookie(SESSION_COOKIE);
-  };
 
   // I am aware this isnt the safest solution in the world,
   // but this app was built for fun and of course in serious

@@ -84,7 +84,7 @@ export const PageProvider: FC = () => {
         />
       )}
       <div className={`flex flex-col ${shouldShowMainElements ? 'lg:pl-64' : ''}`}>
-        <MobileHeader {...{ setIsSidebarOpen }} />
+        {shouldShowMainElements && <MobileHeader {...{ setIsSidebarOpen }} />}
         <main className="flex-1">
           <>
             {shouldShowMainElements && (

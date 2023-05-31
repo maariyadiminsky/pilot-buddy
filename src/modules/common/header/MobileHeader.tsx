@@ -12,6 +12,7 @@ interface MobileHeaderProps {
 
 export const MobileHeader: FC<MobileHeaderProps> = ({ setIsSidebarOpen }) => {
   const [user, setUser] = useState<UserType>();
+  const [hasPathChanged, setHasPathChanged] = useState(false);
 
   const { pathname } = useLocation();
   const { getUserProfileData } = useDatabase();
@@ -26,10 +27,16 @@ export const MobileHeader: FC<MobileHeaderProps> = ({ setIsSidebarOpen }) => {
   }, [getUserProfileData]);
 
   useEffect(() => {
-    if (pathname === '/') {
+    if ((hasPathChanged && pathname === '/') || !user) {
       getUser();
+      setHasPathChanged(false);
     }
-  }, [pathname, getUser]);
+
+    // fixes endless getUser requests on root page.
+    if (pathname !== '/') {
+      setHasPathChanged(true);
+    }
+  }, [pathname, getUser, user, hasPathChanged]);
 
   return (
     <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 border-b border-gray-200 bg-white lg:hidden">
