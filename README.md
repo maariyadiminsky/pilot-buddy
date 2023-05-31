@@ -1,6 +1,6 @@
 # :sparkles: Pilot Buddy
 
-| [What You Can Do](#what-you-can-do) | [Setup(5 min)](#setup5-minutes) | [Tests](#tests) |
+| [What You Can Do](#what-you-can-do) | [Setup](#setup) | [Future Improvements](#future-improvements) |
 
 Introducing PilotBuddy, your comprehensive guide to mastering aviation studies. This app, thoughtfully developed with React, TypeScript and React Testing Library, puts user experience at the forefront by ensuring full responsiveness and accessibility. The dedication to user privacy and security is highlighted by the integration of IndexedDB storage along with robust user login authentication and page authorization flows.
 
@@ -63,7 +63,7 @@ _Please note: Some of these features are shown in the video above._
   - Do not display certain elements on certain pages.
   - ...and so much more. Check out the commits!
 
-## Setup(5 minutes)
+## Setup
 
 ### Prod
 
@@ -85,3 +85,9 @@ REACT_APP_USE_SPEECHLY='' // not required
 - run `yarn install` then `yarn start`.
 - run `yarn test`, or `yarn test:coverage` to see coverage, `yarn test -- [component/page/utils method name].spec.tsx` to run specific test.
 - go to `https://localhost:3000/`. You might get a security warning, this is because I am using https while developing without a SSL certificate, feel free to go to Advanced -> Proceed if you're on Chrome.
+
+## Future Improvements
+
+- The current test coverage for the project is 42%. I am planning to enhance this by adding more tests for additional components, hooks, and methods. The goal is also to provide a more comprehensive and detailed test suite for the existing test files.
+
+- At the moment, some components are overloaded with logic, which can complicate the structure. My objective is to improve this by decoupling the logic from the rendering aspect of these components. This will include migrating some logic to standalone utility/service files, while other logic will remain in dedicated logic components. The rendering will then be handled by its own streamlined component, leading to a cleaner and more manageable codebase.
