@@ -94,3 +94,5 @@ REACT_APP_USE_SPEECHLY='false' // false if not using REACT_APP_SPEECHLY_APP_ID
 - The current test coverage for the project is 42%. I am planning to enhance this by adding more tests for additional components, hooks, and methods. The goal is also to provide a more comprehensive and detailed test suite for the existing test files.
 
 - At the moment, some components are overloaded with logic, which can complicate the structure. My objective is to improve this by decoupling the logic from the rendering aspect of these components. This will include migrating some logic to standalone utility/service files, while other logic will remain in dedicated logic components. The rendering will then be handled by its own streamlined component, leading to a cleaner and more manageable codebase.
+
+- For further user security and improved production use, although user data is encrypted, I would handle authentication and authorization with the backend to ensure any private keys and information is hidden from the frontend.
