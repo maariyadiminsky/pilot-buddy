@@ -118,7 +118,7 @@ export const Profile: FC = () => {
                   name="name"
                   id="name"
                   className="flex w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
-                  placeholder="Add your name."
+                  placeholder="Add your name"
                   value={userProfile?.name || ''}
                   onChange={(event) => setUserName(event.target.value)}
                   aria-label="name"
