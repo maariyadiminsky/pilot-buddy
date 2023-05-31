@@ -1,6 +1,6 @@
 # :sparkles: Pilot Buddy
 
-[What You Can Do](#what-you-can-do) | [👩🏻‍💻 DEMO](https://youtu.be/btpWFZC8mWw) | [Setup](#setup) | [Future Improvements](#future-improvements) |
+[What You Can Do](#what-you-can-do) | [👩🏻‍💻 DEMO](https://youtu.be/btpWFZC8mWw) | [🟢 LIVE](https://superlative-lamington-b11177.netlify.app/) | [Setup](#setup) | [Future Improvements](#future-improvements) |
 
 Introducing PilotBuddy, your comprehensive guide to mastering aviation studies. This app, thoughtfully developed with React, TypeScript and React Testing Library, puts user experience at the forefront by ensuring full responsiveness and accessibility. The dedication to user privacy and security is highlighted by the integration of IndexedDB storage along with robust user login authentication and page authorization flows.
 
@@ -70,7 +70,7 @@ _Please note: Some of these features are shown in the video above._
 
 ### Prod
 
-WIP
+https://superlative-lamington-b11177.netlify.app/
 
 ### Dev
 
