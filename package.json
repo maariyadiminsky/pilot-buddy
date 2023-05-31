@@ -1,7 +1,9 @@
-{
-  "name": "my-base-app",
+{  
   "version": "1.0.0",
-  "private": true,
+  "name": "pilot-buddy",
+  "url" : "https://github.com/maariyadiminsky/pilot-buddy",
+  "homepage": "https://superlative-lamington-b11177.netlify.app/",
+  "license" : "BSD-4-Clause",
   "dependencies": {
     "@headlessui/react": "^1.7.13",
     "@heroicons/react": "^2.0.17",
@@ -76,7 +78,6 @@
     "regenerator-runtime": "^0.13.11",
     "typescript": "^4.9.5"
   },
-  "homepage": ".",
   "postcss": {
     "plugins": {
       "autoprefixer": {}
