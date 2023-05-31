@@ -39,7 +39,7 @@ _Please note: Some of these features are shown in the DEMO._
 - Session
   - User will see an empty data placeholder if there are no questions.
   - User can create, edit or remove notes with different icons for aid while studying a session.
-  - You can show or hide the note creation form any time.
+  - User can show or hide the note creation form any time.
   - User can create a question with question and answer(optional).
   - When creating a question the create question button will be disabled.
   - User can use voice recognition feature to record their question and answer.
