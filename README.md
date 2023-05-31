@@ -2,7 +2,7 @@
 
 [What You Can Do](#what-you-can-do) | [👩🏻‍💻 DEMO](https://youtu.be/btpWFZC8mWw) | [🟢 LIVE](https://superlative-lamington-b11177.netlify.app/) | [Setup](#setup) | [Future Improvements](#future-improvements) |
 
-Introducing PilotBuddy, your comprehensive guide to mastering aviation studies. This app, thoughtfully developed with React, TypeScript and React Testing Library, puts user experience at the forefront by ensuring full responsiveness and accessibility. The dedication to user privacy and security is highlighted by the integration of IndexedDB storage along with robust user login authentication and page authorization flows.
+Introducing PilotBuddy, your comprehensive guide to mastering aviation studies. This app, thoughtfully developed with TypeScript, React and React Testing Library, puts user experience at the forefront by ensuring full responsiveness and accessibility. The dedication to user privacy and security is highlighted by the integration of IndexedDB storage along with robust user login authentication and page authorization flows.
 
 PilotBuddy truly stands out with its innovative features such as speech recognition and synthesis, immersing users in an interactive study environment. With the ability to craft personalized quizzes, add your own questions, and compare answers post-quiz, learning has never been more engaging.
 
