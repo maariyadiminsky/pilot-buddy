@@ -1,12 +1,14 @@
 # :sparkles: Pilot Buddy
 
-| [What You Can Do](#what-you-can-do) | [Setup](#setup) | [Future Improvements](#future-improvements) |
+[What You Can Do](#what-you-can-do) | [👩🏻‍💻 DEMO](https://youtu.be/btpWFZC8mWw) | [Setup](#setup) | [Future Improvements](#future-improvements) |
 
 Introducing PilotBuddy, your comprehensive guide to mastering aviation studies. This app, thoughtfully developed with React, TypeScript and React Testing Library, puts user experience at the forefront by ensuring full responsiveness and accessibility. The dedication to user privacy and security is highlighted by the integration of IndexedDB storage along with robust user login authentication and page authorization flows.
 
 PilotBuddy truly stands out with its innovative features such as speech recognition and synthesis, immersing users in an interactive study environment. With the ability to craft personalized quizzes, add your own questions, and compare answers post-quiz, learning has never been more engaging.
 
 Whether you're studying for private, commercial, or instrument pilot exams, PilotBuddy is designed to be your constant companion, striving to make your learning journey seamless and enjoyable. I've put my :heart: into creating an app that supports you in reaching new heights in your aviation career.
+
+[➡️ Check out the Demo!](https://youtu.be/btpWFZC8mWw)
 
 [![See Pilot Buddy DEMO](https://i.ibb.co/JFkYK4f/Screen-Shot-2023-05-31-at-9-48-31-AM.png)](https://youtu.be/btpWFZC8mWw)
 
