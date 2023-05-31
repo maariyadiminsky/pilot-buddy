@@ -10,7 +10,7 @@ export const HOMEPAGE_TEXT = {
 };
 
 export const Homepage: FC = () => (
-  <div className="relative isolate overflow-hidden bg-white h-screen">
+  <div className="relative isolate overflow-hidden bg-white h-full md:h-screen">
     <svg
       className="absolute inset-0 -z-10 h-full w-full stroke-gray-300 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
       aria-hidden="true"
