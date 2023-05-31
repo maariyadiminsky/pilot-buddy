@@ -16,7 +16,7 @@ Whether you're studying for private, commercial, or instrument pilot exams, Pilo
 
 ## What You Can Do
 
-_Please note: Some of these features are shown in the video above._
+_Please note: Some of these features are shown in the DEMO._
 
 - Authentication flow for sign up or sign in.
   - Multiple error handling for different cases.
