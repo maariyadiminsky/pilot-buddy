@@ -45,21 +45,21 @@ _Please note: Some of these features are shown in the DEMO._
   - User can use voice recognition feature to record their question and answer.
   - User can drag and drop their questions.
   - User can change the order, choose either current drag and drop sort or random.
-  - User can use voice synthesis but choosing a voice they would like to speak their question during the test, similar to how it will be in the check rides with an actual person.
+  - User can use voice synthesis by choosing a voice they would like to speak their question during the test, similar to how it will be in the pilot check rides with an actual person.
   - User can adjust the volume, pitch, and speed of the voice from three selections.
 - Quiz
   - User can start their session quiz if they have at least one question.
   - User can record their answer.
   - Timed answers will move on automatically or user can hit the next button.
   - Number of questions is displayed.
-  - Chosen voice via voice synthesis selection in the session's page will be displayed here.
-  - Results page will show the question, answer created in the session and answer given in the quiz to compare.
+  - Chosen voice via voice synthesis selection in the session's page will be spoken here.
+  - Results page will show the question, answer created in the session and answer given in the quiz for user to compare.
 - Other
   - View homepage with headline and preview of app.
   - All pages responsive, and accessible.
   - Designs are consistent so they flow together seamlessly.
   - Loader is added where data is loading.
-  - 404 page will be displayed if they go to a non existing page.
+  - 404 page will be displayed if user goes to a non existing page.
   - Breadcrumbs to show where user is currently in the app and how pages relate to each other.
   - Truncation of words on several parts of the app for better display.
   - Permission request modal opens if a user has never given microphone permission for this app(in my demo I have already given permission before).
@@ -91,7 +91,11 @@ REACT_APP_USE_SPEECHLY='false' // false if not using REACT_APP_SPEECHLY_APP_ID
 
 ## Future Improvements
 
+- When a new user enters Study Room for the first time they will be asked if they would like to import test data for private, instruments and commercial sessions so they do not have to manually enter question and answers.
+
 - The current test coverage for the project is 42%. I am planning to enhance this by adding more tests for additional components, hooks, and methods. The goal is also to provide a more comprehensive and detailed test suite for the existing test files.
+
+- There are still a lot of places accessibility can be added and improved.
 
 - At the moment, some components are overloaded with logic, which can complicate the structure. My objective is to improve this by decoupling the logic from the rendering aspect of these components. This will include migrating some logic to standalone utility/service files, while other logic will remain in dedicated logic components. The rendering will then be handled by its own streamlined component, leading to a cleaner and more manageable codebase.
 
