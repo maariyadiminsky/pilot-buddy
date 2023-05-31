@@ -20,7 +20,7 @@ _Please note: Some of these features are shown in the DEMO._
 
 - Authentication flow for sign up or sign in.
   - Multiple error handling for different cases.
-  - Multiple users can create an account on the same laptop.
+  - Multiple users can create an account.
   - Rate limiter of up to 3 times incorrect guesses before user is locked out for a minute.
 - Authorization flow for page.
   - Study room, session and test/quiz pages can only be accessed by logged in users.
