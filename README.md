@@ -19,8 +19,9 @@ Whether you're studying for private, commercial, or instrument pilot exams, Pilo
 _Please note: Some of these features are shown in the video above._
 
 - Authentication flow for sign up or sign in.
-  - If user exists, or user tries to create an existing user, they sees an error in ui.
+  - Multiple error handling for different cases.
   - Multiple users can create an account on the same laptop.
+  - Rate limiter of up to 3 times incorrect guesses before user is locked out for a minute.
 - Authorization flow for page.
   - Study room, session and test/quiz pages can only be accessed by logged in users.
 - Sidebar
@@ -79,7 +80,7 @@ WIP
 REACT_APP_DB_ENCRYPTION_KEY='' // create your own key
 REACT_APP_LOG_ROCKET_APP_ID='' // get this when you sign up for logrocket and go through their steps
 REACT_APP_SPEECHLY_APP_ID='' // not required
-REACT_APP_USE_SPEECHLY='' // not required
+REACT_APP_USE_SPEECHLY='false' // false if not using REACT_APP_SPEECHLY_APP_ID
 ```
 
 #### Start Development Environment
