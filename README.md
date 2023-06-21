@@ -10,8 +10,6 @@ Whether you're studying for private, commercial, or instrument pilot exams, Pilo
 
 [➡️ Check out the Demo!](https://youtu.be/btpWFZC8mWw)
 
-[![See Pilot Buddy DEMO](https://i.ibb.co/JFkYK4f/Screen-Shot-2023-05-31-at-9-48-31-AM.png)](https://youtu.be/btpWFZC8mWw)
-
 [![See Pilot Buddy DEMO](https://i.ibb.co/4RpKDJh/Screen-Shot-2023-04-27-at-11-04-21-AM.png)](https://youtu.be/btpWFZC8mWw)
 
 ## What You Can Do
