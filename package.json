@@ -33,7 +33,7 @@
     "tailwindcss": "^3.3.1"
   },
   "scripts": {
-    "start": "HTTPS=true craco start",
+    "start": "craco start",
     "build": "craco build",
     "test": "craco test --verbose",
     "test:coverage": "craco test --coverage --watchAll=false",
