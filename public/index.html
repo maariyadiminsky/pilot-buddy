@@ -10,9 +10,131 @@
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Pilot Buddy</title>
+    <style>
+      .title {
+        display: flex;
+        justify-content: center;
+        font-size: 1.25rem;
+        font-weight: thin;
+      }
+
+      form {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      .list {
+        display: flex;
+        justify-content: center;
+
+        color: blueviolet;
+        margin-top: 10px;
+      }
+
+      .list li {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+      }
+
+      .list input {
+        margin-left: 10px;
+      }
+
+      .btn-submit {
+        display: flex;
+        justify-content: center;
+        margin-top: 1rem;
+        align-self: center;
+        padding: 0.75rem;
+        border-radius: 20%;
+        background-color: blue !important;
+        color: white;
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div class="container2"></div>
+
+    <!-- <div id="root"></div> -->
+    <script>
+      window.onload = () => {
+        let currentlySelected = [];
+
+        // create and add element
+        const containerDiv = document.querySelector('.container2');
+        const title = document.createElement('h2');
+        title.innerText = 'Grocery List';
+        title.className = 'title';
+        containerDiv.appendChild(title);
+
+        // create form with input elements.
+        const formElement = document.createElement('form');
+        containerDiv.appendChild(formElement);
+
+        // create a list
+        const ulElement = document.createElement('ul');
+        ulElement.className = 'list';
+
+        const listItems = ['apple', 'orange', 'pineapple'];
+        for (let i = 0; i < listItems.length; i++) {
+          const listItem = listItems[i];
+          const liElement = document.createElement('li');
+
+          // create checkbox input
+          const checkboxElement = document.createElement('input');
+          checkboxElement.type = 'checkbox';
+          checkboxElement.name = listItem;
+          checkboxElement.id = listItem;
+          checkboxElement.value = listItem;
+          checkboxElement.classList.add('list-item');
+
+          // for fun one item checked by default.
+          if (listItem === 'orange') {
+            checkboxElement.checked = true;
+            currentlySelected = [...currentlySelected, checkboxElement.name];
+          }
+
+          const label = document.createElement('label');
+          label.textContent = listItem;
+          label.htmlFor = listItem;
+
+          // liElement.textContent = listItems[i];
+          liElement.append(checkboxElement, label);
+          ulElement.appendChild(liElement);
+          // can add event listening here too
+        }
+
+        formElement.append(ulElement);
+
+        // add click event on element.
+        formElement.addEventListener('click', (event) => {
+          const element = event.target;
+
+          if (element.checked) {
+            currentlySelected = [...currentlySelected, element.name];
+          } else {
+            currentlySelected = currentlySelected.filter((item) => item !== element.name);
+          }
+        });
+
+        // add button to submit form;
+        const submitButton = document.createElement('button');
+        submitButton.type = 'submit';
+        submitButton.innerText = 'Submit';
+        submitButton.className = 'btn-submit';
+        submitButton.onclick = (event) => {
+          event.preventDefault();
+          console.log('currently selected', currentlySelected);
+
+          alert(`Currently Selected Items: ${currentlySelected.join(', ')}`);
+        };
+
+        formElement.append(submitButton);
+      };
+    </script>
   </body>
 </html>
